@@ -19,7 +19,7 @@ export interface ModalPayload<P extends EssentialModalProp> {
    * 하지만 Portal에서 모달을 렌더링할때는 close()가 필요함. store를 통해서던, local state를 통해서건 간에 결과적으로 close props는 전달되야하기때문.
    */
   props: WithoutEssentialModalProp<P>;
-  Component: (props: P) => JSX.Element,
+  Component: (props: P) => JSX.Element | null;
 }
 
 export interface ModalState {
