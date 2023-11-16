@@ -13,3 +13,9 @@ export const HorizontalFieldset = styled.fieldset`
     }
   }
 `;
+
+export const MainPageH2 = styled.h2`
+  font-size: 20px;
+  margin-top: 30px;
+  margin-bottom: 5px;
+`;

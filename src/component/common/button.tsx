@@ -19,6 +19,10 @@ export const BaseButton: StyledComponent<'button', DefaultTheme> = styled.button
     background: darkgray;
   }
   
+  &.light-main {
+    background: ${props => props.theme.lightMain};
+  }
+  
   &:disabled {
     opacity: 0.4;
     cursor: not-allowed;

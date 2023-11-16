@@ -7,6 +7,7 @@ import {useAppDispatch, useAppSelector} from '@store/hooks';
 import {closeModal} from '@store/reducers/modal';
 import {Provider} from 'react-redux';
 import {store} from '@store/store';
+import {QueryClient, QueryClientProvider} from 'react-query';
 
 /**
  * https://github.com/vercel/next.js/blob/master/examples/with-styled-components/pages/_app.js
@@ -17,15 +18,19 @@ export default function App({Component, pageProps}: AppProps) {
   const GlobalStyleProxy: any = GlobalStyle;
 
   return (
-    <Provider store={store}>
-      <ThemeProviderProxy theme={theme}>
-        <GlobalStyleProxy/>
-        <Component {...pageProps} />
-        <ModalRender/>
-      </ThemeProviderProxy>
-    </Provider>
+    <QueryClientProvider client={INSTANCE}>
+      <Provider store={store}>
+        <ThemeProviderProxy theme={theme}>
+          <GlobalStyleProxy/>
+          <Component {...pageProps} />
+          <ModalRender/>
+        </ThemeProviderProxy>
+      </Provider>
+    </QueryClientProvider>
   );
 }
+
+const INSTANCE = new QueryClient()
 
 function ModalRender() {
   const modals = useAppSelector(state => state.modal.modals);

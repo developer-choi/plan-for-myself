@@ -18,6 +18,20 @@ export function createGoal(goal: PostGoalRequestParameter) {
   })
 }
 
+export function deleteGoal(goal: Goal) {
+  const {goalList, ...rest} = getGoalResponse();
+
+  setGoalResponse({
+    ...rest,
+    goalList: goalList.filter(({pk}) => goal.pk !== pk)
+  })
+}
+
+export function updateGoal(previousGoal: Goal, data: PostGoalRequestParameter) {
+  deleteGoal(previousGoal)
+  createGoal(data)
+}
+
 export function checkedTodayGoalList(checkedGoalList: CheckableGoal[]) {
   const previousResponse = getGoalResponse();
 
