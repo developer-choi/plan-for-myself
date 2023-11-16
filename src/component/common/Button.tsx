@@ -14,16 +14,14 @@ export default forwardRef(function Button(props: ComponentPropsWithoutRef<'butto
 });
 
 const buttonHoverEffect = css`
-  :hover {
-    opacity: 0.7;
-  }
-  
-  :active {
-    opacity: 1;
-  }
-  
-  :disabled {
-    opacity: initial;
+  &:not(:disabled) {
+    :hover {
+      opacity: 0.7;
+    }
+    
+    :active {
+      opacity: 1;
+    }
   }
 `;
 
@@ -34,6 +32,15 @@ const StyledButton = styled.button`
   flex-shrink: 0; //버튼들 중에는 길이가 줄어들면 안되는 경우도 있어서 여기에 선언한다.
   background-color: ${props => props.theme.main};
   color: white;
+  
+  &.gray {
+    background: darkgray;
+  }
+  
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
   
   ${buttonHoverEffect};
 `;
