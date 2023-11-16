@@ -2,16 +2,19 @@ import styled from 'styled-components';
 import Link from 'next/link';
 import React from 'react';
 import Button from '@component/common/Button';
+import {useDispatchOpenModal} from '@store/reducers/modal';
 
 export default function Home() {
   const hasChecked = false;
   const totalGoalList = [];
 
+  const {openGoalModal} = useDispatchOpenModal()
+
   return (
     <Wrap>
       {totalGoalList.length === 0 ? (
         <div>
-          <Button>목표 추가하기</Button>
+          <Button onClick={openGoalModal}>목표 추가하기</Button>
         </div>
       ) : (
         <>
