@@ -1,4 +1,4 @@
-import Button from '@component/common/Button';
+import Button from '@component/common/button';
 import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';

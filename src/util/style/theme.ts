@@ -1,5 +1,6 @@
 import type {DefaultTheme} from 'styled-components';
 
 export const theme: DefaultTheme = {
-  main: 'red'
+  main: '#7752FE',
+  font: '#444'
 };

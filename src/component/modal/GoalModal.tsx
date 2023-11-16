@@ -2,8 +2,9 @@ import Modal from '@component/modal/Modal';
 import type {EssentialModalProp} from '@store/reducers/modal';
 import styled from 'styled-components';
 import React from 'react';
-import Button from '@component/common/Button';
+import Button from '@component/common/button';
 import Input from '@component/common/Input';
+import {HorizontalFieldset} from '@component/common/etc';
 
 export interface GoalModalProp extends EssentialModalProp {
 
@@ -19,7 +20,7 @@ export default function GoalModal({closeModal}: GoalModalProp) {
         <Input placeholder="제목 *"/>
         <Input placeholder="달성 시 금액 *"/>
         <Input placeholder="실패 시 금액"/>
-        <FieldSet>
+        <HorizontalFieldset>
           <label>
             <input type="radio" defaultChecked/>
             Daily
@@ -32,7 +33,7 @@ export default function GoalModal({closeModal}: GoalModalProp) {
             <input type="radio"/>
             Monthly
           </label>
-        </FieldSet>
+        </HorizontalFieldset>
         {!isEdit ? null : (
           <Warning>
             {'위 항목 중 하나라도 수정할 경우,\n기존 목표와 완전히 다른 목표로 간주함.\n이전 목표는 연속달성 리셋 등의 불이익이 발생할 수 있음.'}
@@ -74,14 +75,7 @@ const StyledHeading = styled.h1`
 
 const Warning = styled.div`
   white-space: pre-line;
-  font-size: 14px;
   color: orange;
-`;
-
-const FieldSet = styled.fieldset`
-  gap: 10px;
-  display: flex;
-  font-size: 14px;
 `;
 
 const ButtonWrap = styled.div`

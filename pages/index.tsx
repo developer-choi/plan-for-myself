@@ -1,21 +1,20 @@
 import styled from 'styled-components';
 import Link from 'next/link';
 import React from 'react';
-import Button from '@component/common/Button';
 import {useDispatchOpenModal} from '@store/reducers/modal';
+import {HorizontalFieldset} from '@component/common/etc';
+import Button, {BaseButton} from '@component/common/button';
 
 export default function Home() {
-  const hasChecked = false;
-  const totalGoalList = [];
+  const hasChecked = true;
+  const totalGoalList = [1];
 
   const {openGoalModal} = useDispatchOpenModal()
 
   return (
     <Wrap>
       {totalGoalList.length === 0 ? (
-        <div>
-          <Button onClick={openGoalModal}>목표 추가하기</Button>
-        </div>
+        <Button onClick={openGoalModal}>목표 추가하기</Button>
       ) : (
         <>
           {hasChecked ? (
@@ -35,22 +34,30 @@ export default function Home() {
             </div>
           ) : (
             <Link href="/check-today">
-              <StyledLink>
-                {'체크하러가기 >'}
-              </StyledLink>
+              <Button>
+                {'오늘 목표 체크하러가기 >'}
+              </Button>
             </Link>
           )}
 
-          <h2 style={{marginTop: 20}}>연속 달성중인 목표</h2>
+          <H2>연속 달성중인 목표</H2>
           <ul>
-            <ol>
-              <ContinuousDate>3d</ContinuousDate>
-              xxxxxx하기
-            </ol>
+            <ContinuousGoal>
+              <span className="date">3d</span>
+              <span className="title">이거저거 하기</span>
+            </ContinuousGoal>
+            <ContinuousGoal>
+              <span className="date">3d</span>
+              <span className="title">이거저거 하기</span>
+            </ContinuousGoal>
+            <ContinuousGoal>
+              <span className="date">3d</span>
+              <span className="title">이거저거 하기</span>
+            </ContinuousGoal>
           </ul>
 
-          <h2 style={{marginTop: 20}}>전체 목표 목록</h2>
-          <div>
+          <H2>전체 목표 목록</H2>
+          <HorizontalFieldset style={{marginBottom: 10}}>
             <label>
               <input type="radio" defaultChecked/>
               All
@@ -67,14 +74,20 @@ export default function Home() {
               <input type="radio"/>
               Monthly
             </label>
-          </div>
+          </HorizontalFieldset>
 
           <ul>
-            <ol>xxx 하기</ol>
-            <ol>xxx 하기</ol>
-            <ol>xxx 하기</ol>
-            <ol>xxx 하기</ol>
-            <ol>xxx 하기</ol>
+            <GoalOl>
+              이거저거 하기
+              <GoalPrice className="plus">+2,000원</GoalPrice>
+              <GoalPrice className="minus">-2,000원</GoalPrice>
+              <EditButton>수정</EditButton>
+            </GoalOl>
+            <GoalOl>
+              이거저거 하기
+              <GoalPrice className="plus">+2,000원</GoalPrice>
+              <EditButton>수정</EditButton>
+            </GoalOl>
           </ul>
         </>
       )}
@@ -87,11 +100,53 @@ const Wrap = styled.div`
 `;
 
 const StyledLink = styled.a`
-  margin-left: 10px;
-`;
-
-const ContinuousDate = styled.span`
   color: ${props => props.theme.main};
   font-weight: bold;
-  margin-right: 20px;
+`;
+
+const ContinuousGoal = styled.ol`
+  display: flex;
+  align-items: center;
+  
+  span.date {
+    color: ${props => props.theme.main};
+    font-weight: bold;
+    margin-right: 10px;
+    font-size: 18px;
+  }
+`;
+
+const H2 = styled.h2`
+  font-size: 20px;
+  margin-top: 30px;
+  margin-bottom: 5px;
+`;
+
+const GoalPrice = styled.span`
+  margin-inline: 2px;
+  &.plus {
+    color: blue;
+  }
+  
+  &.minus {
+    color: red;
+  }
+`;
+
+const GoalOl = styled.ol`
+  display: flex;
+  align-items: center;
+  
+  &:not(:first-child) {
+    margin-top: 5px;
+  }
+`;
+
+const EditButton = styled(BaseButton)`
+  padding: 2px 8px;
+  margin-left: 4px;
+  
+  background: orange;
+  color: white;
+  font-size: 12px;
 `;
