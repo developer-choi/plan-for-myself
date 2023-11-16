@@ -16,7 +16,7 @@ export const BaseButton: StyledComponent<'button', DefaultTheme> = styled.button
   ${buttonHoverEffect}
   
   &.gray {
-    background: darkgray;
+    background: ${props => props.theme.disabled};
   }
   
   &.light-main {

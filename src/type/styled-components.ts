@@ -5,5 +5,6 @@ declare module 'styled-components' {
     main: string;
     lightMain: string;
     font: string;
+    disabled: string;
   }
 }

@@ -4,39 +4,43 @@ import type {EssentialModalProp} from '@store/reducers/modal';
 import Button from '@component/common/button';
 import React from 'react';
 import {ModalButtonWrap, ModalHeading} from '@component/modal/GoalModal';
+import {useGoalResponse} from '@util/sevices/goal';
+import {useCheckGoalListForm} from '@util/sevices/check-goal';
 
 export interface CheckTodayModalProp extends EssentialModalProp {
 
 }
 
 export default function CheckTodayModal({closeModal}: CheckTodayModalProp) {
-  const hasChecked = false;
-  const frequency = 'all'
-  const originalList = hasChecked ? ['checkedGoalList', 1, 2, 3] : ['goalList', 1, 2, 3];
-  const goalList = frequency === 'all' ? originalList : originalList.filter(value => value === frequency)
+  const {data} = useGoalResponse();
+  const {formSubmit, radioList, submitDisabled} = useCheckGoalListForm({response: data, closeModal});
+
+  if (!data) {
+    return null;
+  }
 
   return (
     <StyledModal closeModal={closeModal} disableEasilyClose>
       <ModalHeading>목표 체크리스트</ModalHeading>
-      <StyledForm>
-        {goalList.map(value => (
-          <CustomCheckbox key={value}>
-            <input type="checkbox" disabled={hasChecked}/>
-            이거하고 저거하기
+      <StyledForm onSubmit={formSubmit}>
+        {radioList.map(({props, title}) => (
+          <CustomCheckbox key={props.value}>
+            <input type="checkbox" {...props}/>
+            {title}
           </CustomCheckbox>
         ))}
-        {!hasChecked ? null : (
+        {!submitDisabled ? null : (
           <div>
             정산 : 000원 / 제출시작 : 00시 00분
           </div>
         )}
         <ModalButtonWrap>
           <Button className="gray" onClick={closeModal}>취소</Button>
-          <Button disabled={hasChecked}>제출</Button>
+          <Button disabled={submitDisabled} type="submit">제출</Button>
         </ModalButtonWrap>
       </StyledForm>
     </StyledModal>
-  )
+  );
 }
 
 const StyledModal = styled(Modal)`
@@ -75,5 +79,9 @@ const CustomCheckbox = styled.label`
   
   :has(input:checked) {
     border-color: ${props => props.theme.main};
+  }
+  
+  :has(input:disabled) {
+    border-color: ${props => props.theme.disabled};
   }
 `;

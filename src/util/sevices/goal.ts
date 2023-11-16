@@ -19,6 +19,22 @@ export function useGoalResponse() {
 type GoalFrequencyWithAll = GoalFrequency | 'All'
 const ALL_GOAL_FREQUENCY_LIST: GoalFrequencyWithAll[] = ['All', ...GOAL_FREQUENCY_LIST]
 
+export function getTodayGoalFilterFrequency(goalList: Goal[]): Goal[] {
+  const value = new Date()
+
+  // Monthly
+  if (value.getDate() === 1) {
+    return goalList
+  }
+
+  // 일요일, Weekly
+  if(value.getDay() === 0) {
+    return goalList.filter(({frequency}) => frequency !== 'Monthly')
+  }
+
+  return goalList.filter(({frequency}) => frequency === 'Daily')
+}
+
 interface FilteredGoalFormData {
   frequency: GoalFrequencyWithAll
 }

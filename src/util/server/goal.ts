@@ -34,7 +34,6 @@ export function updateGoal(previousGoal: Goal, data: PostGoalRequestParameter) {
 
 export function checkedTodayGoalList(checkedGoalList: CheckableGoal[]) {
   const previousResponse = getGoalResponse();
-
   setGoalResponse({
     goalList: previousResponse.goalList,
     continuousGoalHistory: calculateContinuousGoal(previousResponse, checkedGoalList),
