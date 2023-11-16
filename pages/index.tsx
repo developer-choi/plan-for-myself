@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import Link from 'next/link';
 import React from 'react';
 import {useDispatchOpenModal} from '@store/reducers/modal';
 import {HorizontalFieldset} from '@component/common/etc';
@@ -9,7 +8,7 @@ export default function Home() {
   const hasChecked = true;
   const totalGoalList = [1];
 
-  const {openGoalModal} = useDispatchOpenModal()
+  const {openGoalModal, openCheckTodayModal} = useDispatchOpenModal()
 
   return (
     <Wrap>
@@ -19,25 +18,21 @@ export default function Home() {
         <>
           {hasChecked ? (
             <div>
-              <div>
-                누적 목표 달성률 : 00%
-              </div>
+              <ResultText>
+                누적 목표 달성률 : <Price>00%</Price>
+              </ResultText>
 
-              <div>
-                금일 정산금액 : 000,000원
-                <Link href="/check-today">
-                  <StyledLink>
-                    {'내역 보기 >'}
-                  </StyledLink>
-                </Link>
-              </div>
+              <ResultText>
+                금일 정산금액 : <Price>000,000원</Price>
+                <StyledLink style={{marginLeft: 8}} onClick={openCheckTodayModal}>
+                  {'내역 보기 >'}
+                </StyledLink>
+              </ResultText>
             </div>
           ) : (
-            <Link href="/check-today">
-              <Button>
-                {'오늘 목표 체크하러가기 >'}
-              </Button>
-            </Link>
+            <Button onClick={openCheckTodayModal}>
+              {'오늘 목표 체크하러가기 >'}
+            </Button>
           )}
 
           <H2>연속 달성중인 목표</H2>
@@ -102,6 +97,7 @@ const Wrap = styled.div`
 const StyledLink = styled.a`
   color: ${props => props.theme.main};
   font-weight: bold;
+  font-size: 14px;
 `;
 
 const ContinuousGoal = styled.ol`
@@ -149,4 +145,15 @@ const EditButton = styled(BaseButton)`
   background: orange;
   color: white;
   font-size: 12px;
+`;
+
+const ResultText = styled.span`
+  display: block;
+  font-size: 16px;
+`;
+
+const Price = styled.span`
+  font-size: 18px;
+  font-weight: bold;
+  color: ${props => props.theme.main};
 `;

@@ -15,7 +15,7 @@ export default function GoalModal({closeModal}: GoalModalProp) {
 
   return (
     <StyledModal closeModal={closeModal} disableEasilyClose>
-      <StyledHeading>목표 {isEdit ? '수정' : '등록'}</StyledHeading>
+      <ModalHeading>목표 {isEdit ? '수정' : '등록'}</ModalHeading>
       <StyledForm>
         <Input placeholder="제목 *"/>
         <Input placeholder="달성 시 금액 *"/>
@@ -39,10 +39,10 @@ export default function GoalModal({closeModal}: GoalModalProp) {
             {'위 항목 중 하나라도 수정할 경우,\n기존 목표와 완전히 다른 목표로 간주함.\n이전 목표는 연속달성 리셋 등의 불이익이 발생할 수 있음.'}
           </Warning>
         )}
-        <ButtonWrap>
+        <ModalButtonWrap>
           <Button className="gray" onClick={closeModal}>취소</Button>
           <Button type="submit">제출</Button>
-        </ButtonWrap>
+        </ModalButtonWrap>
       </StyledForm>
     </StyledModal>
   )
@@ -68,7 +68,7 @@ const StyledForm = styled.form`
   }
 `;
 
-const StyledHeading = styled.h1`
+export const ModalHeading = styled.h1`
   font-size: 28px;
   margin-bottom: 20px;
 `;
@@ -78,7 +78,8 @@ const Warning = styled.div`
   color: orange;
 `;
 
-const ButtonWrap = styled.div`
+export const ModalButtonWrap = styled.div`
+  width: 100%;
   display: flex;
   gap: 20px;
   
