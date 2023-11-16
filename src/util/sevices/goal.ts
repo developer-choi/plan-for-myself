@@ -61,7 +61,9 @@ export function useDeleteGoal() {
   const queryClient = useQueryClient();
   
   return useCallback((goal: Goal) => {
-    deleteGoal(goal)
-    queryClient.invalidateQueries(GOAL_RESPONSE_QUERY_KEY)
+    if (confirm('삭제하시겠습니까?')) {
+      deleteGoal(goal)
+      queryClient.invalidateQueries(GOAL_RESPONSE_QUERY_KEY)
+    }
   }, [queryClient])
 }
