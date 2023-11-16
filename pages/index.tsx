@@ -5,15 +5,15 @@ import {HorizontalFieldset} from '@component/common/etc';
 import Button, {BaseButton} from '@component/common/button';
 
 export default function Home() {
-  const hasChecked = true;
-  const totalGoalList = [1];
+  const hasChecked = false;
+  const totalGoalList = [];
 
   const {openGoalModal, openCheckTodayModal} = useDispatchOpenModal()
 
   return (
     <Wrap>
       {totalGoalList.length === 0 ? (
-        <Button onClick={openGoalModal}>목표 추가하기</Button>
+        <Button onClick={() => openGoalModal()}>목표 추가하기</Button>
       ) : (
         <>
           {hasChecked ? (

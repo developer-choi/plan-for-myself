@@ -5,43 +5,43 @@ import React from 'react';
 import Button from '@component/common/button';
 import Input from '@component/common/Input';
 import {HorizontalFieldset} from '@component/common/etc';
+import type {Goal} from '@type/goal';
+import {useGoalForm} from '@util/sevices/goal-form';
 
 export interface GoalModalProp extends EssentialModalProp {
-
+  data: Goal | undefined
 }
 
-export default function GoalModal({closeModal}: GoalModalProp) {
-  const isEdit = true
+export default function GoalModal(props: GoalModalProp) {
+  const {inputProps, formSubmit, isEdit} = useGoalForm(props)
 
   return (
-    <StyledModal closeModal={closeModal} disableEasilyClose>
+    <StyledModal closeModal={props.closeModal} disableEasilyClose>
       <ModalHeading>목표 {isEdit ? '수정' : '등록'}</ModalHeading>
-      <StyledForm>
-        <Input placeholder="제목 *"/>
-        <Input placeholder="달성 시 금액 *"/>
-        <Input placeholder="실패 시 금액"/>
+      <StyledForm onSubmit={formSubmit}>
+        <Input placeholder="제목 *" {...inputProps.title}/>
+        <Input type="number" placeholder="달성 시 금액 *" {...inputProps.achievePrice}/>
+        <Input type="number" placeholder="실패 시 금액" {...inputProps.notAchievePrice}/>
         <HorizontalFieldset>
-          <label>
-            <input type="radio" defaultChecked/>
-            Daily
-          </label>
-          <label>
-            <input type="radio"/>
-            Weekly
-          </label>
-          <label>
-            <input type="radio"/>
-            Monthly
-          </label>
+          {inputProps.radioList.map(props => (
+            <label key={props.value}>
+              <input type="radio" {...props}/>
+              {props.value}
+            </label>
+          ))}
         </HorizontalFieldset>
+        <CheckboxLabel>
+          <input type="checkbox" {...inputProps.enableContinuous}/>
+          연속 달성 활성화
+        </CheckboxLabel>
         {!isEdit ? null : (
           <Warning>
             {'위 항목 중 하나라도 수정할 경우,\n기존 목표와 완전히 다른 목표로 간주함.\n이전 목표는 연속달성 리셋 등의 불이익이 발생할 수 있음.'}
           </Warning>
         )}
         <ModalButtonWrap>
-          <Button className="gray" onClick={closeModal}>취소</Button>
-          <Button type="submit">제출</Button>
+          <Button className="gray" onClick={props.closeModal}>취소</Button>
+          <Button onClick={formSubmit}>제출</Button>
         </ModalButtonWrap>
       </StyledForm>
     </StyledModal>
@@ -87,5 +87,14 @@ export const ModalButtonWrap = styled.div`
   
   > button {
     flex-grow: 1;
+  }
+`;
+
+const CheckboxLabel = styled.label`
+  display: flex;
+  align-items: center;
+  
+  > input {
+    margin-right: 4px;
   }
 `;

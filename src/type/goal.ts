@@ -26,4 +26,4 @@ export interface ContinuousGoalHistory {
   createdTimestamp: number //그날 그날 체크해서 제출하고 연속날짜 새로계산할 때 이게 전전날 연속날짜 기록인지 계산할 때 사용
 }
 
-export type GoalFrequency = 'daily' | 'weekly' | 'monthly'
+export type GoalFrequency = 'Daily' | 'Weekly' | 'Monthly'

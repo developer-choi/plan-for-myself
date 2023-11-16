@@ -12,7 +12,7 @@ const buttonHoverEffect = css`
   }
 `;
 
-export const BaseButton: StyledComponent<'button', DefaultTheme> = styled.button.attrs((props) => ({...props, type: 'button'}))`
+export const BaseButton: StyledComponent<'button', DefaultTheme> = styled.button.attrs(({type = 'button', ...rest}) => ({...rest, type}))`
   ${buttonHoverEffect}
   
   &.gray {

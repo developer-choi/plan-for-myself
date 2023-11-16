@@ -65,10 +65,12 @@ export function useDispatchOpenModal() {
    * Frequently used callbacks
    ****************************************************************************/
 
-  const openGoalModal = useCallback((props: WithoutEssentialModalProp<GoalModalProp>) => {
+  const openGoalModal = useCallback((props?: WithoutEssentialModalProp<GoalModalProp>) => {
     openModal({
       Component: GoalModal,
-      props
+      props: props ?? {
+        data: undefined
+      }
     });
   }, [openModal]);
 
