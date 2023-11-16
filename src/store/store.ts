@@ -5,6 +5,13 @@ export const store = configureStore({
   reducer: {
     modal,
   },
+  middleware: getDefaultMiddleware => getDefaultMiddleware({
+    serializableCheck: {
+      //https://redux-toolkit.js.org/usage/usage-guide#working-with-non-serializable-data
+      ignoredPaths: ['modal.modals'], // Ignore state message
+      ignoredActionPaths: ['payload.props', 'payload.Component'] // Ignore dispatch action message
+    }
+  })
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
