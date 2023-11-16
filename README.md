@@ -1,21 +1,28 @@
-## Installation
+### 의도
+목표를 달성한만큼 자유롭게 용돈을 사용하기
 
-```bash
-yarn create next-app project-name -e https://github.com/developer-choi/next-development-environment
-```
-
-## Core Packages
+### 기능
 <ul>
-<li>next: 12.3.1</li>
-<li>react: 18.2.0</li>
-<li>styled-components: 5.3.6</li>
-<li>typescript: 4.8.3</li>
+목표 제출 / 처리기능
+<ol>평일에는 일일목표만 노출</ol>
+<ol>일요일에는 일일목표 + 주간목표 노출</ol>
+<ol>매달 1일에는 일일목표 + 주간목표 + 월간목표 노출</ol>
 </ul>
 
-## Note
-<ol>
-<li>How to set up the styled-components in SSR environment is <a href="https://styled-components.com/docs/advanced#server-side-rendering">here</a>.</li>
-<li>The solution that <a href="https://velog.io/@jay/ssr-%EC%82%BD%EC%A7%88%EA%B8%B0-styled-component%EA%B0%80-%EC%9E%98-%EB%A0%8C%EB%8D%94%EB%A7%81%EB%90%98%EC%A7%80-%EC%95%8A%EC%95%84%EC%9A%94">styled-components bug that occur in SSR environment</a> is in the 3rd link.</li>
-<li>The styled-components setting is base on <a href="https://github.com/vercel/next.js/tree/master/examples/with-styled-components">here.</a></li>
-<li>The package version remains the same as <a href="https://github.com/developer-choi/react-playground">react-playground</a>.</li>
-</ol>
+<ul>
+목표를 계속 달성하도록 유도하는 기능
+<ol>목표를 달성한 만큼 스스로 할당안 액수만큼 자유롭게 용돈으로 사용</ol>
+<ol>목표를 달성하지 못했을 때 차감할 금액 설정가능</ol>
+<ol>연속 목표 달성일수 표시</ol>
+</ul>
+
+### 핵심
+이 서비스는, 아무것도 보장할 수 없음.
+
+사용자가 목표 달성 안했는데 한걸로 체크하고 제출해도, 
+
+제 3자는 진짜로 했는지 안했는지 알 수 없음.
+
+이 서비스는 철저하게 사용자 본인의 양심에 모든걸 맡김.
+
+그래서, 목표를 달성한 대가는 반드시 본인의 용돈이나 월급이 되어야함.
