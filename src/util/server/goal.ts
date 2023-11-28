@@ -1,13 +1,14 @@
-import type {CheckableGoal, ContinuousGoal, Goal} from '@type/goal';
+import type {CheckableGoal, ContinuousGoal, Goal, GoalFrequency} from '@type/goal';
 import type {ContinuousGoalHistory} from '@type/goal';
-import type {GoalResponse, PostGoalRequestParameter} from '@type/goal-server';
+import type {GoalFullResponse, PostGoalRequestParameter} from '@type/goal-server';
 import {getDiffBetweenDate} from '@util/extend/date-util';
+import type {TodayCheckGoalListResponse} from '@type/goal-server';
 
 /*************************************************************************************************************
  * Exported functions
  *************************************************************************************************************/
 export function createGoal(goal: PostGoalRequestParameter) {
-  const {goalList, ...rest} = getGoalResponse();
+  const {goalList, ...rest} = getGoalFullResponse();
   setGoalResponse({
     ...rest,
     goalList: goalList.concat({
@@ -15,25 +16,25 @@ export function createGoal(goal: PostGoalRequestParameter) {
       pk: new Date().getTime(),
       notAchievePrice: goal.notAchievePrice ?? 0,
     })
-  })
+  });
 }
 
 export function deleteGoal(goal: Goal) {
-  const {goalList, ...rest} = getGoalResponse();
+  const {goalList, ...rest} = getGoalFullResponse();
 
   setGoalResponse({
     ...rest,
     goalList: goalList.filter(({pk}) => goal.pk !== pk)
-  })
+  });
 }
 
 export function updateGoal(previousGoal: Goal, data: PostGoalRequestParameter) {
-  deleteGoal(previousGoal)
-  createGoal(data)
+  deleteGoal(previousGoal);
+  createGoal(data);
 }
 
 export function checkedTodayGoalList(checkedGoalList: CheckableGoal[]) {
-  const previousResponse = getGoalResponse();
+  const previousResponse = getGoalFullResponse();
   setGoalResponse({
     goalList: previousResponse.goalList,
     continuousGoalHistory: calculateContinuousGoal(previousResponse, checkedGoalList),
@@ -49,7 +50,7 @@ export function checkedTodayGoalList(checkedGoalList: CheckableGoal[]) {
   });
 }
 
-export function getGoalResponse(): GoalResponse {
+export function getGoalFullResponse(): GoalFullResponse {
   const item = localStorage.getItem(STORAGE_KEY);
 
   if (item === null) {
@@ -63,7 +64,7 @@ export function getGoalResponse(): GoalResponse {
     return {
       ...response,
       hasCheckedToday: !latestCreatedTimestamp ? false : getDiffBetweenDate(new Date().getTime(), latestCreatedTimestamp) === 0
-    }
+    };
   } catch (error) {
     console.error(error);
     localStorage.removeItem(STORAGE_KEY);
@@ -71,14 +72,26 @@ export function getGoalResponse(): GoalResponse {
   }
 }
 
+export function getTodayCheckGoalListResponse() {
+  const {goalList, checkedGoalHistoryList, hasCheckedToday} = getGoalFullResponse();
+
+  const response: TodayCheckGoalListResponse = {
+    goalList: getTodayGoalFilterFrequency(goalList),
+    checkedGoalHistoryList,
+    hasCheckedToday
+  };
+
+  return response;
+}
+
 /*************************************************************************************************************
  * Non Export
  *************************************************************************************************************/
 const STORAGE_KEY = 'goal-storage';
 
-type StoredGoalResponse = Omit<GoalResponse, 'hasCheckedToday'>
+type StoredGoalResponse = Omit<GoalFullResponse, 'hasCheckedToday'>
 
-const DEFAULT_GOAL_RESPONSE: GoalResponse = {
+const DEFAULT_GOAL_RESPONSE: GoalFullResponse = {
   goalList: [],
   accumulateGoalRate: 0,
   checkedGoalHistoryList: [],
@@ -95,7 +108,7 @@ const DEFAULT_GOAL_RESPONSE: GoalResponse = {
  * 하지만 매일 매번 과거의 기록까지 연산하는것을 방지하기위해,
  * 그날그날 기준 계산한 값을 continuousGoalList에 저장하기로 결정
  */
-export function calculateContinuousGoal(previousResponse: GoalResponse, checkedGoalList: CheckableGoal[]): ContinuousGoalHistory | undefined {
+export function calculateContinuousGoal(previousResponse: GoalFullResponse, checkedGoalList: CheckableGoal[]): ContinuousGoalHistory | undefined {
   const currentTimestamp = new Date().getTime();
   const continuousGoalList: ContinuousGoal[] = checkedGoalList.reduce<ContinuousGoal[]>((a, b) => {
     if (!b.checked || !b.enableContinuous) {
@@ -145,7 +158,7 @@ function calculateTotal(checkedGoalList: CheckableGoal[]) {
   }, 0);
 }
 
-function calculateAccumulateRate(previousResponse: GoalResponse, checkedGoalList: CheckableGoal[]) {
+function calculateAccumulateRate(previousResponse: GoalFullResponse, checkedGoalList: CheckableGoal[]) {
   const achieveList = checkedGoalList.filter(({checked}) => checked);
   const todayRate = achieveList.length * 100 / checkedGoalList.length;
   return Math.floor((previousResponse.accumulateGoalRate * previousResponse.checkedGoalHistoryList.length + todayRate) / (previousResponse.checkedGoalHistoryList.length + 1));
@@ -153,4 +166,26 @@ function calculateAccumulateRate(previousResponse: GoalResponse, checkedGoalList
 
 function setGoalResponse(response: StoredGoalResponse) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(response));
+}
+
+function getTodayGoalFilterFrequency(goalList: Goal[]): Goal[] {
+  const value = new Date();
+  let result: Goal[] = []
+
+  const goalRecord = goalList.reduce((a, b) => {
+    a[b.frequency].push(b);
+    return a;
+  }, {Daily: [], Monthly: [], Weekly: []} as Record<GoalFrequency, Goal[]>)
+
+  // Monthly
+  if (value.getDate() === 1) {
+    result = result.concat(goalRecord.Monthly)
+  }
+
+  // 일요일, Weekly
+  if (value.getDay() === 0) {
+    result = result.concat(goalRecord.Weekly)
+  }
+
+  return result.concat(goalRecord.Daily)
 }

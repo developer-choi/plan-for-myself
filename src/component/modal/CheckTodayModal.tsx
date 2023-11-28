@@ -13,11 +13,13 @@ export interface CheckTodayModalProp extends EssentialModalProp {
 
 export default function CheckTodayModal({closeModal}: CheckTodayModalProp) {
   const {data} = useGoalResponse();
-  const {formSubmit, radioList, submitDisabled} = useCheckGoalListForm({response: data, closeModal});
+  const formResult = useCheckGoalListForm({response: data, closeModal});
 
-  if (!data) {
+  if (!formResult) {
     return null;
   }
+
+  const {formSubmit, submitDisabled, radioList} = formResult
 
   return (
     <StyledModal closeModal={closeModal} disableEasilyClose>

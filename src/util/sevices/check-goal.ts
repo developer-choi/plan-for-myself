@@ -1,7 +1,7 @@
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {useCallback} from 'react';
-import {getTodayGoalFilterFrequency, GOAL_RESPONSE_QUERY_KEY} from '@util/sevices/goal';
-import type {GoalResponse} from '@type/goal-server';
+import {GOAL_RESPONSE_QUERY_KEY} from '@util/sevices/goal';
+import type {TodayCheckGoalListResponse} from '@type/goal-server';
 import {checkedTodayGoalList} from '@util/server/goal';
 import {useQueryClient} from 'react-query';
 
@@ -10,7 +10,7 @@ interface CheckGoalListFormData {
 }
 
 export function useCheckGoalListForm({closeModal, response}: {
-  response: GoalResponse | undefined,
+  response: TodayCheckGoalListResponse | undefined,
   closeModal: () => void
 }) {
   const queryClient = useQueryClient();
@@ -38,15 +38,17 @@ export function useCheckGoalListForm({closeModal, response}: {
     queryClient.invalidateQueries(GOAL_RESPONSE_QUERY_KEY);
   }, [closeModal, queryClient, response]);
 
-  const filteredGoalList = getTodayGoalFilterFrequency(response?.goalList ?? []);
+  if (!response) {
+    return null
+  }
 
   return {
     formSubmit: handleSubmit(onSubmit),
-    submitDisabled: response?.hasCheckedToday,
-    radioList: filteredGoalList.map(({pk, title}) => ({
+    submitDisabled: response.hasCheckedToday,
+    radioList: response.goalList.map(({pk, title}) => ({
       props: {
         ...register('checkedGoalList'),
-        disabled: response?.hasCheckedToday,
+        disabled: response.hasCheckedToday,
         value: pk
       },
       title
