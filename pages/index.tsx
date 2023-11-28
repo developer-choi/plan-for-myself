@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatchOpenModal} from '@store/reducers/modal';
 import Button from '@component/common/button';
 import {useGoalResponse} from '@util/sevices/goal';
@@ -10,6 +10,11 @@ import TotalGoalList from '@component/TotalGoalList';
 export default function Home() {
   const {openGoalModal, openCheckTodayModal} = useDispatchOpenModal()
   const {data} = useGoalResponse()
+  const [text, setText] = useState('');
+
+  useEffect(() => {
+    setText(localStorage.getItem('goal-storage') ?? '')
+  }, []);
 
   if (!data) {
     return null
@@ -19,6 +24,7 @@ export default function Home() {
 
   return (
     <Wrap>
+      {text}
       {goalList.length === 0 ? (
         <Button onClick={() => openGoalModal()}>목표 추가하기</Button>
       ) : (
