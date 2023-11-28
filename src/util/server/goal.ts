@@ -99,7 +99,7 @@ const DEFAULT_GOAL_RESPONSE: GoalFullResponse = {
   hasCheckedToday: false
 };
 
-export function forceResetCheckedHistory() {
+function forceResetCheckedHistory() {
   const previous = getGoalFullResponse();
 
   const newData: GoalFullResponse = {
