@@ -1,19 +1,19 @@
 import styled from 'styled-components';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useDispatchOpenModal} from '@store/reducers/modal';
 import Button from '@component/common/button';
 import {useGoalResponse} from '@util/sevices/goal';
 import GoalOverview from '@component/GoalOverview';
 import ContinuousGoalList from '@component/ContinuousGoalList';
 import TotalGoalList from '@component/TotalGoalList';
+import {forceResetCheckedHistory} from '@util/server/goal';
 
 export default function Home() {
   const {openGoalModal, openCheckTodayModal} = useDispatchOpenModal()
   const {data} = useGoalResponse()
-  const [text, setText] = useState('');
 
   useEffect(() => {
-    setText(localStorage.getItem('goal-storage') ?? '')
+    forceResetCheckedHistory()
   }, []);
 
   if (!data) {
@@ -24,7 +24,6 @@ export default function Home() {
 
   return (
     <Wrap>
-      {text}
       {goalList.length === 0 ? (
         <Button onClick={() => openGoalModal()}>목표 추가하기</Button>
       ) : (
