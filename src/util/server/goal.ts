@@ -99,6 +99,17 @@ const DEFAULT_GOAL_RESPONSE: GoalFullResponse = {
   hasCheckedToday: false
 };
 
+function forceResetCheckedHistory() {
+  const previous = getGoalFullResponse();
+
+  const newData: GoalFullResponse = {
+    ...DEFAULT_GOAL_RESPONSE,
+    goalList: previous.goalList,
+  };
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(newData));
+}
+
 /** 연속날짜 계산규칙 (처음부터 모든기록을 다 뒤져서 계산하는 방법)
  * 1. 첫 번째 히스토리가 오늘꺼도 아니고 어제꺼도 아니면 0일
  * 2. 첫 번째 히스토리의 history에 있는 checkedGoalList에서 enable true인걸 간추려서
@@ -170,22 +181,22 @@ function setGoalResponse(response: StoredGoalResponse) {
 
 function getTodayGoalFilterFrequency(goalList: Goal[]): Goal[] {
   const value = new Date();
-  let result: Goal[] = []
+  let result: Goal[] = [];
 
   const goalRecord = goalList.reduce((a, b) => {
     a[b.frequency].push(b);
     return a;
-  }, {Daily: [], Monthly: [], Weekly: []} as Record<GoalFrequency, Goal[]>)
+  }, {Daily: [], Monthly: [], Weekly: []} as Record<GoalFrequency, Goal[]>);
 
   // Monthly
   if (value.getDate() === 1) {
-    result = result.concat(goalRecord.Monthly)
+    result = result.concat(goalRecord.Monthly);
   }
 
   // 일요일, Weekly
   if (value.getDay() === 0) {
-    result = result.concat(goalRecord.Weekly)
+    result = result.concat(goalRecord.Weekly);
   }
 
-  return result.concat(goalRecord.Daily)
+  return result.concat(goalRecord.Daily);
 }
