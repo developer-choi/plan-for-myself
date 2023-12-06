@@ -29,7 +29,7 @@ export function useCheckGoalListForm({closeModal}: {
       return;
     }
 
-    checkedTodayGoalList(response.goalList.map(goal => ({
+    checkedTodayGoalList(response.todayCheckGoalList.map(goal => ({
       ...goal,
       checked: data.checkedGoalList.includes(goal.pk.toString())
     })));
@@ -45,7 +45,7 @@ export function useCheckGoalListForm({closeModal}: {
   return {
     formSubmit: handleSubmit(onSubmit),
     submitDisabled: response.hasCheckedToday,
-    radioList: response.goalList.map(({pk, title}) => ({
+    radioList: response.todayCheckGoalList.map(({pk, title}) => ({
       props: {
         ...register('checkedGoalList'),
         disabled: response.hasCheckedToday,
