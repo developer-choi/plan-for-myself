@@ -2,7 +2,6 @@ import type {CheckableGoal, ContinuousGoal, Goal, GoalFrequency} from '@type/goa
 import type {ContinuousGoalHistory} from '@type/goal';
 import type {GoalFullResponse, PostGoalRequestParameter} from '@type/goal-server';
 import {getDiffBetweenDate} from '@util/extend/date-util';
-import type {TodayCheckGoalListResponse} from '@type/goal-server';
 
 /*************************************************************************************************************
  * Exported functions
@@ -36,7 +35,7 @@ export function updateGoal(previousGoal: Goal, data: PostGoalRequestParameter) {
 export function checkedTodayGoalList(checkedGoalList: CheckableGoal[]) {
   const previousResponse = getGoalFullResponse();
   setGoalResponse({
-    goalList: previousResponse.goalList,
+    ...previousResponse,
     continuousGoalHistory: calculateContinuousGoal(previousResponse, checkedGoalList),
     checkedGoalHistoryList: [
       {
@@ -46,7 +45,7 @@ export function checkedTodayGoalList(checkedGoalList: CheckableGoal[]) {
       },
       ...previousResponse.checkedGoalHistoryList
     ],
-    accumulateGoalRate: calculateAccumulateRate(previousResponse, checkedGoalList)
+    accumulateGoalRate: calculateAccumulateRate(previousResponse, checkedGoalList),
   });
 }
 
@@ -63,6 +62,7 @@ export function getGoalFullResponse(): GoalFullResponse {
 
     return {
       ...response,
+      todayCheckGoalList: getTodayGoalFilterFrequency(response.goalList),
       hasCheckedToday: !latestCreatedTimestamp ? false : getDiffBetweenDate(new Date().getTime(), latestCreatedTimestamp) === 0
     };
   } catch (error) {
@@ -70,18 +70,6 @@ export function getGoalFullResponse(): GoalFullResponse {
     localStorage.removeItem(STORAGE_KEY);
     return DEFAULT_GOAL_RESPONSE;
   }
-}
-
-export function getTodayCheckGoalListResponse() {
-  const {goalList, checkedGoalHistoryList, hasCheckedToday} = getGoalFullResponse();
-
-  const response: TodayCheckGoalListResponse = {
-    goalList: getTodayGoalFilterFrequency(goalList),
-    checkedGoalHistoryList,
-    hasCheckedToday
-  };
-
-  return response;
 }
 
 /*************************************************************************************************************
@@ -96,7 +84,8 @@ const DEFAULT_GOAL_RESPONSE: GoalFullResponse = {
   accumulateGoalRate: 0,
   checkedGoalHistoryList: [],
   continuousGoalHistory: undefined,
-  hasCheckedToday: false
+  hasCheckedToday: false,
+  todayCheckGoalList: []
 };
 
 function forceResetCheckedHistory() {

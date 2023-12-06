@@ -5,11 +5,10 @@ import {useForm} from 'react-hook-form';
 import {useCallback} from 'react';
 
 export const GOAL_FREQUENCY_LIST: GoalFrequency[] = ['Daily', 'Weekly', 'Monthly']
-export const GOAL_RESPONSE_QUERY_KEY = ['goal-response']
-
+export const GOAL_FULL_RESPONSE_QUERY_KEY = ['goal-full-response']
 export function useGoalResponse() {
   return useQuery({
-    queryKey: GOAL_RESPONSE_QUERY_KEY,
+    queryKey: GOAL_FULL_RESPONSE_QUERY_KEY,
     queryFn: getGoalFullResponse,
     staleTime: Infinity,
     cacheTime: Infinity
@@ -47,7 +46,7 @@ export function useDeleteGoal() {
   return useCallback((goal: Goal) => {
     if (confirm('삭제하시겠습니까?')) {
       deleteGoal(goal)
-      queryClient.invalidateQueries(GOAL_RESPONSE_QUERY_KEY)
+      queryClient.invalidateQueries(GOAL_FULL_RESPONSE_QUERY_KEY)
     }
   }, [queryClient])
 }

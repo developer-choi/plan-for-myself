@@ -2,7 +2,7 @@ import type {PostGoalRequestParameter} from '@type/goal-server';
 import {useCallback} from 'react';
 import type {RegisterOptions, SubmitErrorHandler, SubmitHandler} from 'react-hook-form';
 import {useForm} from 'react-hook-form';
-import {GOAL_FREQUENCY_LIST, GOAL_RESPONSE_QUERY_KEY} from '@util/sevices/goal';
+import {GOAL_FREQUENCY_LIST, GOAL_FULL_RESPONSE_QUERY_KEY} from '@util/sevices/goal';
 import {baseHandleErrors} from '@util/extend/react-hook-form';
 import type {GoalModalProp} from '@component/modal/GoalModal';
 import {createGoal, updateGoal} from '@util/server/goal';
@@ -41,7 +41,7 @@ export function useGoalForm({closeModal, data}: GoalModalProp) {
     } else {
       updateGoal(data, goalParameter);
     }
-    queryClient.invalidateQueries(GOAL_RESPONSE_QUERY_KEY);
+    queryClient.invalidateQueries(GOAL_FULL_RESPONSE_QUERY_KEY);
     closeModal();
   }, [closeModal, data, queryClient]);
 

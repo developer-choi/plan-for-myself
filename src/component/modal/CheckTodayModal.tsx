@@ -4,7 +4,6 @@ import type {EssentialModalProp} from '@store/reducers/modal';
 import Button from '@component/common/button';
 import React from 'react';
 import {ModalButtonWrap, ModalHeading} from '@component/modal/GoalModal';
-import {useGoalResponse} from '@util/sevices/goal';
 import {useCheckGoalListForm} from '@util/sevices/check-goal';
 
 export interface CheckTodayModalProp extends EssentialModalProp {
@@ -12,8 +11,7 @@ export interface CheckTodayModalProp extends EssentialModalProp {
 }
 
 export default function CheckTodayModal({closeModal}: CheckTodayModalProp) {
-  const {data} = useGoalResponse();
-  const formResult = useCheckGoalListForm({response: data, closeModal});
+  const formResult = useCheckGoalListForm({closeModal});
 
   if (!formResult) {
     return null;

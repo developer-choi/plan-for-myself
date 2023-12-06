@@ -1,7 +1,6 @@
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {useCallback} from 'react';
-import {GOAL_RESPONSE_QUERY_KEY} from '@util/sevices/goal';
-import type {TodayCheckGoalListResponse} from '@type/goal-server';
+import {GOAL_FULL_RESPONSE_QUERY_KEY, useGoalResponse} from '@util/sevices/goal';
 import {checkedTodayGoalList} from '@util/server/goal';
 import {useQueryClient} from 'react-query';
 
@@ -9,10 +8,11 @@ interface CheckGoalListFormData {
   checkedGoalList: string[];
 }
 
-export function useCheckGoalListForm({closeModal, response}: {
-  response: TodayCheckGoalListResponse | undefined,
+export function useCheckGoalListForm({closeModal}: {
   closeModal: () => void
 }) {
+  const {data: response} = useGoalResponse()
+
   const queryClient = useQueryClient();
   const {register, handleSubmit} = useForm<CheckGoalListFormData>({
     defaultValues: {
@@ -35,7 +35,7 @@ export function useCheckGoalListForm({closeModal, response}: {
     })));
 
     closeModal();
-    queryClient.invalidateQueries(GOAL_RESPONSE_QUERY_KEY);
+    queryClient.invalidateQueries(GOAL_FULL_RESPONSE_QUERY_KEY);
   }, [closeModal, queryClient, response]);
 
   if (!response) {
