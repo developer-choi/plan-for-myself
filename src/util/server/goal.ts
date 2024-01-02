@@ -59,8 +59,7 @@ export function getGoalFullResponse(): GoalFullResponse {
   try {
     const response = JSON.parse(item) as StoredGoalResponse;
     const latestCreatedTimestamp = response.checkedGoalHistoryList[0]?.createdTimestamp as number | undefined;
-    alert(response.checkedGoalHistoryList[0].createdTimestamp);
-    alert(response.checkedGoalHistoryList[0].totalPrice);
+    alert(JSON.stringify(response.checkedGoalHistoryList[0]));
 
     return {
       ...response,
