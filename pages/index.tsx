@@ -39,4 +39,7 @@ export default function Home() {
 
 const Wrap = styled.div`
   padding: 20px;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 500px;
 `;

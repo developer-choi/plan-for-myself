@@ -4,7 +4,6 @@ import type {Goal} from '@type/goal';
 import {useDeleteGoal, useTotalGoalList} from '@util/sevices/goal';
 import styled from 'styled-components';
 import Button, {BaseButton} from '@component/common/button';
-import {numberWithComma} from '@util/extend/number';
 import {useDispatchOpenModal} from '@store/reducers/modal';
 
 export interface TotalGoalListProp {
@@ -33,8 +32,6 @@ export default function TotalGoalList({goalList}: TotalGoalListProp) {
         {filteredGoalList.map((goal) => (
           <GoalOl key={goal.pk}>
             {goal.title}
-            <GoalPrice className="plus">+{numberWithComma(goal.achievePrice)}원</GoalPrice>
-            {!goal.notAchievePrice ? null : <GoalPrice className="minus">-{numberWithComma(goal.notAchievePrice)}원</GoalPrice>}
             <SmallButton className="edit" onClick={() => openGoalModal({data: goal})}>수정</SmallButton>
             <SmallButton className="delete" onClick={() => deleteGoal(goal)}>삭제</SmallButton>
           </GoalOl>
@@ -45,18 +42,6 @@ export default function TotalGoalList({goalList}: TotalGoalListProp) {
     </>
   )
 }
-
-
-const GoalPrice = styled.span`
-  margin-inline: 2px;
-  &.plus {
-    color: blue;
-  }
-  
-  &.minus {
-    color: red;
-  }
-`;
 
 const GoalOl = styled.ol`
   display: flex;
@@ -70,6 +55,9 @@ const GoalOl = styled.ol`
 const SmallButton = styled(BaseButton)`
   padding: 2px 8px;
   margin-left: 4px;
+  &:first-of-type {
+    margin-left: auto;
+  }
   
   color: white;
   font-size: 12px;
