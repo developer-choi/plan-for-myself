@@ -68,6 +68,14 @@ export function getGoalFullResponse(): GoalFullResponse {
   }
 }
 
+export function initializeGoalList(data: string) {
+  const goalList = JSON.parse(data) as Goal[];
+  setGoalResponse({
+    originalGoalList: goalList,
+    todayHistory: DEFAULT_GOAL_RESPONSE.todayHistory
+  });
+}
+
 /*************************************************************************************************************
  * Non Export
  *************************************************************************************************************/

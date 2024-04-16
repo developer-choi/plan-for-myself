@@ -1,19 +1,26 @@
 import {HorizontalFieldset, MainPageH2} from '@component/common/etc';
-import React from 'react';
+import React, {useCallback} from 'react';
 import type {Goal} from '@type/goal';
-import {useDeleteGoal, useTotalGoalList} from '@util/sevices/goal';
+import {useDeleteGoal, useGoalResponse, useTotalGoalList} from '@util/sevices/goal';
 import styled from 'styled-components';
 import Button, {BaseButton} from '@component/common/button';
 import {useDispatchOpenModal} from '@store/reducers/modal';
 
 export interface TotalGoalListProp {
-  goalList: Goal[]
+  goalList: Goal[];
 }
 
 export default function TotalGoalList({goalList}: TotalGoalListProp) {
-  const {radioPropsList, filteredGoalList, frequency} = useTotalGoalList(goalList)
-  const {openGoalModal} = useDispatchOpenModal()
-  const deleteGoal = useDeleteGoal()
+  const {radioPropsList, filteredGoalList, frequency} = useTotalGoalList(goalList);
+  const {openGoalModal} = useDispatchOpenModal();
+  const deleteGoal = useDeleteGoal();
+
+  const {data} = useGoalResponse();
+
+  const copyGoalList = useCallback(async () => {
+    await navigator.clipboard.writeText(JSON.stringify(data?.originalGoalList));
+    alert('복사되었습니다.');
+  }, [data?.originalGoalList]);
 
   return (
     <>
@@ -41,8 +48,11 @@ export default function TotalGoalList({goalList}: TotalGoalListProp) {
       </ul>
 
       <Button style={{marginTop: 10}} className="light-main" onClick={() => openGoalModal()}>새 목표 추가하기</Button>
+      {!data ? null : (
+        <Button style={{marginLeft: 5}} className="light-main" onClick={copyGoalList}>복사하기</Button>
+      )}
     </>
-  )
+  );
 }
 
 const GoalOl = styled.ol`
@@ -57,6 +67,7 @@ const GoalOl = styled.ol`
 const SmallButton = styled(BaseButton)`
   padding: 2px 8px;
   margin-left: 4px;
+  
   &:first-of-type {
     margin-left: auto;
   }

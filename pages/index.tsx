@@ -1,17 +1,30 @@
 import styled from 'styled-components';
-import React from 'react';
+import React, {useCallback} from 'react';
 import {useDispatchOpenModal} from '@store/reducers/modal';
 import Button from '@component/common/button';
-import {useGoalResponse} from '@util/sevices/goal';
+import {GOAL_FULL_RESPONSE_QUERY_KEY, useGoalResponse} from '@util/sevices/goal';
 import GoalOverview from '@component/GoalOverview';
 import TotalGoalList from '@component/TotalGoalList';
+import {initializeGoalList} from '@util/server/goal';
+import {useQueryClient} from 'react-query';
 
 export default function Home() {
-  const {openGoalModal, openCheckTodayModal} = useDispatchOpenModal()
-  const {data} = useGoalResponse()
+  const {openGoalModal, openCheckTodayModal} = useDispatchOpenModal();
+  const {data} = useGoalResponse();
+
+  const queryClient = useQueryClient();
+
+  const loadGoalList = useCallback(() => {
+    const value = prompt('기존 goalList 값을 입력하세요.');
+
+    if (value) {
+      initializeGoalList(value);
+      queryClient.invalidateQueries(GOAL_FULL_RESPONSE_QUERY_KEY);
+    }
+  }, [queryClient]);
 
   if (!data) {
-    return null
+    return null;
   }
 
   const {todayHistory, originalGoalList} = data;
@@ -19,7 +32,10 @@ export default function Home() {
   return (
     <Wrap>
       {originalGoalList.length === 0 ? (
-        <Button onClick={() => openGoalModal()}>목표 추가하기</Button>
+        <>
+          <Button onClick={() => openGoalModal()}>목표 추가하기</Button>
+          <Button style={{marginLeft: 5}} className="light-main" onClick={loadGoalList}>불러오기</Button>
+        </>
       ) : (
         <>
           {todayHistory.hasChecked ? (
