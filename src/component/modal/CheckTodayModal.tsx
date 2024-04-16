@@ -17,7 +17,7 @@ export default function CheckTodayModal({closeModal}: CheckTodayModalProp) {
     return null;
   }
 
-  const {formSubmit, submitDisabled, radioList} = formResult
+  const {formSubmit, submitDisabled, radioList, submittedDate} = formResult;
 
   return (
     <StyledModal closeModal={closeModal} disableEasilyClose>
@@ -31,7 +31,7 @@ export default function CheckTodayModal({closeModal}: CheckTodayModalProp) {
         ))}
         {!submitDisabled ? null : (
           <div>
-            정산 : 000원 / 제출시작 : 00시 00분
+            제출시각 : {submittedDate}
           </div>
         )}
         <ModalButtonWrap>

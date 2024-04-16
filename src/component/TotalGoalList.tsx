@@ -31,6 +31,7 @@ export default function TotalGoalList({goalList}: TotalGoalListProp) {
       <ul>
         {filteredGoalList.map((goal) => (
           <GoalOl key={goal.pk}>
+            {!goal.isImportant ? null : <ImportantMark/>}
             {goal.title}
             <SmallButton className="edit" onClick={() => openGoalModal({data: goal})}>수정</SmallButton>
             <SmallButton className="delete" onClick={() => deleteGoal(goal)}>삭제</SmallButton>
@@ -69,4 +70,12 @@ const SmallButton = styled(BaseButton)`
   &.delete {
     background: red;
   }
+`;
+
+const ImportantMark = styled.div`
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: red;
+  margin-right: 3px;
 `;

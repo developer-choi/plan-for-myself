@@ -16,7 +16,8 @@ export function useGoalForm({closeModal, data}: GoalModalProp) {
       title: data.title,
       achievePrice: data.achievePrice.toString(),
       notAchievePrice: data.notAchievePrice.toString(),
-      frequency: data.frequency
+      frequency: data.frequency,
+      isImportant: data.isImportant
     },
     shouldFocusError: false
   });
@@ -54,6 +55,7 @@ export function useGoalForm({closeModal, data}: GoalModalProp) {
         ...register('frequency'),
         value: frequency,
       })),
+      isImportant: register('isImportant')
     },
     isEdit: !!data
   };
@@ -67,11 +69,15 @@ const ACHIEVE_OPTIONS: RegisterOptions = {
   required: '달성 시 금액은 필수입니다.'
 };
 
-export type GoalFormData = Record<keyof PostGoalRequestParameter, string>;
+export interface GoalFormData extends Omit<PostGoalRequestParameter, 'notAchievePrice' | 'achievePrice'> {
+  notAchievePrice: string;
+  achievePrice: string;
+}
 
 const DEFAULT_FORM_DATA: GoalFormData = {
   title: '',
   notAchievePrice: '',
   frequency: 'Daily',
   achievePrice: '',
+  isImportant: false
 };

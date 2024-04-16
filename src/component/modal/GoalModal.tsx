@@ -22,6 +22,10 @@ export default function GoalModal(props: GoalModalProp) {
         <Input placeholder="제목 *" {...inputProps.title}/>
         <Input type="number" placeholder="달성 시 금액 *" {...inputProps.achievePrice}/>
         <Input type="number" placeholder="실패 시 금액" {...inputProps.notAchievePrice}/>
+        <CheckboxLabel>
+          <input type="checkbox" {...inputProps.isImportant}/>
+          중요
+        </CheckboxLabel>
         <HorizontalFieldset>
           {inputProps.radioList.map(props => (
             <label key={props.value}>
@@ -73,5 +77,14 @@ export const ModalButtonWrap = styled.div`
   
   > button {
     flex-grow: 1;
+  }
+`;
+
+const CheckboxLabel = styled.label`
+  display: flex;
+  align-items: center;
+  
+  > input {
+    margin-right: 4px;
   }
 `;

@@ -3,6 +3,7 @@ import {useCallback} from 'react';
 import {GOAL_FULL_RESPONSE_QUERY_KEY, useGoalResponse} from '@util/sevices/goal';
 import {checkedTodayGoalList} from '@util/server/goal';
 import {useQueryClient} from 'react-query';
+import dayjs from 'dayjs';
 
 interface CheckGoalListFormData {
   checkedGoalList: string[];
@@ -11,12 +12,13 @@ interface CheckGoalListFormData {
 export function useCheckGoalListForm({closeModal}: {
   closeModal: () => void
 }) {
-  const {data: response} = useGoalResponse()
+  const {data: response} = useGoalResponse();
+  const todayHistory = response?.checkedGoalHistoryList[0];
 
   const queryClient = useQueryClient();
   const {register, handleSubmit} = useForm<CheckGoalListFormData>({
     defaultValues: {
-      checkedGoalList: !response?.hasCheckedToday ? [] : response.checkedGoalHistoryList[0].checkedGoalList.filter(goal => goal.checked).map(goal => goal.pk.toString())
+      checkedGoalList: !todayHistory ? [] : todayHistory.checkedGoalList.filter(goal => goal.checked).map(goal => goal.pk.toString())
     }
   });
 
@@ -52,6 +54,7 @@ export function useCheckGoalListForm({closeModal}: {
         value: pk
       },
       title
-    }))
+    })),
+    submittedDate: !todayHistory ? undefined : dayjs(todayHistory.createdTimestamp).format('YYYY-MM-DD HH:mm:ss')
   };
 }

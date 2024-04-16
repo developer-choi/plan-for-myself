@@ -13,8 +13,8 @@ export default function Home() {
   if (!data) {
     return null
   }
-  
-  const {hasCheckedToday, checkedGoalHistoryList, goalList} = data
+
+  const {hasCheckedToday, checkedGoalHistoryList, goalList} = data;
 
   return (
     <Wrap>

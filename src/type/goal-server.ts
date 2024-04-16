@@ -1,6 +1,6 @@
 import type {CheckedGoalHistory, Goal} from '@type/goal';
 
-export type PostGoalRequestParameter = Omit<Goal, 'pk' | 'notAchievePrice'> & Partial<Pick<Goal, 'notAchievePrice'>>
+export type PostGoalRequestParameter = Omit<Goal, 'pk' | 'notAchievePrice'> & Partial<Pick<Goal, 'notAchievePrice'>>;
 
 export interface GoalFullResponse {
   goalList: Goal[]
