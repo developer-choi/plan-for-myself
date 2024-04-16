@@ -30,15 +30,6 @@ export default function GoalModal(props: GoalModalProp) {
             </label>
           ))}
         </HorizontalFieldset>
-        <CheckboxLabel>
-          <input type="checkbox" {...inputProps.enableContinuous}/>
-          연속 달성 활성화
-        </CheckboxLabel>
-        {!isEdit ? null : (
-          <Warning>
-            {'위 항목 중 하나라도 수정할 경우,\n기존 목표와 완전히 다른 목표로 간주함.\n이전 목표는 연속달성 리셋 등의 불이익이 발생할 수 있음.'}
-          </Warning>
-        )}
         <ModalButtonWrap>
           <Button className="gray" onClick={props.closeModal}>취소</Button>
           <Button onClick={formSubmit}>제출</Button>
@@ -73,11 +64,6 @@ export const ModalHeading = styled.h1`
   margin-bottom: 20px;
 `;
 
-const Warning = styled.div`
-  white-space: pre-line;
-  color: orange;
-`;
-
 export const ModalButtonWrap = styled.div`
   width: 100%;
   display: flex;
@@ -87,14 +73,5 @@ export const ModalButtonWrap = styled.div`
   
   > button {
     flex-grow: 1;
-  }
-`;
-
-const CheckboxLabel = styled.label`
-  display: flex;
-  align-items: center;
-  
-  > input {
-    margin-right: 4px;
   }
 `;
