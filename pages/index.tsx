@@ -4,7 +4,6 @@ import {useDispatchOpenModal} from '@store/reducers/modal';
 import Button from '@component/common/button';
 import {useGoalResponse} from '@util/sevices/goal';
 import GoalOverview from '@component/GoalOverview';
-import ContinuousGoalList from '@component/ContinuousGoalList';
 import TotalGoalList from '@component/TotalGoalList';
 
 export default function Home() {
@@ -15,7 +14,7 @@ export default function Home() {
     return null
   }
   
-  const {hasCheckedToday, checkedGoalHistoryList, continuousGoalHistory, goalList, accumulateGoalRate} = data
+  const {hasCheckedToday, checkedGoalHistoryList, goalList} = data
 
   return (
     <Wrap>
@@ -24,15 +23,11 @@ export default function Home() {
       ) : (
         <>
           {hasCheckedToday ? (
-            <GoalOverview accumulateGoalRate={accumulateGoalRate} todayHistory={checkedGoalHistoryList[0]}/>
+            <GoalOverview todayHistory={checkedGoalHistoryList[0]}/>
           ) : (
             <Button onClick={openCheckTodayModal}>
               {'오늘 목표 체크하러가기 >'}
             </Button>
-          )}
-
-          {!continuousGoalHistory ? null : (
-            <ContinuousGoalList continuousGoalList={continuousGoalHistory.continuousGoalList}/>
           )}
 
           <TotalGoalList goalList={goalList}/>

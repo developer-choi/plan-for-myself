@@ -5,19 +5,14 @@ import {numberWithComma} from '@util/extend/number';
 import type {CheckedGoalHistory} from '@type/goal';
 
 export interface GoalOverviewProp {
-  accumulateGoalRate: number
   todayHistory: CheckedGoalHistory
 }
 
-export default function GoalOverview({accumulateGoalRate, todayHistory}: GoalOverviewProp) {
+export default function GoalOverview({todayHistory}: GoalOverviewProp) {
   const {openCheckTodayModal} = useDispatchOpenModal()
 
   return (
     <div>
-      <ResultText>
-        누적 목표 달성률 : <Price>{accumulateGoalRate}%</Price>
-      </ResultText>
-
       <ResultText>
         금일 정산금액 : <Price>{numberWithComma(todayHistory.totalPrice)}원</Price>
         <StyledLink style={{marginLeft: 8}} onClick={openCheckTodayModal}>

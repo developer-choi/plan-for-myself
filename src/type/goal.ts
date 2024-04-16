@@ -11,19 +11,10 @@ export interface CheckableGoal extends Goal {
   checked: boolean
 }
 
-export interface ContinuousGoal extends Pick<Goal, 'pk' | 'title'>{
-  continuousDate: number //연속달성일수
-}
-
 export interface CheckedGoalHistory {
   checkedGoalList: CheckableGoal[]
   totalPrice: number //음수 가능
   createdTimestamp: number //오늘 체크한거, 저번달에 체크한거, 연속으로 체크했는지 계산할 때 활용
-}
-
-export interface ContinuousGoalHistory {
-  continuousGoalList: ContinuousGoal[]
-  createdTimestamp: number //그날 그날 체크해서 제출하고 연속날짜 새로계산할 때 이게 전전날 연속날짜 기록인지 계산할 때 사용
 }
 
 export type GoalFrequency = 'Daily' | 'Weekly' | 'Monthly'
