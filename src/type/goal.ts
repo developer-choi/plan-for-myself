@@ -11,10 +11,4 @@ export interface CheckableGoal extends Goal {
   checked: boolean;
 }
 
-export interface CheckedGoalHistory {
-  checkedGoalList: CheckableGoal[];
-  totalPrice: number; //음수 가능
-  createdTimestamp: number; //오늘 체크한거, 저번달에 체크한거 계산할 때 활용
-}
-
 export type GoalFrequency = 'Daily' | 'Weekly' | 'Monthly'

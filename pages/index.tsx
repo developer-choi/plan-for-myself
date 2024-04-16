@@ -14,23 +14,23 @@ export default function Home() {
     return null
   }
 
-  const {hasCheckedToday, checkedGoalHistoryList, goalList} = data;
+  const {todayHistory, originalGoalList} = data;
 
   return (
     <Wrap>
-      {goalList.length === 0 ? (
+      {originalGoalList.length === 0 ? (
         <Button onClick={() => openGoalModal()}>목표 추가하기</Button>
       ) : (
         <>
-          {hasCheckedToday ? (
-            <GoalOverview todayHistory={checkedGoalHistoryList[0]}/>
+          {todayHistory.hasChecked ? (
+            <GoalOverview todayHistory={todayHistory}/>
           ) : (
             <Button onClick={openCheckTodayModal}>
               {'오늘 목표 체크하러가기 >'}
             </Button>
           )}
 
-          <TotalGoalList goalList={goalList}/>
+          <TotalGoalList goalList={originalGoalList}/>
         </>
       )}
     </Wrap>

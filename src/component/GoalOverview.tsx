@@ -2,10 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import {useDispatchOpenModal} from '@store/reducers/modal';
 import {numberWithComma} from '@util/extend/number';
-import type {CheckedGoalHistory} from '@type/goal';
+import type {GoalFullResponse} from '@type/goal-server';
 
 export interface GoalOverviewProp {
-  todayHistory: CheckedGoalHistory
+  todayHistory: GoalFullResponse['todayHistory'];
 }
 
 export default function GoalOverview({todayHistory}: GoalOverviewProp) {

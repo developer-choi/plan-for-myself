@@ -1,15 +1,14 @@
 import type {CheckableGoal, Goal, GoalFrequency} from '@type/goal';
 import type {GoalFullResponse, PostGoalRequestParameter} from '@type/goal-server';
-import {getDiffBetweenDate} from '@util/extend/date-util';
 
 /*************************************************************************************************************
  * Exported functions
  *************************************************************************************************************/
 export function createGoal(goal: PostGoalRequestParameter) {
-  const {goalList, ...rest} = getGoalFullResponse();
+  const {originalGoalList, ...rest} = getGoalFullResponse();
   setGoalResponse({
     ...rest,
-    goalList: goalList.concat({
+    originalGoalList: originalGoalList.concat({
       ...goal,
       pk: new Date().getTime(),
       notAchievePrice: goal.notAchievePrice ?? 0,
@@ -18,11 +17,11 @@ export function createGoal(goal: PostGoalRequestParameter) {
 }
 
 export function deleteGoal(goal: Goal) {
-  const {goalList, ...rest} = getGoalFullResponse();
+  const {originalGoalList, ...rest} = getGoalFullResponse();
 
   setGoalResponse({
     ...rest,
-    goalList: goalList.filter(({pk}) => goal.pk !== pk)
+    originalGoalList: originalGoalList.filter(({pk}) => goal.pk !== pk)
   });
 }
 
@@ -35,14 +34,12 @@ export function checkedTodayGoalList(checkedGoalList: CheckableGoal[]) {
   const previousResponse = getGoalFullResponse();
   setGoalResponse({
     ...previousResponse,
-    checkedGoalHistoryList: [
-      {
-        checkedGoalList,
-        createdTimestamp: new Date().getTime(),
-        totalPrice: calculateTotal(checkedGoalList)
-      },
-      ...previousResponse.checkedGoalHistoryList
-    ]
+    todayHistory: {
+      checkedList: checkedGoalList,
+      hasChecked: true,
+      checkedTimestamp: new Date().getTime(),
+      totalPrice: calculateTotal(checkedGoalList)
+    }
   });
 }
 
@@ -55,12 +52,24 @@ export function getGoalFullResponse(): GoalFullResponse {
 
   try {
     const response = JSON.parse(item) as StoredGoalResponse;
-    const latestCreatedTimestamp = response.checkedGoalHistoryList[0]?.createdTimestamp as number | undefined;
+
+    //@ts-ignore
+    if (response.checkedGoalHistoryList) {
+      setGoalResponse({
+        todayHistory: {
+          totalPrice: 0,
+          checkedList: [],
+          hasChecked: false,
+          checkedTimestamp: undefined
+        },
+        //@ts-ignore
+        originalGoalList: response.goalList,
+      });
+    }
 
     return {
       ...response,
-      todayCheckGoalList: getTodayGoalFilterFrequency(response.goalList),
-      hasCheckedToday: !latestCreatedTimestamp ? false : getDiffBetweenDate(new Date().getTime(), latestCreatedTimestamp) === 0
+      todayGoalList: getTodayGoalFilterFrequency(response.originalGoalList),
     };
   } catch (error) {
     console.error(error);
@@ -74,13 +83,17 @@ export function getGoalFullResponse(): GoalFullResponse {
  *************************************************************************************************************/
 const STORAGE_KEY = 'goal-storage';
 
-type StoredGoalResponse = Omit<GoalFullResponse, 'hasCheckedToday'>
+type StoredGoalResponse = Omit<GoalFullResponse, 'todayGoalList'>
 
 const DEFAULT_GOAL_RESPONSE: GoalFullResponse = {
-  goalList: [],
-  checkedGoalHistoryList: [],
-  hasCheckedToday: false,
-  todayCheckGoalList: []
+  originalGoalList: [],
+  todayGoalList: [],
+  todayHistory: {
+    hasChecked: false,
+    checkedList: [],
+    checkedTimestamp: undefined,
+    totalPrice: 0
+  }
 };
 
 function forceResetCheckedHistory() {
@@ -88,7 +101,7 @@ function forceResetCheckedHistory() {
 
   const newData: GoalFullResponse = {
     ...DEFAULT_GOAL_RESPONSE,
-    goalList: previous.goalList,
+    originalGoalList: previous.originalGoalList,
   };
 
   localStorage.setItem(STORAGE_KEY, JSON.stringify(newData));
