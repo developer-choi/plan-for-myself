@@ -32,6 +32,7 @@ export function useTotalGoalList(goalList: Goal[]) {
   const currentFrequency = watch('frequency')
 
   return {
+    frequency: watch('frequency'),
     radioPropsList: ALL_GOAL_FREQUENCY_LIST.map(frequency => ({
       ...register('frequency'),
       value: frequency,

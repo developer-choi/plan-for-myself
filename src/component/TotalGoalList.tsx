@@ -11,7 +11,7 @@ export interface TotalGoalListProp {
 }
 
 export default function TotalGoalList({goalList}: TotalGoalListProp) {
-  const {radioPropsList, filteredGoalList} = useTotalGoalList(goalList)
+  const {radioPropsList, filteredGoalList, frequency} = useTotalGoalList(goalList)
   const {openGoalModal} = useDispatchOpenModal()
   const deleteGoal = useDeleteGoal()
 
@@ -32,7 +32,8 @@ export default function TotalGoalList({goalList}: TotalGoalListProp) {
         {filteredGoalList.map((goal) => (
           <GoalOl key={goal.pk}>
             {!goal.isImportant ? null : <ImportantMark/>}
-            {goal.title}
+            {frequency !== 'All' ? null : <Frequency>({goal.frequency.toLowerCase()})</Frequency>}
+            <Title>{goal.title}</Title>
             <SmallButton className="edit" onClick={() => openGoalModal({data: goal})}>수정</SmallButton>
             <SmallButton className="delete" onClick={() => deleteGoal(goal)}>삭제</SmallButton>
           </GoalOl>
@@ -78,4 +79,14 @@ const ImportantMark = styled.div`
   border-radius: 50%;
   background: red;
   margin-right: 3px;
+`;
+
+const Frequency = styled.span`
+  font-size: 12px;
+  color: #7a7a7a;
+  margin-right: 6px;
+`;
+
+const Title = styled.span`
+  color: black;
 `;
