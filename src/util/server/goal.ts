@@ -59,6 +59,7 @@ export function getGoalFullResponse(): GoalFullResponse {
       ...response,
       originalGoalList: rearrangeImportantGoalList(response.originalGoalList),
       todayGoalList: getTodayGoalFilterFrequency(response.originalGoalList),
+      todayFrequency: getTodayFrequency()
     };
   } catch (error) {
     console.error(error);
@@ -72,17 +73,18 @@ export function getGoalFullResponse(): GoalFullResponse {
  *************************************************************************************************************/
 const STORAGE_KEY = 'goal-storage';
 
-type StoredGoalResponse = Omit<GoalFullResponse, 'todayGoalList'>
+type StoredGoalResponse = Pick<GoalFullResponse, 'originalGoalList' | 'todayHistory'>
 
 const DEFAULT_GOAL_RESPONSE: GoalFullResponse = {
   originalGoalList: [],
-  todayGoalList: [],
   todayHistory: {
     hasChecked: false,
     checkedList: [],
     checkedTimestamp: undefined,
     totalPrice: 0
-  }
+  },
+  todayGoalList: [],
+  todayFrequency: 'Daily'
 };
 
 function calculateTotal(checkedGoalList: CheckableGoal[]) {
@@ -99,8 +101,27 @@ function setGoalResponse(response: StoredGoalResponse) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(response));
 }
 
-function getTodayGoalFilterFrequency(goalList: Goal[]): Goal[] {
+// 평일인지 주말인지 매달인지 판단하는 기준값을 반환
+function getTodayFrequency(): GoalFrequency {
   const value = new Date();
+
+  if (value.getDate() === 1) {
+    return 'Monthly';
+  }
+
+  if (value.getDay() === 0) {
+    return 'Weekly';
+  }
+
+  return 'Daily';
+}
+
+/**
+ * 평일이면 Daily만, 주말이면 Daily + Weekly까지, 매달초면 Daily+Weekly+Monthly 모두 합쳐서 반환
+ * 주말에는 평일것까지, 매달마다는 평일,주말것 까지 같이 검토하기위함
+ */
+function getTodayGoalFilterFrequency(goalList: Goal[]): Goal[] {
+  const todayFilter = getTodayFrequency();
   let result: Goal[] = [];
 
   const goalRecord = goalList.reduce((a, b) => {
@@ -108,13 +129,11 @@ function getTodayGoalFilterFrequency(goalList: Goal[]): Goal[] {
     return a;
   }, {Daily: [], Monthly: [], Weekly: []} as Record<GoalFrequency, Goal[]>);
 
-  // Monthly
-  if (value.getDate() === 1) {
+  if (todayFilter === 'Monthly') {
     result = result.concat(goalRecord.Monthly);
   }
 
-  // 일요일, Weekly
-  if (value.getDay() === 0) {
+  if (todayFilter === 'Weekly') {
     result = result.concat(goalRecord.Weekly);
   }
 

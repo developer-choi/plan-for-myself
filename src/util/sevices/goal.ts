@@ -24,9 +24,10 @@ interface FilteredGoalFormData {
 }
 
 export function useTotalGoalList(goalList: Goal[]) {
+  const {data} = useGoalResponse();
   const {register, watch,} = useForm<FilteredGoalFormData>({
     defaultValues: {
-      frequency: 'All'
+      frequency: data?.todayFrequency ?? 'All'
     }
   });
 
