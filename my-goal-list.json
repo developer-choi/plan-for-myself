@@ -1,0 +1,178 @@
+[
+  {
+    "title": "폰 구석에 박기",
+    "notAchievePrice": 100000,
+    "frequency": "Daily",
+    "achievePrice": 3000,
+    "isImportant": true,
+    "pk": 1713272179543
+  },
+  {
+    "title": "칼기상,손씻,스트레칭,짧독서,불컴,공부",
+    "notAchievePrice": 0,
+    "frequency": "Daily",
+    "achievePrice": 10000,
+    "isImportant": true,
+    "pk": 1713272233910
+  },
+  {
+    "title": "외식안하기",
+    "notAchievePrice": 0,
+    "frequency": "Daily",
+    "achievePrice": 9000,
+    "isImportant": false,
+    "pk": 1713270684048
+  },
+  {
+    "title": "카페안가기",
+    "notAchievePrice": 0,
+    "frequency": "Daily",
+    "achievePrice": 8000,
+    "isImportant": false,
+    "pk": 1713270698253
+  },
+  {
+    "title": "컴영프 블로깅",
+    "notAchievePrice": 10000,
+    "frequency": "Daily",
+    "achievePrice": 3000,
+    "isImportant": false,
+    "pk": 1713271524349
+  },
+  {
+    "title": "컴영프 블로깅",
+    "notAchievePrice": 20000,
+    "frequency": "Weekly",
+    "achievePrice": 5000,
+    "isImportant": false,
+    "pk": 1713271549552
+  },
+  {
+    "title": "운동",
+    "notAchievePrice": 0,
+    "frequency": "Daily",
+    "achievePrice": 3000,
+    "isImportant": false,
+    "pk": 1713271568491
+  },
+  {
+    "title": "인벤안보기",
+    "notAchievePrice": 10000,
+    "frequency": "Daily",
+    "achievePrice": 1000,
+    "isImportant": false,
+    "pk": 1713271583748
+  },
+  {
+    "title": "산책",
+    "notAchievePrice": 0,
+    "frequency": "Daily",
+    "achievePrice": 1000,
+    "isImportant": false,
+    "pk": 1713271598358
+  },
+  {
+    "title": "카페인 안마시기",
+    "notAchievePrice": 5000,
+    "frequency": "Daily",
+    "achievePrice": 1000,
+    "isImportant": false,
+    "pk": 1713271618106
+  },
+  {
+    "title": "루틴문서보기",
+    "notAchievePrice": 5000,
+    "frequency": "Daily",
+    "achievePrice": 1000,
+    "isImportant": false,
+    "pk": 1713271632333
+  },
+  {
+    "title": "7시이후 금식, 양치하기",
+    "notAchievePrice": 10000,
+    "frequency": "Daily",
+    "achievePrice": 5000,
+    "isImportant": false,
+    "pk": 1713271662026
+  },
+  {
+    "title": "유튜브 구독한거만 보기",
+    "notAchievePrice": 5000,
+    "frequency": "Daily",
+    "achievePrice": 1000,
+    "isImportant": false,
+    "pk": 1713271687719
+  },
+  {
+    "title": "모든일일, 주간 올클",
+    "notAchievePrice": 0,
+    "frequency": "Weekly",
+    "achievePrice": 30000,
+    "isImportant": false,
+    "pk": 1713271730335
+  },
+  {
+    "title": "과자,라면,군것질 안하기",
+    "notAchievePrice": 10000,
+    "frequency": "Daily",
+    "achievePrice": 3000,
+    "isImportant": false,
+    "pk": 1713271982634
+  },
+  {
+    "title": "새분 안찾기",
+    "notAchievePrice": 10000,
+    "frequency": "Daily",
+    "achievePrice": 1000,
+    "isImportant": false,
+    "pk": 1713272064201
+  },
+  {
+    "title": "퇴근 10분전에 그날커밋 돌아보기",
+    "notAchievePrice": 3000,
+    "frequency": "Daily",
+    "achievePrice": 1000,
+    "isImportant": false,
+    "pk": 1713272092067
+  },
+  {
+    "title": "이어폰으로 음악안듣기",
+    "notAchievePrice": 5000,
+    "frequency": "Daily",
+    "achievePrice": 3000,
+    "isImportant": false,
+    "pk": 1713272124869
+  },
+  {
+    "title": "순공시간 제기",
+    "notAchievePrice": 20000,
+    "frequency": "Daily",
+    "achievePrice": 7000,
+    "isImportant": false,
+    "pk": 1713272136141
+  },
+  {
+    "title": "엘베ㄴ 계단ㄱ",
+    "notAchievePrice": 2000,
+    "frequency": "Daily",
+    "achievePrice": 2000,
+    "isImportant": false,
+    "pk": 1713272150968
+  },
+  {
+    "title": "9시반 얌전히취침",
+    "notAchievePrice": 10000,
+    "frequency": "Daily",
+    "achievePrice": 3000,
+    "isImportant": false,
+    "pk": 1713272165528
+  },
+  {
+    "title": "일일 올클",
+    "notAchievePrice": 0,
+    "frequency": "Daily",
+    "achievePrice": 5000,
+    "isImportant": false,
+    "pk": 1713272196387
+  }
+]
