@@ -31,9 +31,11 @@ export function updateGoal(previousGoal: Goal, data: PostGoalRequestParameter) {
 }
 
 export function checkedTodayGoalList(checkedGoalList: CheckableGoal[]) {
-  const previousResponse = getGoalFullResponse();
   setGoalResponse({
-    ...previousResponse,
+    originalGoalList: checkedGoalList.map(({checked, isImportant, ...rest}) => ({
+      ...rest,
+      isImportant: isImportant ? isImportant : !checked
+    })),
     todayHistory: {
       checkedList: checkedGoalList,
       hasChecked: true,
