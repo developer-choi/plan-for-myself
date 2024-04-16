@@ -5,6 +5,7 @@ import Button from '@component/common/button';
 import React from 'react';
 import {ModalButtonWrap, ModalHeading} from '@component/modal/GoalModal';
 import {useCheckGoalListForm} from '@util/sevices/check-goal';
+import {numberWithComma} from '@util/extend/number';
 
 export interface CheckTodayModalProp extends EssentialModalProp {
 
@@ -23,10 +24,11 @@ export default function CheckTodayModal({closeModal}: CheckTodayModalProp) {
     <StyledModal closeModal={closeModal} disableEasilyClose>
       <ModalHeading>목표 체크리스트</ModalHeading>
       <StyledForm onSubmit={formSubmit}>
-        {radioList.map(({props, title}) => (
+        {radioList.map(({props, title, price, checked}) => (
           <CustomCheckbox key={props.value}>
             <input type="checkbox" {...props}/>
             {title}
+            <Price className={checked ? 'positive' : 'negative'}>{`${checked ? '+' : '-'}${numberWithComma(price)}`}원</Price>
           </CustomCheckbox>
         ))}
         {!submitDisabled ? null : (
@@ -83,5 +85,17 @@ const CustomCheckbox = styled.label`
   
   :has(input:disabled) {
     border-color: ${props => props.theme.disabled};
+  }
+`;
+
+const Price = styled.span`
+  margin-left: auto;
+  
+  &.positive {
+    color: blue;
+  }
+  
+  &.negative {
+    color: red;
   }
 `;

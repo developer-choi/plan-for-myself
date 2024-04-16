@@ -16,7 +16,7 @@ export function useCheckGoalListForm({closeModal}: {
   const todayHistory = response?.todayHistory;
 
   const queryClient = useQueryClient();
-  const {register, handleSubmit} = useForm<CheckGoalListFormData>({
+  const {register, handleSubmit, watch} = useForm<CheckGoalListFormData>({
     defaultValues: {
       checkedGoalList: !todayHistory ? [] : todayHistory.checkedList.filter(goal => goal.checked).map(goal => goal.pk.toString())
     }
@@ -44,17 +44,25 @@ export function useCheckGoalListForm({closeModal}: {
     return null
   }
 
+  const sourceGoalList = todayHistory?.checkedList.length ? todayHistory.checkedList : response.todayGoalList;
+
   return {
     formSubmit: handleSubmit(onSubmit),
     submitDisabled: !!todayHistory?.hasChecked,
-    radioList: response.todayGoalList.map(({pk, title}) => ({
-      props: {
-        ...register('checkedGoalList'),
-        disabled: todayHistory?.hasChecked,
-        value: pk
-      },
-      title
-    })),
+    radioList: sourceGoalList.map(({pk, title, achievePrice, notAchievePrice}) => {
+      const checked = watch('checkedGoalList').includes(pk.toString());
+
+      return {
+        props: {
+          ...register('checkedGoalList'),
+          disabled: todayHistory?.hasChecked,
+          value: pk
+        },
+        title,
+        price: checked ? achievePrice : notAchievePrice,
+        checked
+      };
+    }),
     submittedDate: !todayHistory ? undefined : dayjs(todayHistory.checkedTimestamp).format('YYYY-MM-DD HH:mm:ss')
   };
 }
