@@ -14,7 +14,6 @@ export function useGoalForm({closeModal, data}: GoalModalProp) {
     mode: 'all',
     defaultValues: !data ? DEFAULT_FORM_DATA : {
       title: data.title,
-      enableContinuous: data.enableContinuous,
       achievePrice: data.achievePrice.toString(),
       notAchievePrice: data.notAchievePrice.toString(),
       frequency: data.frequency
@@ -55,7 +54,6 @@ export function useGoalForm({closeModal, data}: GoalModalProp) {
         ...register('frequency'),
         value: frequency,
       })),
-      enableContinuous: register('enableContinuous')
     },
     isEdit: !!data
   };
@@ -69,14 +67,11 @@ const ACHIEVE_OPTIONS: RegisterOptions = {
   required: '달성 시 금액은 필수입니다.'
 };
 
-export interface GoalFormData extends Record<Exclude<keyof PostGoalRequestParameter, 'enableContinuous'>, string> {
-  enableContinuous: boolean;
-}
+export type GoalFormData = Record<keyof PostGoalRequestParameter, string>;
 
 const DEFAULT_FORM_DATA: GoalFormData = {
   title: '',
   notAchievePrice: '',
   frequency: 'Daily',
   achievePrice: '',
-  enableContinuous: false
 };
