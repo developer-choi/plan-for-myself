@@ -4,32 +4,33 @@ import {deleteGoal, getGoalFullResponse} from '@util/server/goal';
 import {useForm} from 'react-hook-form';
 import {useCallback} from 'react';
 
-export const GOAL_FREQUENCY_LIST: GoalFrequency[] = ['Daily', 'Weekly', 'Monthly']
-export const GOAL_FULL_RESPONSE_QUERY_KEY = ['goal-full-response']
+export const GOAL_FREQUENCY_LIST: GoalFrequency[] = ['Daily', 'Weekly', 'Monthly'];
+export const GOAL_FULL_RESPONSE_QUERY_KEY = ['goal-full-response'];
+
 export function useGoalResponse() {
   return useQuery({
     queryKey: GOAL_FULL_RESPONSE_QUERY_KEY,
     queryFn: getGoalFullResponse,
     staleTime: Infinity,
     cacheTime: Infinity
-  })
+  });
 }
 
 type GoalFrequencyWithAll = GoalFrequency | 'All'
-const ALL_GOAL_FREQUENCY_LIST: GoalFrequencyWithAll[] = ['All', ...GOAL_FREQUENCY_LIST]
+const ALL_GOAL_FREQUENCY_LIST: GoalFrequencyWithAll[] = ['All', ...GOAL_FREQUENCY_LIST];
 
 interface FilteredGoalFormData {
-  frequency: GoalFrequencyWithAll
+  frequency: GoalFrequencyWithAll;
 }
 
 export function useTotalGoalList(goalList: Goal[]) {
-  const {register, watch, } = useForm<FilteredGoalFormData>({
+  const {register, watch,} = useForm<FilteredGoalFormData>({
     defaultValues: {
       frequency: 'All'
     }
   });
 
-  const currentFrequency = watch('frequency')
+  const currentFrequency = watch('frequency');
 
   return {
     frequency: watch('frequency'),
@@ -38,16 +39,16 @@ export function useTotalGoalList(goalList: Goal[]) {
       value: frequency,
     })),
     filteredGoalList: currentFrequency === 'All' ? goalList : goalList.filter(goal => goal.frequency === currentFrequency)
-  }
+  };
 }
 
 export function useDeleteGoal() {
   const queryClient = useQueryClient();
-  
+
   return useCallback((goal: Goal) => {
-    if (confirm('삭제하시겠습니까?')) {
-      deleteGoal(goal)
-      queryClient.invalidateQueries(GOAL_FULL_RESPONSE_QUERY_KEY)
+    if (confirm(`${goal.title.slice(0, 10)}...을 삭제하시겠습니까?`)) {
+      deleteGoal(goal);
+      queryClient.invalidateQueries(GOAL_FULL_RESPONSE_QUERY_KEY);
     }
-  }, [queryClient])
+  }, [queryClient]);
 }
