@@ -50,7 +50,7 @@ const GoalOl = styled.ol`
   align-items: center;
   
   &:not(:first-child) {
-    margin-top: 5px;
+    margin-top: 16px;
   }
 `;
 
