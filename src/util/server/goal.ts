@@ -53,22 +53,9 @@ export function getGoalFullResponse(): GoalFullResponse {
   try {
     const response = JSON.parse(item) as StoredGoalResponse;
 
-    //@ts-ignore
-    if (response.checkedGoalHistoryList) {
-      setGoalResponse({
-        todayHistory: {
-          totalPrice: 0,
-          checkedList: [],
-          hasChecked: false,
-          checkedTimestamp: undefined
-        },
-        //@ts-ignore
-        originalGoalList: response.goalList,
-      });
-    }
-
     return {
       ...response,
+      originalGoalList: rearrangeImportantGoalList(response.originalGoalList),
       todayGoalList: getTodayGoalFilterFrequency(response.originalGoalList),
     };
   } catch (error) {
@@ -95,17 +82,6 @@ const DEFAULT_GOAL_RESPONSE: GoalFullResponse = {
     totalPrice: 0
   }
 };
-
-function forceResetCheckedHistory() {
-  const previous = getGoalFullResponse();
-
-  const newData: GoalFullResponse = {
-    ...DEFAULT_GOAL_RESPONSE,
-    originalGoalList: previous.originalGoalList,
-  };
-
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(newData));
-}
 
 function calculateTotal(checkedGoalList: CheckableGoal[]) {
   return checkedGoalList.reduce((a, b) => {
@@ -141,4 +117,21 @@ function getTodayGoalFilterFrequency(goalList: Goal[]): Goal[] {
   }
 
   return result.concat(goalRecord.Daily);
+}
+
+function rearrangeImportantGoalList(list: Goal[]): Goal[] {
+  const {important, normal} = list.reduce((a, b) => {
+    if (b.isImportant) {
+      a.important.push(b);
+    } else {
+      a.normal.push(b);
+    }
+
+    return a;
+  }, {
+    normal: [] as Goal[],
+    important: [] as Goal[]
+  });
+
+  return important.concat(normal);
 }
