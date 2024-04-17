@@ -1,5 +1,6 @@
 import type {CheckableGoal, Goal, GoalFrequency} from '@type/goal';
 import type {GoalFullResponse, PostGoalRequestParameter} from '@type/goal-server';
+import dayjs from 'dayjs';
 
 /*************************************************************************************************************
  * Exported functions
@@ -54,9 +55,17 @@ export function getGoalFullResponse(): GoalFullResponse {
 
   try {
     const response = JSON.parse(item) as StoredGoalResponse;
+    const isPast = dayjs().diff(response.todayHistory.checkedTimestamp, 'day') > 0;
+
+    if (isPast) {
+      setGoalResponse({
+        originalGoalList: response.originalGoalList,
+        todayHistory: DEFAULT_GOAL_RESPONSE.todayHistory
+      });
+    }
 
     return {
-      ...response,
+      todayHistory: isPast ? DEFAULT_GOAL_RESPONSE.todayHistory : response.todayHistory,
       originalGoalList: rearrangeImportantGoalList(response.originalGoalList),
       todayGoalList: getTodayGoalFilterFrequency(response.originalGoalList),
       todayFrequency: getTodayFrequency()
