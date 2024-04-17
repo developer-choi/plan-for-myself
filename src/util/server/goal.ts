@@ -55,7 +55,7 @@ export function getGoalFullResponse(): GoalFullResponse {
 
   try {
     const response = JSON.parse(item) as StoredGoalResponse;
-    const isPast = dayjs().diff(response.todayHistory.checkedTimestamp, 'day') > 0;
+    const isPast = dayjs().diff(new Date(dayjs(response.todayHistory.checkedTimestamp).format('YYYY-MM-DD')), 'day') > 0;
 
     if (isPast) {
       setGoalResponse({
