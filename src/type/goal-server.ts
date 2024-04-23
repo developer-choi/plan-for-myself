@@ -1,6 +1,6 @@
 import type {CheckableGoal, Goal, GoalFrequency} from '@type/goal';
 
-export type PostGoalRequestParameter = Omit<Goal, 'pk' | 'notAchievePrice'> & Partial<Pick<Goal, 'notAchievePrice'>>;
+export type PostGoalRequestParameter = Omit<Goal, 'pk' | 'notAchievePrice' | 'isImportant'> & Partial<Pick<Goal, 'notAchievePrice'>>;
 
 export interface GoalFullResponse {
   originalGoalList: Goal[];

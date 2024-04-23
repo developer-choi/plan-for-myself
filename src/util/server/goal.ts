@@ -13,6 +13,7 @@ export function createGoal(goal: PostGoalRequestParameter) {
       ...goal,
       pk: new Date().getTime(),
       notAchievePrice: goal.notAchievePrice ?? 0,
+      isImportant: false
     })
   });
 }
@@ -33,9 +34,9 @@ export function updateGoal(previousGoal: Goal, data: PostGoalRequestParameter) {
 
 export function checkedTodayGoalList(checkedGoalList: CheckableGoal[]) {
   setGoalResponse({
-    originalGoalList: checkedGoalList.map(({checked, isImportant, ...rest}) => ({
+    originalGoalList: checkedGoalList.map(({checked, ...rest}) => ({
       ...rest,
-      isImportant: isImportant ? isImportant : !checked
+      isImportant: !checked
     })),
     todayHistory: {
       checkedList: checkedGoalList,

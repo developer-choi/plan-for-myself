@@ -16,8 +16,7 @@ export function useGoalForm({closeModal, data}: GoalModalProp) {
       title: data.title,
       achievePrice: data.achievePrice.toString(),
       notAchievePrice: data.notAchievePrice.toString(),
-      frequency: data.frequency,
-      isImportant: data.isImportant
+      frequency: data.frequency
     },
     shouldFocusError: false
   });
@@ -54,8 +53,7 @@ export function useGoalForm({closeModal, data}: GoalModalProp) {
       radioList: GOAL_FREQUENCY_LIST.map(frequency => ({
         ...register('frequency'),
         value: frequency,
-      })),
-      isImportant: register('isImportant')
+      }))
     },
     isEdit: !!data
   };
@@ -69,7 +67,7 @@ const ACHIEVE_OPTIONS: RegisterOptions = {
   required: '달성 시 금액은 필수입니다.'
 };
 
-export interface GoalFormData extends Omit<PostGoalRequestParameter, 'notAchievePrice' | 'achievePrice'> {
+export interface GoalFormData extends Omit<PostGoalRequestParameter, 'notAchievePrice' | 'achievePrice' | 'isImportant'> {
   notAchievePrice: string;
   achievePrice: string;
 }
@@ -79,5 +77,4 @@ const DEFAULT_FORM_DATA: GoalFormData = {
   notAchievePrice: '',
   frequency: 'Daily',
   achievePrice: '',
-  isImportant: false
 };
