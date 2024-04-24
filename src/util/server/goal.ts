@@ -13,7 +13,7 @@ export function createGoal(goal: PostGoalRequestParameter) {
       ...goal,
       pk: new Date().getTime(),
       notAchievePrice: goal.notAchievePrice ?? 0,
-      isImportant: false
+      isImportant: true
     })
   });
 }
