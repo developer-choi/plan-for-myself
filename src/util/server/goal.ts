@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 /*************************************************************************************************************
  * Exported functions
  *************************************************************************************************************/
-export function createGoal(goal: PostGoalRequestParameter) {
+export function createGoal(goal: PostGoalRequestParameter, isImportant = true) {
   const {originalGoalList, ...rest} = getGoalFullResponse();
   setGoalResponse({
     ...rest,
@@ -13,7 +13,7 @@ export function createGoal(goal: PostGoalRequestParameter) {
       ...goal,
       pk: new Date().getTime(),
       notAchievePrice: goal.notAchievePrice ?? 0,
-      isImportant: true
+      isImportant
     })
   });
 }
@@ -29,7 +29,7 @@ export function deleteGoal(goal: Goal) {
 
 export function updateGoal(previousGoal: Goal, data: PostGoalRequestParameter) {
   deleteGoal(previousGoal);
-  createGoal(data);
+  createGoal(data, false);
 }
 
 export function checkedTodayGoalList(checkedGoalList: CheckableGoal[]) {
