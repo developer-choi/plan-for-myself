@@ -1,13 +1,19 @@
-import {ComponentPropsWithoutRef, forwardRef, Ref} from 'react';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 
-export default forwardRef(function Input(props: ComponentPropsWithoutRef<'input'>, ref: Ref<HTMLInputElement>) {
-  return <StyledInput ref={ref} {...props}/>
-});
-
-const StyledInput = styled.input`
+const InputCss = css`
   border: 1px solid gray;
   padding: 10px;
   border-radius: 5px;
   min-width: 250px;
+  font-family: sans-serif;
+`;
+
+export const Input = styled.input`
+  ${InputCss};
+`;
+
+export const TextArea = styled.textarea`
+  ${InputCss};
+  min-height: 100px;
+  resize: none;
 `;

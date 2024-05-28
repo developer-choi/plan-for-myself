@@ -3,7 +3,7 @@ import type {EssentialModalProp} from '@store/reducers/modal';
 import styled from 'styled-components';
 import React from 'react';
 import Button from '@component/common/button';
-import Input from '@component/common/Input';
+import {Input, TextArea} from '@component/common/Input';
 import {HorizontalFieldset} from '@component/common/etc';
 import type {Goal} from '@type/goal';
 import {useGoalForm} from '@util/sevices/goal-form';
@@ -20,6 +20,7 @@ export default function GoalModal(props: GoalModalProp) {
       <ModalHeading>목표 {isEdit ? '수정' : '등록'}</ModalHeading>
       <StyledForm onSubmit={formSubmit}>
         <Input placeholder="제목 *" {...inputProps.title}/>
+        <TextArea placeholder="내용" {...inputProps.content}/>
         <Input type="number" placeholder="달성 시 금액 *" {...inputProps.achievePrice}/>
         <Input type="number" placeholder="실패 시 금액" {...inputProps.notAchievePrice}/>
         <HorizontalFieldset>

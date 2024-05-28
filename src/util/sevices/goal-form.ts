@@ -14,6 +14,7 @@ export function useGoalForm({closeModal, data}: GoalModalProp) {
     mode: 'all',
     defaultValues: !data ? DEFAULT_FORM_DATA : {
       title: data.title,
+      content: data.content,
       achievePrice: data.achievePrice.toString(),
       notAchievePrice: data.notAchievePrice.toString(),
       frequency: data.frequency
@@ -48,6 +49,7 @@ export function useGoalForm({closeModal, data}: GoalModalProp) {
     formSubmit: handleSubmit(onSubmit, onError),
     inputProps: {
       title: register('title', TITLE_OPTIONS),
+      content: register('content'),
       achievePrice: register('achievePrice', ACHIEVE_OPTIONS),
       notAchievePrice: register('notAchievePrice'),
       radioList: GOAL_FREQUENCY_LIST.map(frequency => ({
@@ -74,6 +76,7 @@ export interface GoalFormData extends Omit<PostGoalRequestParameter, 'notAchieve
 
 const DEFAULT_FORM_DATA: GoalFormData = {
   title: '',
+  content: '',
   notAchievePrice: '',
   frequency: 'Daily',
   achievePrice: '',
