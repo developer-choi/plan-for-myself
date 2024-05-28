@@ -18,15 +18,6 @@
     "isImportant": true
   },
   {
-    "title": "일일 올클",
-    "content": "",
-    "achievePrice": 5000,
-    "notAchievePrice": 0,
-    "frequency": "Daily",
-    "pk": 1716817335225,
-    "isImportant": true
-  },
-  {
     "title": "유튜브, 인벤 안보기",
     "content": "",
     "achievePrice": 3000,
@@ -99,15 +90,6 @@
     "isImportant": false
   },
   {
-    "title": "컴영프 블로깅",
-    "content": "",
-    "achievePrice": 3000,
-    "notAchievePrice": 30000,
-    "frequency": "Daily",
-    "pk": 1715599321390,
-    "isImportant": false
-  },
-  {
     "title": "출근길 걸어가며 생각하기",
     "content": "",
     "achievePrice": 2000,
@@ -135,21 +117,39 @@
     "isImportant": false
   },
   {
-    "title": "폰은 항상 구석에. 필요할때만 잠깐쓰고 다시구석",
-    "content": "",
-    "achievePrice": 5000,
-    "notAchievePrice": 100000,
-    "frequency": "Daily",
-    "pk": 1716854403497,
-    "isImportant": false
-  },
-  {
     "title": "퇴근 후 금식하기",
     "content": "",
     "achievePrice": 9000,
     "notAchievePrice": 20000,
     "frequency": "Daily",
     "pk": 1716855352845,
+    "isImportant": false
+  },
+  {
+    "title": "컴영프 블로깅",
+    "content": "",
+    "achievePrice": 7000,
+    "notAchievePrice": 30000,
+    "frequency": "Daily",
+    "pk": 1716894835344,
+    "isImportant": false
+  },
+  {
+    "title": "폰 구석 유지",
+    "content": "쓸때만 잠깐.\n퇴근하면 구석에 박고\n자기전에 구석에 박고",
+    "achievePrice": 5000,
+    "notAchievePrice": 100000,
+    "frequency": "Daily",
+    "pk": 1716894887883,
+    "isImportant": false
+  },
+  {
+    "title": "일일 올클",
+    "content": "",
+    "achievePrice": 5000,
+    "notAchievePrice": 0,
+    "frequency": "Daily",
+    "pk": 1716894899056,
     "isImportant": false
   }
 ]
