@@ -24,12 +24,15 @@ export default function CheckTodayModal({closeModal}: CheckTodayModalProp) {
     <StyledModal closeModal={closeModal} disableEasilyClose>
       <ModalHeading>목표 체크리스트</ModalHeading>
       <StyledForm onSubmit={formSubmit}>
-        {radioList.map(({props, title, price, checked}) => (
-          <CustomCheckbox key={props.value}>
-            <input type="checkbox" {...props}/>
-            {title}
-            <Price className={checked ? 'positive' : 'negative'}>{`${checked ? '+' : '-'}${numberWithComma(price)}`}원</Price>
-          </CustomCheckbox>
+        {radioList.map(({props, title, price, checked, content}) => (
+          <GoalItem key={props.value}>
+            <CustomCheckbox>
+              <input type="checkbox" {...props}/>
+              {title}
+              <Price className={checked ? 'positive' : 'negative'}>{`${checked ? '+' : '-'}${numberWithComma(price)}`}원</Price>
+            </CustomCheckbox>
+            {!content ? null : <Content>{content}</Content>}
+          </GoalItem>
         ))}
         {!submitDisabled ? null : (
           <div>
@@ -98,4 +101,17 @@ const Price = styled.span`
   &.negative {
     color: red;
   }
+`;
+
+const GoalItem = styled.div`
+  width: 100%;
+`;
+
+const Content = styled.div`
+  margin-top: 6px;
+  white-space: pre-line;
+  
+  border: 1px solid gray;
+  border-radius: 4px;
+  padding: 8px;
 `;

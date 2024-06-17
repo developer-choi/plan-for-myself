@@ -49,7 +49,7 @@ export function useCheckGoalListForm({closeModal}: {
   return {
     formSubmit: handleSubmit(onSubmit),
     submitDisabled: !!todayHistory?.hasChecked,
-    radioList: sourceGoalList.map(({pk, title, achievePrice, notAchievePrice}) => {
+    radioList: sourceGoalList.map(({pk, title, achievePrice, notAchievePrice, content}) => {
       const checked = watch('checkedGoalList').includes(pk.toString());
 
       return {
@@ -59,6 +59,7 @@ export function useCheckGoalListForm({closeModal}: {
           value: pk
         },
         title,
+        content,
         price: checked ? achievePrice : notAchievePrice,
         checked
       };
