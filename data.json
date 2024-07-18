@@ -2,145 +2,145 @@
   {
     "title": "일일 올클",
     "content": "",
-    "achievePrice": 5000,
-    "notAchievePrice": 0,
+    "achieve_price": 5000,
+    "not_achieve_price": 0,
     "frequency": "Daily",
     "pk": 1716947590825,
-    "isImportant": true
+    "is_important": true
   },
   {
     "title": "새 배우 / 새영상 안찾기 / 안하기",
     "content": "다음날 늦게일어나고 피곤함",
-    "notAchievePrice": 30000,
+    "not_achieve_price": 30000,
     "frequency": "Daily",
-    "achievePrice": 3000,
+    "achieve_price": 3000,
     "pk": 1719963833661,
-    "isImportant": true
+    "is_important": true
   },
   {
     "title": "아침루틴",
     "content": "칼기상,손씻,스트레칭,\n습관영상\n독서 최소10분 후 Book Overview에 필기",
-    "achievePrice": 3000,
-    "notAchievePrice": 20000,
+    "achieve_price": 3000,
+    "not_achieve_price": 20000,
     "frequency": "Daily",
     "pk": 1721170632751,
-    "isImportant": true
+    "is_important": true
   },
   {
     "title": "일과 끝내놓고 놀기",
     "content": "",
-    "notAchievePrice": 30000,
+    "not_achieve_price": 30000,
     "frequency": "Daily",
-    "achievePrice": 2000,
+    "achieve_price": 2000,
     "pk": 1721170174417,
-    "isImportant": false
+    "is_important": false
   },
   {
     "title": "회사간식 안먹기",
     "content": "컨디션관리가안되서\n내가원하는만큼 공부가안됨.",
-    "achievePrice": 3000,
-    "notAchievePrice": 10000,
+    "achieve_price": 3000,
+    "not_achieve_price": 10000,
     "frequency": "Daily",
     "pk": 1718589592134,
-    "isImportant": false
+    "is_important": false
   },
   {
     "title": "아점저 3번 이전순공캘린더, plf 보기",
     "content": "",
-    "achievePrice": 5000,
-    "notAchievePrice": 30000,
+    "achieve_price": 5000,
+    "not_achieve_price": 30000,
     "frequency": "Daily",
     "pk": 1718838354251,
-    "isImportant": false
+    "is_important": false
   },
   {
     "title": "컴영프 블로깅",
     "content": "",
-    "achievePrice": 7000,
-    "notAchievePrice": 30000,
+    "achieve_price": 7000,
+    "not_achieve_price": 30000,
     "frequency": "Daily",
     "pk": 1716894835344,
-    "isImportant": false
+    "is_important": false
   },
   {
     "title": "9시반 얌전히취침",
     "content": "",
-    "achievePrice": 3000,
-    "notAchievePrice": 10000,
+    "achieve_price": 3000,
+    "not_achieve_price": 10000,
     "frequency": "Daily",
     "pk": 1716899267227,
-    "isImportant": false
+    "is_important": false
   },
   {
     "title": "회사, 집 순공시간 재기",
     "content": "",
-    "achievePrice": 4000,
-    "notAchievePrice": 20000,
+    "achieve_price": 4000,
+    "not_achieve_price": 20000,
     "frequency": "Daily",
     "pk": 1718619760221,
-    "isImportant": false
+    "is_important": false
   },
   {
     "title": "틈틈히 안쓴만큼 추가",
     "content": "주말은 2배 계산",
-    "achievePrice": 0,
-    "notAchievePrice": 0,
+    "achieve_price": 0,
+    "not_achieve_price": 0,
     "frequency": "Daily",
     "pk": 1718681629071,
-    "isImportant": false
+    "is_important": false
   },
   {
     "title": "점심에 이번주 컴영프 복습",
     "content": "",
-    "notAchievePrice": 10000,
+    "not_achieve_price": 10000,
     "frequency": "Daily",
-    "achievePrice": 3000,
+    "achieve_price": 3000,
     "pk": 1718796623746,
-    "isImportant": false
+    "is_important": false
   },
   {
     "title": "폰 구석 유지",
     "content": "쓸때만 잠깐.\n퇴근하면 구석에 박고\n자기전에 구석에 박고.\n본가는 책꽂이 뒤로박고.",
-    "achievePrice": 5000,
-    "notAchievePrice": 100000,
+    "achieve_price": 5000,
+    "not_achieve_price": 100000,
     "frequency": "Daily",
     "pk": 1719271215180,
-    "isImportant": false
+    "is_important": false
   },
   {
     "title": "잘 때 빼고 안눕기",
     "content": "찬바닥에 누웠다가 잠들어서 감기걸려서 2주일 날림\n이짓을 두번함",
-    "achievePrice": 1000,
-    "notAchievePrice": 40000,
+    "achieve_price": 1000,
+    "not_achieve_price": 40000,
     "frequency": "Daily",
     "pk": 1719990033302,
-    "isImportant": false
+    "is_important": false
   },
   {
     "title": "Work Routine",
     "content": "점심,퇴근전 미리 머리비우고 영듣\n폰,키보드,마우스닦기",
-    "achievePrice": 5000,
-    "notAchievePrice": 10000,
+    "achieve_price": 5000,
+    "not_achieve_price": 10000,
     "frequency": "Daily",
     "pk": 1720019129968,
-    "isImportant": false
+    "is_important": false
   },
   {
     "title": "음식점, 편의점간식 끊기",
     "content": "퇴근하고 김밥,샌드위치 딱 2개먹고 기절했음.\n속도안좋더라.\n그냥 변수만들지말자.\n똑같이 살면, 아무런 문제없음.",
-    "achievePrice": 9000,
-    "notAchievePrice": 30000,
+    "achieve_price": 9000,
+    "not_achieve_price": 30000,
     "frequency": "Daily",
     "pk": 1720496806666,
-    "isImportant": false
+    "is_important": false
   },
   {
     "title": "유튜브 습관",
     "content": "끄기전 FW 유지\nfrudy 계정은 아예 금지\n음악, 공부계정은 목적에만 맞게 사용",
-    "achievePrice": 3000,
-    "notAchievePrice": 9999999,
+    "achieve_price": 3000,
+    "not_achieve_price": 9999999,
     "frequency": "Daily",
     "pk": 1721101439850,
-    "isImportant": false
+    "is_important": false
   }
 ]

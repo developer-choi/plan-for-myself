@@ -2,7 +2,7 @@ import type {PostGoalRequestParameter} from '@type/goal-server';
 import {othersCustomFetch} from '@util/extend/api/both';
 import {getSession} from '@util/sevices/auth';
 import {getCustomFetchInClientSide} from '@util/extend/api/client';
-import type {CheckableGoal} from '@type/goal';
+import type {CheckableGoal, Goal} from '@type/goal';
 
 export async function postGoalApi(goal: PostGoalRequestParameter, isImportant = true) {
   const {not_achieve_price, achieve_price, title, frequency, content} = goal;
@@ -19,6 +19,14 @@ export async function postGoalApi(goal: PostGoalRequestParameter, isImportant = 
       is_important: isImportant
     }
   })
+}
+
+export async function postMultipleGoalApi(originalGoalList: Goal[]) {
+  return othersCustomFetch('/api/original-goal/multiple', {
+    method: 'POST',
+    session: getSession(),
+    body: originalGoalList
+  });
 }
 
 export async function postTodayCheckGoalApi(checkedGoalList: CheckableGoal[]) {
