@@ -27,8 +27,7 @@ function handleRequest(input: string | URL | globalThis.Request, parameter: GetF
     newHeaders.set("Content-Type", "application/json");
   }
 
-  // TODO URL 앞에 env로 개발환경 / 운영환경 셋팅하는부분은 추후 추가
-  const requestUrl = typeof input !== "string" || input.startsWith("http") ? input : `http://localhost:3000/${input}`;
+  const requestUrl = typeof input !== "string" || input.startsWith("http") ? input : `${process.env.NEXT_PUBLIC_FRONT_ORIGIN}/${input}`;
 
   return {
     input: requestUrl,
