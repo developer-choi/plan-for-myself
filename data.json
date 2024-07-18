@@ -1,29 +1,38 @@
 [
   {
-    "title": "일과 끝내놓고 놀기",
-    "content": "",
-    "notAchievePrice": 30000,
-    "frequency": "Daily",
-    "achievePrice": 2000,
-    "pk": 1721170174417,
-    "isImportant": true
-  },
-  {
     "title": "일일 올클",
     "content": "",
     "achievePrice": 5000,
     "notAchievePrice": 0,
     "frequency": "Daily",
     "pk": 1716947590825,
-    "isImportant": false
+    "isImportant": true
   },
   {
-    "title": "엘베ㄴ 계단ㄱ",
+    "title": "새 배우 / 새영상 안찾기 / 안하기",
+    "content": "다음날 늦게일어나고 피곤함",
+    "notAchievePrice": 30000,
+    "frequency": "Daily",
+    "achievePrice": 3000,
+    "pk": 1719963833661,
+    "isImportant": true
+  },
+  {
+    "title": "아침루틴",
+    "content": "칼기상,손씻,스트레칭,\n습관영상\n독서 최소10분 후 Book Overview에 필기",
+    "achievePrice": 3000,
+    "notAchievePrice": 20000,
+    "frequency": "Daily",
+    "pk": 1721170632751,
+    "isImportant": true
+  },
+  {
+    "title": "일과 끝내놓고 놀기",
     "content": "",
-    "notAchievePrice": 2000,
+    "notAchievePrice": 30000,
     "frequency": "Daily",
     "achievePrice": 2000,
-    "pk": 1713272150968,
+    "pk": 1721170174417,
     "isImportant": false
   },
   {
@@ -33,15 +42,6 @@
     "notAchievePrice": 10000,
     "frequency": "Daily",
     "pk": 1718589592134,
-    "isImportant": false
-  },
-  {
-    "title": "새 배우 / 새영상 안찾기 / 안하기",
-    "content": "다음날 늦게일어나고 피곤함",
-    "notAchievePrice": 30000,
-    "frequency": "Daily",
-    "achievePrice": 3000,
-    "pk": 1719963833661,
     "isImportant": false
   },
   {
@@ -141,15 +141,6 @@
     "notAchievePrice": 9999999,
     "frequency": "Daily",
     "pk": 1721101439850,
-    "isImportant": false
-  },
-  {
-    "title": "아침루틴",
-    "content": "칼기상,손씻,스트레칭,\n습관영상\n독서 최소10분 후 Book Overview에 필기",
-    "achievePrice": 3000,
-    "notAchievePrice": 20000,
-    "frequency": "Daily",
-    "pk": 1721170632751,
     "isImportant": false
   }
 ]
