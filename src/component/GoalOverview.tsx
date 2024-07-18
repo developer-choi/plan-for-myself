@@ -14,7 +14,7 @@ export default function GoalOverview({todayHistory}: GoalOverviewProp) {
   return (
     <div>
       <ResultText>
-        오늘 정산금액 : <Price>{numberWithComma(todayHistory.totalPrice)}원</Price>
+        오늘 정산금액 : <Price>{numberWithComma(todayHistory.total_price)}원</Price>
         <StyledLink style={{marginLeft: 8}} onClick={openCheckTodayModal}>
           {'내역 보기 >'}
         </StyledLink>

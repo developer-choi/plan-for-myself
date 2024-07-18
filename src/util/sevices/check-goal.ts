@@ -1,9 +1,9 @@
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {useCallback} from 'react';
 import {GOAL_FULL_RESPONSE_QUERY_KEY, useGoalResponse} from '@util/sevices/goal';
-import {checkedTodayGoalList} from '@util/server/goal';
 import {useQueryClient} from 'react-query';
 import dayjs from 'dayjs';
+import {postTodayCheckGoalApi} from '@util/sevices/api/goal';
 
 interface CheckGoalListFormData {
   checkedGoalList: string[];
@@ -18,7 +18,7 @@ export function useCheckGoalListForm({closeModal}: {
   const queryClient = useQueryClient();
   const {register, handleSubmit, watch} = useForm<CheckGoalListFormData>({
     defaultValues: {
-      checkedGoalList: !todayHistory ? [] : todayHistory.checkedList.filter(goal => goal.checked).map(goal => goal.pk.toString())
+      checkedGoalList: !todayHistory ? [] : todayHistory.checked_list.filter(goal => goal.checked).map(goal => goal.pk.toString())
     }
   });
 
@@ -31,7 +31,7 @@ export function useCheckGoalListForm({closeModal}: {
       return;
     }
 
-    checkedTodayGoalList(response.todayGoalList.map(goal => ({
+    postTodayCheckGoalApi(response.todayGoalList.map(goal => ({
       ...goal,
       checked: data.checkedGoalList.includes(goal.pk.toString())
     })));
@@ -44,26 +44,26 @@ export function useCheckGoalListForm({closeModal}: {
     return null
   }
 
-  const sourceGoalList = todayHistory?.checkedList.length ? todayHistory.checkedList : response.todayGoalList;
+  const sourceGoalList = todayHistory?.checked_list.length ? todayHistory.checked_list : response.todayGoalList;
 
   return {
     formSubmit: handleSubmit(onSubmit),
-    submitDisabled: !!todayHistory?.hasChecked,
-    radioList: sourceGoalList.map(({pk, title, achievePrice, notAchievePrice, content}) => {
+    submitDisabled: !!todayHistory?.has_checked,
+    radioList: sourceGoalList.map(({pk, title, achieve_price, not_achieve_price, content}) => {
       const checked = watch('checkedGoalList').includes(pk.toString());
 
       return {
         props: {
           ...register('checkedGoalList'),
-          disabled: todayHistory?.hasChecked,
+          disabled: todayHistory?.has_checked,
           value: pk
         },
         title,
         content,
-        price: checked ? achievePrice : notAchievePrice,
+        price: checked ? achieve_price : not_achieve_price,
         checked
       };
     }),
-    submittedDate: !todayHistory ? undefined : dayjs(todayHistory.checkedTimestamp).format('YYYY-MM-DD HH:mm:ss')
+    submittedDate: !todayHistory ? undefined : dayjs(todayHistory.checked_timestamp).format('YYYY-MM-DD HH:mm:ss')
   };
 }

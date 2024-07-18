@@ -38,7 +38,7 @@ export default function TotalGoalList({goalList}: TotalGoalListProp) {
       <ul>
         {filteredGoalList.map((goal) => (
           <GoalOl key={goal.pk}>
-            {!goal.isImportant ? null : <ImportantMark/>}
+            {!goal.is_important ? null : <ImportantMark/>}
             {frequency !== 'All' ? null : <Frequency>({goal.frequency.toLowerCase()})</Frequency>}
             <Title>{goal.title}</Title>
             <SmallButton className="edit" onClick={() => openGoalModal({data: goal})}>수정</SmallButton>
