@@ -1,6 +1,5 @@
 import {NextRequest} from 'next/server';
-import {sql} from '@vercel/postgres';
-import {Goal} from '@type/goal';
+import {postOriginalGoalSql} from '@util/sevices/api/server';
 
 export async function POST(request: NextRequest) {
   const goal = await request.json();
@@ -16,11 +15,4 @@ export async function POST(request: NextRequest) {
   }
 
   return new Response('');
-}
-
-export async function postOriginalGoalSql(user_id: string, {title, content, achieve_price, not_achieve_price, frequency, is_important}: Goal) {
-  await sql`
-INSERT INTO original_goal (user_id, title, content, achieve_price, not_achieve_price, frequency, is_important)
-VALUES (${user_id}, ${title}, ${content}, ${achieve_price}, ${not_achieve_price}, ${frequency}, ${is_important});
-`;
 }

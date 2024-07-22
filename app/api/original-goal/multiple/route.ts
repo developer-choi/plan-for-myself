@@ -1,6 +1,6 @@
 import {NextRequest} from 'next/server';
 import {Goal} from '@type/goal';
-import {postOriginalGoalSql} from '../route';
+import {postOriginalGoalSql} from '@util/sevices/api/server';
 
 export async function POST(request: NextRequest) {
   const goalList = await request.json() as Goal[];
