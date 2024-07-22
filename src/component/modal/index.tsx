@@ -1,12 +1,16 @@
+'use client';
+
 import React, {MouseEvent, PropsWithChildren, useCallback, useEffect} from 'react';
-import styled from 'styled-components';
 import type {EssentialModalProp} from '@store/reducers/modal';
+import styles from './index.module.scss';
+import classNames from 'classnames';
 
 export interface ModalProp extends PropsWithChildren<EssentialModalProp> {
   disableEasilyClose?: boolean;
   className?: string;
 }
 
+// 반드시 Client Component에서만 사용할것
 export default function Modal({disableEasilyClose = false, closeModal, children, className}: ModalProp) {
   const onBackdropClick = useCallback(() => {
     if (!disableEasilyClose) {
@@ -28,27 +32,10 @@ export default function Modal({disableEasilyClose = false, closeModal, children,
   }, []);
 
   return (
-    <Backdrop onClick={onBackdropClick}>
-      <Inner onClick={onInnerClick} className={className}>
+    <div className={styles.backdrop} onClick={onBackdropClick}>
+      <div onClick={onInnerClick} className={classNames(styles.inner, className)}>
         {children}
-      </Inner>
-    </Backdrop>
+      </div>
+    </div>
   );
 }
-
-const Backdrop = styled.div`
-  z-index: 100;
-  background-color: rgba(0, 0, 0, 0.3);
-  display: flex;
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  overflow: auto;
-`;
-
-const Inner = styled.div`
-  margin: auto;
-  background-color: white;
-`;

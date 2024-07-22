@@ -1,5 +1,7 @@
-import {PropsWithChildren} from 'react';
+import React, {PropsWithChildren} from 'react';
 import type {Metadata} from 'next';
+import AppProvider from '@component/setting/AppProvider';
+import '@/util/style/global.scss';
 
 export const metadata: Metadata = {
   title: 'Plan for myself',
@@ -9,7 +11,11 @@ export const metadata: Metadata = {
 export default async function RootLayout({children}: PropsWithChildren) {
   return (
     <html lang="en">
-    <body>{children}</body>
+    <body>
+    <AppProvider>
+      {children}
+    </AppProvider>
+    </body>
     </html>
   );
 }

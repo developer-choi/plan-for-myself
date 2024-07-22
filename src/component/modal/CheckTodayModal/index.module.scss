@@ -1,0 +1,69 @@
+@use "/src/util/style/color.module" as color;
+
+.styledModal {
+  padding: 20px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.styledForm {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  
+  > *:not(:last-child) {
+    margin-bottom: 16px;
+  }
+}
+
+.customCheckbox {
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 5px;
+  
+  padding: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border-color: map-get(color.$brandColors, lightMain);
+  
+  input {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+  }
+  
+  :has(input:checked) {
+    border-color: map-get(color.$brandColors, primary);
+  }
+  
+  :has(input:disabled) {
+    border-color: map-get(color.$stateColors, disabled);
+  }
+}
+
+.price {
+  margin-left: auto;
+  
+  &.positive {
+    color: blue;
+  }
+  
+  &.negative {
+    color: red;
+  }
+}
+
+.goalItem {
+  width: 100%;
+}
+
+.content {
+  margin-top: 6px;
+  white-space: pre-line;
+  
+  border: 1px solid gray;
+  border-radius: 4px;
+  padding: 8px;
+}

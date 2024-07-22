@@ -1,78 +1,45 @@
-import Modal from '@component/modal/Modal';
+'use client';
+
+import Modal from '@component/modal';
 import type {EssentialModalProp} from '@store/reducers/modal';
-import styled from 'styled-components';
 import React from 'react';
 import Button from '@component/common/button';
 import {Input, TextArea} from '@component/common/Input';
-import {HorizontalFieldset} from '@component/common/etc';
 import type {Goal} from '@type/goal';
 import {useGoalForm} from '@util/sevices/goal-form';
+import modalStyles from '@/util/style/modal.module.scss';
+import styles from './index.module.scss';
+import commonStyles from '@/util/style/common.module.scss';
 
 export interface GoalModalProp extends EssentialModalProp {
   data: Goal | undefined
 }
 
+// 반드시 Client Component에서만 사용할것
 export default function GoalModal(props: GoalModalProp) {
   const {inputProps, formSubmit, isEdit} = useGoalForm(props)
 
   return (
-    <StyledModal closeModal={props.closeModal} disableEasilyClose>
-      <ModalHeading>목표 {isEdit ? '수정' : '등록'}</ModalHeading>
-      <StyledForm onSubmit={formSubmit}>
+    <Modal className={styles.styledModal} closeModal={props.closeModal} disableEasilyClose>
+      <h1 className={modalStyles.modalHeading}>목표 {isEdit ? '수정' : '등록'}</h1>
+      <form className={styles.styledForm} onSubmit={formSubmit}>
         <Input placeholder="제목 *" {...inputProps.title}/>
         <TextArea placeholder="내용" {...inputProps.content}/>
         <Input type="number" placeholder="달성 시 금액 *" {...inputProps.achievePrice}/>
         <Input type="number" placeholder="실패 시 금액" {...inputProps.notAchievePrice}/>
-        <HorizontalFieldset>
+        <fieldset className={commonStyles.horizontalFieldset}>
           {inputProps.radioList.map(props => (
             <label key={props.value}>
               <input type="radio" {...props}/>
               {props.value}
             </label>
           ))}
-        </HorizontalFieldset>
-        <ModalButtonWrap>
+        </fieldset>
+        <div className={modalStyles.modalButtonWrap}>
           <Button className="gray" onClick={props.closeModal}>취소</Button>
           <Button onClick={formSubmit}>제출</Button>
-        </ModalButtonWrap>
-      </StyledForm>
-    </StyledModal>
+        </div>
+      </form>
+    </Modal>
   )
 }
-
-const StyledModal = styled(Modal)`
-  padding: 20px;
-  width: 100%;
-  max-width: 400px;
-`;
-
-const StyledForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  
-  > *:not(:last-child) {
-    margin-bottom: 15px;
-  }
-  
-  > * {
-    width: 100%;
-  }
-`;
-
-export const ModalHeading = styled.h1`
-  font-size: 28px;
-  margin-bottom: 20px;
-`;
-
-export const ModalButtonWrap = styled.div`
-  width: 100%;
-  display: flex;
-  gap: 20px;
-  
-  margin-top: 10px;
-  
-  > button {
-    flex-grow: 1;
-  }
-`;

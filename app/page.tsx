@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+'use client';
+
 import React, {useCallback} from 'react';
 import {useDispatchOpenModal} from '@store/reducers/modal';
 import Button from '@component/common/button';
@@ -8,6 +9,7 @@ import TotalGoalList from '@component/TotalGoalList';
 import {getRemainWeek} from '@util/extend/date-util';
 import {useQueryClient} from 'react-query';
 import {postMultipleGoalApi} from '@util/sevices/api/goal';
+import styles from './page.module.scss';
 
 export default function Home() {
   const {openGoalModal, openCheckTodayModal} = useDispatchOpenModal();
@@ -30,8 +32,8 @@ export default function Home() {
   const {todayHistory, originalGoalList} = data;
 
   return (
-    <Wrap>
-      <RemainWeek>올해 <em>{getRemainWeek(new Date())}</em>주 남음</RemainWeek>
+    <div className={styles.wrap}>
+      <div className={styles.remainWeek}>올해 <em>{getRemainWeek(new Date())}</em>주 남음</div>
 
       {originalGoalList.length === 0 ? (
         <>
@@ -51,23 +53,6 @@ export default function Home() {
           <TotalGoalList goalList={originalGoalList}/>
         </>
       )}
-    </Wrap>
+    </div>
   );
 }
-
-const Wrap = styled.div`
-  padding: 20px;
-  margin: 0 auto;
-  width: 100%;
-  max-width: 500px;
-`;
-
-const RemainWeek = styled.div`
-  em {
-    font-weight: bold;
-    color: ${props => props.theme.main};
-    font-size: 20px;
-  }
-  
-  margin-bottom: 8px;
-`;

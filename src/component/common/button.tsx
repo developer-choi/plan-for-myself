@@ -1,45 +1,15 @@
-import styled, {css, DefaultTheme, StyledComponent} from 'styled-components';
+import {ComponentPropsWithoutRef} from 'react';
+import classNames from 'classnames';
+import styles from './button.module.scss';
 
-const buttonHoverEffect = css`
-  &:not(:disabled) {
-    :hover {
-      opacity: 0.7;
-    }
-    
-    :active {
-      opacity: 1;
-    }
-  }
-`;
+export default function Button({className, ...rest}: ComponentPropsWithoutRef<'button'>) {
+  return (
+    <BaseButton className={classNames(styles.button, className)} {...rest}/>
+  );
+}
 
-export const BaseButton: StyledComponent<'button', DefaultTheme> = styled.button.attrs(({type = 'button', ...rest}) => ({...rest, type}))`
-  ${buttonHoverEffect}
-  
-  &.gray {
-    background: ${props => props.theme.disabled};
-  }
-  
-  &.light-main {
-    background: ${props => props.theme.lightMain};
-  }
-  
-  &:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
-  
-  &:not(:disabled) {
-    cursor: pointer;
-  }
-`;
-
-const Button: StyledComponent<'button', DefaultTheme> = styled(BaseButton)`
-  padding: 8px 15px;
-  min-width: 90px;
-  border-radius: 5px; //size에는 border-radius도 포함되고,
-  flex-shrink: 0; //버튼들 중에는 길이가 줄어들면 안되는 경우도 있어서 여기에 선언한다.
-  background-color: ${props => props.theme.main};
-  color: white;
-`;
-
-export default Button
+export function BaseButton({type = 'button', className, ...rest}: ComponentPropsWithoutRef<'button'>) {
+  return (
+    <button type={type} className={classNames(styles.baseButton, className)} {...rest}/>
+  );
+}

@@ -1,0 +1,43 @@
+@use "/src/util/style/color.module" as color;
+
+@mixin buttonHoverEffect {
+  &:not(:disabled) {
+    :hover {
+      opacity: 0.7;
+    }
+    
+    :active {
+      opacity: 1;
+    }
+  }
+}
+
+.baseButton {
+  @include buttonHoverEffect;
+  
+  &.gray {
+    background: map-get(color.$stateColors, disabled);
+  }
+  
+  &.light-main {
+    background: map-get(color.$brandColors, lightMain);
+  }
+  
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  
+  &:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+.button {
+  padding: 8px 15px;
+  min-width: 90px;
+  border-radius: 5px; //size에는 border-radius도 포함되고,
+  flex-shrink: 0; //버튼들 중에는 길이가 줄어들면 안되는 경우도 있어서 여기에 선언한다.
+  background-color: map-get(color.$brandColors, primary);
+  color: white;
+}

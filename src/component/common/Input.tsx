@@ -1,19 +1,15 @@
-import styled, {css} from 'styled-components';
+import {ComponentPropsWithoutRef, forwardRef, Ref} from 'react';
+import classNames from 'classnames';
+import styles from './input.module.scss';
 
-const InputCss = css`
-  border: 1px solid gray;
-  padding: 10px;
-  border-radius: 5px;
-  min-width: 250px;
-  font-family: sans-serif;
-`;
+export const Input =  forwardRef(function Input({className, ...rest}: ComponentPropsWithoutRef<'input'>, ref: Ref<HTMLInputElement>) {
+  return (
+    <input ref={ref} className={classNames(styles.input, className)} {...rest}/>
+  );
+});
 
-export const Input = styled.input`
-  ${InputCss};
-`;
-
-export const TextArea = styled.textarea`
-  ${InputCss};
-  min-height: 100px;
-  resize: none;
-`;
+export const TextArea = forwardRef(function TextArea({className, ...rest}: ComponentPropsWithoutRef<'textarea'>, ref: Ref<HTMLTextAreaElement>) {
+  return (
+    <textarea ref={ref} className={classNames(styles.textarea, className)} {...rest}/>
+  );
+});

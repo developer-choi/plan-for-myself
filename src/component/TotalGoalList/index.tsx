@@ -1,10 +1,11 @@
-import {HorizontalFieldset, MainPageH2} from '@component/common/etc';
 import React, {useCallback} from 'react';
 import type {Goal} from '@type/goal';
 import {useDeleteGoal, useGoalResponse, useTotalGoalList} from '@util/sevices/goal';
-import styled from 'styled-components';
 import Button, {BaseButton} from '@component/common/button';
 import {useDispatchOpenModal} from '@store/reducers/modal';
+import styles from './index.module.scss';
+import commonStyles from '@/util/style/common.module.scss';
+import classNames from 'classnames';
 
 export interface TotalGoalListProp {
   goalList: Goal[];
@@ -24,26 +25,26 @@ export default function TotalGoalList({goalList}: TotalGoalListProp) {
 
   return (
     <>
-      <MainPageH2>전체 목표 목록</MainPageH2>
+      <h2 className={commonStyles.mainPageH2}>전체 목표 목록</h2>
 
-      <HorizontalFieldset style={{marginBottom: 10}}>
+      <fieldset style={{marginBottom: 10}} className={commonStyles.horizontalFieldset}>
         {radioPropsList.map(props => (
           <label key={props.value}>
             <input type="radio" {...props}/>
             {props.value}
           </label>
         ))}
-      </HorizontalFieldset>
+      </fieldset>
 
       <ul>
         {filteredGoalList.map((goal) => (
-          <GoalOl key={goal.pk}>
-            {!goal.is_important ? null : <ImportantMark/>}
-            {frequency !== 'All' ? null : <Frequency>({goal.frequency.toLowerCase()})</Frequency>}
-            <Title>{goal.title}</Title>
-            <SmallButton className="edit" onClick={() => openGoalModal({data: goal})}>수정</SmallButton>
-            <SmallButton className="delete" onClick={() => deleteGoal(goal)}>삭제</SmallButton>
-          </GoalOl>
+          <ol key={goal.pk} className={styles.goalOl}>
+            {!goal.is_important ? null : <div className={styles.importantMark}/>}
+            {frequency !== 'All' ? null : <span className={styles.frequency}>({goal.frequency.toLowerCase()})</span>}
+            <span className={styles.title}>{goal.title}</span>
+            <BaseButton className={classNames(styles.smallButton, styles.edit)} onClick={() => openGoalModal({data: goal})}>수정</BaseButton>
+            <BaseButton className={classNames(styles.smallButton, styles.delete)} onClick={() => deleteGoal(goal)}>삭제</BaseButton>
+          </ol>
         ))}
       </ul>
 
@@ -54,50 +55,3 @@ export default function TotalGoalList({goalList}: TotalGoalListProp) {
     </>
   );
 }
-
-const GoalOl = styled.ol`
-  display: flex;
-  align-items: center;
-  
-  &:not(:first-child) {
-    margin-top: 16px;
-  }
-`;
-
-const SmallButton = styled(BaseButton)`
-  padding: 2px 8px;
-  margin-left: 4px;
-  
-  &:first-of-type {
-    margin-left: auto;
-  }
-  
-  color: white;
-  font-size: 12px;
-  
-  &.edit {
-    background: orange;
-  }
-  
-  &.delete {
-    background: red;
-  }
-`;
-
-const ImportantMark = styled.div`
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: red;
-  margin-right: 3px;
-`;
-
-const Frequency = styled.span`
-  font-size: 12px;
-  color: #7a7a7a;
-  margin-right: 6px;
-`;
-
-const Title = styled.span`
-  color: black;
-`;

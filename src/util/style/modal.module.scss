@@ -1,0 +1,16 @@
+.modalHeading {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.modalButtonWrap {
+  width: 100%;
+  display: flex;
+  gap: 20px;
+  
+  margin-top: 10px;
+  
+  > button {
+    flex-grow: 1;
+  }
+}

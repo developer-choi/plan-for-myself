@@ -36,7 +36,8 @@
       ],
       "@store/*": [
         "src/store/*"
-      ]
+      ],
+      "@/*": ["./src/*"]
     },
     "incremental": true,
     "plugins": [

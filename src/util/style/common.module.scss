@@ -1,6 +1,4 @@
-import styled from 'styled-components';
-
-export const HorizontalFieldset = styled.fieldset`
+.horizontalFieldset {
   gap: 12px;
   display: flex;
   
@@ -12,10 +10,10 @@ export const HorizontalFieldset = styled.fieldset`
       margin-right: 4px;
     }
   }
-`;
+}
 
-export const MainPageH2 = styled.h2`
+.mainPageH2 {
   font-size: 20px;
   margin-top: 30px;
   margin-bottom: 5px;
-`;
+}
