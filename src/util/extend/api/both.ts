@@ -20,7 +20,7 @@ function handleRequest(input: string | URL | globalThis.Request, parameter: Cust
     newHeaders.set("Content-Type", "application/json");
   }
 
-  const requestUrl = typeof input !== "string" || input.startsWith("http") ? input : `${process.env.NEXT_PUBLIC_FRONT_ORIGIN}/${input}`;
+  const requestUrl = typeof input !== "string" || input.startsWith("http") ? input : `${process.env.NEXT_PUBLIC_FRONT_ORIGIN}${input}`;
 
   return {
     input: requestUrl,
