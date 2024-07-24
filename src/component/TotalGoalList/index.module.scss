@@ -8,22 +8,11 @@
 }
 
 .smallButton {
-  padding: 2px 8px;
+  width: auto;
   margin-left: 4px;
   
   &:first-of-type {
     margin-left: auto;
-  }
-  
-  color: white;
-  font-size: 12px;
-  
-  &.edit {
-    background: orange;
-  }
-  
-  &.delete {
-    background: red;
   }
 }
 
@@ -43,4 +32,10 @@
 
 .title {
   color: black;
+}
+
+.buttonWrap {
+  display: flex;
+  margin-top: 12px;
+  gap: 16px;
 }

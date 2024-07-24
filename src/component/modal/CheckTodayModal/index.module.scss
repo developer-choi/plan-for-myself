@@ -1,4 +1,4 @@
-@use "/src/util/style/color.module" as color;
+@use "/src/util/style/color" as color;
 
 .styledModal {
   padding: 20px;
@@ -26,7 +26,7 @@
   width: 100%;
   display: flex;
   align-items: center;
-  border-color: map-get(color.$brandColors, lightMain);
+  border-color: map-get(color.$brandColors, secondary);
   
   input {
     width: 20px;

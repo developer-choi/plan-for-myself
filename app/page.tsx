@@ -2,7 +2,6 @@
 
 import React, {useCallback, useEffect} from 'react';
 import {useDispatchOpenModal} from '@/store/reducers/modal';
-import Button from '@/component/common/button';
 import {GOAL_FULL_RESPONSE_QUERY_KEY, useGoalResponse} from '@/util/sevices/goal';
 import GoalOverview from '@/component/GoalOverview';
 import TotalGoalList from '@/component/TotalGoalList';
@@ -13,6 +12,7 @@ import styles from './page.module.scss';
 import {getRemindOfMessageListApi} from '@/util/sevices/api/remind-of-message';
 import {randomInArray} from '@/util/extend/random';
 import {toast} from 'react-toastify';
+import Button from '@/component/element/Button';
 
 export default function Home() {
   const {openGoalModal, openCheckTodayModal} = useDispatchOpenModal();
@@ -53,10 +53,10 @@ export default function Home() {
       <div className={styles.remainWeek}>올해 <em>{getRemainWeek(new Date())}</em>주 남음</div>
 
       {originalGoalList.length === 0 ? (
-        <>
+        <div className={styles.buttonWrap}>
           <Button onClick={() => openGoalModal()}>목표 추가하기</Button>
-          <Button style={{marginLeft: 5}} className="light-main" onClick={loadGoalList}>불러오기</Button>
-        </>
+          <Button style={{marginLeft: 5}} onClick={loadGoalList}>불러오기</Button>
+        </div>
       ) : (
         <>
           {todayHistory.has_checked ? (

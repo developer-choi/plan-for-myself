@@ -7,10 +7,10 @@ import {
   postRemindOfMessageApi,
   RemindOfMessageItem, updateRemindOfMessageApi
 } from '@/util/sevices/api/remind-of-message';
-import Button, {BaseButton} from '@/component/common/button';
 import styles from '../page.module.scss';
 import goalStyles from '@/component/TotalGoalList/index.module.scss';
 import classNames from 'classnames';
+import Button from '@/component/element/Button';
 
 export default function Page() {
   const [list, setList] = useState<RemindOfMessageItem[]>([]);
@@ -63,8 +63,8 @@ export default function Page() {
         {list.map((item) => (
           <ol key={item.id} className={goalStyles.goalOl}>
             <span className={goalStyles.title}>{item.message}</span>
-            <BaseButton className={classNames(goalStyles.smallButton, goalStyles.edit)} onClick={() => updateMessage(item.id)}>수정</BaseButton>
-            <BaseButton className={classNames(goalStyles.smallButton, goalStyles.delete)} onClick={() => deleteMessage(item)}>삭제</BaseButton>
+            <Button size="xsmall" color="edit" className={classNames(styles.smallButton)} onClick={() => updateMessage(item.id)}>수정</Button>
+            <Button size="xsmall" color="delete" className={classNames(styles.smallButton)} onClick={() => deleteMessage(item)}>삭제</Button>
           </ol>
         ))}
       </ul>

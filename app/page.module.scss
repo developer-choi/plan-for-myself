@@ -1,4 +1,4 @@
-@use "/src/util/style/color.module" as color;
+@use "/src/util/style/color" as color;
 
 .wrap {
   padding: 20px;
@@ -15,4 +15,8 @@
   }
   
   margin-bottom: 8px;
+}
+
+.buttonWrap {
+  display: flex;
 }

@@ -3,13 +3,13 @@
 import Modal from '@/component/modal';
 import type {EssentialModalProp} from '@/store/reducers/modal';
 import React from 'react';
-import Button from '@/component/common/button';
 import {Input, TextArea} from '@/component/common/Input';
 import type {Goal} from '@/type/goal';
 import {useGoalForm} from '@/util/sevices/goal-form';
 import modalStyles from '@/util/style/modal.module.scss';
 import styles from './index.module.scss';
 import commonStyles from '@/util/style/common.module.scss';
+import Button from '@/component/element/Button';
 
 export interface GoalModalProp extends EssentialModalProp {
   data: Goal | undefined
@@ -36,7 +36,7 @@ export default function GoalModal(props: GoalModalProp) {
           ))}
         </fieldset>
         <div className={modalStyles.modalButtonWrap}>
-          <Button className="gray" onClick={props.closeModal}>취소</Button>
+          <Button variant="outlined" onClick={props.closeModal}>취소</Button>
           <Button onClick={formSubmit}>제출</Button>
         </div>
       </form>

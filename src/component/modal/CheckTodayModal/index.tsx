@@ -1,7 +1,6 @@
 'use client';
 
 import type {EssentialModalProp} from '@/store/reducers/modal';
-import Button from '@/component/common/button';
 import React from 'react';
 import {useCheckGoalListForm} from '@/util/sevices/check-goal';
 import {numberWithComma} from '@/util/extend/number';
@@ -9,6 +8,7 @@ import styles from './index.module.scss';
 import modalStyles from '@/util/style/modal.module.scss';
 import Modal from '@/component/modal';
 import classNames from 'classnames';
+import Button from '@/component/element/Button';
 
 export interface CheckTodayModalProp extends EssentialModalProp {
 
@@ -44,7 +44,7 @@ export default function CheckTodayModal({closeModal}: CheckTodayModalProp) {
           </div>
         )}
         <div className={modalStyles.modalButtonWrap}>
-          <Button className="gray" onClick={closeModal}>취소</Button>
+          <Button variant="outlined" onClick={closeModal}>취소</Button>
           <Button disabled={submitDisabled} type="submit">제출</Button>
         </div>
       </form>

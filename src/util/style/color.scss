@@ -1,0 +1,22 @@
+$grayColors: (
+  #333333, // nth($grayColors, 1);
+  #444444,
+  #646464,
+  #898989,
+  #bdbdbd, // nth($grayColors, 5);
+  #dbdbdb,
+  #ebebeb,
+  #f0f0f0,
+  #f5f5f5, // nth($grayColors, 9);
+);
+
+$brandColors: (
+  primary: #7752FE, // map-get(color.$brandColors, primary);
+  secondary: #C2D9FF, // map-get(color.$brandColors, secondary);
+  edit: orange,
+  delete: red
+);
+
+$stateColors: (
+  disabled: darkgray // map-get(color.$stateColors, disabled);
+);
