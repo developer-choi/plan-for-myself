@@ -4,6 +4,10 @@ import type {CheckableGoal, Goal, GoalFrequency} from '@type/goal';
 import dayjs from 'dayjs';
 import type {GoalFullResponse} from '@type/goal-server';
 
+/**
+ * 기능 = 내 목표목록, 오늘 체크한거 히스토리, 오늘 체크할 목표목록, 오늘의 빈도값 가져오기
+ * 401 = user_id가 헤더에 없거나, 존재하지 않는 회원
+ */
 export async function GET(request: NextRequest) {
   const user_id = request.headers.get('User-Id');
 
