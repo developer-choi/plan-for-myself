@@ -1,19 +1,12 @@
-import {BodyInit} from 'undici-types';
 import {LoginError, Session} from '@util/sevices/auth';
 
-export async function getCustomFetchInBothSide(input: string | URL | globalThis.Request, parameter: GetFetchParameter): Promise<CustomResponse> {
+export async function customFetchInBothSide(input: string | URL | globalThis.Request, parameter: CustomFetchParameter) {
   const request = handleRequest(input, parameter);
   const response = await fetch(request.input, request.init);
   return handleResponse(response);
 }
 
-export async function othersCustomFetch(input: string | URL | globalThis.Request, parameter: OthersFetchParameter) {
-  const request = handleRequest(input, parameter);
-  const response = await fetch(request.input, request.init);
-  return handleResponse(response);
-}
-
-function handleRequest(input: string | URL | globalThis.Request, parameter: GetFetchParameter) {
+function handleRequest(input: string | URL | globalThis.Request, parameter: CustomFetchParameter) {
   const {headers, session, body, ...init} = parameter;
   const newHeaders = new Headers(headers);
 
@@ -67,13 +60,21 @@ async function handleResponse(response: Response) {
   }
 }
 
-export interface GetFetchParameter extends Omit<RequestInit, 'body'> {
-  body?: BodyInit | null | object;
-  session: Session | null;
+// Client Side / Server Side 각 환경에서 한번 더 확장한 fetch 함수 만들 때 이 타입을 사용
+export interface ExtendedCustomFetchParameter extends Omit<RequestInit, 'body'> {
+  body?: RequestInit['body'] | object;
+  method: 'GET' | 'POST' | 'DELETE' | 'PATCH' | 'PUT';
+
+  /**
+   * none = request에 accessToken을 싣지않음.
+   * public = 로그인되어있으면 accessToken을 request에 실음
+   * private = public 특징 포함하며, 로그인 안되어있으면 LoginError 던짐
+   */
+  authorize: 'private' | 'public' | 'none';
 }
 
-export interface OthersFetchParameter extends GetFetchParameter {
-  method: "POST" | "DELETE" | "PATCH";
+export interface CustomFetchParameter extends ExtendedCustomFetchParameter {
+  session: Session | null;
 }
 
 export interface CustomResponse extends Pick<Response, 'status' | 'headers' | 'url'> {

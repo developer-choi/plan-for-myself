@@ -1,15 +1,13 @@
 import type {PostGoalRequestParameter} from '@type/goal-server';
-import {othersCustomFetch} from '@util/extend/api/both';
-import {getSession} from '@util/sevices/auth';
-import {getCustomFetchInClientSide} from '@util/extend/api/client';
 import type {CheckableGoal, Goal} from '@type/goal';
+import {customFetchInClientSide} from '@util/extend/api/client';
 
 export async function postGoalApi(goal: PostGoalRequestParameter, isImportant = true) {
   const {not_achieve_price, achieve_price, title, frequency, content} = goal;
 
-  return othersCustomFetch('/api/original-goal', {
+  return customFetchInClientSide('/api/original-goal', {
     method: 'POST',
-    session: getSession(),
+    authorize: 'private',
     body: {
       title,
       content,
@@ -22,36 +20,39 @@ export async function postGoalApi(goal: PostGoalRequestParameter, isImportant = 
 }
 
 export async function postMultipleGoalApi(originalGoalList: Goal[]) {
-  return othersCustomFetch('/api/original-goal/multiple', {
+  return customFetchInClientSide('/api/original-goal/multiple', {
     method: 'POST',
-    session: getSession(),
+    authorize: 'private',
     body: originalGoalList
   });
 }
 
 export async function postTodayCheckGoalApi(checkedGoalList: CheckableGoal[]) {
-  return othersCustomFetch('/api/today-goal', {
+  return customFetchInClientSide('/api/today-goal', {
     method: 'POST',
-    session: getSession(),
+    authorize: 'private',
     body: checkedGoalList
   });
 }
 
 export async function getGoalListApi() {
-  return getCustomFetchInClientSide('/api/today-goal');
+  return customFetchInClientSide('/api/today-goal', {
+    method: 'GET',
+    authorize: 'private',
+  });
 }
 
 export async function updateGoalApi(pk: number, parameter: PostGoalRequestParameter) {
-  return othersCustomFetch(`/api/original-goal/${pk}`, {
+  return customFetchInClientSide(`/api/original-goal/${pk}`, {
     method: 'PATCH',
-    session: getSession(),
+    authorize: 'private',
     body: parameter
   });
 }
 
 export async function deleteGoalApi(pk: number) {
-  return othersCustomFetch(`/api/original-goal/${pk}`, {
+  return customFetchInClientSide(`/api/original-goal/${pk}`, {
     method: 'DELETE',
-    session: getSession()
+    authorize: 'private',
   });
 }
