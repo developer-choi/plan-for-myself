@@ -38,6 +38,7 @@ export default function Home() {
         hideProgressBar: true,
         closeButton: false,
         closeOnClick: true,
+        theme: 'colored'
       });
     })().then();
   }, []);
