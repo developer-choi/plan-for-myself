@@ -1,4 +1,4 @@
-import {LoginError, Session} from '@util/sevices/auth';
+import {LoginError, Session} from '@/util/sevices/auth';
 
 export async function customFetchInBothSide(input: string | URL | globalThis.Request, parameter: CustomFetchParameter) {
   const request = handleRequest(input, parameter);

@@ -1,7 +1,7 @@
 'use client';
 
 import React, {MouseEvent, PropsWithChildren, useCallback, useEffect} from 'react';
-import type {EssentialModalProp} from '@store/reducers/modal';
+import type {EssentialModalProp} from '@/store/reducers/modal';
 import styles from './index.module.scss';
 import classNames from 'classnames';
 

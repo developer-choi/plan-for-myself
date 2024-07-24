@@ -6,8 +6,8 @@ import {
   getRemindOfMessageListApi,
   postRemindOfMessageApi,
   RemindOfMessageItem, updateRemindOfMessageApi
-} from '@util/sevices/api/remind-of-message';
-import Button, {BaseButton} from '@component/common/button';
+} from '@/util/sevices/api/remind-of-message';
+import Button, {BaseButton} from '@/component/common/button';
 import styles from '../page.module.scss';
 import goalStyles from '@/component/TotalGoalList/index.module.scss';
 import classNames from 'classnames';

@@ -1,13 +1,13 @@
 'use client';
 
-import type {EssentialModalProp} from '@store/reducers/modal';
-import Button from '@component/common/button';
+import type {EssentialModalProp} from '@/store/reducers/modal';
+import Button from '@/component/common/button';
 import React from 'react';
-import {useCheckGoalListForm} from '@util/sevices/check-goal';
-import {numberWithComma} from '@util/extend/number';
+import {useCheckGoalListForm} from '@/util/sevices/check-goal';
+import {numberWithComma} from '@/util/extend/number';
 import styles from './index.module.scss';
 import modalStyles from '@/util/style/modal.module.scss';
-import Modal from '@component/modal';
+import Modal from '@/component/modal';
 import classNames from 'classnames';
 
 export interface CheckTodayModalProp extends EssentialModalProp {

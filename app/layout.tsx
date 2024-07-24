@@ -1,6 +1,6 @@
 import React, {PropsWithChildren} from 'react';
 import type {Metadata} from 'next';
-import AppProvider from '@component/setting/AppProvider';
+import AppProvider from '@/component/setting/AppProvider';
 import '@/util/style/global.scss';
 import 'react-toastify/dist/ReactToastify.css';
 import {ToastContainer} from 'react-toastify';

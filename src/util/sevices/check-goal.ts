@@ -1,9 +1,9 @@
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {useCallback} from 'react';
-import {GOAL_FULL_RESPONSE_QUERY_KEY, useGoalResponse} from '@util/sevices/goal';
+import {GOAL_FULL_RESPONSE_QUERY_KEY, useGoalResponse} from '@/util/sevices/goal';
 import {useQueryClient} from 'react-query';
 import dayjs from 'dayjs';
-import {postTodayCheckGoalApi} from '@util/sevices/api/goal';
+import {postTodayCheckGoalApi} from '@/util/sevices/api/goal';
 
 interface CheckGoalListFormData {
   checkedGoalList: string[];

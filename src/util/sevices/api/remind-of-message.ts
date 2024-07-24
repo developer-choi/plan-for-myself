@@ -1,4 +1,4 @@
-import {customFetchInClientSide} from '@util/extend/api/client';
+import {customFetchInClientSide} from '@/util/extend/api/client';
 
 export async function postRemindOfMessageApi(message: string) {
   return customFetchInClientSide('/api/remind-of-message', {

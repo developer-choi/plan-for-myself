@@ -1,6 +1,6 @@
-import type {PostGoalRequestParameter} from '@type/goal-server';
-import type {CheckableGoal, Goal} from '@type/goal';
-import {customFetchInClientSide} from '@util/extend/api/client';
+import type {PostGoalRequestParameter} from '@/type/goal-server';
+import type {CheckableGoal, Goal} from '@/type/goal';
+import {customFetchInClientSide} from '@/util/extend/api/client';
 
 export async function postGoalApi(goal: PostGoalRequestParameter, isImportant = true) {
   const {not_achieve_price, achieve_price, title, frequency, content} = goal;

@@ -1,6 +1,6 @@
-import type {FieldError} from 'react-hook-form/dist/types/errors';
+import type {FieldError} from 'react-hook-form';
 
-export function baseHandleErrors<T>(errorList: (FieldError | undefined)[], customFocus = true) {
+export function baseHandleErrors(errorList: (FieldError | undefined)[], customFocus = true) {
   for (const error of errorList) {
     if (!error) {
       continue;

@@ -1,4 +1,4 @@
-import type {CheckableGoal, Goal, GoalFrequency} from '@type/goal';
+import type {CheckableGoal, Goal, GoalFrequency} from '@/type/goal';
 
 export type PostGoalRequestParameter = Omit<Goal, 'pk' | 'not_achieve_price' | 'is_important'> & Partial<Pick<Goal, 'not_achieve_price'>>;
 

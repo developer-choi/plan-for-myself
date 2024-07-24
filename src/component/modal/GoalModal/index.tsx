@@ -1,12 +1,12 @@
 'use client';
 
-import Modal from '@component/modal';
-import type {EssentialModalProp} from '@store/reducers/modal';
+import Modal from '@/component/modal';
+import type {EssentialModalProp} from '@/store/reducers/modal';
 import React from 'react';
-import Button from '@component/common/button';
-import {Input, TextArea} from '@component/common/Input';
-import type {Goal} from '@type/goal';
-import {useGoalForm} from '@util/sevices/goal-form';
+import Button from '@/component/common/button';
+import {Input, TextArea} from '@/component/common/Input';
+import type {Goal} from '@/type/goal';
+import {useGoalForm} from '@/util/sevices/goal-form';
 import modalStyles from '@/util/style/modal.module.scss';
 import styles from './index.module.scss';
 import commonStyles from '@/util/style/common.module.scss';

@@ -1,17 +1,17 @@
 'use client';
 
 import React, {useCallback, useEffect} from 'react';
-import {useDispatchOpenModal} from '@store/reducers/modal';
-import Button from '@component/common/button';
-import {GOAL_FULL_RESPONSE_QUERY_KEY, useGoalResponse} from '@util/sevices/goal';
-import GoalOverview from '@component/GoalOverview';
-import TotalGoalList from '@component/TotalGoalList';
-import {getRemainWeek} from '@util/extend/date-util';
+import {useDispatchOpenModal} from '@/store/reducers/modal';
+import Button from '@/component/common/button';
+import {GOAL_FULL_RESPONSE_QUERY_KEY, useGoalResponse} from '@/util/sevices/goal';
+import GoalOverview from '@/component/GoalOverview';
+import TotalGoalList from '@/component/TotalGoalList';
+import {getRemainWeek} from '@/util/extend/date-util';
 import {useQueryClient} from 'react-query';
-import {postMultipleGoalApi} from '@util/sevices/api/goal';
+import {postMultipleGoalApi} from '@/util/sevices/api/goal';
 import styles from './page.module.scss';
-import {getRemindOfMessageListApi} from '@util/sevices/api/remind-of-message';
-import {randomInArray} from '@util/extend/random';
+import {getRemindOfMessageListApi} from '@/util/sevices/api/remind-of-message';
+import {randomInArray} from '@/util/extend/random';
 import {toast} from 'react-toastify';
 
 export default function Home() {

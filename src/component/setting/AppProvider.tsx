@@ -2,10 +2,10 @@
 
 import React, {PropsWithChildren, useCallback} from 'react';
 import {Provider} from 'react-redux';
-import {store} from '@store/store';
+import {store} from '@/store/store';
 import {QueryClient, QueryClientProvider} from 'react-query';
-import {useAppDispatch, useAppSelector} from '@store/hooks';
-import {closeModal} from '@store/reducers/modal';
+import {useAppDispatch, useAppSelector} from '@/store/hooks';
+import {closeModal} from '@/store/reducers/modal';
 
 export default function AppProvider({children}: PropsWithChildren) {
   return (

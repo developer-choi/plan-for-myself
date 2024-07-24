@@ -1,6 +1,6 @@
 import {NextRequest} from 'next/server';
-import {Goal} from '@type/goal';
-import {postOriginalGoalSql} from '@util/sevices/api/server';
+import {Goal} from '@/type/goal';
+import {postOriginalGoalSql} from '@/util/sevices/api/server';
 
 /**
  * 기능 = 목표 어려개 생성하기

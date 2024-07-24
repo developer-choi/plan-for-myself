@@ -1,8 +1,8 @@
 import React, {useCallback} from 'react';
-import type {Goal} from '@type/goal';
-import {useDeleteGoal, useGoalResponse, useTotalGoalList} from '@util/sevices/goal';
-import Button, {BaseButton} from '@component/common/button';
-import {useDispatchOpenModal} from '@store/reducers/modal';
+import type {Goal} from '@/type/goal';
+import {useDeleteGoal, useGoalResponse, useTotalGoalList} from '@/util/sevices/goal';
+import Button, {BaseButton} from '@/component/common/button';
+import {useDispatchOpenModal} from '@/store/reducers/modal';
 import styles from './index.module.scss';
 import commonStyles from '@/util/style/common.module.scss';
 import classNames from 'classnames';

@@ -1,5 +1,5 @@
 import {NextRequest} from 'next/server';
-import type {PostGoalRequestParameter} from '@type/goal-server';
+import type {PostGoalRequestParameter} from '@/type/goal-server';
 import {sql} from '@vercel/postgres';
 
 /**
