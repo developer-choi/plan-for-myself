@@ -11,10 +11,12 @@ export async function postRemindOfMessageApi(message: string) {
 }
 
 export async function getRemindOfMessageListApi() {
-  return customFetchInClientSide('/api/remind-of-message', {
+  const {json} = await customFetchInClientSide('/api/remind-of-message', {
     method: 'GET',
     authorize: 'private'
   });
+
+  return json as RemindOfMessageItem[];
 }
 
 export interface RemindOfMessageItem {

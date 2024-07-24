@@ -17,7 +17,7 @@ export default function Page() {
 
   const refresh = useCallback(() => {
     getRemindOfMessageListApi().then(list => {
-      setList(list.json);
+      setList(list);
     });
   }, []);
 

@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {useDispatchOpenModal} from '@store/reducers/modal';
 import Button from '@component/common/button';
 import {GOAL_FULL_RESPONSE_QUERY_KEY, useGoalResponse} from '@util/sevices/goal';
@@ -10,6 +10,9 @@ import {getRemainWeek} from '@util/extend/date-util';
 import {useQueryClient} from 'react-query';
 import {postMultipleGoalApi} from '@util/sevices/api/goal';
 import styles from './page.module.scss';
+import {getRemindOfMessageListApi} from '@util/sevices/api/remind-of-message';
+import {randomInArray} from '@util/extend/random';
+import {toast} from 'react-toastify';
 
 export default function Home() {
   const {openGoalModal, openCheckTodayModal} = useDispatchOpenModal();
@@ -24,6 +27,20 @@ export default function Home() {
       queryClient.invalidateQueries(GOAL_FULL_RESPONSE_QUERY_KEY);
     }
   }, [queryClient]);
+
+  useEffect(() => {
+    (async () => {
+      const list = await getRemindOfMessageListApi();
+      const item = randomInArray(list);
+      toast.info(item.message, {
+        autoClose: 5000,
+        position: 'top-center',
+        hideProgressBar: true,
+        closeButton: false,
+        closeOnClick: true,
+      });
+    })().then();
+  }, []);
 
   if (!data) {
     return null;
