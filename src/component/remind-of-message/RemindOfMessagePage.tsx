@@ -55,10 +55,8 @@ export default function RemindOfMessagePage({list}: RemindOfMessagePageProps) {
         {list.map((item) => (
           <ol key={item.id} className={goalStyles.goalOl}>
             <span className={goalStyles.title}>{item.message}</span>
-            <Button size="xsmall" color="edit" className={goalStyles.smallButton}
-                    onClick={() => updateMessage(item.id)}>수정</Button>
-            <Button size="xsmall" color="delete" className={goalStyles.smallButton}
-                    onClick={() => deleteMessage(item)}>삭제</Button>
+            <Button size="xsmall" color="edit" className={goalStyles.smallButton} style={{width: 'auto'}} onClick={() => updateMessage(item.id)}>수정</Button>
+            <Button size="xsmall" color="delete" className={goalStyles.smallButton} style={{width: 'auto'}} onClick={() => deleteMessage(item)}>삭제</Button>
           </ol>
         ))}
       </ul>
