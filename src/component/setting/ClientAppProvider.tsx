@@ -7,7 +7,7 @@ import {QueryClient, QueryClientProvider} from 'react-query';
 import {useAppDispatch, useAppSelector} from '@/store/hooks';
 import {closeModal} from '@/store/reducers/modal';
 
-export default function AppProvider({children}: PropsWithChildren) {
+export default function ClientAppProvider({children}: PropsWithChildren) {
   return (
     <QueryClientProvider client={INSTANCE}>
       <Provider store={store}>

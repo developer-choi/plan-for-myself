@@ -1,4 +1,5 @@
-import {LoginError, Session} from '@/util/sevices/auth';
+import {Session} from 'next-auth';
+import {LoginError} from '@/util/sevices/auth/redirect';
 
 export async function customFetchInBothSide(input: string | URL | globalThis.Request, parameter: CustomFetchParameter) {
   const request = handleRequest(input, parameter);
@@ -7,15 +8,18 @@ export async function customFetchInBothSide(input: string | URL | globalThis.Req
 }
 
 function handleRequest(input: string | URL | globalThis.Request, parameter: CustomFetchParameter) {
-  const {headers, session, body, ...init} = parameter;
+  const {headers, session, authorize, body, ...init} = parameter;
   const newHeaders = new Headers(headers);
 
-  if (session?.userId !== 'forworkchoe@gmail.com') {
+  if (authorize === 'private' && !session) {
     throw LOGIN_ERROR;
-  } else {
-    newHeaders.set("User-Id", session.userId);
+
+  } else if (authorize !== 'none' && session) {
+    // access token 대신
+    newHeaders.set("User-Id", session.user.email);
   }
 
+  // GET의 경우에는 없고, 그 외 나머지는 JSON이 될 수도, Primitive일 수도 있음.
   if (typeof body === "object") {
     newHeaders.set("Content-Type", "application/json");
   }

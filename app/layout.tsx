@@ -1,10 +1,5 @@
 import React, {PropsWithChildren} from 'react';
 import type {Metadata} from 'next';
-import AppProvider from '@/component/setting/AppProvider';
-import '@/util/style/reset.css';
-import '@/util/style/global.scss';
-import 'react-toastify/dist/ReactToastify.css';
-import {ToastContainer} from 'react-toastify';
 import {Noto_Sans} from 'next/font/google';
 
 const font = Noto_Sans({
@@ -21,10 +16,7 @@ export default async function RootLayout({children}: PropsWithChildren) {
   return (
     <html lang="en">
     <body className={font.className}>
-    <AppProvider>
-      {children}
-    </AppProvider>
-    <ToastContainer/>
+    {children}
     </body>
     </html>
   );
