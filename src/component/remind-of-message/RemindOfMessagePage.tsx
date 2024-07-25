@@ -1,8 +1,8 @@
 'use client';
 
-import styles from '../../app/(service)/(private)/page.module.scss';
+import styles from '@/app/(service)/(private)/dashboard/page.module.scss';
 import goalStyles from '@/component/TotalGoalList/index.module.scss';
-import Button from '@/component/element/Button';
+import Button from '../design-system/element/Button';
 import React, {useCallback} from 'react';
 import {
   deleteRemindOfMessageApi,
