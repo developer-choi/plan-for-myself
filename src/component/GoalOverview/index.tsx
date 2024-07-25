@@ -1,7 +1,7 @@
 import React from 'react';
 import {useDispatchOpenModal} from '@/store/reducers/modal';
 import {numberWithComma} from '@/util/extend/number';
-import type {GoalFullResponse} from '@/type/goal-server';
+import type {GoalFullResponse} from '@/type/goal';
 import styles from './index.module.scss';
 
 export interface GoalOverviewProp {

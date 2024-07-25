@@ -1,4 +1,3 @@
-import type {PostGoalRequestParameter} from '@/type/goal-server';
 import {useCallback} from 'react';
 import type {RegisterOptions, SubmitErrorHandler, SubmitHandler} from 'react-hook-form';
 import {useForm} from 'react-hook-form';
@@ -7,7 +6,7 @@ import {baseHandleErrors} from '@/util/extend/react-hook-form';
 import type {GoalModalProp} from '@/component/modal/GoalModal';
 import type {GoalFrequency} from '@/type/goal';
 import {useQueryClient} from 'react-query';
-import {postGoalApi, updateGoalApi} from '@/util/sevices/api/goal';
+import {postGoalApi, PostGoalRequestParameter, updateGoalApi} from '@/util/sevices/api/goal';
 
 export function useGoalForm({closeModal, data}: GoalModalProp) {
   const {register, handleSubmit} = useForm<GoalFormData>({
