@@ -1,6 +1,8 @@
+'use client';
+
 import React, {useCallback} from 'react';
-import type {Goal} from '@/type/goal';
-import {useDeleteGoal, useGoalResponse, useTotalGoalList} from '@/util/sevices/goal';
+import type {Goal, GoalFrequency} from '@/type/goal';
+import {useDeleteGoal, useTotalGoalList} from '@/util/sevices/goal';
 import {useDispatchOpenModal} from '@/store/reducers/modal';
 import styles from './index.module.scss';
 import commonStyles from '@/util/style/common.module.scss';
@@ -9,19 +11,18 @@ import Button from '@/component/element/Button';
 
 export interface TotalGoalListProp {
   goalList: Goal[];
+  todayFrequency: GoalFrequency;
 }
 
-export default function TotalGoalList({goalList}: TotalGoalListProp) {
-  const {radioPropsList, filteredGoalList, frequency} = useTotalGoalList(goalList);
+export default function TotalGoalList({goalList, todayFrequency}: TotalGoalListProp) {
+  const {radioPropsList, filteredGoalList, currentFrequency} = useTotalGoalList(goalList, todayFrequency);
   const {openGoalModal} = useDispatchOpenModal();
   const deleteGoal = useDeleteGoal();
 
-  const {data} = useGoalResponse();
-
   const copyGoalList = useCallback(async () => {
-    await navigator.clipboard.writeText(JSON.stringify(data?.originalGoalList));
+    await navigator.clipboard.writeText(JSON.stringify(goalList));
     alert('복사되었습니다.');
-  }, [data?.originalGoalList]);
+  }, [goalList]);
 
   return (
     <>
@@ -40,7 +41,7 @@ export default function TotalGoalList({goalList}: TotalGoalListProp) {
         {filteredGoalList.map((goal) => (
           <ol key={goal.pk} className={styles.goalOl}>
             {!goal.is_important ? null : <div className={styles.importantMark}/>}
-            {frequency !== 'All' ? null : <span className={styles.frequency}>({goal.frequency.toLowerCase()})</span>}
+            {currentFrequency !== 'All' ? null : <span className={styles.frequency}>({goal.frequency.toLowerCase()})</span>}
             <span className={styles.title}>{goal.title}</span>
             <Button size="xsmall" color="edit" className={classNames(styles.smallButton)} onClick={() => openGoalModal({data: goal})}>수정</Button>
             <Button size="xsmall" color="delete" className={classNames(styles.smallButton)} onClick={() => deleteGoal(goal)}>삭제</Button>
@@ -50,9 +51,7 @@ export default function TotalGoalList({goalList}: TotalGoalListProp) {
 
       <div className={styles.buttonWrap}>
         <Button color="secondary" onClick={() => openGoalModal()}>새 목표 추가하기</Button>
-        {!data ? null : (
-          <Button color="secondary" variant="outlined" onClick={copyGoalList}>복사하기</Button>
-        )}
+        <Button color="secondary" variant="outlined" onClick={copyGoalList}>복사하기</Button>
       </div>
     </>
   );

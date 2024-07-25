@@ -1,12 +1,11 @@
 import {useCallback} from 'react';
 import type {RegisterOptions, SubmitErrorHandler, SubmitHandler} from 'react-hook-form';
 import {useForm} from 'react-hook-form';
-import {GOAL_FREQUENCY_LIST, GOAL_FULL_RESPONSE_QUERY_KEY} from '@/util/sevices/goal';
+import {GOAL_FREQUENCY_LIST} from '@/util/sevices/goal';
 import {baseHandleErrors} from '@/util/extend/react-hook-form';
 import type {GoalModalProp} from '@/component/modal/GoalModal';
 import type {GoalFrequency} from '@/type/goal';
-import {useQueryClient} from 'react-query';
-import {postGoalApi, PostGoalRequestParameter, updateGoalApi} from '@/util/sevices/api/goal';
+import {postGoalApi, PostGoalRequestParameter, updateGoalApi} from '@/util/sevices/api/goal-client';
 
 export function useGoalForm({closeModal, data}: GoalModalProp) {
   const {register, handleSubmit} = useForm<GoalFormData>({
@@ -25,8 +24,6 @@ export function useGoalForm({closeModal, data}: GoalModalProp) {
     baseHandleErrors([title, achievePrice, notAchievePrice]);
   }, []);
 
-  const queryClient = useQueryClient();
-
   const onSubmit: SubmitHandler<GoalFormData> = useCallback(formData => {
     const goalParameter: PostGoalRequestParameter = {
       ...formData,
@@ -40,9 +37,9 @@ export function useGoalForm({closeModal, data}: GoalModalProp) {
     } else {
       updateGoalApi(data.pk, goalParameter);
     }
-    queryClient.invalidateQueries(GOAL_FULL_RESPONSE_QUERY_KEY);
+    // queryClient.invalidateQueries(GOAL_FULL_RESPONSE_QUERY_KEY);
     closeModal();
-  }, [closeModal, data, queryClient]);
+  }, [closeModal, data]);
 
   return {
     formSubmit: handleSubmit(onSubmit, onError),

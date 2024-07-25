@@ -9,14 +9,15 @@ import modalStyles from '@/util/style/modal.module.scss';
 import Modal from '@/component/modal';
 import classNames from 'classnames';
 import Button from '@/component/element/Button';
+import {GoalFullResponse} from '@/type/goal';
 
 export interface CheckTodayModalProp extends EssentialModalProp {
-
+  goalFullResponse: GoalFullResponse;
 }
 
 // 반드시 Client Component에서만 사용할것
-export default function CheckTodayModal({closeModal}: CheckTodayModalProp) {
-  const formResult = useCheckGoalListForm({closeModal});
+export default function CheckTodayModal({closeModal, goalFullResponse}: CheckTodayModalProp) {
+  const formResult = useCheckGoalListForm({closeModal, response: goalFullResponse});
 
   if (!formResult) {
     return null;

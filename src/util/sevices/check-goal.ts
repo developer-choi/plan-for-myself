@@ -1,21 +1,19 @@
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {useCallback} from 'react';
-import {GOAL_FULL_RESPONSE_QUERY_KEY, useGoalResponse} from '@/util/sevices/goal';
-import {useQueryClient} from 'react-query';
 import dayjs from 'dayjs';
-import {postTodayCheckGoalApi} from '@/util/sevices/api/goal';
+import {postTodayCheckGoalApi} from '@/util/sevices/api/goal-client';
+import {GoalFullResponse} from '@/type/goal';
 
 interface CheckGoalListFormData {
   checkedGoalList: string[];
 }
 
-export function useCheckGoalListForm({closeModal}: {
-  closeModal: () => void
+export function useCheckGoalListForm({closeModal, response}: {
+  closeModal: () => void,
+  response: GoalFullResponse
 }) {
-  const {data: response} = useGoalResponse();
   const todayHistory = response?.todayHistory;
 
-  const queryClient = useQueryClient();
   const {register, handleSubmit, watch} = useForm<CheckGoalListFormData>({
     defaultValues: {
       checkedGoalList: !todayHistory ? [] : todayHistory.checked_list.filter(goal => goal.checked).map(goal => goal.pk.toString())
@@ -37,8 +35,8 @@ export function useCheckGoalListForm({closeModal}: {
     })));
 
     closeModal();
-    queryClient.invalidateQueries(GOAL_FULL_RESPONSE_QUERY_KEY);
-  }, [closeModal, queryClient, response]);
+    // queryClient.invalidateQueries(GOAL_FULL_RESPONSE_QUERY_KEY);
+  }, [closeModal, response]);
 
   if (!response) {
     return null

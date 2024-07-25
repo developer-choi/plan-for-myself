@@ -1,5 +1,6 @@
 import type {CheckableGoal, Goal} from '@/type/goal';
 import {customFetchInClientSide} from '@/util/extend/api/client';
+import {RemindOfMessageItem} from '@/util/sevices/api/remind-of-message';
 
 export type PostGoalRequestParameter = Omit<Goal, 'pk' | 'not_achieve_price' | 'is_important'> & Partial<Pick<Goal, 'not_achieve_price'>>;
 
@@ -36,13 +37,6 @@ export async function postTodayCheckGoalApi(checkedGoalList: CheckableGoal[]) {
   });
 }
 
-export async function getGoalListApi() {
-  return customFetchInClientSide('/api/today-goal', {
-    method: 'GET',
-    authorize: 'private',
-  });
-}
-
 export async function updateGoalApi(pk: number, parameter: PostGoalRequestParameter) {
   return customFetchInClientSide(`/api/original-goal/${pk}`, {
     method: 'PATCH',
@@ -56,4 +50,13 @@ export async function deleteGoalApi(pk: number) {
     method: 'DELETE',
     authorize: 'private',
   });
+}
+
+export async function getRemindOfMessageListApiOnClient() {
+  const {json} = await customFetchInClientSide('/api/remind-of-message', {
+    method: 'GET',
+    authorize: 'private'
+  });
+
+  return json as RemindOfMessageItem[];
 }
