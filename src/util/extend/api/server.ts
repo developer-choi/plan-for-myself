@@ -6,9 +6,14 @@ import {LoginError} from '@/util/sevices/auth/redirect';
 
 export async function customFetchInServerSide(input: string | URL | globalThis.Request, parameter: ExtendedCustomFetchParameter) {
   try {
+    console.log('request on server', input);
     const session = await auth();
-    return await customFetchInBothSide(input, {...parameter, session});
+    const result = await customFetchInBothSide(input, {...parameter, session});
+    console.log('response on server', result.json);
+    return result;
   } catch (error: any) {
+    console.log('error occurred on server', error.message);
+
     if (error instanceof LoginError) {
       const currentUrl = headers().get(CURRENT_URL_IN_HEADER) ?? '/'; // middleware에서 셋팅
       redirect(`/api/next-auth/logout?redirect=${currentUrl}`);

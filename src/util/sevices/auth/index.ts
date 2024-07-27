@@ -36,6 +36,8 @@ export const {handlers, signOut, auth} = NextAuth({
         redirectUrl: nextUrl.pathname + nextUrl.search
       });
 
+      console.log('nextNavigating in middleware', isLoggedIn, nextUrl);
+
       switch (nextNavigating.type) {
         case 'already-authenticated':
         case 'not-authenticated':
