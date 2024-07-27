@@ -1,0 +1,21 @@
+@use "/src/component/design-system/form/form-elements/index.module" as form;
+
+.innerContainer {
+  @include form.commonFormElementWrapper;
+  display: flex;
+  align-items: center; // 아이콘 수직 중앙정렬
+  gap: 4px; // 아이콘과 input 사이 간격
+  
+  >:not(input) {
+    flex-shrink: 0; // 아이콘 크기가 인풋 크기와 상관없이 줄어들지않도록.
+    
+    // 인풋에 노출되는 모든 아이콘 크기를 비율에맞춰 고정하기위함
+    width: auto;
+    height: map-get(form.$formElement, inputLineHeight);
+  }
+}
+
+.input {
+  @include form.commonFormElement;
+  flex-grow: 1;
+}

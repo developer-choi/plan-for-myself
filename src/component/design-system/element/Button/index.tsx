@@ -1,7 +1,7 @@
 import React, { ComponentPropsWithRef } from 'react';
 import classNames from 'classnames';
 import styles from './index.module.scss'
-import LoadingSpinner from '@/component/element/LoadingSpinner';
+import LoadingSpinner from '@/component/design-system/element/LoadingSpinner';
 
 export interface ButtonProps extends Pick<ComponentPropsWithRef<'button'>, UsedProps> {
   size?: ButtonSize; // default 'medium'
