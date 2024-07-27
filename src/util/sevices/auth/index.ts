@@ -4,6 +4,7 @@ import {getNextNavigating} from '@/util/sevices/auth/path';
 import Google from '@auth/core/providers/google';
 
 export const {handlers, signOut, auth} = NextAuth({
+  secret: 'Aeh9xmaxlq2swmiGAlOpAyHc49fVwrwrStF9/sjqe8w=',
   pages: {
     signIn: '/guest/login',
     error: '/guest/login'
