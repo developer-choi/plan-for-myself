@@ -1,9 +1,10 @@
 "use client";
 
 import {useSession} from "next-auth/react";
-import {PropsWithChildren, useEffect} from "react";
+import {PropsWithChildren, useCallback} from 'react';
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {getNextNavigating} from '@/util/sevices/auth/path';
+import {useEffectFromTheSecondTime} from '@/util/extend/react';
 /**
  * https://docs.google.com/document/d/1SQKE-pymRA1941tgN5sORI-MdqnP_mmd4F-SpLH9xpU/edit#heading=h.o2dttbhzlqr
  *
@@ -22,7 +23,7 @@ export default function InnerSessionProvider({children}: PropsWithChildren) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  useEffect(() => {
+  useEffectFromTheSecondTime(useCallback(() => {
     const nextNavigating = getNextNavigating({
       nextPathname: pathname,
       redirectUrl: pathname + '?' + searchParams.toString(),
@@ -34,7 +35,7 @@ export default function InnerSessionProvider({children}: PropsWithChildren) {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
+  }, [status]));
 
   return children;
 }
