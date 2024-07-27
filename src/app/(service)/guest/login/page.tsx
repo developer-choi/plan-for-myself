@@ -1,6 +1,6 @@
 'use client';
 
-import Button from '@/component/design-system/element/Button';
+import Button from '@/component/element/Button';
 import {useCallback, useEffect} from 'react';
 import {signIn} from 'next-auth/react';
 import {getRedirectUrlWhenLoginSuccess} from '@/util/sevices/auth/redirect';

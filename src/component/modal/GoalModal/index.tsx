@@ -3,14 +3,13 @@
 import Modal from '@/component/modal';
 import type {EssentialModalProp} from '@/store/reducers/modal';
 import React from 'react';
+import {Input, TextArea} from '@/component/common/Input';
 import type {Goal} from '@/type/goal';
 import {useGoalForm} from '@/util/sevices/goal-form';
 import modalStyles from '@/util/style/modal.module.scss';
 import styles from './index.module.scss';
 import commonStyles from '@/util/style/common.module.scss';
-import Button from '@/component/design-system/element/Button';
-import Input from '@/component/design-system/form/Input';
-import TextArea from '@/component/design-system/form/TextArea';
+import Button from '@/component/element/Button';
 
 export interface GoalModalProp extends EssentialModalProp {
   data: Goal | undefined

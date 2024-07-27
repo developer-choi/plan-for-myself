@@ -8,7 +8,7 @@ import styles from './index.module.scss';
 import modalStyles from '@/util/style/modal.module.scss';
 import Modal from '@/component/modal';
 import classNames from 'classnames';
-import Button from '@/component/design-system/element/Button';
+import Button from '@/component/element/Button';
 import {GoalFullResponse} from '@/type/goal';
 
 export interface CheckTodayModalProp extends EssentialModalProp {

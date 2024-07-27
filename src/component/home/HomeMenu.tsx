@@ -1,7 +1,7 @@
 'use client';
 
-import styles from '@/app/(service)/(private)/dashboard/page.module.scss';
-import Button from '../design-system/element/Button';
+import styles from '../../app/(service)/(private)/page.module.scss';
+import Button from '@/component/element/Button';
 import React, {useCallback} from 'react';
 import {postMultipleGoalApi} from '@/util/sevices/api/goal-client';
 import {useDispatchOpenModal} from '@/store/reducers/modal';

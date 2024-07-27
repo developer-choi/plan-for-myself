@@ -17,7 +17,7 @@ export type NextNavigatingResult = {
 };
 
 export function getNextNavigating({redirectUrl, nextPathname, isLoggedIn}: NextNavigatingParam): NextNavigatingResult {
-  const isPrivate = PRIVATE_PATHNAMES.some(pathname => nextPathname.startsWith(pathname));
+  const isPrivate = PRIVATE_PATHNAMES.some(pathname => pathname === nextPathname);
   const isNotPrivate = NOT_PRIVATE_PATHNAME.some(pathname => nextPathname.startsWith(pathname));
 
   if (isPrivate && !isLoggedIn) {
@@ -42,7 +42,7 @@ export function getNextNavigating({redirectUrl, nextPathname, isLoggedIn}: NextN
  * Non Export
  *************************************************************************************************************/
 const PRIVATE_PATHNAMES = [
-  "/dashboard",
+  "/",
   '/remind-of-message'
 ];
 
