@@ -8,6 +8,7 @@ export const {handlers, signOut, auth} = NextAuth({
     signIn: '/guest/login',
     error: '/guest/login'
   },
+  secret: process.env.AUTH_SECRET,
   session: {
     maxAge: 60 * 60 * 24 // 단위 : second
   },
