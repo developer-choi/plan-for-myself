@@ -1,7 +1,7 @@
 'use client';
 
 import styles from '@/app/(service)/(private)/dashboard/page.module.scss';
-import goalStyles from '@/component/TotalGoalList/index.module.scss';
+import goalStyles from '@/component/goal/TotalGoalList/index.module.scss';
 import Button from '../design-system/element/Button';
 import React, {useCallback} from 'react';
 import {

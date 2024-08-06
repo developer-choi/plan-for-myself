@@ -4,7 +4,7 @@ import Modal from '@/component/modal';
 import type {EssentialModalProp} from '@/store/reducers/modal';
 import React from 'react';
 import type {Goal} from '@/type/goal';
-import {useGoalForm} from '@/util/sevices/goal-form';
+import {useGoalForm} from '@/util/sevices/goal/goal-form';
 import modalStyles from '@/util/style/modal.module.scss';
 import styles from './index.module.scss';
 import commonStyles from '@/util/style/common.module.scss';

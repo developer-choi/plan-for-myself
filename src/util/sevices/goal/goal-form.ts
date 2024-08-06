@@ -1,9 +1,9 @@
 import {useCallback} from 'react';
 import type {RegisterOptions, SubmitErrorHandler, SubmitHandler} from 'react-hook-form';
 import {useForm} from 'react-hook-form';
-import {GOAL_FREQUENCY_LIST} from '@/util/sevices/goal';
+import {GOAL_FREQUENCY_LIST} from '@/util/sevices/goal/index';
 import {baseHandleErrors} from '@/util/extend/react-hook-form';
-import type {GoalModalProp} from '@/component/modal/GoalModal';
+import type {GoalModalProp} from '@/component/modal/goal/GoalModal';
 import type {GoalFrequency} from '@/type/goal';
 import {postGoalApi, PostGoalRequestParameter, updateGoalApi} from '@/util/sevices/api/goal-client';
 
