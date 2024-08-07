@@ -12,12 +12,12 @@ export interface FormElementWrapperProps {
 
 export function FormElementWrapper({label, error, children, style, className = ''}: PropsWithChildren<FormElementWrapperProps>) {
   return (
-    <div style={style} className={classNames(className)}>
-      {!label ? null : <label className={styles.label}>{label}</label>}
+    <label style={style} className={classNames(styles.container, className)}>
+      {!label ? null : <span className={styles.label}>{label}</span>}
 
       {children}
 
       {!error ? null : <span className={styles.formErrorMessage}>{error}</span>}
-    </div>
+    </label>
   )
 }

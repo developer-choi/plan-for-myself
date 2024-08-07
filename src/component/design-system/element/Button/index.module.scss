@@ -45,7 +45,6 @@
  * class로 경우에따라 large / medium 지정 필요
  */
 @mixin buttonSize {
-  width: 100%; // 기본 너비 100%로 해서 컨테이너 길이 따라가도록 디자이너의 요청. (별도 짧은 길이 필요하면 style이나 className으로 width 커스텀)
   border: {
     width: 1px;
     style: solid;

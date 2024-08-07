@@ -1,4 +1,4 @@
-@use "/src/util/style/color" as color;
+@use "/src/util/style/color";
 
 $formElement: (
   labelMarginTop: 8px, // map-get($formElement, labelMarginTop); 모든 디자인시스템상 폼 요소는 라벨과 폼요소 사이 상하 간격이 같아야함.
@@ -6,6 +6,10 @@ $formElement: (
   labelLineHeight: 20px, // map-get($formElement, labelLineHeight); 라벨에 노출되는 아이콘의 높이값은 인풋의 line-height만큼만 커야함.
   inputLineHeight: 20px // map-get($formElement, inputLineHeight); 인풋에 노출되는 아이콘의 높이값은 인풋의 line-height만큼만 커야함.
 );
+
+.container {
+  width: 100%;
+}
 
 .label {
   display: flex;
@@ -57,7 +61,7 @@ $formElement: (
  * ==> 이 폼 요소들의 아래 스타일은 반드시 똑같이 가야해서 이렇게 별도 분리함.
  */
 @mixin commonFormElementWrapper {
-  padding: 8px; // 테두리와 그 안에 실제 폼요소태그 사이 패딩
+  padding: 9px 7px; // 테두리와 그 안에 실제 폼요소태그 사이 패딩
   
   border: 1px solid lightgray; // Priority 4. default
   border-radius: 4px; // Shape
