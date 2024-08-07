@@ -1,0 +1,11 @@
+.wrap {
+  display: flex;
+  margin-bottom: 20px;
+  max-width: 500px;
+  gap: 8px;
+}
+
+.customButton {
+  flex-shrink: 0;
+  width: 80px;
+}

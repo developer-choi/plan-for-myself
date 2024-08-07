@@ -1,3 +1,5 @@
+import {useEffect} from 'react';
+
 export type SpecialKey = 'ctrlKey' | 'altKey' | 'metaKey' | 'shiftKey';
 const SPECIAL_KEYS: SpecialKey[] = ['shiftKey', 'metaKey', 'ctrlKey', 'altKey'];
 
@@ -12,6 +14,24 @@ export function isMatchKeyboardEvent(event: Pick<KeyboardEvent, 'key' | SpecialK
   }
 
   return isMatchingSpecialKeys(event, shortcut.specialKeys ?? []);
+}
+
+export function useKeyboardShortcut(keyboardShortcut: KeyboardShortcut, callback: (event: KeyboardEvent) => void) {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (!isMatchKeyboardEvent(event, keyboardShortcut)) {
+        return;
+      }
+
+      callback(event);
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [callback, keyboardShortcut]);
 }
 
 /*************************************************************************************************************
