@@ -1,9 +1,14 @@
 import styles from './page.module.scss';
 import {getStudiedTimeHistoryApi} from '@/util/sevices/api/studied-time-server';
-import {ServerComponentProps} from 'next';
+import {Metadata, ServerComponentProps} from 'next';
 import CustomLink from '@/component/design-system/element/link/CustomLink';
 import {getDiffDate} from '@/util/extend/date/util';
 import StudiedCalendarCell from '@/component/services/studied-time/StudiedCalendarCell';
+
+export const metadata: Metadata = {
+  title: 'Calendar',
+  description: '공부 시간, 실패원인을 기록하고, 분석할 수 있도록 돕습니다.'
+}
 
 export default async function Page({params}: ServerComponentProps) {
   const year = Number(params.year);

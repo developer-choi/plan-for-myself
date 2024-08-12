@@ -5,7 +5,7 @@ import ReviewKeywordsPage from '@/app/(service)/tool/review-keywords/client';
 import {convertLegacyKeywordIfLegacy, KEYWORD_KEY} from '@/util/sevices/review-keywords/core';
 
 export const metadata: Metadata = {
-  title: '키워드 복습',
+  title: 'Review keywords',
 };
 
 function checkedRedirect({searchParams}: ServerComponentProps) {
