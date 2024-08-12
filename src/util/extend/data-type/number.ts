@@ -4,3 +4,9 @@ export function numberWithComma(value: number | string): string {
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   return parts.join('.');
 }
+
+export function calculateTotal<T>(list: T[], callback: (item: T) => number) {
+  return list.reduce((a, b) => {
+    return a + callback(b);
+  }, 0);
+}

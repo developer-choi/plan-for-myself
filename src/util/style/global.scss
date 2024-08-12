@@ -17,3 +17,7 @@ button {
 input:disabled, button:disabled, textarea:disabled {
   cursor: not-allowed;
 }
+
+table {
+  table-layout: fixed;
+}

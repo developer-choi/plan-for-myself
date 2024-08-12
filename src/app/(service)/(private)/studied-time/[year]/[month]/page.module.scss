@@ -1,0 +1,72 @@
+@use "/src/util/style/util";
+@use "/src/util/style/color";
+
+.pageWrap {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.h1 {
+  text-align: center;
+  font-size: 32px;
+  margin-top: 32px;
+}
+
+.navigator {
+  margin-block: 32px;
+  
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+
+.table {
+  width: 100%;
+  
+  td {
+    border: 1px solid black;
+  }
+  
+  tbody td {
+    height: 200px;
+  }
+}
+
+.calendarDate {
+  @include util.flexCenter;
+  flex-direction: column;
+  padding-inline: 8px;
+  
+  &.notMatched {
+    color: lightgray;
+  }
+  
+  > span {
+    width: 100%;
+  }
+}
+
+.dateText {
+  margin-top: 8px;
+  text-align: center;
+}
+
+.studiedTime {
+  margin-top: 8px;
+  padding-left: 6px;
+  background: map-get(color.$brandColors, primary);
+  color: white;
+  font-weight: bold;
+  line-height: 24px;
+}
+
+.failReason {
+  margin-top: 8px;
+  padding-left: 6px;
+  background: red;
+  color: white;
+  font-weight: bold;
+  line-height: 24px;
+}
