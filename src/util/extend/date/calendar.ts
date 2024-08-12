@@ -32,7 +32,7 @@ export interface CalendarDate {
   original: Date;
   isMatchedMonth: boolean;
   year: number;
-  month: number;
+  month: number; // 현재 달과 1차이난다거나 그런거없이 다 보정된상태로 전달됨
   date: number;
 }
 

@@ -18,5 +18,6 @@ $brandColors: (
 );
 
 $stateColors: (
-  disabled: darkgray // map-get(color.$stateColors, disabled);
+  disabled: darkgray, // map-get(color.$stateColors, disabled);
+  error: red
 );

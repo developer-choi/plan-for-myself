@@ -13,5 +13,3 @@ export interface DailyStudyTime {
   date_type: DailyStudyTimeDateType;
   timestamp: number;
 }
-
-export type PostDailyStudyTimeParameter = Omit<DailyStudyTime, 'pk' | 'timestamp'>;
