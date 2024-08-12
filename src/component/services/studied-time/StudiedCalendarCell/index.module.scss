@@ -1,6 +1,14 @@
 @use "/src/util/style/util";
 @use "/src/util/style/color";
 
+@mixin cellRow {
+  margin-top: 8px;
+  padding-left: 6px;
+  font-weight: bold;
+  line-height: 24px;
+  color: white;
+}
+
 .tdWrap {
   cursor: pointer;
 }
@@ -25,19 +33,23 @@
 }
 
 .studiedTime {
-  margin-top: 8px;
-  padding-left: 6px;
+  @include cellRow;
   background: map-get(color.$brandColors, primary);
-  color: white;
-  font-weight: bold;
-  line-height: 24px;
 }
 
 .failReason {
-  margin-top: 8px;
-  padding-left: 6px;
+  @include cellRow;
   background: red;
-  color: white;
-  font-weight: bold;
-  line-height: 24px;
+}
+
+.summary {
+  @include cellRow;
+  
+  &.fail {
+    background: red;
+  }
+  
+  &.success {
+    background: limegreen;
+  }
 }

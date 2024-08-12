@@ -30,10 +30,14 @@ export function getCalendarBoundary(year: number, month: number): CalendarBounda
 
 export interface CalendarDate {
   original: Date;
-  isMatchedMonth: boolean;
   year: number;
   month: number; // 현재 달과 1차이난다거나 그런거없이 다 보정된상태로 전달됨
   date: number;
+  state: {
+    isMatchedMonth: boolean;
+    isLast: boolean;
+    isFirst: boolean;
+  };
 }
 
 // 기준 : 시작이 월요일
@@ -54,12 +58,18 @@ export function getCalendarWeekList<T = CalendarDate>(year: number, month: numbe
     .fill('').map((_, index) => new Date(year, month, index + 1));
 
   const calendarDates: T[] = prevMonthDates.concat(currentMonthDates, nextMonthDates).map(date => {
+    const numericDate = date.getDate();
+
     const calendarDate: CalendarDate = {
       original: date,
-      isMatchedMonth: month === date.getMonth() + 1,
       year: date.getFullYear(),
       month: date.getMonth() + 1,
-      date: date.getDate()
+      date: numericDate,
+      state: {
+        isMatchedMonth: month === date.getMonth() + 1,
+        isFirst: numericDate === 1,
+        isLast: endOfMonth.getDate() === numericDate
+      }
     };
 
     if (converter) {
@@ -72,21 +82,3 @@ export function getCalendarWeekList<T = CalendarDate>(year: number, month: numbe
 
   return arraySplit(calendarDates, 7);
 }
-
-/**
- * 테스트 코드
- * 1. 해당 연, 월의 시작일 종료일이 화수목금토인 경우. (월요일, 일요일 끝자락에 안걸리는 케이스)
- * getCalendarDates(2024, 10);
- *
- * 2. 시작일이 월요일인 케이스
- * getCalendarDates(2024, 7);
- *
- * 3. 시작일이 일요일인 케이스
- * getCalendarDates(2024, 9);
- *
- * 4. 종료일이 월요일인 케이스
- * getCalendarDates(2024, 9);
- *
- * 5. 종료일이 일요일인 케이스
- * getCalendarDates(2024, 6);
- */

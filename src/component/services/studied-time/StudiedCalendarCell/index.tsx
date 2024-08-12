@@ -7,12 +7,17 @@ import {calculateTotal} from '@/util/extend/data-type/number';
 import styles from './index.module.scss';
 import {useCallback} from 'react';
 import {useDispatchOpenModal} from '@/store/reducers/modal';
+import {studiedTimeFormat} from '@/util/sevices/studied-time';
 
 interface StudiedCalendarCellProps {
   history: StudiedTimeHistory;
+  summary?: {
+    success?: string; //한달내내 공부안했으면 없음
+    fail?: string; //한달내내 실패 안했으면 없음
+  };
 }
 
-export default function StudiedCalendarCell({history}: StudiedCalendarCellProps) {
+export default function StudiedCalendarCell({history, summary}: StudiedCalendarCellProps) {
   const {openStudiedTimeFormModal} = useDispatchOpenModal();
 
   const onClickCell = useCallback(() => {
@@ -33,9 +38,15 @@ export default function StudiedCalendarCell({history}: StudiedCalendarCellProps)
 
   return (
     <td onClick={onClickCell} className={styles.tdWrap}>
-      <span className={classNames(styles.calendarDate, {[styles.notMatched]: !history.calendarDate.isMatchedMonth})}>
+      <span className={classNames(styles.calendarDate, {[styles.notMatched]: !history.calendarDate.state.isMatchedMonth})}>
         <span className={styles.dateText}>{history.calendarDate.date}</span>
         {!history.data ? null : <StudiedHistory data={history.data}/>}
+        {!summary?.success ? null : (
+          <span className={classNames(styles.summary, styles.success)}>{summary.success}</span>
+        )}
+        {!summary?.fail ? null : (
+          <span className={classNames(styles.summary, styles.fail)}>{summary.fail}</span>
+        )}
       </span>
     </td>
   );
@@ -60,7 +71,5 @@ function formatter(studiedMinutes: DailyStudyTime['studied_minutes']): string | 
     return null;
   }
 
-  const hours = Math.floor(total / 60);
-  const minutes = Math.floor(total % 60).toString().padStart(2, '0');
-  return `${hours}:${minutes} (${studiedMinutes.join('+')})`;
+  return `${studiedTimeFormat(total)} (${studiedMinutes.join('+')})`;
 }

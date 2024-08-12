@@ -8,3 +8,16 @@ export function arraySplit<T>(list: T[], length: number): T[][] {
 
   return resultArray;
 }
+
+export type Direction = 'asc' | 'desc';
+
+export function sortByNumber<T>(direction: Direction, list: T[], valueExtractor: (item: T) => number) {
+  return [...list].sort((a, b) => {
+    if (direction === 'asc') {
+      return valueExtractor(a) - valueExtractor(b);
+
+    } else {
+      return valueExtractor(b) - valueExtractor(a);
+    }
+  });
+}
