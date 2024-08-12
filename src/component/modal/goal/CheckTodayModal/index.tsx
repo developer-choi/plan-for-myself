@@ -3,7 +3,7 @@
 import type {EssentialModalProp} from '@/store/reducers/modal';
 import React from 'react';
 import {useCheckGoalListForm} from '@/util/sevices/goal/check-goal';
-import {numberWithComma} from '@/util/extend/number';
+import {numberWithComma} from '@/util/extend/data-type/number';
 import styles from './index.module.scss';
 import modalStyles from '@/util/style/modal.module.scss';
 import Modal from '@/component/modal';

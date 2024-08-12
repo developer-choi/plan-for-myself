@@ -2,7 +2,7 @@
 
 import React, {useCallback} from 'react';
 import {useDispatchOpenModal} from '@/store/reducers/modal';
-import {numberWithComma} from '@/util/extend/number';
+import {numberWithComma} from '@/util/extend/data-type/number';
 import type {GoalFullResponse} from '@/type/goal';
 import styles from './index.module.scss';
 import Button from '@/component/design-system/element/Button';
