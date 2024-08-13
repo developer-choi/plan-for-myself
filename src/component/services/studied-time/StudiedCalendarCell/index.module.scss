@@ -30,6 +30,14 @@
 .dateText {
   margin-top: 8px;
   text-align: center;
+  
+  &.today {
+    width: 32px;
+    background: map-get(color.$brandColors, secondary);
+    font-weight: bold;
+    border-radius: 20px;
+    scale: 1.1;
+  }
 }
 
 .studiedTime {

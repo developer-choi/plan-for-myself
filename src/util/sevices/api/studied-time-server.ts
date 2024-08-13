@@ -9,9 +9,9 @@ export interface StudiedTimeHistory {
 }
 
 export async function getStudiedTimeHistoryApi(year: number, month: number): Promise<StudiedTimeHistory[][]> {
-  const {startOfMonth, endOfMonth} = getCalendarBoundary(year, month);
+  const {start, end} = getCalendarBoundary(year, month);
 
-  const {json} = await customFetchInServerSide(`/api/studied-time?start=${formatter(startOfMonth)}&end=${formatter(endOfMonth)}`, {
+  const {json} = await customFetchInServerSide(`/api/studied-time?start=${formatter(start)}&end=${formatter(end)}`, {
     authorize: 'private',
     method: 'GET'
   });

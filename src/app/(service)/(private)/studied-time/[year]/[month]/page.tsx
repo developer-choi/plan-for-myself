@@ -49,7 +49,7 @@ export default async function Page({params}: ServerComponentProps) {
               <StudiedCalendarCell
                 key={`${history.calendarDate.month}-${history.calendarDate.date}`}
                 history={history}
-                summary={!history.calendarDate.state.isMatchedMonth || !history.calendarDate.state.isLast ? undefined : getThisMonthSummary(weekList)}
+                summary={!history.calendarDate.state.calendar.isLastDate ? undefined : getThisMonthSummary(weekList)}
               />
             ))}
           </tr>

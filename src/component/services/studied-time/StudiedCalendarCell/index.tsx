@@ -38,8 +38,8 @@ export default function StudiedCalendarCell({history, summary}: StudiedCalendarC
 
   return (
     <td onClick={onClickCell} className={styles.tdWrap}>
-      <span className={classNames(styles.calendarDate, {[styles.notMatched]: !history.calendarDate.state.isMatchedMonth})}>
-        <span className={styles.dateText}>{history.calendarDate.date}</span>
+      <span className={classNames(styles.calendarDate, {[styles.notMatched]: !history.calendarDate.state.calendar.isMatchedMonth})}>
+        <span className={classNames(styles.dateText, {[styles.thisWeek]: history.calendarDate.state.current.isThisWeek}, {[styles.today]: history.calendarDate.state.current.isToday})}>{history.calendarDate.date}</span>
         {!history.data ? null : <StudiedHistory data={history.data}/>}
         {!summary?.success ? null : (
           <span className={classNames(styles.summary, styles.success)}>{summary.success}</span>
