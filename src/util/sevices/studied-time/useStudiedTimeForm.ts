@@ -123,16 +123,19 @@ export default function useStudiedTimeForm(history: StudiedTimeHistory, initialF
     {
       label: '아침 공부시간 *',
       placeholder: '130 (minutes)',
+      autoComplete: 'off',
       ...register('studied_minutes.part1')
     },
     {
       label: '점심 공부시간 *',
       placeholder: '50 (minutes)',
+      autoComplete: 'off',
       ...register('studied_minutes.part2')
     },
     {
       label: '저녁 공부시간 *',
       placeholder: '0 (minutes)',
+      autoComplete: 'off',
       ...register('studied_minutes.part3')
     },
   ];
