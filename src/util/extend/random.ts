@@ -13,7 +13,18 @@ export function randomIndex(array: any[]): number {
   return randomNumber(0, array.length - 1);
 }
 
-export function randomInArray<T>(array: T[]): T {
-  const index = randomIndex(array);
-  return array[index];
+export function randomInArray<T>(array: T[], count = 1): T[] {
+  let temp = [...array];
+  const maxCount = count < array.length ? count : array.length;
+
+  const result: T[] = [];
+
+  for(let i = 0; i < maxCount; i++) {
+    const someIndex = randomIndex(temp);
+    const item = temp[someIndex];
+    temp.splice(someIndex, 1);
+    result.push(item);
+  }
+
+  return result;
 }

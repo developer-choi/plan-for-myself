@@ -18,15 +18,15 @@ export default function ClientAppProvider({children}: PropsWithChildren) {
         return;
       }
 
-      const item = randomInArray(list);
-
-      toast.info(item.message, {
-        autoClose: 5000,
-        position: 'top-center',
-        hideProgressBar: true,
-        closeButton: false,
-        closeOnClick: true,
-        theme: 'colored'
+      randomInArray(list, 3).forEach(item => {
+        toast.info(item.message, {
+          autoClose: 5000,
+          position: 'top-center',
+          hideProgressBar: true,
+          closeButton: false,
+          closeOnClick: true,
+          theme: 'colored'
+        });
       });
     }).catch(() => {});
   }, []);
