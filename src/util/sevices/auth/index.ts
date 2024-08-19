@@ -10,7 +10,7 @@ export const {handlers, signOut, auth} = NextAuth({
     error: '/guest/login'
   },
   session: {
-    maxAge: 60 * 60 * 24 // 단위 : second
+    maxAge: 60 * 60 * 24 * 30 // 단위 : second
   },
   providers: [Google],
   callbacks: {
