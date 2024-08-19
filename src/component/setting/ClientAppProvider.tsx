@@ -7,7 +7,7 @@ import {QueryClient, QueryClientProvider} from 'react-query';
 import {useAppDispatch, useAppSelector} from '@/store/hooks';
 import {closeModal} from '@/store/reducers/modal';
 import 'react-toastify/dist/ReactToastify.css';
-import {toast, ToastContainer} from 'react-toastify';
+import {toast, ToastContainer, ToastPosition} from 'react-toastify';
 import {randomInArray} from '@/util/extend/random';
 import {getRemindOfMessageListApiOnClient} from '@/util/sevices/api/goal-client';
 
@@ -18,14 +18,17 @@ export default function ClientAppProvider({children}: PropsWithChildren) {
         return;
       }
 
-      randomInArray(list, 3).forEach(item => {
+      const position = randomInArray(TOAST_POSITIONS)[0];
+
+      randomInArray(list, 2).forEach(item => {
         toast.info(item.message, {
-          autoClose: 5000,
-          position: 'top-center',
+          autoClose: 99999999,
+          position,
           hideProgressBar: true,
           closeButton: false,
           closeOnClick: true,
-          theme: 'colored'
+          theme: 'colored',
+          draggable: false
         });
       });
     }).catch(() => {});
@@ -60,3 +63,5 @@ function ModalRender() {
     </>
   );
 }
+
+const TOAST_POSITIONS: ToastPosition[] = ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right'];
