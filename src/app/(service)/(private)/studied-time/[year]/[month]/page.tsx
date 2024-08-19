@@ -62,7 +62,7 @@ export default async function Page({params}: ServerComponentProps) {
 
 function getThisMonthSummary(weekList: StudiedTimeHistory[][]) {
   const {totalKeywords, totalMinutes} = weekList.flat().reduce((a, b) => {
-    if (!b.data) {
+    if (!b.data || !b.calendarDate.state.calendar.isMatchedMonth) {
       return a;
     }
 
