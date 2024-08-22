@@ -1,6 +1,6 @@
 import React from 'react';
 import RemindOfMessagePage from '@/component/remind-of-message/RemindOfMessagePage';
-import {getRemindOfMessageListApiOnServer} from '@/util/sevices/api/goal-server';
+import {getRemindOfMessageListApiOnServer} from '@/util/sevices/api/goal';
 
 export default async function Page() {
   const list = await getRemindOfMessageListApiOnServer();

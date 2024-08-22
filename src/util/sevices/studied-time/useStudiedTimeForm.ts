@@ -10,8 +10,8 @@ import {
   patchStudiedTimeApi,
   PostDailyStudyTimeParameter,
   postStudiedTimeApi
-} from '@/util/sevices/api/studied-time-client';
-import {StudiedTimeHistory} from '@/util/sevices/api/studied-time-server';
+} from '@/util/sevices/api/studied-time';
+import {StudiedTimeHistory} from '@/util/sevices/api/studied-time';
 import {calculateTotal} from '@/util/extend/data-type/number';
 
 export interface StudiedTimeFormData {

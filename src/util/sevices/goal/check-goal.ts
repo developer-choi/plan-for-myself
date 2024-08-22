@@ -1,7 +1,7 @@
 import {SubmitHandler, useForm} from 'react-hook-form';
 import {useCallback} from 'react';
 import dayjs from 'dayjs';
-import {postTodayCheckGoalApi} from '@/util/sevices/api/goal-client';
+import {postTodayCheckGoalApi} from '@/util/sevices/api/goal';
 import {GoalFullResponse} from '@/type/goal';
 
 interface CheckGoalListFormData {

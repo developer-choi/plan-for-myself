@@ -1,13 +1,30 @@
-import type {CheckableGoal, Goal} from '@/type/goal';
-import {customFetchInClientSide} from '@/util/extend/api/client';
 import {RemindOfMessageItem} from '@/util/sevices/api/remind-of-message';
+import {customFetchOnClientSide, customFetchOnServerSide} from '@/util/extend/api/both';
+import type {CheckableGoal, Goal} from '@/type/goal';
+
+
+export async function getGoalListApi() {
+  return customFetchOnServerSide('/api/today-goal', {
+    method: 'GET',
+    authorize: 'private',
+  });
+}
+
+export async function getRemindOfMessageListApiOnServer() {
+  const {json} = await customFetchOnServerSide('/api/remind-of-message', {
+    method: 'GET',
+    authorize: 'private'
+  });
+
+  return json as RemindOfMessageItem[];
+}
 
 export type PostGoalRequestParameter = Omit<Goal, 'pk' | 'not_achieve_price' | 'is_important'> & Partial<Pick<Goal, 'not_achieve_price'>>;
 
 export async function postGoalApi(goal: PostGoalRequestParameter, isImportant = true) {
   const {not_achieve_price, achieve_price, title, frequency, content} = goal;
 
-  return customFetchInClientSide('/api/original-goal', {
+  return customFetchOnClientSide('/api/original-goal', {
     method: 'POST',
     authorize: 'private',
     body: {
@@ -22,7 +39,7 @@ export async function postGoalApi(goal: PostGoalRequestParameter, isImportant = 
 }
 
 export async function postMultipleGoalApi(originalGoalList: Goal[]) {
-  return customFetchInClientSide('/api/original-goal/multiple', {
+  return customFetchOnClientSide('/api/original-goal/multiple', {
     method: 'POST',
     authorize: 'private',
     body: originalGoalList
@@ -30,7 +47,7 @@ export async function postMultipleGoalApi(originalGoalList: Goal[]) {
 }
 
 export async function postTodayCheckGoalApi(checkedGoalList: CheckableGoal[]) {
-  return customFetchInClientSide('/api/today-goal', {
+  return customFetchOnClientSide('/api/today-goal', {
     method: 'POST',
     authorize: 'private',
     body: checkedGoalList
@@ -38,7 +55,7 @@ export async function postTodayCheckGoalApi(checkedGoalList: CheckableGoal[]) {
 }
 
 export async function updateGoalApi(pk: number, parameter: PostGoalRequestParameter) {
-  return customFetchInClientSide(`/api/original-goal/${pk}`, {
+  return customFetchOnClientSide(`/api/original-goal/${pk}`, {
     method: 'PATCH',
     authorize: 'private',
     body: parameter
@@ -46,14 +63,14 @@ export async function updateGoalApi(pk: number, parameter: PostGoalRequestParame
 }
 
 export async function deleteGoalApi(pk: number) {
-  return customFetchInClientSide(`/api/original-goal/${pk}`, {
+  return customFetchOnClientSide(`/api/original-goal/${pk}`, {
     method: 'DELETE',
     authorize: 'private',
   });
 }
 
 export async function getRemindOfMessageListApiOnClient() {
-  const {json} = await customFetchInClientSide('/api/remind-of-message', {
+  const {json} = await customFetchOnClientSide('/api/remind-of-message', {
     method: 'GET',
     authorize: 'private'
   });

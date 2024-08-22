@@ -1,5 +1,5 @@
 import styles from './page.module.scss';
-import {getStudiedTimeHistoryApi, StudiedTimeHistory} from '@/util/sevices/api/studied-time-server';
+import {getStudiedTimeHistoryApi, StudiedTimeHistory} from '@/util/sevices/api/studied-time';
 import {Metadata, ServerComponentProps} from 'next';
 import CustomLink from '@/component/design-system/element/link/CustomLink';
 import {getDiffDate} from '@/util/extend/date/util';

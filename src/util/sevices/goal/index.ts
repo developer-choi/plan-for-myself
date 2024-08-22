@@ -1,7 +1,7 @@
 import type {Goal, GoalFrequency} from '@/type/goal';
 import {useForm} from 'react-hook-form';
 import {useCallback} from 'react';
-import {deleteGoalApi} from '@/util/sevices/api/goal-client';
+import {deleteGoalApi} from '@/util/sevices/api/goal';
 
 export const GOAL_FREQUENCY_LIST: GoalFrequency[] = ['Daily', 'Weekly', 'Monthly'];
 

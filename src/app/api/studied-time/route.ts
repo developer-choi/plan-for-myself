@@ -1,6 +1,6 @@
 import {NextRequest} from 'next/server';
 import {sql} from '@vercel/postgres';
-import {PostDailyStudyTimeParameter, UpdateDailyStudyTimeParameter} from '@/util/sevices/api/studied-time-client';
+import {PostDailyStudyTimeParameter, UpdateDailyStudyTimeParameter} from '@/util/sevices/api/studied-time';
 
 export async function GET(request: NextRequest) {
   const user_id = request.headers.get('User-Id');

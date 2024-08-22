@@ -1,7 +1,7 @@
-import {customFetchInClientSide} from '@/util/extend/api/client';
+import {customFetchOnClientSide} from '@/util/extend/api/both';
 
 export async function postRemindOfMessageApi(message: string) {
-  return customFetchInClientSide('/api/remind-of-message', {
+  return customFetchOnClientSide('/api/remind-of-message', {
     method: 'POST',
     authorize: 'private',
     body: {
@@ -16,7 +16,7 @@ export interface RemindOfMessageItem {
 }
 
 export async function updateRemindOfMessageApi(parameter: RemindOfMessageItem) {
-  return customFetchInClientSide('/api/remind-of-message', {
+  return customFetchOnClientSide('/api/remind-of-message', {
     method: 'PATCH',
     authorize: 'private',
     body: parameter
@@ -24,7 +24,7 @@ export async function updateRemindOfMessageApi(parameter: RemindOfMessageItem) {
 }
 
 export async function deleteRemindOfMessageApi(id: RemindOfMessageItem['id']) {
-  return customFetchInClientSide(`/api/remind-of-message/${id}`, {
+  return customFetchOnClientSide(`/api/remind-of-message/${id}`, {
     method: 'DELETE',
     authorize: 'private',
   });

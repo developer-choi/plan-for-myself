@@ -1,7 +1,7 @@
 'use client';
 
 import classNames from 'classnames';
-import {StudiedTimeHistory} from '@/util/sevices/api/studied-time-server';
+import {StudiedTimeHistory} from '@/util/sevices/api/studied-time';
 import {DailyStudyTime} from '@/type/studied-time';
 import {calculateTotal} from '@/util/extend/data-type/number';
 import styles from './index.module.scss';

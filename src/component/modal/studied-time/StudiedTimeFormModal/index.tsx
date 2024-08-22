@@ -8,7 +8,7 @@ import Button from '@/component/design-system/element/Button';
 import type {EssentialModalProp} from '@/store/reducers/modal';
 import React from 'react';
 import Modal from '@/component/modal';
-import {StudiedTimeHistory} from '@/util/sevices/api/studied-time-server';
+import {StudiedTimeHistory} from '@/util/sevices/api/studied-time';
 
 export interface StudiedTimeFormModalProps extends EssentialModalProp {
   history: StudiedTimeHistory;

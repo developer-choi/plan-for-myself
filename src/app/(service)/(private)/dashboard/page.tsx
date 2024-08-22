@@ -4,7 +4,7 @@ import TotalGoalList from '@/component/goal/TotalGoalList';
 import {getRemainWeek} from '@/util/extend/date/util';
 import styles from './page.module.scss';
 import HomeMenu from '@/component/home/HomeMenu';
-import {getGoalListApi} from '@/util/sevices/api/goal-server';
+import {getGoalListApi} from '@/util/sevices/api/goal';
 import {GoalFullResponse} from '@/type/goal';
 
 export default async function Home() {

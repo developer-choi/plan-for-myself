@@ -9,7 +9,7 @@ import {closeModal} from '@/store/reducers/modal';
 import 'react-toastify/dist/ReactToastify.css';
 import {toast, ToastContainer, ToastPosition} from 'react-toastify';
 import {randomInArray} from '@/util/extend/random';
-import {getRemindOfMessageListApiOnClient} from '@/util/sevices/api/goal-client';
+import {getRemindOfMessageListApiOnClient} from '@/util/sevices/api/goal';
 
 export default function ClientAppProvider({children}: PropsWithChildren) {
   useEffect(() => {
