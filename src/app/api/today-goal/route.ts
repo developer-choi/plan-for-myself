@@ -1,8 +1,8 @@
 import {NextRequest} from 'next/server';
 import {sql} from '@vercel/postgres';
-import type {CheckableGoal, Goal, GoalFrequency} from '@/type/goal';
+import type {CheckableGoal, Goal, GoalFrequency} from '@/types/goal';
 import dayjs from 'dayjs';
-import type {GoalFullResponse} from '@/type/goal';
+import type {GoalFullResponse} from '@/types/goal';
 
 /**
  * 기능 = 내 목표목록, 오늘 체크한거 히스토리, 오늘 체크할 목표목록, 오늘의 빈도값 가져오기

@@ -1,5 +1,5 @@
 import {NextRequest} from 'next/server';
-import {postOriginalGoalSql} from '@/util/sevices/api/server';
+import {postOriginalGoalSql} from '@/utils/service/api/server';
 
 /**
  * 기능 = 목표 1개 생성하기

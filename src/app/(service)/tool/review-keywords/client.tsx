@@ -1,7 +1,7 @@
 'use client';
 
-import {useHandleKeywordList} from '@/util/sevices/review-keywords/hooks';
-import {KeyboardShortcut, useKeyboardShortcut} from '@/util/extend/event/keyboard';
+import {useHandleKeywordList} from '@/utils/service/review-keywords/hooks';
+import {KeyboardShortcut, useKeyboardShortcut} from '@/utils/extend/event/keyboard';
 import styles from '@/app/(service)/tool/review-keywords/page.module.scss';
 import KeywordForm from '@/component/review-keywords/KeywordForm';
 import KeywordListItem from '@/component/review-keywords/KeywordListItem';

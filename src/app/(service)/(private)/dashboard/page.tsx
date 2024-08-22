@@ -1,11 +1,11 @@
 import React from 'react';
-import GoalOverview from '@/component/goal/GoalOverview';
-import TotalGoalList from '@/component/goal/TotalGoalList';
-import {getRemainWeek} from '@/util/extend/date/util';
+import GoalOverview from '@/components/goal/GoalOverview';
+import TotalGoalList from '@/components/goal/TotalGoalList';
+import {getRemainWeek} from '@/utils/extend/date/util';
 import styles from './page.module.scss';
-import HomeMenu from '@/component/home/HomeMenu';
-import {getGoalListApi} from '@/util/sevices/api/goal';
-import {GoalFullResponse} from '@/type/goal';
+import HomeMenu from '@/components/home/HomeMenu';
+import {getGoalListApi} from '@/utils/service/api/goal';
+import {GoalFullResponse} from '@/types/goal';
 
 export default async function Home() {
   const goalFullResponse = (await getGoalListApi()).json as GoalFullResponse;

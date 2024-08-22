@@ -1,5 +1,5 @@
 import {NextAuthRequest} from "next-auth";
-import {auth} from '@/util/sevices/auth';
+import {auth} from '@/utils/service/auth';
 
 export const middleware = auth((_: NextAuthRequest) => {
   // additional middleware logic

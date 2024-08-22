@@ -1,6 +1,6 @@
 import {NextRequest} from 'next/server';
 import {sql} from '@vercel/postgres';
-import {PostGoalRequestParameter} from '@/util/sevices/api/goal';
+import {PostGoalRequestParameter} from '@/utils/service/api/goal';
 
 /**
  * 기능 = 내 목표 1개 통째로 업데이트하는거

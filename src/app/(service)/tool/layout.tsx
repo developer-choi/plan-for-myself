@@ -1,5 +1,5 @@
 import {PropsWithChildren} from 'react';
-import {auth} from '@/util/sevices/auth';
+import {auth} from '@/utils/service/auth';
 import PrivateLayout from '@/app/(service)/(private)/layout';
 
 export default async function ToolLayout({children}: PropsWithChildren) {

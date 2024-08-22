@@ -2,12 +2,12 @@ import styles from './page.module.scss';
 import {getStudiedTimeHistoryApi, StudiedTimeHistory} from '@/util/sevices/api/studied-time';
 import {Metadata, ServerComponentProps} from 'next';
 import CustomLink from '@/component/design-system/element/link/CustomLink';
-import {getDiffDate} from '@/util/extend/date/util';
+import {getDiffDate} from '@/utils/extend/date/util';
 import StudiedCalendarCell from '@/component/services/studied-time/StudiedCalendarCell';
-import {calculateTotal} from '@/util/extend/data-type/number';
+import {calculateTotal} from '@/utils/extend/data-type/number';
 import {studiedTimeFormat} from '@/util/sevices/studied-time';
-import {classifyStrings} from '@/util/extend/data-type/string';
-import {sortByNumber} from '@/util/extend/data-type/array';
+import {classifyStrings} from '@/utils/extend/data-type/string';
+import {sortByNumber} from '@/utils/extend/data-type/array';
 
 export const metadata: Metadata = {
   title: 'Calendar',
