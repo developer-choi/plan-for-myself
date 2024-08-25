@@ -66,8 +66,11 @@ function getThisMonthSummary(weekList: StudiedTimeHistory[][]) {
       return a;
     }
 
+    if (b.data.fail_keywords.length > 1 || b.data.fail_keywords[0] !== '') {
+      a.totalKeywords = a.totalKeywords.concat(b.data.fail_keywords);
+    }
+
     a.totalMinutes += calculateTotal(b.data.studied_minutes, value => value);
-    a.totalKeywords = a.totalKeywords.concat(b.data.fail_keywords);
     return a;
   }, {
     totalMinutes: 0,
