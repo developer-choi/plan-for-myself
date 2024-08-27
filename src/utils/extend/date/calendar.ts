@@ -52,21 +52,20 @@ export function getCalendarBoundary(year: number, month: number): DateBoundary {
 export interface CalendarDate {
   original: Date;
   year: number;
-  month: number; // 현재 달과 1차이난다거나 그런거없이 다 보정된상태로 전달됨
+  month: number; // 현재 달과 1차이난다거나 그런거없이 보정된상태로 전달됨
   date: number;
 
   // 마크업 할 때 사용
   state: {
     // 현재 날짜와 상관없는 해당 달력만의 정보
     calendar: {
-      isMatchedThisMonth: boolean; // 달력의 월과 같은 월인지. ("달력" 기준 저번달, 다음달인지 아닌지) + 연도도 같아야함!
+      isMatchedMonth: boolean; // 조회한 달력의 월과 같은 월인지. ("달력" 기준 저번달, 다음달인지 아닌지를 구분할 때 사용)
       isLastDate: boolean; // 해당 월의 마지막 날인지
       isFirstDate: boolean; // 해당 월의 첫 날인지
     };
 
     // 현재 날짜와 관련이 있는 달력의 정보
     current: {
-      isThisWeek: boolean; // 이번주와 달력의 특정 일이 같은 주인지
       isToday: boolean; // 오늘과 동일한 날짜인지 여부
     };
   };
@@ -90,11 +89,10 @@ export function getCalendarWeekList<T = CalendarDate>(year: number, month: numbe
     .fill('').map((_, index) => new Date(year, month, index + 1));
 
   const today = new Date();
-  const thisWeek = getWeekBoundary(today);
 
   const calendarDates: T[] = prevMonthDates.concat(currentMonthDates, nextMonthDates).map(date => {
     const numericDate = date.getDate();
-    const isMatchedThisMonth = (month === date.getMonth() + 1) && year === date.getFullYear();
+    const isMatchedMonth = month === date.getMonth() + 1;
 
     const calendarDate: CalendarDate = {
       original: date,
@@ -103,13 +101,12 @@ export function getCalendarWeekList<T = CalendarDate>(year: number, month: numbe
       date: numericDate,
       state: {
         calendar: {
-          isMatchedThisMonth,
-          isFirstDate: isMatchedThisMonth && numericDate === 1,
-          isLastDate: isMatchedThisMonth && end.getDate() === numericDate
+          isMatchedMonth,
+          isFirstDate: isMatchedMonth && numericDate === 1,
+          isLastDate: isMatchedMonth && end.getDate() === numericDate
         },
         current: {
-          isThisWeek: thisWeek.start.getDate() <= numericDate && numericDate <= thisWeek.end.getDate(),
-          isToday: numericDate === today.getDate() && isMatchedThisMonth,
+          isToday: numericDate === today.getDate() && (today.getMonth() === date.getMonth()) && (today.getFullYear() === date.getFullYear()),
         },
       }
     };
@@ -123,4 +120,32 @@ export function getCalendarWeekList<T = CalendarDate>(year: number, month: numbe
   });
 
   return arraySplit(calendarDates, 7);
+}
+
+export interface CalendarNavigation {
+  year: number;
+  month: number;
+}
+
+export function getCalendarNavigation(year: number, month: number) {
+  const previousCalendar: CalendarNavigation = month === 1 ? {
+    year: year - 1,
+    month: 12
+  } : {
+    year,
+    month: month - 1
+  };
+
+  const nextCalendar: CalendarNavigation = month === 12 ? {
+    year: year + 1,
+    month: 1
+  } : {
+    year,
+    month: month + 1
+  };
+
+  return {
+    previousCalendar,
+    nextCalendar
+  }
 }

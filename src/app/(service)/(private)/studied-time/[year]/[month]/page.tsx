@@ -1,13 +1,14 @@
 import styles from './page.module.scss';
 import {Metadata, ServerComponentProps} from 'next';
 import CustomLink from '@/components/design-system/element/link/CustomLink';
-import {getDiffDate} from '@/utils/extend/date/util';
 import StudiedCalendarCell from '@/components/services/studied-time/StudiedCalendarCell';
 import {calculateTotal} from '@/utils/extend/data-type/number';
 import {classifyStrings} from '@/utils/extend/data-type/string';
 import {sortByNumber} from '@/utils/extend/data-type/array';
 import {getStudiedTimeHistoryApi, StudiedTimeHistory} from '@/utils/service/api/studied-time';
 import {studiedTimeFormat} from '@/utils/service/studied-time';
+import {getCalendarNavigation} from '@/utils/extend/date/calendar';
+import {useMemo} from 'react';
 
 export const metadata: Metadata = {
   title: 'Calendar',
@@ -17,9 +18,10 @@ export const metadata: Metadata = {
 export default async function Page({params}: ServerComponentProps) {
   const year = Number(params.year);
   const month = Number(params.month);
-
-  const previousMonth = getDiffDate(new Date(year, month - 1), [0, -1]);
-  const nextMonth = getDiffDate(new Date(year, month - 1), [0, 1]);
+  
+  const {previousCalendar, nextCalendar} = useMemo(() => {
+    return getCalendarNavigation(year, month);
+  }, [month, year])
 
   const weekList = await getStudiedTimeHistoryApi(year, month);
 
@@ -27,8 +29,8 @@ export default async function Page({params}: ServerComponentProps) {
     <div className={styles.pageWrap}>
       <h1 className={styles.h1}>{year} / {month}</h1>
       <div className={styles.navigator}>
-        <CustomLink href={`/studied-time/${previousMonth.getFullYear()}/${previousMonth.getMonth() + 1}`}>Previous</CustomLink>
-        <CustomLink href={`/studied-time/${nextMonth.getFullYear()}/${nextMonth.getMonth() + 1}`}>Next</CustomLink>
+        <CustomLink href={`/studied-time/${previousCalendar.year}/${previousCalendar.month}`}>Previous</CustomLink>
+        <CustomLink href={`/studied-time/${nextCalendar.year}/${nextCalendar.month}`}>Next</CustomLink>
       </div>
       <table className={styles.table}>
         <thead>
@@ -62,7 +64,7 @@ export default async function Page({params}: ServerComponentProps) {
 
 function getThisMonthSummary(weekList: StudiedTimeHistory[][]) {
   const {totalKeywords, totalMinutes} = weekList.flat().reduce((a, b) => {
-    if (!b.data || !b.calendarDate.state.calendar.isMatchedThisMonth) {
+    if (!b.data || !b.calendarDate.state.calendar.isMatchedMonth) {
       return a;
     }
 

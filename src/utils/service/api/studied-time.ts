@@ -45,7 +45,7 @@ export async function getStudiedTimeHistoryApi(year: number, month: number): Pro
   });
 
   return getCalendarWeekList(year, month, function (calendarDate) {
-    const matchData = !calendarDate.state.calendar.isMatchedThisMonth ? undefined : (json as DailyStudyTime[]).find(({timestamp}) => {
+    const matchData = !calendarDate.state.calendar.isMatchedMonth ? undefined : (json as DailyStudyTime[]).find(({timestamp}) => {
       return isSameDate(new Date(timestamp), calendarDate.original);
     });
 
