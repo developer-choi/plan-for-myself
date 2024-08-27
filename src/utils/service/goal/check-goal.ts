@@ -3,13 +3,14 @@ import {useCallback} from 'react';
 import dayjs from 'dayjs';
 import {postTodayCheckGoalApi} from '@/utils/service/api/goal';
 import {GoalFullResponse} from '@/types/goal';
+import {useMutation} from 'react-query';
 
 interface CheckGoalListFormData {
   checkedGoalList: string[];
 }
 
-export function useCheckGoalListForm({closeModal, response}: {
-  closeModal: () => void,
+export function useCheckGoalListForm({onClose, response}: {
+  onClose: () => void,
   response: GoalFullResponse
 }) {
   const todayHistory = response?.todayHistory;
@@ -20,7 +21,9 @@ export function useCheckGoalListForm({closeModal, response}: {
     }
   });
 
-  const onSubmit: SubmitHandler<CheckGoalListFormData> = useCallback(data => {
+  const {mutateAsync, isLoading} = useMutation(postTodayCheckGoalApi);
+
+  const onSubmit: SubmitHandler<CheckGoalListFormData> = useCallback(async data => {
     if (!response) {
       return;
     }
@@ -29,14 +32,14 @@ export function useCheckGoalListForm({closeModal, response}: {
       return;
     }
 
-    postTodayCheckGoalApi(response.todayGoalList.map(goal => ({
+    await mutateAsync(response.todayGoalList.map(goal => ({
       ...goal,
       checked: data.checkedGoalList.includes(goal.pk.toString())
     })));
 
-    closeModal();
+    onClose();
     // queryClient.invalidateQueries(GOAL_FULL_RESPONSE_QUERY_KEY);
-  }, [closeModal, response]);
+  }, [mutateAsync, onClose, response]);
 
   if (!response) {
     return null
@@ -45,8 +48,11 @@ export function useCheckGoalListForm({closeModal, response}: {
   const sourceGoalList = todayHistory?.checked_list.length ? todayHistory.checked_list : response.todayGoalList;
 
   return {
-    formSubmit: handleSubmit(onSubmit),
-    submitDisabled: !!todayHistory?.has_checked,
+    form: {
+      onSubmit: handleSubmit(onSubmit),
+      disabled: !!todayHistory?.has_checked,
+      loading: isLoading
+    },
     radioList: sourceGoalList.map(({pk, title, achieve_price, not_achieve_price, content}) => {
       const checked = watch('checkedGoalList').includes(pk.toString());
 

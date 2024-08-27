@@ -1,0 +1,20 @@
+@use 'container.module';
+
+.oneButtonFooter {
+  flex-grow: 0;
+  
+  padding: {
+    bottom: container.$modalPadding;
+    left: container.$modalPadding;
+    right: container.$modalPadding;
+  };
+  
+  > button {
+    width: 100%; // One Button 모달에서는 기본적으로 버튼 길이가 최대임
+  }
+}
+
+.twoButtonsFooter {
+  display: flex;
+  gap: 10px;
+}

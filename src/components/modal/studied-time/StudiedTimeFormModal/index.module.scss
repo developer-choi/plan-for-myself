@@ -1,9 +1,7 @@
-@use '/src/components/design-system/form/form-elements/index.module' as form;
+@use '/src/styles/design-system.module';
 
 .formWrap {
-  @include form.commonForm;
-  width: 400px;
-  padding: 20px;
+  @include design-system.commonForm;
 }
 
 .buttonWrap {

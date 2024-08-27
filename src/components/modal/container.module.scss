@@ -1,0 +1,115 @@
+@use '/src/styles/design-system.module';
+
+@mixin dimBackdrop {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+// 이걸 특정 innerContainer에서 include하면 body만 스크롤이 생김
+@mixin fullBodyScroll {
+  :global(.bodyPaddingContainer) {
+    overflow: hidden;
+    
+    > :global(.bodyScrollContainer) {
+      /**
+       * 항상 보이게 만들어서 스크롤이 안보이는 케이스에서도 우측여백으로 잡아놓은 스크롤트랙이 패딩처럼 보이게
+       * 이거를 overflow: scroll;로 했다간 수평스크롤도 같이 보여서 난감해짐.
+       */
+      overflow-y: scroll;
+      max-height: 100%;
+    }
+  }
+}
+
+// 이걸 특정 innerContainer에서 include하면 body만 스크롤이 생김
+@mixin limitedBodyScroll {
+  :global(.bodyScrollContainer) {
+    overflow-y: scroll;
+    max-height: 50dvh;
+  }
+}
+
+// 상하좌우 모달패딩값
+$modalPadding: 16px;
+
+.centerAlignContainer {
+  $minPadding: 16px; // 뷰포트보다 모달의 가로 또는 세로가 더 작은경우 뷰포트와 모달 사이 최소간격
+  
+  @include dimBackdrop;
+  display: flex;
+  padding: $minPadding;
+  
+  &:not(.open) {
+    display: none;
+  }
+}
+
+.centerAlignInner {
+  // 모달 중앙정렬
+  margin: auto;
+  
+  // 반응형
+  width: 100%;
+  
+  &.medium {
+    max-width: 480px;
+  }
+  
+  &.large {
+    max-width: 720px;
+  }
+  
+  @include limitedBodyScroll;
+}
+
+.bottomSheetContainer {
+  display: flex;
+  pointer-events: none; // 바텀시트모달은 일단 렌더링시켜놓고 나서 보이는것만 조절하기에, 숨겨져있을 때는 인터렉션에 영향을 주면안됨.
+  background-color: transparent;
+  transition: background-color 0.4s;
+  
+  > .bottomSheetInner {
+    position: fixed;
+    bottom: -100%;
+    transition: bottom 0.4s;
+  }
+  
+  &.open {
+    pointer-events: auto;
+    @include dimBackdrop;
+    
+    > .bottomSheetInner {
+      bottom: 0;
+    }
+  }
+}
+
+.bottomSheetInner {
+  width: 100%;
+  
+  @include limitedBodyScroll;
+}
+
+.fullScreenContainer {
+  &:not(.open) {
+    display: none;
+  }
+}
+
+.fullScreenInner {
+  width: 100%;
+  height: 100%;
+  
+  display: flex;
+  flex-direction: column;
+  
+  @include fullBodyScroll;
+}
+
+.rootModalContainer {
+  z-index: map-get(design-system.$zIndexes, modal);
+}
+
+.rootModalInner {
+  // 모달 기본 배경색 지정
+  background-color: white;
+}

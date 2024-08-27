@@ -1,17 +1,14 @@
 'use client';
 
-import React, {PropsWithChildren, useCallback, useEffect} from 'react';
-import {Provider} from 'react-redux';
-import {store} from '@/store/store';
+import React, {PropsWithChildren, useEffect} from 'react';
 import {QueryClient, QueryClientProvider} from 'react-query';
-import {useAppDispatch, useAppSelector} from '@/store/hooks';
-import {closeModal} from '@/store/reducers/modal';
 import 'react-toastify/dist/ReactToastify.css';
 import {toast, ToastContainer, ToastPosition} from 'react-toastify';
 import {randomInArray} from '@/utils/extend/random';
 import {getRemindOfMessageListApiOnClient} from '@/utils/service/api/goal';
+import ModalProvider from '@/components/setting/ModalProvider';
 
-export default function ClientAppProvider({children}: PropsWithChildren) {
+export default function AppProvider({children}: PropsWithChildren) {
   useEffect(() => {
     getRemindOfMessageListApiOnClient().then(list => {
       if (list.length === 0) {
@@ -36,32 +33,14 @@ export default function ClientAppProvider({children}: PropsWithChildren) {
 
   return (
     <QueryClientProvider client={INSTANCE}>
-      <Provider store={store}>
+      <ModalProvider>
         {children}
-        <ModalRender/>
-        <ToastContainer/>
-      </Provider>
+      </ModalProvider>
+      <ToastContainer/>
     </QueryClientProvider>
   )
 }
 
 const INSTANCE = new QueryClient();
-
-function ModalRender() {
-  const modals = useAppSelector(state => state.modal.modals);
-  const dispatch = useAppDispatch();
-
-  const close = useCallback((pk: number) => {
-    dispatch(closeModal(pk));
-  }, [dispatch]);
-
-  return (
-    <>
-      {modals.map(({pk, Component, props}) => (
-        <Component key={pk} closeModal={() => close(pk)} {...props}/>
-      ))}
-    </>
-  );
-}
 
 const TOAST_POSITIONS: ToastPosition[] = ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right'];

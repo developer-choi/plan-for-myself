@@ -1,22 +1,28 @@
 'use client';
 
 import React, {useCallback} from 'react';
-import {useDispatchOpenModal} from '@/store/reducers/modal';
 import {numberWithComma} from '@/utils/extend/data-type/number';
 import type {GoalFullResponse} from '@/types/goal';
 import styles from './index.module.scss';
 import Button from '@/components/design-system/element/Button';
+import {useOpenModal} from '@/utils/extend/modal';
+import CheckTodayModal from '@/components/modal/goal/CheckTodayModal';
 
 export interface GoalOverviewProp {
   goalFullResponse: GoalFullResponse;
 }
 
 export default function GoalOverview({goalFullResponse}: GoalOverviewProp) {
-  const {openCheckTodayModal} = useDispatchOpenModal();
+  const {openModal} = useOpenModal();
 
   const onClick = useCallback(() => {
-    openCheckTodayModal({goalFullResponse})
-  }, [goalFullResponse, openCheckTodayModal]);
+    openModal({
+      Component: CheckTodayModal,
+      props: {
+        goalFullResponse
+      }
+    })
+  }, [goalFullResponse, openModal]);
 
   if (!goalFullResponse.todayHistory.has_checked) {
     return (

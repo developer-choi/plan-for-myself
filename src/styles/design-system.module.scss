@@ -1,0 +1,36 @@
+@mixin commonForm {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.commonForm {
+  @include commonForm;
+}
+
+// https://docs.google.com/document/d/1PuIedTgshX2lHkh9YgIW6sv9W7aiyuA_aTxdPlQ6Vm0/edit
+$zIndexes: (
+  modal: 30,
+  mobileBottomNav: 10,
+  pcStickyHeader: 10,
+);
+
+.horizontalFieldset {
+  gap: 12px;
+  display: flex;
+  
+  > label {
+    display: flex;
+    align-items: center;
+    
+    > input {
+      margin-right: 4px;
+    }
+  }
+}
+
+.mainPageH2 {
+  font-size: 20px;
+  margin-top: 30px;
+  margin-bottom: 5px;
+}

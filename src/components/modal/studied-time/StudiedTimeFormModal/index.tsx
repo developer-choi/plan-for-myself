@@ -4,40 +4,61 @@ import useStudiedTimeForm, {StudiedTimeFormData} from '@/utils/service/studied-t
 import styles from './index.module.scss';
 import Input from '@/components/design-system/form/Input';
 import Radio, {RadioGroup} from '@/components/design-system/form/Radio';
-import Button from '@/components/design-system/element/Button';
-import type {EssentialModalProp} from '@/store/reducers/modal';
 import React from 'react';
-import Modal from '@/components/modal';
 import {StudiedTimeHistory} from '@/utils/service/api/studied-time';
+import {ComposedModalProps, ModalContainer} from '@/components/modal/container';
+import {DefaultModalHeader} from '@/components/modal/header';
+import DefaultModalBody from '@/components/modal/body';
+import {OneButtonModalFooter, TwoButtonsModalFooter} from '@/components/modal/footer';
 
-export interface StudiedTimeFormModalProps extends EssentialModalProp {
+export interface StudiedTimeFormModalProps extends ComposedModalProps {
   history: StudiedTimeHistory;
   initialFormData?: StudiedTimeFormData;
 }
 
-export default function StudiedTimeFormModal({initialFormData, history, ...rest}: StudiedTimeFormModalProps) {
+export default function StudiedTimeFormModal({initialFormData, history, onClose, ...rest}: StudiedTimeFormModalProps) {
   const {form, props} = useStudiedTimeForm(history, initialFormData);
 
   return (
-    <Modal {...rest}>
-      <form className={styles.formWrap} onSubmit={form.onSubmit}>
-        <RadioGroup label={props.dateType.groupLabel}>
-          {props.dateType.list.map((props, index) => (
-            <Radio key={index} {...props} />
+    <ModalContainer type="centerAlign" onClose={onClose} {...rest}>
+      <DefaultModalHeader onClose={onClose}></DefaultModalHeader>
+      <DefaultModalBody>
+        <form className={styles.formWrap} onSubmit={form.onSubmit}>
+          <RadioGroup label={props.dateType.groupLabel}>
+            {props.dateType.list.map((props, index) => (
+              <Radio key={index} {...props} />
+            ))}
+          </RadioGroup>
+
+          {props.studiedMinutesInputList.map((props, index) => (
+            <Input key={index} {...props}/>
           ))}
-        </RadioGroup>
 
-        {props.studiedMinutesInputList.map((props, index) => (
-          <Input key={index} {...props}/>
-        ))}
-
-        <Input {...props.fail.keywords}/>
-        <Input {...props.fail.reason}/>
-        <div className={styles.buttonWrap}>
-          {!history.data ? null : <Button size="large" variant="outlined" color="delete" onClick={form.deleteHistory}>삭제</Button>}
-          <Button size="large" type="submit" loading={form.loading}>{history.data ? '수정' : '추가'}</Button>
-        </div>
-      </form>
-    </Modal>
+          <Input {...props.fail.keywords}/>
+          <Input {...props.fail.reason}/>
+        </form>
+      </DefaultModalBody>
+      {!history.data ? (
+        <OneButtonModalFooter
+          buttonText="추가"
+          onClick={form.onSubmit}
+          loading={form.loading}
+          buttonType="submit"
+        />
+      ) : (
+        <TwoButtonsModalFooter
+          left={{
+            buttonText: '삭제',
+            onClick: form.deleteHistory
+          }}
+          right={{
+            buttonText: '수정',
+            onClick: form.onSubmit,
+            loading: form.loading,
+            buttonType: 'submit'
+          }}
+        />
+      )}
+    </ModalContainer>
   );
 }

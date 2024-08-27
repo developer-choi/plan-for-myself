@@ -100,9 +100,3 @@ $formElement: (
     color: map-get(color.$stateColors, disabled);
   }
 }
-
-@mixin commonForm {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}

@@ -1,6 +1,6 @@
 import React, {PropsWithChildren} from 'react';
 import InnerSessionProvider from '@/utils/service/auth/InnerSessionProvider';
-import ClientAppProvider from '@/components/setting/ClientAppProvider';
+import AppProvider from '@/components/setting/AppProvider';
 import {SessionProvider} from 'next-auth/react';
 import {auth} from '@/utils/service/auth';
 import '@/styles/reset.css';
@@ -12,9 +12,9 @@ export default async function ServiceLayout({children}: PropsWithChildren) {
   return (
     <SessionProvider refetchOnWindowFocus={false} session={session}>
       <InnerSessionProvider>
-        <ClientAppProvider>
+        <AppProvider>
           {children}
-        </ClientAppProvider>
+        </AppProvider>
       </InnerSessionProvider>
     </SessionProvider>
   );

@@ -54,7 +54,7 @@ export async function postTodayCheckGoalApi(checkedGoalList: CheckableGoal[]) {
   });
 }
 
-export async function updateGoalApi(pk: number, parameter: PostGoalRequestParameter) {
+export async function updateGoalApi({pk, ...parameter}: PostGoalRequestParameter & {pk: number}) {
   return customFetchOnClientSide(`/api/original-goal/${pk}`, {
     method: 'PATCH',
     authorize: 'private',

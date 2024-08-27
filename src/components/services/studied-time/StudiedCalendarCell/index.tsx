@@ -6,8 +6,9 @@ import {DailyStudyTime} from '@/types/studied-time';
 import {calculateTotal} from '@/utils/extend/data-type/number';
 import styles from './index.module.scss';
 import {useCallback} from 'react';
-import {useDispatchOpenModal} from '@/store/reducers/modal';
 import {studiedTimeFormat} from '@/utils/service/studied-time';
+import {useOpenModal} from '@/utils/extend/modal';
+import StudiedTimeFormModal from '@/components/modal/studied-time/StudiedTimeFormModal';
 
 interface StudiedCalendarCellProps {
   history: StudiedTimeHistory;
@@ -18,23 +19,26 @@ interface StudiedCalendarCellProps {
 }
 
 export default function StudiedCalendarCell({history, summary}: StudiedCalendarCellProps) {
-  const {openStudiedTimeFormModal} = useDispatchOpenModal();
+  const {openModal} = useOpenModal();
 
   const onClickCell = useCallback(() => {
-    openStudiedTimeFormModal({
-      history,
-      initialFormData: {
-        date_type: history.data?.date_type ?? 'quarter',
-        studied_minutes: {
-          part1: history.data?.studied_minutes?.[0].toString() ?? '',
-          part2: history.data?.studied_minutes?.[1].toString() ?? '',
-          part3: history.data?.studied_minutes?.[2].toString() ?? ''
-        },
-        fail_keywords: history.data?.fail_keywords.join(',') ?? '',
-        fail_reason: history.data?.fail_reason ?? ''
+    openModal({
+      Component: StudiedTimeFormModal,
+      props: {
+        history,
+        initialFormData: {
+          date_type: history.data?.date_type ?? 'quarter',
+          studied_minutes: {
+            part1: history.data?.studied_minutes?.[0].toString() ?? '',
+            part2: history.data?.studied_minutes?.[1].toString() ?? '',
+            part3: history.data?.studied_minutes?.[2].toString() ?? ''
+          },
+          fail_keywords: history.data?.fail_keywords.join(',') ?? '',
+          fail_reason: history.data?.fail_reason ?? ''
+        }
       }
     });
-  }, [history, openStudiedTimeFormModal]);
+  }, [history, openModal]);
 
   return (
     <td onClick={onClickCell} className={styles.tdWrap}>

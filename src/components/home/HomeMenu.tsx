@@ -4,14 +4,24 @@ import styles from '@/app/(service)/(private)/dashboard/page.module.scss';
 import Button from '@/components/design-system/element/Button';
 import React, {useCallback} from 'react';
 import {postMultipleGoalApi} from '@/utils/service/api/goal';
-import {useDispatchOpenModal} from '@/store/reducers/modal';
+import {useOpenModal} from '@/utils/extend/modal';
+import GoalModal from '@/components/modal/goal/GoalModal';
 
 export interface HomeMenuProps {
 
 }
 
 export default function HomeMenu({}: HomeMenuProps) {
-  const {openGoalModal} = useDispatchOpenModal();
+  const {openModal} = useOpenModal();
+
+  const openGoalModal = useCallback(() => {
+    openModal({
+      Component: GoalModal,
+      props: {
+        data: undefined
+      }
+    })
+  }, [openModal]);
 
   const loadGoalList = useCallback(async () => {
     const value = prompt('기존 goalList 값을 입력하세요.');

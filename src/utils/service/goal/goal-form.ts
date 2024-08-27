@@ -6,8 +6,9 @@ import type {GoalModalProp} from '@/components/modal/goal/GoalModal';
 import type {GoalFrequency} from '@/types/goal';
 import {GOAL_FREQUENCY_LIST} from '@/utils/service/goal/index';
 import {postGoalApi, PostGoalRequestParameter, updateGoalApi} from '@/utils/service/api/goal';
+import {useMutation} from 'react-query';
 
-export function useGoalForm({closeModal, data}: GoalModalProp) {
+export function useGoalForm({onClose, data}: GoalModalProp) {
   const {register, handleSubmit} = useForm<GoalFormData>({
     mode: 'all',
     defaultValues: !data ? DEFAULT_FORM_DATA : {
@@ -24,7 +25,10 @@ export function useGoalForm({closeModal, data}: GoalModalProp) {
     baseHandleErrors([title, achievePrice, notAchievePrice]);
   }, []);
 
-  const onSubmit: SubmitHandler<GoalFormData> = useCallback(formData => {
+  const postMutation = useMutation(postGoalApi);
+  const updateMutation = useMutation(updateGoalApi);
+
+  const onSubmit: SubmitHandler<GoalFormData> = useCallback(async formData => {
     const goalParameter: PostGoalRequestParameter = {
       ...formData,
       not_achieve_price: Number(formData.notAchievePrice),
@@ -33,16 +37,22 @@ export function useGoalForm({closeModal, data}: GoalModalProp) {
     };
 
     if (!data) {
-      postGoalApi(goalParameter);
+      await postMutation.mutateAsync(goalParameter);
     } else {
-      updateGoalApi(data.pk, goalParameter);
+      await updateMutation.mutateAsync({
+        pk: data.pk,
+        ...goalParameter
+      });
     }
     // queryClient.invalidateQueries(GOAL_FULL_RESPONSE_QUERY_KEY);
-    closeModal();
-  }, [closeModal, data]);
+    onClose();
+  }, [data, onClose, postMutation, updateMutation]);
 
   return {
-    formSubmit: handleSubmit(onSubmit, onError),
+    form: {
+      onSubmit: handleSubmit(onSubmit, onError),
+      loading: postMutation.isLoading || updateMutation.isLoading,
+    },
     inputProps: {
       title: register('title', TITLE_OPTIONS),
       content: register('content'),

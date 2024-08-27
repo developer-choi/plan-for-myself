@@ -1,0 +1,39 @@
+@use 'container.module';
+@use "/src/styles/typography.module";
+
+.defaultHeader {
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  
+  padding: {
+    top: container.$modalPadding;
+    left: container.$modalPadding;
+    right: container.$modalPadding;
+  };
+}
+
+.title {
+  @include typography.h4;
+  font-weight: bold;
+}
+
+.closeButton {
+  margin-left: 4px;
+  font-size: 0;
+}
+
+.profileHeader {
+  display: flex;
+  justify-content: flex-start;
+  
+  img {
+    border-radius: 50%;
+    margin-right: 12px;
+  }
+}
+
+.hashtag {
+  margin-top: 8px;
+}
