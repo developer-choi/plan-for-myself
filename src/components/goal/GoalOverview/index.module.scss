@@ -1,0 +1,18 @@
+@use "/src/styles/color" as color;
+
+.resultText {
+  display: block;
+  font-size: 16px;
+}
+
+.price {
+  font-size: 18px;
+  font-weight: bold;
+  color: map-get(color.$brandColors, primary);
+}
+
+.styledLink {
+  color: map-get(color.$brandColors, primary);
+  font-weight: bold;
+  font-size: 14px;
+}

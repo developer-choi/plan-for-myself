@@ -2,7 +2,7 @@ import React from 'react';
 import {Metadata, ServerComponentProps} from 'next';
 import {redirect} from 'next/navigation';
 import ReviewKeywordsPage from '@/app/(service)/tool/review-keywords/client';
-import {convertLegacyKeywordIfLegacy, KEYWORD_KEY} from '@/util/sevices/review-keywords/core';
+import {convertLegacyKeywordIfLegacy, KEYWORD_KEY} from '@/utils/service/review-keywords/core';
 
 export const metadata: Metadata = {
   title: 'Review keywords',

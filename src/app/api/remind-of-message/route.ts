@@ -1,6 +1,6 @@
 import {NextRequest} from 'next/server';
 import {sql} from '@vercel/postgres';
-import {RemindOfMessageItem} from '@/util/sevices/api/remind-of-message';
+import {RemindOfMessageItem} from '@/utils/service/api/remind-of-message';
 
 /**
  * 기능 = 리마인드 메시지 1개 생성하기

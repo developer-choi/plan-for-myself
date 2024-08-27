@@ -1,0 +1,155 @@
+@use "/src/styles/util" as util;
+@use "/src/styles/color" as color;
+
+/**
+ * class로 경우에따라 loading 지정 필요
+ */
+@mixin cursorByState {
+  // cursor by state
+  cursor: pointer;
+  
+  &.loading {
+    cursor: progress;
+  }
+  
+  :disabled {
+    cursor: not-allowed;
+  }
+}
+
+@mixin textByButtonSize($size) {
+  $style: (
+    large: (
+      padding: 11px,
+      font-size: 16px,
+      line-height: 24px
+    ),
+    medium: (
+      padding: 9px 11px,
+      font-size: 14px,
+      line-height: 20px
+    ),
+    xsmall: (
+      padding: 2px 8px,
+      font-size: 12px,
+      line-height: 16px
+    ),
+  );
+  
+  padding: map-get(map-get($style, $size), padding);
+  font-size: map-get(map-get($style, $size), font-size);
+  line-height: map-get(map-get($style, $size), line-height);
+};
+
+/**
+ * class로 경우에따라 large / medium 지정 필요
+ */
+@mixin buttonSize {
+  border: {
+    width: 1px;
+    style: solid;
+    radius: 4px;
+  }
+  @each $size in large, medium, xsmall {
+    &.#{$size} {
+      @include textByButtonSize($size);
+    }
+  }
+}
+
+@mixin loadingColor($color) {
+  svg > circle {
+    stroke: $color;
+  }
+}
+
+/**
+ * @param variant outlined / contained
+ * @param colorOrState disabled / primary / secondary
+ */
+@mixin colorSet($variant, $colorOrState) {
+  //  disabled 상태인 경우 강제로 contained 적용
+  @if $colorOrState == 'disabled' {
+    $pointerColor: white;
+    border-color: map-get(color.$stateColors, disabled);
+    background-color: map-get(color.$stateColors, disabled);
+    color: $pointerColor;
+    @include loadingColor($pointerColor);
+  }
+  
+  @else {
+    $pointerColor: map-get(color.$brandColors, $colorOrState);
+    border-color: $pointerColor;
+    background-color: if($variant == 'contained', $pointerColor, white);
+    color: if($variant == 'contained', white, $pointerColor);
+    @include loadingColor($pointerColor);
+  }
+}
+
+/**
+ * class로 경우에따라
+ * 1. outlined / contained 지정 필요
+ * 2. primary / secondary 지정 필요
+ */
+@mixin buttonColorSet {
+  @each $color in primary, secondary, edit, delete {
+    @each $variant in outlined, contained {
+      &.#{$color}.#{$variant} {
+        @include colorSet($variant, $color);
+      }
+      
+      &.#{$color}.#{$variant}:disabled {
+        @include colorSet(contained, disabled);
+      }
+    }
+  }
+}
+
+// class에 경우에 따라 loading 필요
+@mixin customButtonStyle {
+  // 아이콘이 버튼 내에 들어가는 경우 대응
+  &:has(>svg, img) {
+    display: inline-flex; // 아이콘의 font-size로 인한 여백 삭제도 같이 가능
+    
+    /**
+     * 버튼에 텍스트만 있는경우 브라우저의 버튼 기본스타일로 수직 수평정렬이 가능하지만,
+     * 버튼안에 아이콘 또는 아이콘+텍스트가 들어가는 케이스때문에 이렇게 설정해야.
+     */
+    align-items: center;
+    justify-content: center;
+    
+    column-gap: 4px; // 아이콘, 텍스트 사이 간격은 디자인 시스템에 따름.
+    
+    /**
+     * 버튼텍스트가 길어지는경우 대응.
+     * 텍스트가 버튼 크기보다 길 경우, 두세줄 되면서 버튼 높이 커지고 그에따라 레이아웃이 틀어지는 현상을 막기위함.
+     * 이렇게 하면, UI 오류가 버튼에만 발생하고 옆 UI에 영향을 주지않음.
+     */
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  // 로딩을 제외한 나머지 아이콘이 들어가는 경우,
+  &:not(.loading) {
+    // 버튼에 어떠한 크기, 모양의 아이콘이 오더라도 아래 스타일 적용하도록 디자이너와 협의됨
+    > svg, img {
+      width: auto;
+      height: 16px;
+      border-radius: 2px;
+    }
+  }
+}
+
+.button {
+  // 추가로 필요한 클래스이름은 하단 mixin 주석 참고
+  @include customButtonStyle;
+  @include cursorByState;
+  @include buttonSize;
+  @include buttonColorSet;
+}
+
+.buttonLink {
+  // button의 기본 스타일이지만, anchor는 없으므로 별도 추가
+  text-align: center;
+  display: inline-block;
+}

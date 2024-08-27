@@ -1,0 +1,15 @@
+@use '/src/components/design-system/form/form-elements/index.module' as form;
+
+.formWrap {
+  @include form.commonForm;
+  width: 400px;
+  padding: 20px;
+}
+
+.buttonWrap {
+  display: flex;
+  gap: 12px;
+  > button {
+    flex-grow: 1;
+  }
+}
