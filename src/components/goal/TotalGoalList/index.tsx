@@ -29,11 +29,6 @@ export default function TotalGoalList({goalList, todayFrequency}: TotalGoalListP
     })
   }, [openModal]);
 
-  const copyGoalList = useCallback(async () => {
-    await navigator.clipboard.writeText(JSON.stringify(goalList));
-    alert('복사되었습니다.');
-  }, [goalList]);
-
   return (
     <>
       <h2 className={designSystemStyles.mainPageH2}>전체 목표 목록</h2>
@@ -61,7 +56,6 @@ export default function TotalGoalList({goalList, todayFrequency}: TotalGoalListP
 
       <div className={styles.buttonWrap}>
         <Button color="secondary" onClick={() => openGoalModal()}>새 목표 추가하기</Button>
-        <Button color="secondary" variant="outlined" onClick={copyGoalList}>복사하기</Button>
       </div>
     </>
   );
