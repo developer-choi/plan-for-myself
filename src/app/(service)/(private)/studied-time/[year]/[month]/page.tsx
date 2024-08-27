@@ -35,13 +35,13 @@ export default async function Page({params}: ServerComponentProps) {
       <table className={styles.table}>
         <thead>
         <tr>
-          <td><span className={styles.calendarDate}>MON</span></td>
-          <td><span className={styles.calendarDate}>TUE</span></td>
-          <td><span className={styles.calendarDate}>WED</span></td>
-          <td><span className={styles.calendarDate}>THU</span></td>
-          <td><span className={styles.calendarDate}>FRI</span></td>
-          <td><span className={styles.calendarDate}>SAT</span></td>
-          <td><span className={styles.calendarDate}>SUN</span></td>
+          <td><span className={styles.theadTd}>MON</span></td>
+          <td><span className={styles.theadTd}>TUE</span></td>
+          <td><span className={styles.theadTd}>WED</span></td>
+          <td><span className={styles.theadTd}>THU</span></td>
+          <td><span className={styles.theadTd}>FRI</span></td>
+          <td><span className={styles.theadTd}>SAT</span></td>
+          <td><span className={styles.theadTd}>SUN</span></td>
         </tr>
         </thead>
         <tbody>
