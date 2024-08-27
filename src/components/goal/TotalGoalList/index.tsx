@@ -7,7 +7,7 @@ import {useDispatchOpenModal} from '@/store/reducers/modal';
 import styles from './index.module.scss';
 import commonStyles from '@/styles/common.module.scss';
 import classNames from 'classnames';
-import Button from '@/component/design-system/element/Button';
+import Button from '@/components/design-system/element/Button';
 
 export interface TotalGoalListProp {
   goalList: Goal[];

@@ -1,7 +1,7 @@
 import React, {CSSProperties} from 'react';
 import classNames from 'classnames';
 import styles from './index.module.scss';
-import ActiveLink, {ActiveLinkProps, LinkActiveMode} from '@/component/design-system/element/link/ActiveLink';
+import ActiveLink, {ActiveLinkProps, LinkActiveMode} from '@/components/design-system/element/link/ActiveLink';
 
 export type TabBarItem = Omit<ActiveLinkProps, 'enableActive'>;
 

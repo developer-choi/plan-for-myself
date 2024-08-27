@@ -1,4 +1,4 @@
-import {FormElementWrapper, FormElementWrapperProps} from '@/component/design-system/form/form-elements';
+import {FormElementWrapper, FormElementWrapperProps} from '@/components/design-system/form/form-elements';
 import classNames from 'classnames';
 import {ComponentPropsWithRef, forwardRef, MouseEvent, ReactNode, Ref, useCallback} from 'react';
 import styles from './index.module.scss';

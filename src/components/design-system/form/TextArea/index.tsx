@@ -3,7 +3,7 @@ import styles from './index.module.scss';
 import {
   FormElementWrapper,
   FormElementWrapperProps
-} from "@/component/design-system/form/form-elements";
+} from "@/components/design-system/form/form-elements";
 import classNames from "classnames";
 import {isMatchKeyboardEvent, KeyboardShortcut} from '@/utils/extend/event/keyboard';
 

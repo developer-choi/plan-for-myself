@@ -5,7 +5,7 @@ import {useDispatchOpenModal} from '@/store/reducers/modal';
 import {numberWithComma} from '@/utils/extend/data-type/number';
 import type {GoalFullResponse} from '@/types/goal';
 import styles from './index.module.scss';
-import Button from '@/component/design-system/element/Button';
+import Button from '@/components/design-system/element/Button';
 
 export interface GoalOverviewProp {
   goalFullResponse: GoalFullResponse;
