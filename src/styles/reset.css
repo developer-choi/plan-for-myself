@@ -1,3 +1,10 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+/* https://docs.google.com/document/d/1CLI8GDnyOAk2_rE5rE05hddkSFX1Rf86-ExLHOQwBdw/edit#heading=h.2bz2629pkxby */
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -18,7 +25,7 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
-
+/* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
   display: block;
@@ -54,30 +61,18 @@ button, input, textarea {
   padding: 0;
   border: none;
   
+  /* 브라우저가 해당 태그에 직접 기본스타일 지정하고있어서, body로 부터 기본값 상속받기위해 작성함. */
   font-size: inherit;
   color: inherit;
-}
-
-input, textarea {
   font-family: inherit;
 }
 
+/**
+ * button은 기본 배경색 disabled 배경색 둘 다 있는데,
+ * button, button:disabled 안하고 button 하나만 배경색 지정해도 둘 다 지정됨.
+ */
 button, input:disabled, textarea:disabled {
   background: transparent;
-}
-
-textarea {
-  resize: none;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-input[type=number] {
-  -moz-appearance: textfield;
 }
 
 /* 이렇게 안하면, 더이상 줄어들지않는 최소길이 (약 150px쯤)가 있어서 작은 컨테이너에 인풋이 들어갔을 때 인풋이 뚫고나오는 문제가 있음. */
@@ -90,6 +85,35 @@ textarea {
 }
 
 /*************************************************************************************************************
+ * Custom Reset CSS > Input type number
+ *************************************************************************************************************/
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/*************************************************************************************************************
+ * Custom Reset CSS > Input type search
+ *************************************************************************************************************/
+input::-ms-clear,
+input::-ms-reveal {
+  display:none;width:0;height:0;
+}
+input::-webkit-search-decoration,
+input::-webkit-search-cancel-button,
+input::-webkit-search-results-button,
+input::-webkit-search-results-decoration {
+  display:none;
+}
+
+/*************************************************************************************************************
  * Custom Reset CSS > 기타
  *************************************************************************************************************/
 * {
@@ -98,12 +122,18 @@ textarea {
 
 a {
   text-decoration: none;
-  color: inherit;
+  color: inherit; /* 이거 안하면 링크 방문여부에 따른 그 컬러 나옴 */
 }
 
+/* Modal, Non Modal 공통 reset.css */
 dialog {
   color: inherit;
   border: none;
   padding: 0;
   overflow: visible;
+  
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
 }

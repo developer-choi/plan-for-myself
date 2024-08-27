@@ -21,7 +21,7 @@ export default function StudiedTimeFormModal({initialFormData, history, onClose,
 
   return (
     <ModalContainer type="centerAlign" onClose={onClose} {...rest}>
-      <DefaultModalHeader onClose={onClose}></DefaultModalHeader>
+      <DefaultModalHeader onClose={onClose}>공부기록 {history.data ? '수정' : '작성'}</DefaultModalHeader>
       <DefaultModalBody>
         <form className={styles.formWrap} onSubmit={form.onSubmit}>
           <RadioGroup label={props.dateType.groupLabel}>

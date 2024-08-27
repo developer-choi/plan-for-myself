@@ -36,7 +36,7 @@ export default function AppProvider({children}: PropsWithChildren) {
       <ModalProvider>
         {children}
       </ModalProvider>
-      <ToastContainer/>
+      <ToastContainer toastStyle={{lineHeight: '20px'}}/>
     </QueryClientProvider>
   )
 }
