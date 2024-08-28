@@ -1,7 +1,7 @@
-import React, { ComponentPropsWithRef } from 'react';
+import React, {ComponentPropsWithRef, useCallback, MouseEvent} from 'react';
 import classNames from 'classnames';
 import styles from './index.module.scss'
-import LoadingSpinner from '../LoadingSpinner';
+import LoadingSpinner from '@/components/element/LoadingSpinner';
 
 export interface ButtonProps extends Pick<ComponentPropsWithRef<'button'>, UsedProps> {
   size?: ButtonSize; // default 'medium'
@@ -11,12 +11,21 @@ export interface ButtonProps extends Pick<ComponentPropsWithRef<'button'>, UsedP
 }
 
 export default function Button(props: ButtonProps) {
-  const { children, className, type = 'button', loading, size = 'medium', variant = 'contained', color = 'primary', ...rest } = props;
+  const { children, className, type = 'button', loading, size = 'medium', variant = 'contained', color = 'primary', onClick, ...rest } = props;
+
+  const customOnClick = useCallback((event: MouseEvent<HTMLButtonElement>) => {
+    if (loading) {
+      return;
+    }
+
+    onClick?.(event);
+  }, [loading, onClick]);
 
   return (
     <button
       type={type}
       className={classNames(styles.button, {[styles.loading]: loading}, styles[size], styles[color], styles[variant], className)}
+      onClick={customOnClick}
       {...rest}
     >
       {loading ? <LoadingSpinner className="loading" square={LINE_HEIGHT_BY_SIZE[size]}/> : children}

@@ -1,5 +1,5 @@
-@use "/src/styles/util" as util;
-@use "/src/styles/color" as color;
+@use "/src/styles/util";
+@use "/src/styles/color";
 
 /**
  * class로 경우에따라 loading 지정 필요
@@ -71,18 +71,20 @@
   //  disabled 상태인 경우 강제로 contained 적용
   @if $colorOrState == 'disabled' {
     $pointerColor: white;
+    @include loadingColor($pointerColor);
     border-color: map-get(color.$stateColors, disabled);
     background-color: map-get(color.$stateColors, disabled);
     color: $pointerColor;
-    @include loadingColor($pointerColor);
   }
   
   @else {
     $pointerColor: map-get(color.$brandColors, $colorOrState);
+    $color: if($variant == 'contained', white, $pointerColor);
+    
+    @include loadingColor($color);
     border-color: $pointerColor;
     background-color: if($variant == 'contained', $pointerColor, white);
-    color: if($variant == 'contained', white, $pointerColor);
-    @include loadingColor($pointerColor);
+    color: $color;
   }
 }
 
@@ -146,6 +148,8 @@
   @include cursorByState;
   @include buttonSize;
   @include buttonColorSet;
+  
+  flex-shrink: 0;
 }
 
 .buttonLink {
