@@ -148,8 +148,6 @@
   @include cursorByState;
   @include buttonSize;
   @include buttonColorSet;
-  
-  flex-shrink: 0;
 }
 
 .buttonLink {
