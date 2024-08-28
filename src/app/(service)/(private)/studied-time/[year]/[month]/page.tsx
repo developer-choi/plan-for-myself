@@ -1,7 +1,7 @@
 import styles from './page.module.scss';
 import {Metadata, ServerComponentProps} from 'next';
-import CustomLink from '@/components/design-system/element/link/CustomLink';
-import StudiedCalendarCell from '@/components/services/studied-time/StudiedCalendarCell';
+import CustomLink from '@/components/element/link/CustomLink';
+import StudiedCalendarCell from '../../../../../../components/service/studied-time/StudiedCalendarCell';
 import {calculateTotal} from '@/utils/extend/data-type/number';
 import {classifyStrings} from '@/utils/extend/data-type/string';
 import {sortByNumber} from '@/utils/extend/data-type/array';

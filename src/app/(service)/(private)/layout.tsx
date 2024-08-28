@@ -1,5 +1,5 @@
 import {PropsWithChildren} from 'react';
-import TabBar, {TabBarItem} from '@/components/design-system/tab/TabBar';
+import TabBar, {TabBarItem} from '../../../components/layout/TabBar';
 
 export default function PrivateLayout({children}: PropsWithChildren) {
   return (

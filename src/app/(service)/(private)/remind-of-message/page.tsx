@@ -1,5 +1,5 @@
 import React from 'react';
-import RemindOfMessagePage from '@/components/remind-of-message/RemindOfMessagePage';
+import RemindOfMessagePage from '@/components/service/remind-of-message/RemindOfMessagePage';
 import {getRemindOfMessageListApiOnServer} from '@/utils/service/api/goal';
 
 export default async function Page() {

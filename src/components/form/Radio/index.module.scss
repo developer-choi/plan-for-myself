@@ -1,0 +1,31 @@
+@use "/src/components/form/form-elements/index.module" as form;
+@use "/src/styles/color";
+@use "/src/styles/util";
+
+// @param $color primary / language 3개
+@mixin iconColor($color) {
+  svg > circle:first-of-type {
+    fill: map-get(color.$brandColors, $color);
+  }
+}
+
+.wrapper {
+  @include form.commonRadioCheckSwitchWrapper;
+  
+  > input {
+    @include util.hiddenDefaultInputIcon;
+  }
+  
+  @each $color in primary, secondary {
+    &:has(:checked).#{$color} {
+      @include iconColor($color);
+    }
+  }
+}
+
+.radioGroup {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 8px;
+  column-gap: 16px;
+}

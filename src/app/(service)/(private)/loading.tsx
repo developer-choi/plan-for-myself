@@ -1,3 +1,3 @@
-import {LoadingPage} from '@/components/design-system/element/LoadingSpinner';
+import {LoadingPage} from '@/components/element/LoadingSpinner';
 
 export default LoadingPage;

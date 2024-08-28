@@ -3,8 +3,8 @@
 import {useHandleKeywordList} from '@/utils/service/review-keywords/hooks';
 import {KeyboardShortcut, useKeyboardShortcut} from '@/utils/extend/event/keyboard';
 import styles from '@/app/(service)/tool/review-keywords/page.module.scss';
-import KeywordForm from '@/components/review-keywords/KeywordForm';
-import KeywordListItem from '@/components/review-keywords/KeywordListItem';
+import KeywordForm from '@/components/service/review-keywords/KeywordForm';
+import KeywordListItem from '@/components/service/review-keywords/KeywordListItem';
 import React from 'react';
 
 export default function ReviewKeywordsPage() {

@@ -2,8 +2,8 @@ import {SubmitErrorHandler, SubmitHandler, useForm} from 'react-hook-form';
 import {useCallback} from 'react';
 import {baseHandleErrors} from '@/utils/extend/react-hook-form';
 import {DailyStudyTimeDateType} from '@/types/studied-time';
-import {InputProps} from '@/components/design-system/form/Input';
-import {RadioProps} from '@/components/design-system/form/Radio';
+import {InputProps} from '@/components/form/Input';
+import {RadioProps} from '@/components/form/Radio';
 import {useMutation} from 'react-query';
 import {
   deleteStudiedTimeApi,

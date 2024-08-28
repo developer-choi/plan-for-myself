@@ -1,9 +1,9 @@
 import React from 'react';
-import GoalOverview from '@/components/goal/GoalOverview';
-import TotalGoalList from '@/components/goal/TotalGoalList';
+import GoalOverview from '@/components/service/goal/GoalOverview';
+import TotalGoalList from '@/components/service/goal/TotalGoalList';
 import {getRemainWeek} from '@/utils/extend/date/util';
 import styles from './page.module.scss';
-import HomeMenu from '@/components/home/HomeMenu';
+import HomeMenu from '@/components/service/home/HomeMenu';
 import {getGoalListApi} from '@/utils/service/api/goal';
 import {GoalFullResponse} from '@/types/goal';
 

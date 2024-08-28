@@ -2,8 +2,8 @@
 
 import useStudiedTimeForm, {StudiedTimeFormData} from '@/utils/service/studied-time/useStudiedTimeForm';
 import styles from './index.module.scss';
-import Input from '@/components/design-system/form/Input';
-import Radio, {RadioGroup} from '@/components/design-system/form/Radio';
+import Input from '@/components/form/Input';
+import Radio, {RadioGroup} from '@/components/form/Radio';
 import React from 'react';
 import {StudiedTimeHistory} from '@/utils/service/api/studied-time';
 import {ComposedModalProps, ModalContainer} from '@/components/modal/container';
