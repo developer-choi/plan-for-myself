@@ -40,7 +40,7 @@
   }
 }
 
-.studiedTime {
+.primary {
   @include cellRow;
   background: map-get(color.$brandColors, primary);
 }

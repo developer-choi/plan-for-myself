@@ -9,6 +9,7 @@ import {getStudiedTimeHistoryApi, StudiedTimeHistory} from '@/utils/service/api/
 import {studiedTimeFormat} from '@/utils/service/studied-time';
 import {getCalendarNavigation} from '@/utils/extend/date/calendar';
 import {useMemo} from 'react';
+import StudiedTimeSetting from '@/components/service/studied-time/StudiedTimeSetting';
 
 export const metadata: Metadata = {
   title: 'Calendar',
@@ -32,6 +33,7 @@ export default async function Page({params}: ServerComponentProps) {
         <CustomLink href={`/studied-time/${previousCalendar.year}/${previousCalendar.month}`}>Previous</CustomLink>
         <CustomLink href={`/studied-time/${nextCalendar.year}/${nextCalendar.month}`}>Next</CustomLink>
       </div>
+      <StudiedTimeSetting/>
       <table className={styles.table}>
         <thead>
         <tr>

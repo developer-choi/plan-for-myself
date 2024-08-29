@@ -2,13 +2,14 @@
 
 import classNames from 'classnames';
 import {StudiedTimeHistory} from '@/utils/service/api/studied-time';
-import {DailyStudyTime} from '@/types/studied-time';
+import {DailyStudyTime, StudiedTimeCellMode} from '@/types/studied-time';
 import {calculateTotal} from '@/utils/extend/data-type/number';
 import styles from './index.module.scss';
-import {useCallback} from 'react';
+import {useCallback, useMemo} from 'react';
 import {studiedTimeFormat} from '@/utils/service/studied-time';
 import {useOpenModal} from '@/utils/extend/modal';
 import StudiedTimeFormModal from '@/components/modal/studied-time/StudiedTimeFormModal';
+import {useSearchParams} from 'next/navigation';
 
 interface StudiedCalendarCellProps {
   history: StudiedTimeHistory;
@@ -42,11 +43,40 @@ export default function StudiedCalendarCell({history, summary}: StudiedCalendarC
     });
   }, [history, openModal]);
 
+  const searchParams = useSearchParams();
+  // TODO 이런부분 유효성검증 어떻게 통일하려고했더라
+  const cellMode = searchParams.get('cellMode') as StudiedTimeCellMode ?? 'default';
+
+  const cellRender = useMemo(() => {
+    if (!history.data) {
+      return null;
+    }
+
+    switch (cellMode) {
+      case 'sleep_time': {
+        const {wake_up_time, bed_time} = history.data;
+        
+        return (
+          <>
+            {!wake_up_time ? null : <span className={styles.primary}>기상 시각 : {wake_up_time}</span>}
+            {!bed_time ? null : <span className={styles.primary}>취침 시각 : {bed_time}</span>}
+          </>
+        );
+      }
+      
+      default:
+        return (
+          <StudiedHistory data={history.data}/>
+        );
+    }
+
+  }, [cellMode, history.data]);
+
   return (
     <td onClick={onClickCell} className={styles.tdWrap}>
       <span className={classNames(styles.calendarDate, {[styles.notMatched]: !history.calendarDate.state.calendar.isMatchedMonth})}>
         <span className={classNames(styles.dateText, {[styles.today]: history.calendarDate.state.current.isToday})}>{history.calendarDate.date}</span>
-        {!history.data ? null : <StudiedHistory data={history.data}/>}
+        {cellRender}
         {!summary?.success ? null : (
           <span className={classNames(styles.summary, styles.success)}>{summary.success}</span>
         )}
@@ -59,18 +89,18 @@ export default function StudiedCalendarCell({history, summary}: StudiedCalendarC
 }
 
 function StudiedHistory({data}: {data: DailyStudyTime}) {
-  const formatted = formatter(data.studied_minutes);
+  const formatted = minutesFormatter(data.studied_minutes);
   const fail = data.fail_reason ? data.fail_reason : data.fail_keywords.length ? data.fail_keywords.join(',') : null;
 
   return (
     <>
-      {!formatted ? null : <span className={styles.studiedTime}>{formatted}</span>}
+      {!formatted ? null : <span className={styles.primary}>{formatted}</span>}
       {!fail ? null : <span className={styles.failReason}>{fail}</span>}
     </>
   );
 }
 
-function formatter(studiedMinutes: DailyStudyTime['studied_minutes']): string | null {
+function minutesFormatter(studiedMinutes: DailyStudyTime['studied_minutes']): string | null {
   const total = calculateTotal(studiedMinutes, value => value);
 
   if (total === 0) {
