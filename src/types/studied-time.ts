@@ -12,4 +12,6 @@ export interface DailyStudyTime {
   fail_reason: string | undefined;
   date_type: DailyStudyTimeDateType;
   timestamp: number;
+  wake_up_time: string | ''; // hh;mm
+  bed_time: string | ''; // hh;mm
 }

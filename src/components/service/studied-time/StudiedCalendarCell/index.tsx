@@ -34,7 +34,9 @@ export default function StudiedCalendarCell({history, summary}: StudiedCalendarC
             part3: history.data?.studied_minutes?.[2].toString() ?? ''
           },
           fail_keywords: history.data?.fail_keywords.join(',') ?? '',
-          fail_reason: history.data?.fail_reason ?? ''
+          fail_reason: history.data?.fail_reason ?? '',
+          wake_up_time: history.data?.wake_up_time ?? '',
+          bed_time: history.data?.bed_time ?? ''
         }
       }
     });

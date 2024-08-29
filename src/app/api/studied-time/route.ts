@@ -10,12 +10,14 @@ export async function GET(request: NextRequest) {
 
   try {
     const response = await sql`
-SELECT pk, studied_minutes, fail_keywords, fail_reason, date_type, timestamp from studied_time where user_id=${user_id}
+SELECT pk, studied_minutes, fail_keywords, fail_reason, date_type, timestamp, wake_up_time, bed_time from studied_time where user_id=${user_id}
 AND (TIMESTAMP 'epoch' + timestamp / 1000 * INTERVAL '1 second')
     BETWEEN ${start} AND ${end};
 `;
     return Response.json(response.rows.map(row => ({
       ...row,
+      wake_up_time: row.wake_up_time ?? '',
+      bed_time: row.bed_time ?? '',
       timestamp: Number(row.timestamp)
     })));
   } catch (error) {
@@ -29,15 +31,15 @@ AND (TIMESTAMP 'epoch' + timestamp / 1000 * INTERVAL '1 second')
 export async function POST(request: NextRequest) {
   const user_id = request.headers.get('User-Id');
   const parameter: PostDailyStudyTimeParameter = await request.json();
-  const {fail_keywords = [], fail_reason = '', studied_minutes, date_type, timestamp} = parameter;
+  const {fail_keywords = [], fail_reason = '', studied_minutes, date_type, timestamp, wake_up_time, bed_time} = parameter;
 
   const formattedStudiedMinutes = `{${studied_minutes.join(',')}}`;
   const formattedFailKeywords = `{${fail_keywords.map(k => `"${k}"`).join(',')}}`;
 
   try {
     await sql`
-        INSERT INTO studied_time (studied_minutes, fail_keywords, fail_reason, date_type, timestamp, user_id)
-        VALUES (${formattedStudiedMinutes}, ${formattedFailKeywords}, ${fail_reason}, ${date_type}, ${timestamp}, ${user_id})`;
+        INSERT INTO studied_time (studied_minutes, fail_keywords, fail_reason, date_type, timestamp, user_id, wake_up_time, bed_time)
+        VALUES (${formattedStudiedMinutes}, ${formattedFailKeywords}, ${fail_reason}, ${date_type}, ${timestamp}, ${user_id}, ${wake_up_time}, ${bed_time})`;
     return new Response('');
 
   } catch (error) {
@@ -51,7 +53,7 @@ export async function POST(request: NextRequest) {
 // user_id 비교해서 맞는사람인 경우에만 허용
 export async function PATCH(request: NextRequest) {
   const parameter: UpdateDailyStudyTimeParameter = await request.json();
-  const {fail_keywords = [], fail_reason = '', studied_minutes, date_type, timestamp, pk} = parameter;
+  const {fail_keywords = [], fail_reason = '', studied_minutes, date_type, timestamp, pk, wake_up_time, bed_time} = parameter;
 
   const formattedStudiedMinutes = `{${studied_minutes.join(',')}}`;
   const formattedFailKeywords = `{${fail_keywords.map(k => `"${k}"`).join(',')}}`;
@@ -63,7 +65,9 @@ export async function PATCH(request: NextRequest) {
           fail_keywords = ${formattedFailKeywords},
           fail_reason = ${fail_reason},
           date_type = ${date_type},
-          timestamp = ${timestamp}
+          timestamp = ${timestamp},
+          wake_up_time = ${wake_up_time},
+          bed_time = ${bed_time}
         WHERE
           pk = ${pk}
     `;
