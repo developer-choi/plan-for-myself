@@ -218,13 +218,6 @@ const HOUR_MINUTE_OPTIONS: RegisterOptions = {
 
       return 'HH:mm 형식으로 입력해주세요.';
     }
-  },
-  onChange: event => {
-    const value = event.target.value;
-
-    if (value.length === 2) {
-      event.target.value = `${value}:`;
-    }
   }
 };
 
