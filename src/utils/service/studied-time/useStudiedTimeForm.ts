@@ -34,7 +34,7 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, ini
       },
       fail_keywords: initialFormData?.fail_keywords ?? '',
       fail_reason: initialFormData?.fail_reason ?? '',
-      date_type: initialFormData?.date_type ?? isHolidayDate(history.calendarDate) ? 'holiday' : 'weekday',
+      date_type: initialFormData?.date_type ?? (isHolidayDate(history.calendarDate) ? 'holiday' : 'weekday'),
       wake_up_time: initialFormData?.wake_up_time,
       bed_time: initialFormData?.bed_time
     }

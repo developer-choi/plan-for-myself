@@ -30,7 +30,7 @@ export default function useFilterDailyStudiedHistory(data: DailyStudyTime[]) {
   const day = watch('day');
 
   const filteredList = useMemo(() => {
-    return data.filter(({date_type, timestamp}) => date_type === dateType && day.length === 0 || day.includes(new Date(timestamp).getDay().toString()));
+    return data.filter(({date_type, timestamp}) => date_type === dateType && (day.length === 0 || day.includes(new Date(timestamp).getDay().toString())));
   }, [data, dateType, day]);
 
   return {
