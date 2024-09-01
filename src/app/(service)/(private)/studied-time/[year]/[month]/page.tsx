@@ -32,7 +32,7 @@ export default async function Page({params}: ServerComponentProps) {
 
   return (
     <div className={layoutStyles.pageContentLarge}>
-      <H1>{year} / {month}</H1>
+      <H1 className={styles.title}>{year} / {month}</H1>
       <div className={styles.navigator}>
         <CustomLink href={`/studied-time/${previousCalendar.year}/${previousCalendar.month}`}>Previous</CustomLink>
         <CustomLink href={`/studied-time/${nextCalendar.year}/${nextCalendar.month}`}>Next</CustomLink>

@@ -45,6 +45,11 @@
   background: map-get(color.$brandColors, primary);
 }
 
+.secondary {
+  @include cellRow;
+  background: map-get(color.$brandColors, secondary);
+}
+
 .failReason {
   @include cellRow;
   background: red;

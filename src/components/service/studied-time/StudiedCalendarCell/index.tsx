@@ -106,7 +106,7 @@ function SleepHistory({data}: {data: DailyStudyTime}) {
   return (
     <>
       {!wake_up_time ? null : <span className={styles.primary}>기상 시각 : {wake_up_time}</span>}
-      {!bed_time ? null : <span className={styles.primary}>취침 시각 : {bed_time}</span>}
+      {!bed_time ? null : <span className={styles.secondary}>취침 시각 : {bed_time}</span>}
     </>
   );
 }

@@ -10,7 +10,7 @@ export default function useFilterDailyStudiedHistory(data: DailyStudyTime[]) {
   const {register, watch} = useForm<FilterFormData>({
     defaultValues: {
       date_type: 'weekday',
-      day: ['1', '2', '3', '4', '5', '6', '0']
+      day: []
     }
   });
 
@@ -30,7 +30,7 @@ export default function useFilterDailyStudiedHistory(data: DailyStudyTime[]) {
   const day = watch('day');
 
   const filteredList = useMemo(() => {
-    return data.filter(({date_type, timestamp}) => date_type === dateType && day.includes(new Date(timestamp).getDay().toString()));
+    return data.filter(({date_type, timestamp}) => date_type === dateType && day.length === 0 || day.includes(new Date(timestamp).getDay().toString()));
   }, [data, dateType, day]);
 
   return {
