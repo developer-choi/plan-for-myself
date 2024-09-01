@@ -10,9 +10,11 @@ export async function GET(request: NextRequest) {
 
   try {
     const response = await sql`
-SELECT pk, studied_minutes, fail_keywords, fail_reason, date_type, timestamp, wake_up_time, bed_time from studied_time where user_id=${user_id}
-AND (TIMESTAMP 'epoch' + timestamp / 1000 * INTERVAL '1 second')
-    BETWEEN ${start} AND ${end};
+SELECT pk, studied_minutes, fail_keywords, fail_reason, date_type, timestamp, wake_up_time, bed_time 
+FROM studied_time 
+WHERE user_id = ${user_id}
+AND (TIMESTAMP 'epoch' + timestamp / 1000 * INTERVAL '1 second') BETWEEN ${start} AND ${end}
+ORDER BY timestamp ASC;
 `;
     return Response.json(response.rows.map(row => ({
       ...row,
