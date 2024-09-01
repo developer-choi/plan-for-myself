@@ -1,3 +1,5 @@
+const REMIND_MESSAGE = 'MP에 있는거 RP로 옮기자.';
+
 const INVEN_LIST = [
   'inven.co.kr/',
   'lostark.inven.co.kr/',
@@ -19,18 +21,25 @@ const YOUTUBE_LIST = [
   '@penguinmonster',
   '@gsbg', // G식백과
   '@WolfYoutube_Official',
+  '@publicst', // 얘는 무료야
 
   // WOMAN
   '@trollya217',
   '@nerububu',
   '@showtube91', // 소니쇼
 
-  // ETC
-  '@gogumameori',
-  '@REVA-STUDIO',
+  // 블루아카이브
+  '@BlueSechi',
   '@Beliatan_',
   '@Zeroku777',
   '@jeenyburger',
+  '@ZitaArchive',
+  '@ZitaArchive',
+  '@%EB%B0%B1%EC%9D%BC%EC%84%9C', // 백일서ㅈ
+
+  // ETC
+  '@gogumameori',
+  '@REVA-STUDIO',
   '@chokbro'
 ].map(channelId => `www.youtube.com/${channelId}`);
 
@@ -58,7 +67,9 @@ function handleBlockSites() {
   box.style.justifyContent = 'center';
   box.style.fontSize = '72px';
   box.style.fontWeight = 'bold';
-  box.innerText = 'MP에 있는거 RP로 옮기자.';
+  box.innerText = REMIND_MESSAGE;
+
+  document.body.innerHTML = '';
   document.body.appendChild(box);
 }
 
