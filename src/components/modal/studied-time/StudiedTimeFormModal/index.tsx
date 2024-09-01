@@ -5,14 +5,14 @@ import styles from './index.module.scss';
 import Input from '@/components/form/Input';
 import Radio, {RadioGroup} from '@/components/form/Radio';
 import React from 'react';
-import {StudiedTimeHistory} from '@/utils/service/api/studied-time';
+import {StudiedTimeCalendarWeek} from '@/utils/service/api/studied-time';
 import {ComposedModalProps, ModalContainer} from '@/components/modal/container';
 import {DefaultModalHeader} from '@/components/modal/header';
 import DefaultModalBody from '@/components/modal/body';
 import {OneButtonModalFooter, TwoButtonsModalFooter} from '@/components/modal/footer';
 
 export interface StudiedTimeFormModalProps extends ComposedModalProps {
-  history: StudiedTimeHistory;
+  history: StudiedTimeCalendarWeek;
   initialFormData?: StudiedTimeFormData;
 }
 

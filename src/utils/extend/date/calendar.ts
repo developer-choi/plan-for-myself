@@ -11,41 +11,11 @@ export interface DateBoundary {
  */
 export function getMonthBoundary(year: number, month: number): DateBoundary {
   const start = new Date(year, month - 1, 1);
-  const end = new Date(year, month, 0);
+  const end = new Date(year, month, 0, 23, 59, 59);
 
   return {
     start,
     end,
-  };
-}
-
-/**
- * @return start 해당 월의 첫 번째 일의 Date 객체
- * @return end 해당 월의 마지막 일의 Date 객체
- */
-export function getWeekBoundary(date: Date): DateBoundary {
-  const count = date.getDay() === 0 ? 6 : date.getDay() - 1;
-
-  const start = new Date(date.getTime());
-  start.setDate(start.getDate() - count);
-
-  const end = new Date(date.getTime());
-  end.setDate(end.getDate() + (6 - count));
-
-  return {
-    start,
-    end
-  };
-}
-
-export function getCalendarBoundary(year: number, month: number): DateBoundary {
-  const {end, start} = getMonthBoundary(year, month);
-  const prevMonthDayCount = start.getDay() === 0 ? 6 : start.getDay() - 1;
-  const nextMonthDayCount = 7 - end.getDay();
-
-  return {
-    start: new Date(year, month - 1, 1 - prevMonthDayCount),
-    end: new Date(year, month, nextMonthDayCount === 7 ? 0 : nextMonthDayCount)
   };
 }
 

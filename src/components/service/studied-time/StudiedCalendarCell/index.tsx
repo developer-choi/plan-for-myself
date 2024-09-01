@@ -1,9 +1,8 @@
 'use client';
 
 import classNames from 'classnames';
-import {StudiedTimeHistory} from '@/utils/service/api/studied-time';
+import {StudiedTimeCalendarWeek} from '@/utils/service/api/studied-time';
 import {DailyStudyTime, StudiedTimeCellMode} from '@/types/studied-time';
-import {calculateTotal} from '@/utils/extend/data-type/number';
 import styles from './index.module.scss';
 import {useCallback, useMemo} from 'react';
 import {studiedTimeFormat} from '@/utils/service/studied-time';
@@ -12,7 +11,7 @@ import StudiedTimeFormModal from '@/components/modal/studied-time/StudiedTimeFor
 import {useSearchParams} from 'next/navigation';
 
 interface StudiedCalendarCellProps {
-  history: StudiedTimeHistory;
+  history: StudiedTimeCalendarWeek;
   summary?: {
     success?: string; //한달내내 공부안했으면 없음
     fail?: string; //한달내내 실패 안했으면 없음
@@ -78,10 +77,10 @@ export default function StudiedCalendarCell({history, summary}: StudiedCalendarC
         <span className={classNames(styles.dateText, {[styles.today]: history.calendarDate.state.current.isToday})}>{history.calendarDate.date}</span>
         {cellRender}
         {!summary?.success ? null : (
-          <span className={classNames(styles.summary, styles.success)}>{summary.success}</span>
+          <span className={classNames(styles.summary)}>{summary.success}</span>
         )}
         {!summary?.fail ? null : (
-          <span className={classNames(styles.summary, styles.fail)}>{summary.fail}</span>
+          <span className={classNames(styles.summary)}>{summary.fail}</span>
         )}
       </span>
     </td>
@@ -89,7 +88,7 @@ export default function StudiedCalendarCell({history, summary}: StudiedCalendarC
 }
 
 function StudiedHistory({data}: {data: DailyStudyTime}) {
-  const formatted = minutesFormatter(data.studied_minutes);
+  const formatted = studiedTimeFormat(data.studied_minutes);
   const fail = data.fail_reason ? data.fail_reason : data.fail_keywords.length ? data.fail_keywords.join(',') : null;
 
   return (
@@ -98,14 +97,4 @@ function StudiedHistory({data}: {data: DailyStudyTime}) {
       {!fail ? null : <span className={styles.failReason}>{fail}</span>}
     </>
   );
-}
-
-function minutesFormatter(studiedMinutes: DailyStudyTime['studied_minutes']): string | null {
-  const total = calculateTotal(studiedMinutes, value => value);
-
-  if (total === 0) {
-    return null;
-  }
-
-  return `${studiedTimeFormat(total)} (${studiedMinutes.join('+')})`;
 }

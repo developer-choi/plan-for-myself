@@ -5,12 +5,14 @@ import StudiedCalendarCell from '@/components/service/studied-time/StudiedCalend
 import {calculateTotal} from '@/utils/extend/data-type/number';
 import {classifyStrings} from '@/utils/extend/data-type/string';
 import {sortByNumber} from '@/utils/extend/data-type/array';
-import {getStudiedTimeHistoryApi, StudiedTimeHistory} from '@/utils/service/api/studied-time';
-import {studiedTimeFormat} from '@/utils/service/studied-time';
+import {getStudiedTimeCalendarApi, StudiedTimeCalendarWeek} from '@/utils/service/api/studied-time';
+import {minutesFormat} from '@/utils/service/studied-time';
 import {getCalendarNavigation} from '@/utils/extend/date/calendar';
-import {useMemo} from 'react';
+import React, {useMemo} from 'react';
 import StudiedTimeSetting from '@/components/service/studied-time/StudiedTimeSetting';
+import StudiedStatistics from '@/components/modal/studied-time/statistics/StudiedStatistics';
 import layoutStyles from '@/styles/layout.module.scss';
+import {H1} from '@/components/element/typography';
 
 export const metadata: Metadata = {
   title: 'Calendar',
@@ -25,11 +27,11 @@ export default async function Page({params}: ServerComponentProps) {
     return getCalendarNavigation(year, month);
   }, [month, year])
 
-  const weekList = await getStudiedTimeHistoryApi(year, month);
+  const weekList = await getStudiedTimeCalendarApi(year, month);
 
   return (
     <div className={layoutStyles.pageContentLarge}>
-      <h1 className={styles.h1}>{year} / {month}</h1>
+      <H1>{year} / {month}</H1>
       <div className={styles.navigator}>
         <CustomLink href={`/studied-time/${previousCalendar.year}/${previousCalendar.month}`}>Previous</CustomLink>
         <CustomLink href={`/studied-time/${nextCalendar.year}/${nextCalendar.month}`}>Next</CustomLink>
@@ -61,11 +63,12 @@ export default async function Page({params}: ServerComponentProps) {
         ))}
         </tbody>
       </table>
+      <StudiedStatistics year={year} month={month}/>
     </div>
   );
 }
 
-function getThisMonthSummary(weekList: StudiedTimeHistory[][]) {
+function getThisMonthSummary(weekList: StudiedTimeCalendarWeek[][]) {
   const {totalKeywords, totalMinutes} = weekList.flat().reduce((a, b) => {
     if (!b.data || !b.calendarDate.state.calendar.isMatchedMonth) {
       return a;
@@ -85,7 +88,7 @@ function getThisMonthSummary(weekList: StudiedTimeHistory[][]) {
   const top3Keywords = sortByNumber('desc', classifyStrings(totalKeywords), ({count}) => count).slice(0, 3).map(({value, count}) => `${value}${count}`);
 
   return {
-    success: totalMinutes === 0 ? undefined : studiedTimeFormat(totalMinutes),
+    success: totalMinutes === 0 ? undefined : minutesFormat(totalMinutes),
     fail: top3Keywords.length === 0 ? undefined : top3Keywords.join(' / ')
   };
 }

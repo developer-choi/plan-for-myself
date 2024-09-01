@@ -9,7 +9,7 @@ import {
   patchStudiedTimeApi,
   PostDailyStudyTimeParameter,
   postStudiedTimeApi,
-  StudiedTimeHistory
+  StudiedTimeCalendarWeek
 } from '@/utils/service/api/studied-time';
 import {calculateTotal} from '@/utils/extend/data-type/number';
 import {useMutation} from '@tanstack/react-query';
@@ -24,7 +24,7 @@ export interface StudiedTimeFormData extends Pick<DailyStudyTime, 'date_type' | 
   fail_reason: string;
 }
 
-export default function useStudiedTimeForm(history: StudiedTimeHistory, initialFormData?: StudiedTimeFormData) {
+export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, initialFormData?: StudiedTimeFormData) {
   const {register, handleSubmit, setError, formState: {errors}} = useForm<StudiedTimeFormData>({
     defaultValues: {
       studied_minutes: {

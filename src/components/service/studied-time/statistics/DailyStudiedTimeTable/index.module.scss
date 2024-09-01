@@ -1,0 +1,13 @@
+@use "/src/styles/color";
+
+.table {
+  th, td {
+    border: 1px solid gray;
+    padding: 8px 16px;
+  }
+  
+  th.fail, td.fail {
+    color: map-get(color.$stateColors, error);
+    font-weight: bold;
+  }
+}

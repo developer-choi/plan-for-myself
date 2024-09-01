@@ -1,8 +1,7 @@
 import {DailyStudyTime} from '@/types/studied-time';
-import {customFetchOnClientSide} from '@/utils/extend/fetch';
-import {CalendarDate, getCalendarBoundary, getCalendarWeekList} from '@/utils/extend/date/calendar';
+import {customFetchOnClientSide, customFetchOnServerSide} from '@/utils/extend/fetch';
+import {CalendarDate, getCalendarWeekList, getMonthBoundary} from '@/utils/extend/date/calendar';
 import {isSameDate} from '@/utils/extend/date/util';
-import {customFetchOnServerSide} from '@/utils/extend/fetch';
 
 export type PostDailyStudyTimeParameter = Omit<DailyStudyTime, 'pk'>;
 
@@ -31,13 +30,25 @@ export async function deleteStudiedTimeApi(pk: DailyStudyTime['pk']) {
   });
 }
 
-export interface StudiedTimeHistory {
+export async function getStudiedTimeApi(year: number, month: number) {
+  // const {start, end} = getCalendarBoundary(year, month); 달력에는 포함되지만 저번달이나 다음달 내용은 그냥 데이터 요청자체를 안하기로함.
+  const {start, end} = getMonthBoundary(year, month);
+
+  const {json} = await customFetchOnClientSide(`/api/studied-time?start=${formatter(start)}&end=${formatter(end)}`, {
+    authorize: 'private',
+    method: 'GET'
+  });
+
+  return json as DailyStudyTime[];
+}
+
+export interface StudiedTimeCalendarWeek {
   calendarDate: CalendarDate;
   data?: DailyStudyTime; // 해당 날짜에 공부한 기록이 없으면 없음
 }
 
-export async function getStudiedTimeHistoryApi(year: number, month: number): Promise<StudiedTimeHistory[][]> {
-  const {start, end} = getCalendarBoundary(year, month);
+export async function getStudiedTimeCalendarApi(year: number, month: number): Promise<StudiedTimeCalendarWeek[][]> {
+  const {start, end} = getMonthBoundary(year, month);
 
   const {json} = await customFetchOnServerSide(`/api/studied-time?start=${formatter(start)}&end=${formatter(end)}`, {
     authorize: 'private',
@@ -51,11 +62,11 @@ export async function getStudiedTimeHistoryApi(year: number, month: number): Pro
 
     return {
       calendarDate,
-      data: matchData
+      data: matchData,
     };
   });
 }
 
 function formatter(date: Date) {
-  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
 }
