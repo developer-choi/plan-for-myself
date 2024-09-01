@@ -1,4 +1,22 @@
-import {customFetchOnClientSide} from '@/utils/extend/fetch';
+import {customFetchOnClientSide, customFetchOnServerSide} from '@/utils/extend/fetch';
+
+export async function getRemindOfMessageListApiOnServer() {
+  const {json} = await customFetchOnServerSide('/api/remind-of-message', {
+    method: 'GET',
+    authorize: 'private'
+  });
+
+  return json as RemindOfMessageItem[];
+}
+
+export async function getRemindOfMessageListApiOnClient() {
+  const {json} = await customFetchOnClientSide('/api/remind-of-message', {
+    method: 'GET',
+    authorize: 'private'
+  });
+
+  return json as RemindOfMessageItem[];
+}
 
 export async function postRemindOfMessageApi(message: string) {
   return customFetchOnClientSide('/api/remind-of-message', {

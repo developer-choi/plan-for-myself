@@ -2,39 +2,39 @@
 
 import React, {useCallback} from 'react';
 import {numberWithComma} from '@/utils/extend/data-type/number';
-import type {GoalFullResponse} from '@/types/goal';
+import type {HabitFullResponse} from '@/types/habit';
 import styles from './index.module.scss';
-import Button from '../../../element/Button';
+import Button from '@/components/element/Button';
 import {useOpenModal} from '@/utils/extend/modal';
-import CheckTodayModal from '@/components/modal/goal/CheckTodayModal';
+import CheckTodayModal from '@/components/modal/habit/CheckTodayModal';
 
-export interface GoalOverviewProp {
-  goalFullResponse: GoalFullResponse;
+export interface HabitOverviewProp {
+  habitFullResponse: HabitFullResponse;
 }
 
-export default function GoalOverview({goalFullResponse}: GoalOverviewProp) {
+export default function HabitOverview({habitFullResponse}: HabitOverviewProp) {
   const {openModal} = useOpenModal();
 
   const onClick = useCallback(() => {
     openModal({
       Component: CheckTodayModal,
       props: {
-        goalFullResponse
+        habitFullResponse
       }
     })
-  }, [goalFullResponse, openModal]);
+  }, [habitFullResponse, openModal]);
 
-  if (!goalFullResponse.todayHistory.has_checked) {
+  if (!habitFullResponse.todayHistory.has_checked) {
     return (
       <Button onClick={onClick}>
-        {'오늘 목표 체크하러가기 >'}
+        {'오늘 습관 체크하러가기 >'}
       </Button>
     );
   } else {
     return (
       <div>
         <span className={styles.resultText}>
-          오늘 정산금액 : <span className={styles.price}>{numberWithComma(goalFullResponse.todayHistory.total_price)}원</span>
+          오늘 정산금액 : <span className={styles.price}>{numberWithComma(habitFullResponse.todayHistory.total_price)}원</span>
           <a style={{marginLeft: 8}} className={styles.styledLink} onClick={onClick}>
             {'내역 보기 >'}
           </a>

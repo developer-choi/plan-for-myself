@@ -1,26 +1,26 @@
 import React from 'react';
-import GoalOverview from '@/components/service/goal/GoalOverview';
-import TotalGoalList from '@/components/service/goal/TotalGoalList';
+import HabitOverview from '@/components/service/habit/HabitOverview';
+import TotalHabitList from '@/components/service/habit/TotalHabitList';
 import {getRemainWeek} from '@/utils/extend/date/util';
 import styles from './page.module.scss';
 import HomeMenu from '@/components/service/home/HomeMenu';
-import {getGoalListApi} from '@/utils/service/api/goal';
-import {GoalFullResponse} from '@/types/goal';
+import {getHabitListApi} from '@/utils/service/api/habit';
+import {HabitFullResponse} from '@/types/habit';
 
 export default async function Home() {
-  const goalFullResponse = (await getGoalListApi()).json as GoalFullResponse;
-  const {originalGoalList, todayFrequency} = goalFullResponse;
+  const habitFullResponse = (await getHabitListApi()).json as HabitFullResponse;
+  const {originalHabitList, todayFrequency} = habitFullResponse;
 
   return (
     <div className={styles.wrap}>
       <div className={styles.remainWeek}>올해 <em>{getRemainWeek(new Date())}</em>주 남음</div>
 
-      {originalGoalList.length === 0 ? (
+      {originalHabitList.length === 0 ? (
         <HomeMenu/>
       ) : (
         <>
-          <GoalOverview goalFullResponse={goalFullResponse}/>
-          <TotalGoalList goalList={originalGoalList} todayFrequency={todayFrequency}/>
+          <HabitOverview habitFullResponse={habitFullResponse}/>
+          <TotalHabitList habitList={originalHabitList} todayFrequency={todayFrequency}/>
         </>
       )}
     </div>

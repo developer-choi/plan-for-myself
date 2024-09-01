@@ -1,23 +1,23 @@
 'use client';
 
 import React from 'react';
-import {useCheckGoalListForm} from '@/utils/service/goal/check-goal';
+import {useCheckHabitListForm} from '@/utils/service/habit/check';
 import {numberWithComma} from '@/utils/extend/data-type/number';
 import styles from './index.module.scss';
 import classNames from 'classnames';
-import {GoalFullResponse} from '@/types/goal';
+import {HabitFullResponse} from '@/types/habit';
 import {ComposedModalProps, ModalContainer} from '@/components/modal/container';
 import {DefaultModalHeader} from '@/components/modal/header';
 import DefaultModalBody from '@/components/modal/body';
 import {TwoButtonsModalFooter} from '@/components/modal/footer';
 
 export interface CheckTodayModalProp extends ComposedModalProps {
-  goalFullResponse: GoalFullResponse;
+  habitFullResponse: HabitFullResponse;
 }
 
 // 반드시 Client Component에서만 사용할것
-export default function CheckTodayModal({onClose, goalFullResponse}: CheckTodayModalProp) {
-  const formResult = useCheckGoalListForm({onClose, response: goalFullResponse});
+export default function CheckTodayModal({onClose, habitFullResponse}: CheckTodayModalProp) {
+  const formResult = useCheckHabitListForm({onClose, response: habitFullResponse});
 
   if (!formResult) {
     return null;
@@ -27,11 +27,11 @@ export default function CheckTodayModal({onClose, goalFullResponse}: CheckTodayM
 
   return (
     <ModalContainer onClose={onClose}>
-      <DefaultModalHeader>목표 체크리스트</DefaultModalHeader>
+      <DefaultModalHeader>습관 체크리스트</DefaultModalHeader>
       <DefaultModalBody>
         <form className={styles.styledForm} onSubmit={form.onSubmit}>
           {radioList.map(({props, title, price, checked, content}) => (
-            <div key={props.value} className={styles.goalItem}>
+            <div key={props.value} className={styles.habitItem}>
               <label className={styles.customCheckbox}>
                 <input type="checkbox" {...props}/>
                 {title}

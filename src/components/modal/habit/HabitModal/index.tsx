@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import type {Goal} from '@/types/goal';
-import {useGoalForm} from '@/utils/service/goal/goal-form';
+import type {Habit} from '@/types/habit';
+import {useHabitForm} from '@/utils/service/habit/form';
 import styles from './index.module.scss';
 import designSystemStyles from '@/styles/design-system.module.scss';
 import Input from '@/components/form/Input';
@@ -12,17 +12,17 @@ import {DefaultModalHeader} from '@/components/modal/header';
 import DefaultModalBody from '@/components/modal/body';
 import {TwoButtonsModalFooter} from '@/components/modal/footer';
 
-export interface GoalModalProp extends ComposedModalProps {
-  data: Goal | undefined
+export interface HabitModalProp extends ComposedModalProps {
+  data: Habit | undefined
 }
 
 // 반드시 Client Component에서만 사용할것
-export default function GoalModal(props: GoalModalProp) {
-  const {inputProps, form, isEdit} = useGoalForm(props)
+export default function HabitModal(props: HabitModalProp) {
+  const {inputProps, form, isEdit} = useHabitForm(props)
 
   return (
     <ModalContainer onClose={props.onClose}>
-      <DefaultModalHeader>목표 {isEdit ? '수정' : '등록'}</DefaultModalHeader>
+      <DefaultModalHeader>습관 {isEdit ? '수정' : '등록'}</DefaultModalHeader>
       <DefaultModalBody>
         <form className={styles.styledForm} onSubmit={form.onSubmit}>
           <Input placeholder="제목 *" {...inputProps.title}/>
