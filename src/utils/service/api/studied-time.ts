@@ -1,6 +1,12 @@
 import {DailyStudyTime} from '@/types/studied-time';
 import {customFetchOnClientSide, customFetchOnServerSide} from '@/utils/extend/fetch';
-import {CalendarDate, getCalendarBoundary, getCalendarWeekList} from '@/utils/extend/date/calendar';
+import {
+  CalendarDate,
+  getCalendarBoundary,
+  getCalendarNavigation,
+  getCalendarWeekList,
+  getMonthBoundary
+} from '@/utils/extend/date/calendar';
 import {isSameDate} from '@/utils/extend/date/util';
 import {padToTwoDigits} from '@/utils/extend/data-type/string';
 
@@ -31,8 +37,8 @@ export async function deleteStudiedTimeApi(pk: DailyStudyTime['pk']) {
   });
 }
 
-export async function getStudiedTimeApi(year: number, month: number) {
-  const {start, end} = getCalendarBoundary(year, month);
+async function getStudiedTimeApi(year: number, month: number) {
+  const {start, end} = getMonthBoundary(year, month);
 
   const {json} = await customFetchOnClientSide(`/api/studied-time?start=${formatter(start)}&end=${formatter(end)}`, {
     authorize: 'private',
@@ -40,6 +46,20 @@ export async function getStudiedTimeApi(year: number, month: number) {
   });
 
   return json as DailyStudyTime[];
+}
+
+export async function getMonthlyStatisticsApi(year: number, month: number) {
+  const {previousCalendar} = getCalendarNavigation(year, month);
+
+  const [thisMonthResponse, previousMonthResponse] = await Promise.all([
+    getStudiedTimeApi(year, month),
+    getStudiedTimeApi(previousCalendar.year, previousCalendar.month)
+  ]);
+
+  return {
+    this: thisMonthResponse,
+    previous: previousMonthResponse
+  }
 }
 
 export interface StudiedTimeCalendarWeek {

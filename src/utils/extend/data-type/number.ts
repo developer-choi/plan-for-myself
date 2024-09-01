@@ -10,3 +10,14 @@ export function calculateTotal<T>(list: T[], callback: (item: T) => number) {
     return a + callback(b);
   }, 0);
 }
+
+export function getAbsoluteValueWithSign(value: number) {
+  const absoluteValue = Math.abs(value);
+  const signType = value >= 0 ? 'positive' : 'negative';
+
+  return {
+    absoluteValue,
+    sign: signType === 'positive' ? '+' : '-',
+    signType
+  };
+}

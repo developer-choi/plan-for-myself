@@ -1,16 +1,16 @@
 'use client';
 
-import {useEffect, useMemo} from 'react';
+import {useMemo} from 'react';
 import {DailyStudyTime, DailyStudyTimeDateType} from '@/types/studied-time';
 import {useForm} from 'react-hook-form';
 import {RadioProps} from '@/components/form/Radio';
 import {CheckboxProps} from '@/components/form/Checkbox';
 
 export default function useFilterDailyStudiedHistory(data: DailyStudyTime[]) {
-  const {register, watch, setValue} = useForm<FilterFormData>({
+  const {register, watch} = useForm<FilterFormData>({
     defaultValues: {
       date_type: 'quarter',
-      day: defaultDayCheckList('quarter') // 월화수목금
+      day: ['1', '2', '3', '4', '5', '6', '0']
     }
   });
 
@@ -28,10 +28,6 @@ export default function useFilterDailyStudiedHistory(data: DailyStudyTime[]) {
 
   const dateType = watch('date_type');
   const day = watch('day');
-  
-  useEffect(() => {
-    setValue('day', defaultDayCheckList(dateType));
-  }, [dateType, setValue]);
 
   const filteredList = useMemo(() => {
     return data.filter(({date_type, timestamp}) => date_type === dateType && day.includes(new Date(timestamp).getDay().toString()));
@@ -57,7 +53,7 @@ const DATE_TYPE_LIST = [
     value: 'quarter'
   },
   {
-    name: '주말 및 휴일',
+    name: '주말, 휴일',
     value: 'full'
   },
 ];
@@ -92,12 +88,3 @@ const DAY_TYPE_LIST = [
     value: 0
   },
 ];
-
-function defaultDayCheckList(dateType: DailyStudyTimeDateType) {
-  if (dateType === 'quarter') {
-    return ['1', '2', '3', '4', '5'];
-    
-  } else {
-    return ['6', '0'];
-  }
-}
