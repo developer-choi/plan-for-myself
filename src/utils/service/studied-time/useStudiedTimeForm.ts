@@ -33,7 +33,7 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, ini
       },
       fail_keywords: initialFormData?.fail_keywords ?? '',
       fail_reason: initialFormData?.fail_reason ?? '',
-      date_type: initialFormData?.date_type ?? 'quarter',
+      date_type: initialFormData?.date_type ?? 'weekday',
       wake_up_time: initialFormData?.wake_up_time,
       bed_time: initialFormData?.bed_time
     }
@@ -95,14 +95,14 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, ini
   const dateTypeRadioList: RadioProps[] = [
     {
       label: '평일',
-      value: 'quarter',
+      value: 'weekday',
       ...register('date_type', {
         required: '날짜 종류는 필수입니다.'
       })
     },
     {
-      label: '주말, 휴일',
-      value: 'full',
+      label: '휴일 (주말 포함)',
+      value: 'holiday',
       ...register('date_type', {
         required: '날짜 종류는 필수입니다.'
       })

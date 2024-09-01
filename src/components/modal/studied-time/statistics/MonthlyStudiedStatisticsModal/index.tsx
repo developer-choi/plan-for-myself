@@ -23,7 +23,7 @@ export default function MonthlyStudiedStatisticsModal({year, month, monthData, .
     <ModalContainer type="fullScreen" easilyClose {...rest}>
       <DefaultModalHeader onClose={rest.onClose}>{year}-{padToTwoDigits(month)} 월별 통계</DefaultModalHeader>
       <DefaultModalBody>
-        <H2 className={styles.subHeading}>직전 월 비교 요약</H2>
+        <H2 className={styles.subHeading}>공부시간 직전월 비교</H2>
         <MonthlyStatisticsSummary monthData={monthData} />
 
         <H2 className={styles.subHeading}>일일 기록</H2>

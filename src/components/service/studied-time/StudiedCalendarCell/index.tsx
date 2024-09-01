@@ -28,7 +28,7 @@ export default function StudiedCalendarCell({history, summary}: StudiedCalendarC
       props: {
         history,
         initialFormData: {
-          date_type: history.data?.date_type ?? 'quarter',
+          date_type: history.data?.date_type ?? 'weekday',
           studied_minutes: {
             part1: history.data?.studied_minutes?.[0].toString() ?? '',
             part2: history.data?.studied_minutes?.[1].toString() ?? '',

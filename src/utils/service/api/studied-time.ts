@@ -22,8 +22,8 @@ export async function postStudiedTimeApi(parameter: PostDailyStudyTimeParameter)
 
 export type UpdateDailyStudyTimeParameter = DailyStudyTime;
 
-export async function patchStudiedTimeApi(parameter: UpdateDailyStudyTimeParameter) {
-  return customFetchOnClientSide('/api/studied-time', {
+export async function patchStudiedTimeApi({pk, ...parameter}: UpdateDailyStudyTimeParameter) {
+  return customFetchOnClientSide(`/api/studied-time/${pk}`, {
     method: 'PATCH',
     authorize: 'private',
     body: parameter

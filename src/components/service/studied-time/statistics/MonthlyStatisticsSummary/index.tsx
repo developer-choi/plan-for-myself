@@ -18,19 +18,19 @@ export default function MonthlyStatisticsSummary({monthData}: MonthlyStatisticsS
   return (
     <ul>
       <li>
-        <span className={styles.name}>총 평일 공부시간 : </span>
+        <span className={styles.name}>평일 총합 : </span>
         <Value thisMonth={thisMonthSummary.totalWeekdayStudied} previousMonth={previousMonthSummary.totalWeekdayStudied}/>
       </li>
       <li>
-        <span className={styles.name}>평균 평일 공부시간 : </span>
+        <span className={styles.name}>평일 평균 : </span>
         <Value thisMonth={thisMonthSummary.averageDuringWeekday} previousMonth={previousMonthSummary.averageDuringWeekday}/>
       </li>
       <li className={styles.gapTop}>
-        <span className={styles.name}>총 주말, 휴일 공부시간 : </span>
+        <span className={styles.name}>휴일 총합 : </span>
         <Value thisMonth={thisMonthSummary.totalHolidayStudied} previousMonth={previousMonthSummary.totalHolidayStudied}/>
       </li>
       <li>
-        <span className={styles.name}>평균 주말, 휴일 공부시간 : </span>
+        <span className={styles.name}>휴일 평균 : </span>
         <Value thisMonth={thisMonthSummary.averageDuringHoliday} previousMonth={previousMonthSummary.averageDuringHoliday}/>
       </li>
     </ul>
@@ -46,7 +46,7 @@ interface MonthlyStatistics {
 
 function getMonthlyStatisticsSummary(data: DailyStudyTime[]): MonthlyStatistics {
   const {total, count} = data.reduce((a, b) => {
-    const key = b.date_type === 'quarter' ? 'weekday' : 'holiday';
+    const key = b.date_type === 'weekday' ? 'weekday' : 'holiday';
     a.total[key] += calculateTotal(b.studied_minutes, value => value);
     a.count[key]++;
     return a;

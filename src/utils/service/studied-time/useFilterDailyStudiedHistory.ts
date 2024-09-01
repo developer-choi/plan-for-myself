@@ -9,7 +9,7 @@ import {CheckboxProps} from '@/components/form/Checkbox';
 export default function useFilterDailyStudiedHistory(data: DailyStudyTime[]) {
   const {register, watch} = useForm<FilterFormData>({
     defaultValues: {
-      date_type: 'quarter',
+      date_type: 'weekday',
       day: ['1', '2', '3', '4', '5', '6', '0']
     }
   });
@@ -50,11 +50,11 @@ interface FilterFormData {
 const DATE_TYPE_LIST = [
   {
     name: '평일',
-    value: 'quarter'
+    value: 'weekday'
   },
   {
-    name: '주말, 휴일',
-    value: 'full'
+    name: '휴일 (주말 포함)',
+    value: 'holiday'
   },
 ];
 
