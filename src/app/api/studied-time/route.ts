@@ -16,6 +16,7 @@ AND (TIMESTAMP 'epoch' + timestamp / 1000 * INTERVAL '1 second')
 `;
     return Response.json(response.rows.map(row => ({
       ...row,
+      fail_keywords: row.fail_keywords.length === 1 && row.fail_keywords[0] === '' ? [] : row.fail_keywords,
       wake_up_time: row.wake_up_time ?? '',
       bed_time: row.bed_time ?? '',
       timestamp: Number(row.timestamp)

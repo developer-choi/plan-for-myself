@@ -11,16 +11,16 @@
 
 .tdWrap {
   cursor: pointer;
+  
+  &.notMatched > * {
+    opacity: 0.3;
+  }
 }
 
 .calendarDate {
   @include util.flexCenter;
   flex-direction: column;
   padding-inline: 8px;
-  
-  &.notMatched {
-    color: lightgray;
-  }
   
   > span {
     width: 100%;

@@ -19,6 +19,21 @@ export function getMonthBoundary(year: number, month: number): DateBoundary {
   };
 }
 
+/**
+ * @return start 해당 달력의 첫 번째 일의 Date 객체 (저번달일 수도 있음. 일단 월요일임)
+ * @return end 해당 달력의 마지막 일의 Date 객체 (다음달일 수도 있음. 일단 일요일임)
+ */
+export function getCalendarBoundary(year: number, month: number): DateBoundary {
+  const {end, start} = getMonthBoundary(year, month);
+  const prevMonthDayCount = start.getDay() === 0 ? 6 : start.getDay() - 1;
+  const nextMonthDayCount = 7 - end.getDay();
+
+  return {
+    start: new Date(year, month - 1, 1 - prevMonthDayCount),
+    end: new Date(year, month, nextMonthDayCount === 7 ? 0 : nextMonthDayCount, 23, 59, 59)
+  };
+}
+
 export interface CalendarDate {
   original: Date;
   year: number;

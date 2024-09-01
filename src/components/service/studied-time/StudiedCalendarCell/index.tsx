@@ -9,6 +9,7 @@ import {studiedTimeFormat} from '@/utils/service/studied-time';
 import {useOpenModal} from '@/utils/extend/modal';
 import StudiedTimeFormModal from '@/components/modal/studied-time/StudiedTimeFormModal';
 import {useSearchParams} from 'next/navigation';
+import {calculateTotal} from '@/utils/extend/data-type/number';
 
 interface StudiedCalendarCellProps {
   history: StudiedTimeCalendarWeek;
@@ -51,15 +52,16 @@ export default function StudiedCalendarCell({history, summary}: StudiedCalendarC
       return null;
     }
 
+    if (calculateTotal(history.data.studied_minutes, value => value) === 0 && !history.data.fail_reason && !history.data.fail_keywords.length) {
+      return (
+        <SleepHistory data={history.data}/>
+      );
+    }
+
     switch (cellMode) {
       case 'sleep_time': {
-        const {wake_up_time, bed_time} = history.data;
-        
         return (
-          <>
-            {!wake_up_time ? null : <span className={styles.primary}>기상 시각 : {wake_up_time}</span>}
-            {!bed_time ? null : <span className={styles.primary}>취침 시각 : {bed_time}</span>}
-          </>
+          <SleepHistory data={history.data}/>
         );
       }
       
@@ -68,12 +70,11 @@ export default function StudiedCalendarCell({history, summary}: StudiedCalendarC
           <StudiedHistory data={history.data}/>
         );
     }
-
   }, [cellMode, history.data]);
 
   return (
-    <td onClick={onClickCell} className={styles.tdWrap}>
-      <span className={classNames(styles.calendarDate, {[styles.notMatched]: !history.calendarDate.state.calendar.isMatchedMonth})}>
+    <td onClick={onClickCell} className={classNames(styles.tdWrap, {[styles.notMatched]: !history.calendarDate.state.calendar.isMatchedMonth})}>
+      <span className={classNames(styles.calendarDate)}>
         <span className={classNames(styles.dateText, {[styles.today]: history.calendarDate.state.current.isToday})}>{history.calendarDate.date}</span>
         {cellRender}
         {!summary?.success ? null : (
@@ -95,6 +96,17 @@ function StudiedHistory({data}: {data: DailyStudyTime}) {
     <>
       {!formatted ? null : <span className={styles.primary}>{formatted}</span>}
       {!fail ? null : <span className={styles.failReason}>{fail}</span>}
+    </>
+  );
+}
+
+function SleepHistory({data}: {data: DailyStudyTime}) {
+  const {wake_up_time, bed_time} = data;
+
+  return (
+    <>
+      {!wake_up_time ? null : <span className={styles.primary}>기상 시각 : {wake_up_time}</span>}
+      {!bed_time ? null : <span className={styles.primary}>취침 시각 : {bed_time}</span>}
     </>
   );
 }

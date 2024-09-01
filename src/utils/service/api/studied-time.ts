@@ -1,7 +1,8 @@
 import {DailyStudyTime} from '@/types/studied-time';
 import {customFetchOnClientSide, customFetchOnServerSide} from '@/utils/extend/fetch';
-import {CalendarDate, getCalendarWeekList, getMonthBoundary} from '@/utils/extend/date/calendar';
+import {CalendarDate, getCalendarBoundary, getCalendarWeekList} from '@/utils/extend/date/calendar';
 import {isSameDate} from '@/utils/extend/date/util';
+import {padToTwoDigits} from '@/utils/extend/data-type/string';
 
 export type PostDailyStudyTimeParameter = Omit<DailyStudyTime, 'pk'>;
 
@@ -31,8 +32,7 @@ export async function deleteStudiedTimeApi(pk: DailyStudyTime['pk']) {
 }
 
 export async function getStudiedTimeApi(year: number, month: number) {
-  // const {start, end} = getCalendarBoundary(year, month); 달력에는 포함되지만 저번달이나 다음달 내용은 그냥 데이터 요청자체를 안하기로함.
-  const {start, end} = getMonthBoundary(year, month);
+  const {start, end} = getCalendarBoundary(year, month);
 
   const {json} = await customFetchOnClientSide(`/api/studied-time?start=${formatter(start)}&end=${formatter(end)}`, {
     authorize: 'private',
@@ -48,7 +48,7 @@ export interface StudiedTimeCalendarWeek {
 }
 
 export async function getStudiedTimeCalendarApi(year: number, month: number): Promise<StudiedTimeCalendarWeek[][]> {
-  const {start, end} = getMonthBoundary(year, month);
+  const {start, end} = getCalendarBoundary(year, month);
 
   const {json} = await customFetchOnServerSide(`/api/studied-time?start=${formatter(start)}&end=${formatter(end)}`, {
     authorize: 'private',
@@ -56,7 +56,7 @@ export async function getStudiedTimeCalendarApi(year: number, month: number): Pr
   });
 
   return getCalendarWeekList(year, month, function (calendarDate) {
-    const matchData = !calendarDate.state.calendar.isMatchedMonth ? undefined : (json as DailyStudyTime[]).find(({timestamp}) => {
+    const matchData = (json as DailyStudyTime[]).find(({timestamp}) => {
       return isSameDate(new Date(timestamp), calendarDate.original);
     });
 
@@ -67,6 +67,13 @@ export async function getStudiedTimeCalendarApi(year: number, month: number): Pr
   });
 }
 
-function formatter(date: Date) {
-  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+function formatter(value: Date) {
+  const year = padToTwoDigits(value.getFullYear());
+  const month = padToTwoDigits(value.getMonth() + 1);
+  const date = padToTwoDigits(value.getDate());
+  const hour = padToTwoDigits(value.getHours());
+  const minute = padToTwoDigits(value.getMinutes());
+  const second = padToTwoDigits(value.getSeconds());
+
+  return `${year}-${month}-${date} ${hour}:${minute}:${second}`;
 }

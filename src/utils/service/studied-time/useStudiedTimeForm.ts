@@ -11,7 +11,6 @@ import {
   postStudiedTimeApi,
   StudiedTimeCalendarWeek
 } from '@/utils/service/api/studied-time';
-import {calculateTotal} from '@/utils/extend/data-type/number';
 import {useMutation} from '@tanstack/react-query';
 
 export interface StudiedTimeFormData extends Pick<DailyStudyTime, 'date_type' | 'wake_up_time' | 'bed_time'> {
@@ -25,7 +24,7 @@ export interface StudiedTimeFormData extends Pick<DailyStudyTime, 'date_type' | 
 }
 
 export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, initialFormData?: StudiedTimeFormData) {
-  const {register, handleSubmit, setError, formState: {errors}} = useForm<StudiedTimeFormData>({
+  const {register, handleSubmit, formState: {errors}} = useForm<StudiedTimeFormData>({
     defaultValues: {
       studied_minutes: {
         part1: initializeStudiedMinute(initialFormData?.studied_minutes.part1),
@@ -65,23 +64,9 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, ini
     // part 1, 2, 3이 빈문자열이어도 Number()에서 0으로 변환됨
     const {part1, part2, part3} = data.studied_minutes;
     const studiedMinutes = [part1, part2, part3].map(value => Number(value)) as [number, number, number];
-
-    const studied = calculateTotal(studiedMinutes, value => value) > 0;
-    const failed = !!data.fail_keywords || !!data.fail_reason;
-
-    if (!studied && !failed) {
-      setError('fail_reason', {
-        type: 'required',
-        message: '공부를 하루종일 안했다면, 실패 원인 또는 키워드를 작성해주세요.'
-      }, {shouldFocus: true});
-      setError('fail_keywords', {
-        type: 'required',
-        message: '공부를 하루종일 안했다면, 실패 원인 또는 키워드를 작성해주세요.'
-      });
-      return;
-    }
-
     const {calendarDate: {year, month, date}} = history;
+
+    // TODO date_type 외에 전부다 안입력하면 막긴 해야함. 공부시간 / 실패사유 / 기상취침시각 셋중 하나는 입력해야함.
 
     const postParameter: PostDailyStudyTimeParameter = {
       ...data,
@@ -105,7 +90,7 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, ini
     } catch (error) {
       console.error(error);
     }
-  }, [history, postMutation, setError, updateMutation]);
+  }, [history, postMutation, updateMutation]);
 
   const dateTypeRadioList: RadioProps[] = [
     {
