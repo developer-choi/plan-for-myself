@@ -24,7 +24,7 @@ export default function StudiedStatistics({year, month}: StudiedStatisticsProps)
 
   const openMonthlyStatistics = useCallback(async () => {
     const monthData = await queryClient.fetchQuery({
-      queryKey: ['daily-studied-time'],
+      queryKey: ['daily-studied-time', year, month],
       queryFn: () => getMonthlyStatisticsApi(year, month)
     });
     

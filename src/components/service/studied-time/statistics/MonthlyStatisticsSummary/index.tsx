@@ -73,6 +73,10 @@ function Value({thisMonth, previousMonth}: ValueProps) {
   const {signType, sign, absoluteValue} = getAbsoluteValueWithSign(thisMonth - previousMonth);
 
   return (
-    <span className={styles.value}>{minutesFormat(thisMonth)} <span className={signType}>({sign}{minutesFormat(absoluteValue)})</span></span>
+    <span className={styles.value}>{minutesFormat(thisMonth)} {previousMonth === 0 ? (
+      <span>( - )</span>
+    ) : (
+      <span className={signType}>({sign}{minutesFormat(absoluteValue)})</span>
+    )}</span>
   );
 }

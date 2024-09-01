@@ -28,6 +28,7 @@ export default async function Page({params}: ServerComponentProps) {
   }, [month, year])
 
   const weekList = await getStudiedTimeCalendarApi(year, month);
+  const haveData = weekList.some(week => week.some(({data}) => data));
 
   return (
     <div className={layoutStyles.pageContentLarge}>
@@ -63,7 +64,9 @@ export default async function Page({params}: ServerComponentProps) {
         ))}
         </tbody>
       </table>
-      <StudiedStatistics year={year} month={month}/>
+      {!haveData ? null : (
+        <StudiedStatistics year={year} month={month}/>
+      )}
     </div>
   );
 }
