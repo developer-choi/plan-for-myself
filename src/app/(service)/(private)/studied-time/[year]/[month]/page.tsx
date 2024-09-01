@@ -10,6 +10,7 @@ import {studiedTimeFormat} from '@/utils/service/studied-time';
 import {getCalendarNavigation} from '@/utils/extend/date/calendar';
 import {useMemo} from 'react';
 import StudiedTimeSetting from '@/components/service/studied-time/StudiedTimeSetting';
+import layoutStyles from '@/styles/layout.module.scss';
 
 export const metadata: Metadata = {
   title: 'Calendar',
@@ -27,7 +28,7 @@ export default async function Page({params}: ServerComponentProps) {
   const weekList = await getStudiedTimeHistoryApi(year, month);
 
   return (
-    <div className={styles.pageWrap}>
+    <div className={layoutStyles.pageContentLarge}>
       <h1 className={styles.h1}>{year} / {month}</h1>
       <div className={styles.navigator}>
         <CustomLink href={`/studied-time/${previousCalendar.year}/${previousCalendar.month}`}>Previous</CustomLink>

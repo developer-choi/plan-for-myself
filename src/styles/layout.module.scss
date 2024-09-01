@@ -1,0 +1,24 @@
+$layout: (
+  horizontalPadding: 16px,
+  pcHeaderHeight: 52px,
+  large: 1600px,
+  medium: 800px,
+);
+
+/**
+ * 가로로 1200px ~ 480px 만큼의 container를 만들 때 필요한 CSS
+ * @size large, medium, small, xsmall
+ */
+@mixin horizontalWidthContainer($size) {
+  width: calc(map-get($layout, $size));
+  margin: 0 auto;
+  padding-bottom: 24px; // 페이지 내용이 길어질 경우 푸터와 딱붙으면 안됨.
+}
+
+.pageContentLarge {
+  @include horizontalWidthContainer(large);
+}
+
+.pageContentMedium {
+  @include horizontalWidthContainer(medium);
+}

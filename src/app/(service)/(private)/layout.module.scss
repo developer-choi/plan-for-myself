@@ -1,0 +1,25 @@
+@use '/src/styles/layout.module';
+@use '/src/styles/design-system.module';
+
+// 이게 스티키 헤더가 노출되는 사이트의 일반적인 레이아웃 규칙임.
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: 100%;
+}
+
+.header {
+  position: fixed; // 이렇게 sticky 안쓰고 스티키헤더를 구현하더라 유튜브 치지직 둘다
+  top: 0;
+  width: 100%;
+  height: map-get(layout.$layout, pcHeaderHeight);
+  z-index: map-get(design-system.$zIndexes, pcStickyHeader);
+  background: white;
+}
+
+.page {
+  padding-top: map-get(layout.$layout, pcHeaderHeight); // margin-top을 하지않는 이슈는 heigt 100% 같은거 할 때 부모높이 기준으로 계산하게되는데 이 때 부모높이를 전체 페이지 높이로 하기위함
+  width: 100%;
+  flex-grow: 1;
+}
