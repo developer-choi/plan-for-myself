@@ -9,6 +9,7 @@ import styles from './index.module.scss';
 import Radio, {RadioGroup} from '@/components/form/Radio';
 import useFilterDailyStudiedHistory from '@/utils/service/studied-time/useFilterDailyStudiedHistory';
 import Checkbox from '@/components/form/Checkbox';
+import classNames from 'classnames';
 
 export interface DailyStudiedTimeTableProps {
   year: number;
@@ -46,19 +47,30 @@ export default function DailyStudiedTimeTable({data}: DailyStudiedTimeTableProps
         </tr>
         </thead>
         <tbody>
-        {list.map(({pk, bed_time, wake_up_time, fail_keywords, fail_reason, studied_minutes, timestamp}) => (
-          <tr key={pk}>
-            <td>{dayjs(timestamp).format('YYYY-MM-DD ddd')}</td>
-            <td>{totalStudiedTimeFormat(studied_minutes)}</td>
-            <td>{studied_minutes[0] === 0 ? '' : minutesFormat(studied_minutes[0])}</td>
-            <td>{studied_minutes[1] === 0 ? '' : minutesFormat(studied_minutes[1])}</td>
-            <td>{studied_minutes[2] === 0 ? '' : minutesFormat(studied_minutes[2])}</td>
-            <td className={styles.fail}>{!fail_keywords.length ? '' : fail_keywords.join(', ')}</td>
-            <td className={styles.fail}>{!fail_reason ? '' : fail_reason}</td>
-            <td>{!wake_up_time ? '' : wake_up_time}</td>
-            <td>{!bed_time ? '' : bed_time}</td>
-          </tr>
-        ))}
+        {list.map(({pk, bed_time, wake_up_time, fail_keywords, fail_reason, studied_minutes, timestamp}) => {
+          const dateText = dayjs(timestamp).format('YYYY-MM-DD ddd');
+          const totalStudiedTime = totalStudiedTimeFormat(studied_minutes);
+          const studiedTime = {
+            morning: studied_minutes[0] === 0 ? '' : minutesFormat(studied_minutes[0]),
+            lunch: studied_minutes[1] === 0 ? '' : minutesFormat(studied_minutes[1]),
+            dinner: studied_minutes[2] === 0 ? '' : minutesFormat(studied_minutes[2])
+          };
+          const failKeywords = !fail_keywords.length ? '' : fail_keywords.join(', ');
+
+          return (
+            <tr key={pk}>
+              <td>{dateText}</td>
+              <td className={classNames({[styles.empty]: !totalStudiedTime})}>{totalStudiedTime}</td>
+              <td className={classNames({[styles.empty]: !studiedTime.morning})}>{studiedTime.morning}</td>
+              <td className={classNames({[styles.empty]: !studiedTime.lunch})}>{studiedTime.lunch}</td>
+              <td className={classNames({[styles.empty]: !studiedTime.dinner})}>{studiedTime.dinner}</td>
+              <td className={classNames(styles.fail, {[styles.empty]: !failKeywords})}>{failKeywords}</td>
+              <td className={classNames(styles.fail, {[styles.empty]: !fail_reason})}>{fail_reason}</td>
+              <td className={classNames({[styles.empty]: !wake_up_time})}>{wake_up_time}</td>
+              <td className={classNames({[styles.empty]: !bed_time})}>{bed_time}</td>
+            </tr>
+          );
+        })}
         </tbody>
       </table>
     </>

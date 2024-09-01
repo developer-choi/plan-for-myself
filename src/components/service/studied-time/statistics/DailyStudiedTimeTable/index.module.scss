@@ -10,4 +10,8 @@
     color: map-get(color.$stateColors, error);
     font-weight: bold;
   }
+  
+  td.empty {
+    background-color: nth(color.$grayColors, 7);
+  }
 }
