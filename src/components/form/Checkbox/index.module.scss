@@ -1,0 +1,39 @@
+@use "/src/components/form/form-elements/index.module" as form;
+@use "/src/styles/color";
+@use "/src/styles/util";
+
+// @param $color primary / secondary
+@mixin iconColor($color) {
+  > svg > path {
+    fill: map-get(color.$brandColors, $color);
+  }
+}
+
+@mixin switchIconShow {
+  > .checked, .unchecked {
+    display: none;
+  }
+  
+  &:has(:checked) > .checked {
+    display: inline;
+  }
+  
+  &:not(:has(:checked)) > .unchecked {
+    display: inline;
+  }
+}
+
+.wrapper {
+  @include form.commonRadioCheckSwitchWrapper;
+  @include switchIconShow;
+  
+  > input {
+    @include util.hiddenDefaultInputIcon;
+  }
+  
+  @each $color in primary, secondary {
+    &:has(:checked).#{$color} {
+      @include iconColor($color);
+    }
+  }
+}

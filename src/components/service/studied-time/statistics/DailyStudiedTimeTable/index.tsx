@@ -1,12 +1,14 @@
 'use client';
 
-import React, {ChangeEvent, useCallback, useMemo, useState} from 'react';
+import React from 'react';
 import {DailyStudyTime, DailyStudyTimeDateType} from '@/types/studied-time';
 import dayjs from 'dayjs';
 import {minutesFormat} from '@/utils/service/studied-time';
 import {calculateTotal} from '@/utils/extend/data-type/number';
 import styles from './index.module.scss';
 import Radio, {RadioGroup} from '@/components/form/Radio';
+import useFilterDailyStudiedHistory from '@/utils/service/studied-time/useFilterDailyStudiedHistory';
+import Checkbox from '@/components/form/Checkbox';
 
 export interface DailyStudiedTimeTableProps {
   year: number;
@@ -15,29 +17,19 @@ export interface DailyStudiedTimeTableProps {
 }
 
 export default function DailyStudiedTimeTable({data}: DailyStudiedTimeTableProps) {
-  const [filter, setFilter] = useState<DailyStudyTimeDateType>('quarter');
-
-  const onChangeWeekday = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      setFilter('quarter');
-    }
-  }, []);
-
-  const onChangeHoliday = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      setFilter('full');
-    }
-  }, []);
-
-  const filteredList = useMemo(() => {
-    return data.filter(({date_type}) => date_type === filter)
-  }, [data, filter]);
+  const {list, inputProps} = useFilterDailyStudiedHistory(data);
 
   return (
     <>
       <RadioGroup>
-        <Radio checked={filter === 'quarter'} name="filter" label="평일" onChange={onChangeWeekday}/>
-        <Radio checked={filter === 'full'} name="filter" label="주말 및 휴일" onChange={onChangeHoliday}/>
+        {inputProps.dateType.map(props => (
+          <Radio key={props.value as DailyStudyTimeDateType} {...props}/>
+        ))}
+      </RadioGroup>
+      <RadioGroup>
+        {inputProps.day.map(props => (
+          <Checkbox key={props.value as number} {...props}/>
+        ))}
       </RadioGroup>
       <table className={styles.table}>
         <thead>
@@ -54,9 +46,9 @@ export default function DailyStudiedTimeTable({data}: DailyStudiedTimeTableProps
         </tr>
         </thead>
         <tbody>
-        {filteredList.map(({pk, bed_time, wake_up_time, fail_keywords, fail_reason, studied_minutes, timestamp}) => (
+        {list.map(({pk, bed_time, wake_up_time, fail_keywords, fail_reason, studied_minutes, timestamp}) => (
           <tr key={pk}>
-            <td>{dayjs(timestamp).format('YYYY-MM-DD')}</td>
+            <td>{dayjs(timestamp).format('YYYY-MM-DD ddd')}</td>
             <td>{totalStudiedTimeFormat(studied_minutes)}</td>
             <td>{studied_minutes[0] === 0 ? '' : minutesFormat(studied_minutes[0])}</td>
             <td>{studied_minutes[1] === 0 ? '' : minutesFormat(studied_minutes[1])}</td>
