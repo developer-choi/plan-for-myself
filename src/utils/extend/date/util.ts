@@ -34,6 +34,24 @@ export function isSameDate(date1: Date, date2: Date, sameDepth = 3): boolean {
   return date1Properties.every((value, index) => value === date2Properties[index]);
 }
 
+export interface SimpleDate {
+  year: number;
+  month: number;
+  date: number;
+}
+
+// 주의 : month는 실제 month보다 1 작습니다. 0부터 시작하기 때문입니다.
+export function destructDate(target = new Date()) {
+  const year = target.getFullYear();
+  const month = target.getMonth();
+  const date = target.getDate();
+  const hour = target.getHours();
+  const minute = target.getMinutes();
+  const second = target.getSeconds();
+  const milliSecond = target.getMilliseconds();
+  return {year, month, date, hour, minute, second, milliSecond};
+}
+
 /*************************************************************************************************************
  * Non Export
  *************************************************************************************************************/
@@ -73,18 +91,6 @@ function getDiffDayInWeek(value: Date, diff: number, day: 1 | 2 | 3 | 4 | 5 | 6 
 
   const diffWeekDates = (diff - 1) * 7;
   return new Date(year, month, date + diffDate + diffWeekDates + diffDays, hour, minute, second, milliSecond);
-}
-
-// 주의 : month는 실제 month보다 1 작습니다. 0부터 시작하기 때문입니다.
-function destructDate(target = new Date()) {
-  const year = target.getFullYear();
-  const month = target.getMonth();
-  const date = target.getDate();
-  const hour = target.getHours();
-  const minute = target.getMinutes();
-  const second = target.getSeconds();
-  const milliSecond = target.getMilliseconds();
-  return {year, month, date, hour, minute, second, milliSecond};
 }
 
 /**

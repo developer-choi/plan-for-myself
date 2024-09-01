@@ -10,6 +10,7 @@ import {ComposedModalProps, ModalContainer} from '@/components/modal/container';
 import {DefaultModalHeader} from '@/components/modal/header';
 import DefaultModalBody from '@/components/modal/body';
 import {OneButtonModalFooter, TwoButtonsModalFooter} from '@/components/modal/footer';
+import dayjs from 'dayjs';
 
 export interface StudiedTimeFormModalProps extends ComposedModalProps {
   history: StudiedTimeCalendarWeek;
@@ -21,7 +22,7 @@ export default function StudiedTimeFormModal({initialFormData, history, onClose,
 
   return (
     <ModalContainer onClose={onClose} {...rest}>
-      <DefaultModalHeader onClose={onClose}>공부기록 {history.data ? '수정' : '작성'}</DefaultModalHeader>
+      <DefaultModalHeader onClose={onClose}>{dayjs(history.calendarDate.original).format('MM-DD')} 공부기록 {history.data ? '수정' : '작성'}</DefaultModalHeader>
       <DefaultModalBody>
         <form className={styles.formWrap} onSubmit={form.onSubmit}>
           <RadioGroup label={props.dateType.groupLabel}>

@@ -12,6 +12,7 @@ import {
   StudiedTimeCalendarWeek
 } from '@/utils/service/api/studied-time';
 import {useMutation} from '@tanstack/react-query';
+import {isHolidayDate} from '@/utils/extend/date/holiday';
 
 export interface StudiedTimeFormData extends Pick<DailyStudyTime, 'date_type' | 'wake_up_time' | 'bed_time'> {
   studied_minutes: {
@@ -33,7 +34,7 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, ini
       },
       fail_keywords: initialFormData?.fail_keywords ?? '',
       fail_reason: initialFormData?.fail_reason ?? '',
-      date_type: initialFormData?.date_type ?? 'weekday',
+      date_type: initialFormData?.date_type ?? isHolidayDate(history.calendarDate) ? 'holiday' : 'weekday',
       wake_up_time: initialFormData?.wake_up_time,
       bed_time: initialFormData?.bed_time
     }

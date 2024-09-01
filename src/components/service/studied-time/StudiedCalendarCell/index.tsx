@@ -27,17 +27,17 @@ export default function StudiedCalendarCell({history, summary}: StudiedCalendarC
       Component: StudiedTimeFormModal,
       props: {
         history,
-        initialFormData: {
-          date_type: history.data?.date_type ?? 'weekday',
+        initialFormData: !history.data ? undefined : {
+          date_type: history.data.date_type,
           studied_minutes: {
-            part1: history.data?.studied_minutes?.[0].toString() ?? '',
-            part2: history.data?.studied_minutes?.[1].toString() ?? '',
-            part3: history.data?.studied_minutes?.[2].toString() ?? ''
+            part1: history.data.studied_minutes?.[0].toString(),
+            part2: history.data.studied_minutes?.[1].toString(),
+            part3: history.data.studied_minutes?.[2].toString()
           },
-          fail_keywords: history.data?.fail_keywords.join(',') ?? '',
-          fail_reason: history.data?.fail_reason ?? '',
-          wake_up_time: history.data?.wake_up_time ?? '',
-          bed_time: history.data?.bed_time ?? ''
+          fail_keywords: history.data.fail_keywords.join(','),
+          fail_reason: history.data.fail_reason ?? '',
+          wake_up_time: history.data.wake_up_time,
+          bed_time: history.data.bed_time
         }
       }
     });
