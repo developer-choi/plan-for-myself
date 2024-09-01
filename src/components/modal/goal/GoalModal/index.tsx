@@ -21,7 +21,7 @@ export default function GoalModal(props: GoalModalProp) {
   const {inputProps, form, isEdit} = useGoalForm(props)
 
   return (
-    <ModalContainer onClose={props.onClose}  type="centerAlign">
+    <ModalContainer onClose={props.onClose}>
       <DefaultModalHeader>목표 {isEdit ? '수정' : '등록'}</DefaultModalHeader>
       <DefaultModalBody>
         <form className={styles.styledForm} onSubmit={form.onSubmit}>

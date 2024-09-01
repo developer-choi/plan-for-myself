@@ -7,7 +7,7 @@ import {EssentialModalProps} from '@/utils/extend/modal';
 
 export interface ModalContainerProps extends EssentialModalProps, Omit<ComponentPropsWithoutRef<'div'>, 'onClick'> {
   easilyClose?: boolean; // backdrop / esc 눌러서 모달 닫게 해주는 기능, default false
-  type: 'centerAlign' | 'bottomSheet' | 'fullScreen';
+  type?: 'centerAlign' | 'bottomSheet' | 'fullScreen'; // default centerAlign
   size?: 'large' | 'medium'; // centerAlign 모달에서만 사용함
 
   /**
@@ -25,7 +25,7 @@ export interface ModalContainerProps extends EssentialModalProps, Omit<Component
 // Alert, Confirm 등 모달 확장할 때 이 타입을 확장하기
 export type ComposedModalProps = Omit<ModalContainerProps, 'type' | 'size'>;
 
-export function ModalContainer({className, size = 'medium', type, easilyClose, onClose, open, ...rest}: ModalContainerProps) {
+export function ModalContainer({className, type = 'centerAlign', size = 'medium', easilyClose, onClose, open, ...rest}: ModalContainerProps) {
   const modalRef = useRef<HTMLDialogElement>(null);
   /**
    * bottomSheet면 기본값 false로 동작하고
@@ -71,12 +71,12 @@ export function ModalContainer({className, size = 'medium', type, easilyClose, o
   }, [_open]);
 
   const onClickBackdrop = useCallback((event: MouseEvent<HTMLDivElement>) => {
-    if (type === 'fullScreen') {
+    if (!easilyClose) {
       return;
     }
 
     event.stopPropagation();
-  }, [type]);
+  }, [easilyClose]);
 
   return (
     <dialog ref={modalRef} className={classNames(styles.rootModalContainer, styles[type + 'Container'], {[styles.open]: _open})} onClick={easilyClose ? onClose : undefined}>

@@ -46,6 +46,9 @@ $modalPadding: container.$modalPadding;
   @include customScrollbar;
   
   display: flex; // 이미지같은거 노출될 때 간격 모두 없애기 위함
+  flex-direction: column;
+  align-items: flex-start;
+  
   width: 100%;
   white-space: pre-line;
   word-break: break-word; // 이거 안하면 한글자 무한입력할 때 줄내림안됨

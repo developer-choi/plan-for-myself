@@ -20,7 +20,7 @@ export default function StudiedTimeFormModal({initialFormData, history, onClose,
   const {form, props} = useStudiedTimeForm(history, initialFormData);
 
   return (
-    <ModalContainer type="centerAlign" onClose={onClose} {...rest}>
+    <ModalContainer onClose={onClose} {...rest}>
       <DefaultModalHeader onClose={onClose}>공부기록 {history.data ? '수정' : '작성'}</DefaultModalHeader>
       <DefaultModalBody>
         <form className={styles.formWrap} onSubmit={form.onSubmit}>

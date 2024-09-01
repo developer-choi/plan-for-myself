@@ -26,7 +26,7 @@ export default function CheckTodayModal({onClose, goalFullResponse}: CheckTodayM
   const {form, radioList, submittedDate} = formResult;
 
   return (
-    <ModalContainer onClose={onClose} type="centerAlign">
+    <ModalContainer onClose={onClose}>
       <DefaultModalHeader>목표 체크리스트</DefaultModalHeader>
       <DefaultModalBody>
         <form className={styles.styledForm} onSubmit={form.onSubmit}>
