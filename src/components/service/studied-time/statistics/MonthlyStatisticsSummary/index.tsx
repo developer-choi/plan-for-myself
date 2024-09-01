@@ -1,67 +1,36 @@
 import React from 'react';
-import {DailyStudyTime} from '@/types/studied-time';
-import {calculateTotal, getAbsoluteValueWithSign} from '@/utils/extend/data-type/number';
+import {getAbsoluteValueWithSign} from '@/utils/extend/data-type/number';
 import {minutesFormat} from '@/utils/service/studied-time';
 import styles from './index.module.scss';
+import {
+  analyzeDifferenceMonthlyStatistics,
+  DifferenceMonthlyStatisticsParam
+} from '@/utils/service/studied-time/statistics';
 
-export interface MonthlyStatisticsSummaryProps {
-  monthData: {
-    this: DailyStudyTime[];
-    previous: DailyStudyTime[];
-  };
-}
-
-export default function MonthlyStatisticsSummary({monthData}: MonthlyStatisticsSummaryProps) {
-  const thisMonthSummary = getMonthlyStatisticsSummary(monthData.this);
-  const previousMonthSummary = getMonthlyStatisticsSummary(monthData.previous);
+export default function MonthlyStatisticsSummary(props: DifferenceMonthlyStatisticsParam) {
+  const {adjusted, weekday, holiday} = analyzeDifferenceMonthlyStatistics(props);
+  const adjustPrefix = adjusted ? '(환산)' : '';
 
   return (
     <ul>
       <li>
-        <span className={styles.name}>평일 총합 : </span>
-        <Value thisMonth={thisMonthSummary.totalWeekdayStudied} previousMonth={previousMonthSummary.totalWeekdayStudied}/>
+        <span className={styles.name}>{adjustPrefix} 평일 총합 : </span>
+        <Value thisMonth={weekday.totalStudied.this} previousMonth={weekday.totalStudied.previous}/>
       </li>
       <li>
         <span className={styles.name}>평일 평균 : </span>
-        <Value thisMonth={thisMonthSummary.averageDuringWeekday} previousMonth={previousMonthSummary.averageDuringWeekday}/>
+        <Value thisMonth={weekday.averageStudied.this} previousMonth={weekday.averageStudied.previous}/>
       </li>
       <li className={styles.gapTop}>
-        <span className={styles.name}>휴일 총합 : </span>
-        <Value thisMonth={thisMonthSummary.totalHolidayStudied} previousMonth={previousMonthSummary.totalHolidayStudied}/>
+        <span className={styles.name}>{adjustPrefix} 휴일 총합 : </span>
+        <Value thisMonth={holiday.totalStudied.this} previousMonth={holiday.totalStudied.previous}/>
       </li>
       <li>
         <span className={styles.name}>휴일 평균 : </span>
-        <Value thisMonth={thisMonthSummary.averageDuringHoliday} previousMonth={previousMonthSummary.averageDuringHoliday}/>
+        <Value thisMonth={holiday.averageStudied.this} previousMonth={holiday.averageStudied.previous}/>
       </li>
     </ul>
   );
-}
-
-interface MonthlyStatistics {
-  totalWeekdayStudied: number;
-  averageDuringWeekday: number; // 평일 평균 공부시간, 단위 : minutes
-  totalHolidayStudied: number;
-  averageDuringHoliday: number; // 주밀&휴일 평균 공부시간, 단위 : minutes
-}
-
-function getMonthlyStatisticsSummary(data: DailyStudyTime[]): MonthlyStatistics {
-  const {total, count} = data.reduce((a, b) => {
-    const key = b.date_type === 'weekday' ? 'weekday' : 'holiday';
-    a.total[key] += calculateTotal(b.studied_minutes, value => value);
-    a.count[key]++;
-    return a;
-  }, {total: {weekday: 0, holiday: 0}, count: {weekday: 0, holiday: 0}});
-
-  const averageDuringHoliday = Math.floor(total.holiday / count.holiday);
-  const averageDuringWeekday = Math.floor(total.weekday / count.weekday);
-
-  return {
-    totalHolidayStudied: total.holiday,
-    totalWeekdayStudied: total.weekday,
-    // 0/0 = NaN
-    averageDuringHoliday: Number.isNaN(averageDuringHoliday) ? 0 : averageDuringHoliday,
-    averageDuringWeekday: Number.isNaN(averageDuringWeekday) ? 0 : averageDuringWeekday
-  };
 }
 
 interface ValueProps {
