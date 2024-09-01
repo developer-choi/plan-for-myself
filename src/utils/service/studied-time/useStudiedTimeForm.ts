@@ -4,7 +4,6 @@ import {baseHandleErrors} from '@/utils/extend/react-hook-form';
 import {DailyStudyTime} from '@/types/studied-time';
 import {InputProps} from '@/components/form/Input';
 import {RadioProps} from '@/components/form/Radio';
-import {useMutation} from 'react-query';
 import {
   deleteStudiedTimeApi,
   patchStudiedTimeApi,
@@ -13,6 +12,7 @@ import {
   StudiedTimeHistory
 } from '@/utils/service/api/studied-time';
 import {calculateTotal} from '@/utils/extend/data-type/number';
+import {useMutation} from '@tanstack/react-query';
 
 export interface StudiedTimeFormData extends Pick<DailyStudyTime, 'date_type' | 'wake_up_time' | 'bed_time'> {
   studied_minutes: {
@@ -51,9 +51,15 @@ export default function useStudiedTimeForm(history: StudiedTimeHistory, initialF
     ]);
   }, []);
 
-  const postMutation = useMutation(postStudiedTimeApi);
-  const updateMutation = useMutation(patchStudiedTimeApi);
-  const deleteMutation = useMutation(deleteStudiedTimeApi);
+  const postMutation = useMutation({
+    mutationFn: postStudiedTimeApi
+  });
+  const updateMutation = useMutation({
+    mutationFn: patchStudiedTimeApi
+  });
+  const deleteMutation = useMutation({
+    mutationFn: deleteStudiedTimeApi
+  });
 
   const onSubmit: SubmitHandler<StudiedTimeFormData> = useCallback(async data => {
     // part 1, 2, 3이 빈문자열이어도 Number()에서 0으로 변환됨
@@ -183,7 +189,7 @@ export default function useStudiedTimeForm(history: StudiedTimeHistory, initialF
   return {
     form: {
       onSubmit: handleSubmit(onSubmit, onError),
-      loading: postMutation.isLoading || updateMutation.isLoading, // TODO 추후 Button loading props에 enableMutating 추가
+      loading: postMutation.isPending || updateMutation.isPending, // TODO 추후 Button loading props에 enableMutating 추가
       deleteHistory
     },
     props: {

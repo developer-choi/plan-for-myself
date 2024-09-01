@@ -6,7 +6,7 @@ import type {GoalModalProp} from '@/components/modal/goal/GoalModal';
 import type {GoalFrequency} from '@/types/goal';
 import {GOAL_FREQUENCY_LIST} from '@/utils/service/goal/index';
 import {postGoalApi, PostGoalRequestParameter, updateGoalApi} from '@/utils/service/api/goal';
-import {useMutation} from 'react-query';
+import {useMutation} from '@tanstack/react-query';
 
 export function useGoalForm({onClose, data}: GoalModalProp) {
   const {register, handleSubmit} = useForm<GoalFormData>({
@@ -25,8 +25,12 @@ export function useGoalForm({onClose, data}: GoalModalProp) {
     baseHandleErrors([title, achievePrice, notAchievePrice]);
   }, []);
 
-  const postMutation = useMutation(postGoalApi);
-  const updateMutation = useMutation(updateGoalApi);
+  const postMutation = useMutation({
+    mutationFn: postGoalApi
+  });
+  const updateMutation = useMutation({
+    mutationFn: updateGoalApi
+  });
 
   const onSubmit: SubmitHandler<GoalFormData> = useCallback(async formData => {
     const goalParameter: PostGoalRequestParameter = {
@@ -51,7 +55,7 @@ export function useGoalForm({onClose, data}: GoalModalProp) {
   return {
     form: {
       onSubmit: handleSubmit(onSubmit, onError),
-      loading: postMutation.isLoading || updateMutation.isLoading,
+      loading: postMutation.isPending || updateMutation.isPending,
     },
     inputProps: {
       title: register('title', TITLE_OPTIONS),

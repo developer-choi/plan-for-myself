@@ -3,7 +3,7 @@ import {useCallback} from 'react';
 import dayjs from 'dayjs';
 import {postTodayCheckGoalApi} from '@/utils/service/api/goal';
 import {GoalFullResponse} from '@/types/goal';
-import {useMutation} from 'react-query';
+import {useMutation} from '@tanstack/react-query';
 
 interface CheckGoalListFormData {
   checkedGoalList: string[];
@@ -21,7 +21,9 @@ export function useCheckGoalListForm({onClose, response}: {
     }
   });
 
-  const {mutateAsync, isLoading} = useMutation(postTodayCheckGoalApi);
+  const {mutateAsync, isPending} = useMutation({
+    mutationFn: postTodayCheckGoalApi
+  });
 
   const onSubmit: SubmitHandler<CheckGoalListFormData> = useCallback(async data => {
     if (!response) {
@@ -51,7 +53,7 @@ export function useCheckGoalListForm({onClose, response}: {
     form: {
       onSubmit: handleSubmit(onSubmit),
       disabled: !!todayHistory?.has_checked,
-      loading: isLoading
+      loading: isPending
     },
     radioList: sourceGoalList.map(({pk, title, achieve_price, not_achieve_price, content}) => {
       const checked = watch('checkedGoalList').includes(pk.toString());

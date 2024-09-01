@@ -1,46 +1,27 @@
-'use client';
+import React, {PropsWithChildren} from 'react';
+import {auth} from '@/utils/service/auth';
+import {SessionProvider} from 'next-auth/react';
+import InnerSessionProvider from '@/utils/service/auth/InnerSessionProvider';
+import ReactQueryProvider from '@/components/setting/ReactQueryProvider';
+import dynamic from 'next/dynamic';
 
-import React, {PropsWithChildren, useEffect} from 'react';
-import {QueryClient, QueryClientProvider} from 'react-query';
-import 'react-toastify/dist/ReactToastify.css';
-import {toast, ToastContainer, ToastPosition} from 'react-toastify';
-import {randomInArray} from '@/utils/extend/random';
-import {getRemindOfMessageListApiOnClient} from '@/utils/service/api/goal';
-import ModalProvider from '@/components/setting/ModalProvider';
+// 첫 페이지 로딩 시점에 안보여도 되는 것들은 모두 dynamic import 하기로 함
+const CustomToastContainer = dynamic(() => import('@/components/setting/CustomToastContainer'), {ssr: false});
+const ModalProvider = dynamic(() => import('@/components/setting/ModalProvider'), {ssr: false});
 
-export default function AppProvider({children}: PropsWithChildren) {
-  useEffect(() => {
-    getRemindOfMessageListApiOnClient().then(list => {
-      if (list.length === 0) {
-        return;
-      }
-
-      const position = randomInArray(TOAST_POSITIONS)[0];
-
-      randomInArray(list, 2).forEach(item => {
-        toast.info(item.message, {
-          autoClose: 99999999,
-          position,
-          hideProgressBar: true,
-          closeButton: false,
-          closeOnClick: true,
-          theme: 'colored',
-          draggable: false
-        });
-      });
-    }).catch(() => {});
-  }, []);
+export default async function AppProvider({children}: PropsWithChildren) {
+  const session = await auth();
 
   return (
-    <QueryClientProvider client={INSTANCE}>
-      <ModalProvider>
-        {children}
-      </ModalProvider>
-      <ToastContainer toastStyle={{lineHeight: '20px'}}/>
-    </QueryClientProvider>
+    <SessionProvider refetchOnWindowFocus={false} session={session}>
+      <InnerSessionProvider>
+        <ReactQueryProvider>
+          <ModalProvider>
+            {children}
+          </ModalProvider>
+          <CustomToastContainer/>
+        </ReactQueryProvider>
+      </InnerSessionProvider>
+    </SessionProvider>
   )
 }
-
-const INSTANCE = new QueryClient();
-
-const TOAST_POSITIONS: ToastPosition[] = ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right'];
