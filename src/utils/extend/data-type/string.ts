@@ -1,3 +1,4 @@
+// 특히 시간 표시할 때 엄청 많이써서 추가
 export function padToTwoDigits(value: string | number) {
   return (typeof value === 'number' ? value.toString() : value).padStart(2, '0');
 }
