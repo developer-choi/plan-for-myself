@@ -45,7 +45,7 @@ export default function TotalHabitList({habitList, todayFrequency}: TotalHabitLi
       <ul>
         {filteredHabitList.map((habit) => (
           <ol key={habit.pk} className={styles.habitOl}>
-            {!habit.is_important ? null : <div className={styles.importantMark}/>}
+            {!habit.has_important ? null : <div className={styles.importantMark}/>}
             {currentFrequency !== 'All' ? null : <span className={styles.frequency}>({habit.frequency.toLowerCase()})</span>}
             <span className={styles.title}>{habit.title}</span>
             <Button size="xsmall" color="edit" className={classNames(styles.smallButton)} onClick={() => openHabitModal(habit)}>수정</Button>

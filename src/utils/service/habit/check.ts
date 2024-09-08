@@ -2,11 +2,12 @@ import {SubmitHandler, useForm} from 'react-hook-form';
 import {useCallback} from 'react';
 import dayjs from 'dayjs';
 import {postTodayCheckHabitApi} from '@/utils/service/api/habit';
-import {HabitFullResponse} from '@/types/habit';
+import {Habit, HabitFullResponse} from '@/types/habit';
 import {useMutation} from '@tanstack/react-query';
+import {RadioProps} from '@/components/form/Radio';
 
 interface CheckHabitListFormData {
-  checkedHabitList: string[];
+  checkedSubHabitList: string[]; // 형식 : habit.pk_children.index
 }
 
 export function useCheckHabitListForm({onClose, response}: {
@@ -15,9 +16,20 @@ export function useCheckHabitListForm({onClose, response}: {
 }) {
   const todayHistory = response?.todayHistory;
 
-  const {register, handleSubmit, watch} = useForm<CheckHabitListFormData>({
+  const {register, handleSubmit} = useForm<CheckHabitListFormData>({
     defaultValues: {
-      checkedHabitList: !todayHistory ? [] : todayHistory.checked_list.filter(habit => habit.checked).map(habit => habit.pk.toString())
+      checkedSubHabitList: !todayHistory ? [] : todayHistory.checked_list
+        .reduce((a, b) => {
+          const checkedPKList: string[] = [];
+
+          b.children.forEach(({checked}, index) => {
+            if (checked) {
+              checkedPKList.push(subHabitToKey(b, index));
+            }
+          });
+
+          return a.concat(checkedPKList);
+        }, [] as string[]),
     }
   });
 
@@ -30,13 +42,16 @@ export function useCheckHabitListForm({onClose, response}: {
       return;
     }
 
-    if (data.checkedHabitList.length === 0 && !confirm('제출하시겠습니까?')) {
+    if (data.checkedSubHabitList.length === 0 && !confirm('제출하시겠습니까?')) {
       return;
     }
 
     await mutateAsync(response.todayHabitList.map(habit => ({
       ...habit,
-      checked: data.checkedHabitList.includes(habit.pk.toString())
+      children: habit.children.map((sub, index) => ({
+        ...sub,
+        checked: data.checkedSubHabitList.includes(subHabitToKey(habit, index))
+      }))
     })));
 
     onClose();
@@ -48,6 +63,23 @@ export function useCheckHabitListForm({onClose, response}: {
   }
 
   const sourceHabitList = todayHistory?.checked_list.length ? todayHistory.checked_list : response.todayHabitList;
+  const hasChecked = todayHistory?.has_checked;
+
+  const radioList = sourceHabitList.map((habit) => {
+    const {pk, children, title, content} = habit;
+
+    return {
+      pk,
+      title,
+      content,
+      propsList: children.map((subHabit, index) => ({
+        ...register('checkedSubHabitList'),
+        label: subHabit.title,
+        value: subHabitToKey(habit, index),
+        disabled: hasChecked
+      }) as RadioProps)
+    };
+  })
 
   return {
     form: {
@@ -55,21 +87,11 @@ export function useCheckHabitListForm({onClose, response}: {
       disabled: !!todayHistory?.has_checked,
       loading: isPending
     },
-    radioList: sourceHabitList.map(({pk, title, achieve_price, not_achieve_price, content}) => {
-      const checked = watch('checkedHabitList').includes(pk.toString());
-
-      return {
-        props: {
-          ...register('checkedHabitList'),
-          disabled: todayHistory?.has_checked,
-          value: pk
-        },
-        title,
-        content,
-        price: checked ? achieve_price : not_achieve_price,
-        checked
-      };
-    }),
+    radioList,
     submittedDate: !todayHistory ? undefined : dayjs(todayHistory.checked_timestamp).format('YYYY-MM-DD HH:mm:ss')
   };
+}
+
+function subHabitToKey(parent: Habit, childrenIndex: number) {
+  return `${parent.pk}_${childrenIndex}`;
 }

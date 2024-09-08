@@ -5,35 +5,10 @@
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
+  font-size: 14px;
   
   > *:not(:last-child) {
     margin-bottom: 16px;
-  }
-}
-
-.customCheckbox {
-  border-width: 2px;
-  border-style: solid;
-  border-radius: 5px;
-  
-  padding: 10px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  border-color: map-get(color.$brandColors, secondary);
-  
-  input {
-    width: 20px;
-    height: 20px;
-    margin-right: 10px;
-  }
-  
-  :has(input:checked) {
-    border-color: map-get(color.$brandColors, primary);
-  }
-  
-  :has(input:disabled) {
-    border-color: map-get(color.$stateColors, disabled);
   }
 }
 
@@ -47,10 +22,6 @@
   &.negative {
     color: red;
   }
-}
-
-.habitItem {
-  width: 100%;
 }
 
 .content {

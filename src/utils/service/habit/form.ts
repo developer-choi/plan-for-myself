@@ -1,29 +1,36 @@
-import {useCallback} from 'react';
-import type {RegisterOptions, SubmitErrorHandler, SubmitHandler} from 'react-hook-form';
-import {useForm} from 'react-hook-form';
+import {useCallback, useMemo} from 'react';
+import {RegisterOptions, SubmitErrorHandler, SubmitHandler, useFieldArray, useForm} from 'react-hook-form';
 import {baseHandleErrors} from '@/utils/extend/react-hook-form';
 import type {HabitModalProp} from '@/components/modal/habit/HabitModal';
 import type {HabitFrequency} from '@/types/habit';
 import {HABIT_FREQUENCY_LIST} from '@/utils/service/habit/index';
-import {postHabitApi, PostHabitRequestParameter, updateHabitApi} from '@/utils/service/api/habit';
+import {postHabitApi, PostHabitRequest, updateHabitApi, UpdateHabitRequest} from '@/utils/service/api/habit';
 import {useMutation} from '@tanstack/react-query';
 
 export function useHabitForm({onClose, data}: HabitModalProp) {
-  const {register, handleSubmit} = useForm<HabitFormData>({
+  const {register, handleSubmit, control} = useForm<HabitFormData>({
     mode: 'all',
     defaultValues: !data ? DEFAULT_FORM_DATA : {
       title: data.title,
       content: data.content,
       achievePrice: data.achieve_price.toString(),
       notAchievePrice: data.not_achieve_price.toString(),
-      frequency: data.frequency
+      frequency: data.frequency,
+      children: data.children
     },
     shouldFocusError: false
   });
-
-  const onError: SubmitErrorHandler<HabitFormData> = useCallback(({title, achievePrice, notAchievePrice}) => {
-    baseHandleErrors([title, achievePrice, notAchievePrice]);
-  }, []);
+  const {fields, append, remove} = useFieldArray({
+    control,
+    name: 'children',
+    rules: {
+      required: '최소 1개 이상의 하위습관을 등록해야합니다.',
+      minLength: {
+        value: 1,
+        message: '최소 1개 이상의 하위습관을 등록해야합니다.'
+      }
+    }
+  });
 
   const postMutation = useMutation({
     mutationFn: postHabitApi
@@ -32,19 +39,31 @@ export function useHabitForm({onClose, data}: HabitModalProp) {
     mutationFn: updateHabitApi
   });
 
-  const onSubmit: SubmitHandler<HabitFormData> = useCallback(async formData => {
-    const habitParameter: PostHabitRequestParameter = {
-      ...formData,
-      not_achieve_price: Number(formData.notAchievePrice),
-      achieve_price: Number(formData.achievePrice),
-      frequency: formData.frequency as HabitFrequency
-    };
+  const onError: SubmitErrorHandler<HabitFormData> = useCallback(({title, achievePrice, notAchievePrice,  children}) => {
+    baseHandleErrors([title, achievePrice, notAchievePrice, children?.root]);
+  }, []);
 
+  const onSubmit: SubmitHandler<HabitFormData> = useCallback(async formData => {
     if (!data) {
+      const habitParameter: PostHabitRequest = {
+        ...formData,
+        not_achieve_price: Number(formData.notAchievePrice),
+        achieve_price: Number(formData.achievePrice),
+        frequency: formData.frequency as HabitFrequency
+      };
+
       await postMutation.mutateAsync(habitParameter);
     } else {
-      await updateMutation.mutateAsync({
+      const habitParameter: UpdateHabitRequest = {
+        ...formData,
         pk: data.pk,
+        not_achieve_price: Number(formData.notAchievePrice),
+        achieve_price: Number(formData.achievePrice),
+        frequency: formData.frequency as HabitFrequency,
+        children: formData.children
+      };
+
+      await updateMutation.mutateAsync({
         ...habitParameter
       });
     }
@@ -52,10 +71,30 @@ export function useHabitForm({onClose, data}: HabitModalProp) {
     onClose();
   }, [data, onClose, postMutation, updateMutation]);
 
+  const childrenList = useMemo(() => {
+    return fields.map((field, index) => ({
+      props: register(`children.${index}.title`),
+      is_important: field.is_important
+    }));
+  }, [fields, register]);
+
+  const appendChildren = useCallback(() => {
+    append({
+      title: '',
+      is_important: false
+    });
+  }, [append]);
+
+  const removeChildren = useCallback((index: number) => {
+    remove(index);
+  }, [remove]);
+
   return {
     form: {
       onSubmit: handleSubmit(onSubmit, onError),
       loading: postMutation.isPending || updateMutation.isPending,
+      appendChildren,
+      removeChildren
     },
     inputProps: {
       title: register('title', TITLE_OPTIONS),
@@ -65,7 +104,8 @@ export function useHabitForm({onClose, data}: HabitModalProp) {
       radioList: HABIT_FREQUENCY_LIST.map(frequency => ({
         ...register('frequency'),
         value: frequency,
-      }))
+      })),
+      childrenList
     },
     isEdit: !!data
   };
@@ -79,15 +119,17 @@ const ACHIEVE_OPTIONS: RegisterOptions = {
   required: '달성 시 금액은 필수입니다.'
 };
 
-export interface HabitFormData extends Omit<PostHabitRequestParameter, 'not_achieve_price' | 'achieve_price' | 'isImportant'> {
+export interface HabitFormData extends Omit<UpdateHabitRequest, 'not_achieve_price' | 'achieve_price' | 'isImportant'> {
   notAchievePrice: string;
   achievePrice: string;
 }
 
 const DEFAULT_FORM_DATA: HabitFormData = {
+  pk: 0,
   title: '',
   content: '',
   notAchievePrice: '',
   frequency: 'Daily',
   achievePrice: '',
+  children: []
 };

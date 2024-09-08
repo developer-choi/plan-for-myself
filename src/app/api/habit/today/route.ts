@@ -12,10 +12,15 @@ export async function GET(request: NextRequest) {
   const user_id = request.headers.get('User-Id');
 
   try {
-    const originalHabitListResponse = await sql`SELECT pk, title, achieve_price, content, not_achieve_price, frequency, is_important FROM original_habit where user_id=${user_id}`;
+    const originalHabitListResponse = await sql`SELECT pk, title, achieve_price, content, not_achieve_price, frequency, children FROM original_habit where user_id=${user_id}`;
     const todayHistoryResponse = await sql`SELECT * FROM today_habit_history where user_id=${user_id}`;
 
-    const originalHabitList = rearrangeImportantHabitList(originalHabitListResponse.rows as Habit[]);
+    const originalHabitList = rearrangeImportantHabitList(originalHabitListResponse.rows as Habit[]).map(({children, ...rest}) => ({
+      ...rest,
+      children,
+      has_important: children.some(({is_important}) => is_important)
+    }));
+
     const historyFromDB = todayHistoryResponse.rows[0] as HabitFullResponse['todayHistory'] | undefined;
 
     if (!historyFromDB) {
@@ -41,30 +46,13 @@ export async function GET(request: NextRequest) {
     console.error(error);
     return new Response('', {
       status: 500
-    })
+    });
   }
 }
 
 export async function POST(request: NextRequest) {
   const checkedHabitList: CheckableHabit[] = await request.json();
   const user_id = request.headers.get('User-Id');
-
-  // 동적 SQL 쿼리 문자열 초기화
-  let query = `UPDATE original_habit AS og SET is_important = CASE`;
-
-  // 매개변수 배열 초기화
-  const params: (number | boolean)[] = [];
-
-  // 각 데이터를 순회하며 CASE WHEN 절 추가
-  checkedHabitList.forEach(({ pk, checked }, index) => {
-    query += ` WHEN og.pk = $${index * 2 + 1} THEN $${index * 2 + 2}`;
-    params.push(pk, !checked); // checked가 true면 false로, false면 true로 설정
-  });
-
-  // SQL 쿼리 마무리
-  query += ` ELSE og.is_important END WHERE og.pk IN (`;
-  query += checkedHabitList.map((_, index) => `$${index * 2 + 1}`).join(', ');
-  query += `)`;
 
   // 템플릿 리터럴을 사용하여 쿼리 실행
   try {
@@ -74,7 +62,14 @@ export async function POST(request: NextRequest) {
       INSERT INTO today_habit_history (checked_timestamp, has_checked, checked_list, total_price, user_id)
       VALUES (${Date.now()}, true, ${JSON.stringify(checkedHabitList)}, ${calculateTotal(checkedHabitList)}, ${user_id})`;
 
-    await sql.query(query, params);
+    for (const habit of checkedHabitList) {
+      const newChildren = habit.children.map(({checked, title}) => ({
+        title,
+        is_important: !checked
+      }));
+
+      await sql`UPDATE original_habit SET children = ${JSON.stringify(newChildren)} WHERE pk = ${habit.pk}`;
+    }
 
     return new Response('');
   } catch (error) {
@@ -90,7 +85,7 @@ export async function POST(request: NextRequest) {
  *************************************************************************************************************/
 function calculateTotal(checkedHabitList: CheckableHabit[]) {
   return checkedHabitList.reduce((a, b) => {
-    if (b.checked) {
+    if (b.children.every(({checked}) => checked)) {
       return a + b.achieve_price;
     } else {
       return a - b.not_achieve_price;
@@ -140,7 +135,7 @@ function getTodayHabitFilterFrequency(habitList: Habit[]): Habit[] {
 
 function rearrangeImportantHabitList(list: Habit[]): Habit[] {
   const {important, normal} = list.reduce((a, b) => {
-    if (b.is_important) {
+    if (b.children.some(({is_important}) => is_important)) {
       a.important.push(b);
     } else {
       a.normal.push(b);
