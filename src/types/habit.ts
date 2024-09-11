@@ -21,7 +21,7 @@ export interface CheckableHabit extends Habit {
   children: CheckableHabitSubItem[];
 }
 
-export type HabitFrequency = 'Daily' | 'Weekly' | 'Monthly'
+export type HabitFrequency = 'Daily' | 'Weekly';
 
 export interface HabitFullResponse {
   originalHabitList: Habit[];

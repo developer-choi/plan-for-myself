@@ -3,13 +3,10 @@ import {useForm} from 'react-hook-form';
 import {useCallback} from 'react';
 import {deleteHabitApi} from '@/utils/service/api/habit';
 
-export const HABIT_FREQUENCY_LIST: HabitFrequency[] = ['Daily', 'Weekly', 'Monthly'];
-
-type HabitFrequencyWithAll = HabitFrequency | 'All'
-const ALL_HABIT_FREQUENCY_LIST: HabitFrequencyWithAll[] = ['All', ...HABIT_FREQUENCY_LIST];
+export const HABIT_FREQUENCY_LIST: HabitFrequency[] = ['Daily', 'Weekly'];
 
 interface FilteredHabitFormData {
-  frequency: HabitFrequencyWithAll;
+  frequency: HabitFrequency;
 }
 
 export function useTotalHabitList(habitList: Habit[], todayFrequency: HabitFrequency) {
@@ -19,15 +16,12 @@ export function useTotalHabitList(habitList: Habit[], todayFrequency: HabitFrequ
     }
   });
 
-  const currentFrequency = watch('frequency');
-
   return {
-    currentFrequency: watch('frequency'),
-    radioPropsList: ALL_HABIT_FREQUENCY_LIST.map(frequency => ({
+    radioPropsList: HABIT_FREQUENCY_LIST.map(frequency => ({
       ...register('frequency'),
       value: frequency,
     })),
-    filteredHabitList: currentFrequency === 'All' ? habitList : habitList.filter(habit => habit.frequency === currentFrequency)
+    filteredHabitList: habitList.filter(habit => habit.frequency === watch('frequency'))
   };
 }
 

@@ -87,10 +87,6 @@ export async function POST(request: NextRequest) {
 function getTodayFrequency(): HabitFrequency {
   const value = new Date();
 
-  if (value.getDate() === 1) {
-    return 'Monthly';
-  }
-
   if (value.getDay() === 0) {
     return 'Weekly';
   }
@@ -99,7 +95,7 @@ function getTodayFrequency(): HabitFrequency {
 }
 
 /**
- * 평일이면 Daily만, 주말이면 Daily + Weekly까지, 매달초면 Daily+Weekly+Monthly 모두 합쳐서 반환
+ * 평일이면 Daily만, 주말이면 Daily + Weekly까지 모두 합쳐서 반환
  * 주말에는 평일것까지, 매달마다는 평일,주말것 까지 같이 검토하기위함
  */
 function getTodayHabitFilterFrequency(habitList: Habit[]): Habit[] {
@@ -109,11 +105,7 @@ function getTodayHabitFilterFrequency(habitList: Habit[]): Habit[] {
   const habitRecord = habitList.reduce((a, b) => {
     a[b.frequency].push(b);
     return a;
-  }, {Daily: [], Monthly: [], Weekly: []} as Record<HabitFrequency, Habit[]>);
-
-  if (todayFilter === 'Monthly') {
-    result = result.concat(habitRecord.Monthly);
-  }
+  }, {Daily: [], Weekly: []} as Record<HabitFrequency, Habit[]>);
 
   if (todayFilter === 'Weekly') {
     result = result.concat(habitRecord.Weekly);

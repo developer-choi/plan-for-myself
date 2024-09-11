@@ -16,7 +16,7 @@ export interface TotalHabitListProp {
 }
 
 export default function TotalHabitList({habitList, todayFrequency}: TotalHabitListProp) {
-  const {radioPropsList, filteredHabitList, currentFrequency} = useTotalHabitList(habitList, todayFrequency);
+  const {radioPropsList, filteredHabitList} = useTotalHabitList(habitList, todayFrequency);
   const deleteHabit = useDeleteHabit();
   const {openModal} = useOpenModal();
 
@@ -46,7 +46,6 @@ export default function TotalHabitList({habitList, todayFrequency}: TotalHabitLi
         {filteredHabitList.map((habit) => (
           <ol key={habit.pk} className={styles.habitOl}>
             {!habit.has_important ? null : <div className={styles.importantMark}/>}
-            {currentFrequency !== 'All' ? null : <span className={styles.frequency}>({habit.frequency.toLowerCase()})</span>}
             <span className={styles.title}>{habit.title}</span>
             <Button size="xsmall" color="edit" className={classNames(styles.smallButton)} onClick={() => openHabitModal(habit)}>수정</Button>
             <Button size="xsmall" color="delete" className={classNames(styles.smallButton)} onClick={() => deleteHabit(habit)}>삭제</Button>
