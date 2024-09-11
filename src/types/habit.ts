@@ -1,18 +1,27 @@
 export interface Habit {
   pk: number; //created timestamp
   title: string;
-  achieve_price: number; //습관 달성금액, 자연수만 가능 (음수 및 소수 불가능)
-  content: string;
-  not_achieve_price: number; //습관 달성실패 차감금액, 자연수만 가능
+  memo: string;
   frequency: HabitFrequency;
+  children: SubHabit[];
+  has_important: boolean;
+}
+
+// 네이밍 고민중
+export interface SubHabit {
+  title: string;
   is_important: boolean;
 }
 
-export interface CheckableHabit extends Habit {
+export interface CheckableHabitSubItem extends SubHabit {
   checked: boolean;
 }
 
-export type HabitFrequency = 'Daily' | 'Weekly' | 'Monthly'
+export interface CheckableHabit extends Habit {
+  children: CheckableHabitSubItem[];
+}
+
+export type HabitFrequency = 'Daily' | 'Weekly';
 
 export interface HabitFullResponse {
   originalHabitList: Habit[];
@@ -20,7 +29,6 @@ export interface HabitFullResponse {
     checked_timestamp: number | undefined;
     has_checked: boolean;
     checked_list: CheckableHabit[];
-    total_price: number; // 음수 가능
   };
   todayFrequency: HabitFrequency;
   todayHabitList: Habit[]; // 오늘 체크할 습관 목록. 평일이면 Daily꺼만, 주말이면 Weekly 포함. 매일 체크리스트 보여주는데만 사용하면됨.

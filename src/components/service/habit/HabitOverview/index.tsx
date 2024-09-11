@@ -1,7 +1,6 @@
 'use client';
 
 import React, {useCallback} from 'react';
-import {numberWithComma} from '@/utils/extend/data-type/number';
 import type {HabitFullResponse} from '@/types/habit';
 import styles from './index.module.scss';
 import Button from '@/components/element/Button';
@@ -34,7 +33,6 @@ export default function HabitOverview({habitFullResponse}: HabitOverviewProp) {
     return (
       <div>
         <span className={styles.resultText}>
-          오늘 정산금액 : <span className={styles.price}>{numberWithComma(habitFullResponse.todayHistory.total_price)}원</span>
           <a style={{marginLeft: 8}} className={styles.styledLink} onClick={onClick}>
             {'내역 보기 >'}
           </a>

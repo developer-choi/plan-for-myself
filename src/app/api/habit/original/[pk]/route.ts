@@ -1,6 +1,6 @@
 import {NextRequest} from 'next/server';
 import {sql} from '@vercel/postgres';
-import {PostHabitRequestParameter} from '@/utils/service/api/habit';
+import {PostHabitRequest} from '@/utils/service/api/habit';
 
 /**
  * 기능 = 내 습관 1개 통째로 업데이트하는거
@@ -9,16 +9,15 @@ import {PostHabitRequestParameter} from '@/utils/service/api/habit';
  * 404 = pk가 존재하지않음
  */
 export async function PATCH(request: NextRequest, {params: {pk}}: {params: {pk: string}}) {
-  const {achieve_price, not_achieve_price, content, title, frequency} = await request.json() as PostHabitRequestParameter;
+  const {memo, title, frequency, children} = await request.json() as PostHabitRequest;
 
     try {
       await sql`
         UPDATE original_habit SET
           title = ${title},
-          achieve_price = ${achieve_price},
-          content = ${content},
-          not_achieve_price = ${not_achieve_price},
-          frequency = ${frequency}
+          memo = ${memo},
+          frequency = ${frequency},
+          children = ${JSON.stringify(children)}
         WHERE
           pk = ${pk}
     `;

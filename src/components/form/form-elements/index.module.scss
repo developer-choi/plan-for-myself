@@ -12,6 +12,7 @@ $formElement: (
 }
 
 .label {
+  font-size: 14px;
   display: flex;
   align-items: center;
   margin-bottom: map-get($formElement, labelMarginTop);

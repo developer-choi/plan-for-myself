@@ -9,6 +9,19 @@
   @include commonForm;
 }
 
+@mixin commonSubForm {
+  @include commonForm;
+  gap: 8px;
+  
+  &:global(.row) {
+    flex-direction: row;
+  }
+}
+
+.commonSubForm {
+  @include commonSubForm;
+}
+
 $zIndexes: (
   modal: 30,
   pcStickyHeader: 10,

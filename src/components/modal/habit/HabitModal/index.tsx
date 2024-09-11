@@ -11,6 +11,10 @@ import {ComposedModalProps, ModalContainer} from '@/components/modal/container';
 import {DefaultModalHeader} from '@/components/modal/header';
 import DefaultModalBody from '@/components/modal/body';
 import {TwoButtonsModalFooter} from '@/components/modal/footer';
+import Button from '@/components/element/Button';
+import {Label} from '@/components/form/form-elements';
+import classNames from 'classnames';
+import Radio, {RadioGroup} from '@/components/form/Radio';
 
 export interface HabitModalProp extends ComposedModalProps {
   data: Habit | undefined
@@ -24,19 +28,23 @@ export default function HabitModal(props: HabitModalProp) {
     <ModalContainer onClose={props.onClose}>
       <DefaultModalHeader>습관 {isEdit ? '수정' : '등록'}</DefaultModalHeader>
       <DefaultModalBody>
-        <form className={styles.styledForm} onSubmit={form.onSubmit}>
+        <form className={styles.habitForm} onSubmit={form.onSubmit}>
           <Input placeholder="제목 *" {...inputProps.title}/>
-          <TextArea placeholder="내용" {...inputProps.content}/>
-          <Input type="number" placeholder="달성 시 금액 *" {...inputProps.achievePrice}/>
-          <Input type="number" placeholder="실패 시 금액" {...inputProps.notAchievePrice}/>
-          <fieldset className={designSystemStyles.horizontalFieldset}>
+          <div>
+            <Label>하위 습관</Label>
+            <div className={designSystemStyles.commonSubForm}>
+              {...inputProps.childrenList.map(({props, is_important}, index) => (
+                <Input key={props.name} className={classNames({is_important})} rightRender={<button onClick={() => form.removeChildren(index)}>삭제</button>} {...props}/>
+              ))}
+              <Button onClick={form.appendChildren} color="secondary">Append</Button>
+            </div>
+          </div>
+          <TextArea placeholder="메모" {...inputProps.memo}/>
+          <RadioGroup label="습관주기">
             {inputProps.radioList.map(props => (
-              <label key={props.value}>
-                <input type="radio" {...props}/>
-                {props.value}
-              </label>
+              <Radio key={props.value} {...props}/>
             ))}
-          </fieldset>
+          </RadioGroup>
         </form>
       </DefaultModalBody>
       <TwoButtonsModalFooter
@@ -50,5 +58,5 @@ export default function HabitModal(props: HabitModalProp) {
         }}
       />
     </ModalContainer>
-  )
+  );
 }

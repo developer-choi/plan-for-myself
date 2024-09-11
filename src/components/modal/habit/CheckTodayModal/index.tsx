@@ -2,14 +2,13 @@
 
 import React from 'react';
 import {useCheckHabitListForm} from '@/utils/service/habit/check';
-import {numberWithComma} from '@/utils/extend/data-type/number';
 import styles from './index.module.scss';
-import classNames from 'classnames';
 import {HabitFullResponse} from '@/types/habit';
 import {ComposedModalProps, ModalContainer} from '@/components/modal/container';
 import {DefaultModalHeader} from '@/components/modal/header';
 import DefaultModalBody from '@/components/modal/body';
 import {TwoButtonsModalFooter} from '@/components/modal/footer';
+import Checkbox from '@/components/form/Checkbox';
 
 export interface CheckTodayModalProp extends ComposedModalProps {
   habitFullResponse: HabitFullResponse;
@@ -30,15 +29,13 @@ export default function CheckTodayModal({onClose, habitFullResponse}: CheckToday
       <DefaultModalHeader>습관 체크리스트</DefaultModalHeader>
       <DefaultModalBody>
         <form className={styles.styledForm} onSubmit={form.onSubmit}>
-          {radioList.map(({props, title, price, checked, content}) => (
-            <div key={props.value} className={styles.habitItem}>
-              <label className={styles.customCheckbox}>
-                <input type="checkbox" {...props}/>
-                {title}
-                <span
-                  className={classNames(styles.price, checked ? styles.positive : styles.negative)}>{`${checked ? '+' : '-'}${numberWithComma(price)}`}원</span>
-              </label>
-              {!content ? null : <div className={styles.content}>{content}</div>}
+          {radioList.map(({propsList, pk, title, memo}) => (
+            <div key={pk} >
+              <div>{title}</div>
+              {propsList.map(props => (
+                <Checkbox key={props.value as string} {...props}/>
+              ))}
+              {!memo ? null : <div className={styles.memo}>{memo}</div>}
             </div>
           ))}
           {!form.disabled ? null : (

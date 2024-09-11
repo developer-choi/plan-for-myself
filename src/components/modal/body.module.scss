@@ -42,7 +42,6 @@ $modalPadding: container.$modalPadding;
 }
 
 .bodyScrollContainer {
-  @include typography.body1;
   @include customScrollbar;
   
   display: flex; // 이미지같은거 노출될 때 간격 모두 없애기 위함

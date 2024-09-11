@@ -1,63 +1,20 @@
 @use "/src/styles/color";
+@use "/src/styles/typography.module";
+@use "/src/styles/design-system.module";
 
 .styledForm {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 100%;
-  
-  > *:not(:last-child) {
-    margin-bottom: 16px;
-  }
+  @include typography.body2;
+  @include design-system.commonForm;
 }
 
-.customCheckbox {
-  border-width: 2px;
-  border-style: solid;
-  border-radius: 5px;
+.memo {
+  @include typography.body3;
+  color: nth(color.$grayColors, 3);
   
-  padding: 10px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  border-color: map-get(color.$brandColors, secondary);
-  
-  input {
-    width: 20px;
-    height: 20px;
-    margin-right: 10px;
-  }
-  
-  :has(input:checked) {
-    border-color: map-get(color.$brandColors, primary);
-  }
-  
-  :has(input:disabled) {
-    border-color: map-get(color.$stateColors, disabled);
-  }
-}
-
-.price {
-  margin-left: auto;
-  
-  &.positive {
-    color: blue;
-  }
-  
-  &.negative {
-    color: red;
-  }
-}
-
-.habitItem {
-  width: 100%;
-}
-
-.content {
   margin-top: 6px;
   white-space: pre-line;
   
-  border: 1px solid gray;
+  border: 1px solid lightgray;
   border-radius: 4px;
   padding: 8px;
 }
