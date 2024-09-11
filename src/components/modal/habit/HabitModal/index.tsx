@@ -38,7 +38,7 @@ export default function HabitModal(props: HabitModalProp) {
               <Button onClick={form.appendChildren} color="secondary">Append</Button>
             </div>
           </div>
-          <TextArea placeholder="내용" {...inputProps.content}/>
+          <TextArea placeholder="메모" {...inputProps.memo}/>
           <Input type="number" placeholder="달성 시 금액 *" {...inputProps.achievePrice}/>
           <Input type="number" placeholder="실패 시 금액" {...inputProps.notAchievePrice}/>
           <fieldset className={designSystemStyles.horizontalFieldset}>

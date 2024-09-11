@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
   const user_id = request.headers.get('User-Id');
 
   try {
-    const originalHabitListResponse = await sql`SELECT pk, title, achieve_price, content, not_achieve_price, frequency, children FROM original_habit where user_id=${user_id}`;
+    const originalHabitListResponse = await sql`SELECT pk, title, achieve_price, memo, not_achieve_price, frequency, children FROM original_habit where user_id=${user_id}`;
     const todayHistoryResponse = await sql`SELECT * FROM today_habit_history where user_id=${user_id}`;
 
     const originalHabitList = rearrangeImportantHabitList(originalHabitListResponse.rows as Habit[]).map(({children, ...rest}) => ({

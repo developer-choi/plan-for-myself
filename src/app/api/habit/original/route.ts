@@ -8,13 +8,13 @@ import {Habit} from '@/types/habit';
  * 400 = habit 데이터중 일부가 유효하지않은 경우
  */
 export async function POST(request: NextRequest) {
-  const {achieve_price, content, frequency, not_achieve_price, title, children} = await request.json() as Habit;
+  const {achieve_price, memo, frequency, not_achieve_price, title, children} = await request.json() as Habit;
   const user_id = request.headers.get('User-Id') as string;
 
   try {
     await sql`
-INSERT INTO original_habit (user_id, title, content, achieve_price, not_achieve_price, frequency, children)
-VALUES (${user_id}, ${title}, ${content}, ${achieve_price}, ${not_achieve_price}, ${frequency}, ${JSON.stringify(children)});
+INSERT INTO original_habit (user_id, title, memo, achieve_price, not_achieve_price, frequency, children)
+VALUES (${user_id}, ${title}, ${memo}, ${achieve_price}, ${not_achieve_price}, ${frequency}, ${JSON.stringify(children)});
 `;
   } catch (error) {
     console.error(error);

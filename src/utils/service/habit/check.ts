@@ -66,12 +66,12 @@ export function useCheckHabitListForm({onClose, response}: {
   const hasChecked = todayHistory?.has_checked;
 
   const radioList = sourceHabitList.map((habit) => {
-    const {pk, children, title, content} = habit;
+    const {pk, children, title, memo} = habit;
 
     return {
       pk,
       title,
-      content,
+      memo: memo,
       propsList: children.map((subHabit, index) => ({
         ...register('checkedSubHabitList'),
         label: subHabit.title,

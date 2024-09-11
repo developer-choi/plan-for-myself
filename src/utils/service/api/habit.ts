@@ -14,14 +14,14 @@ export interface PostHabitRequest extends Omit<Habit, 'pk' | 'not_achieve_price'
 }
 
 export async function postHabitApi(habit: PostHabitRequest, isImportant = true) {
-  const {not_achieve_price, achieve_price, title, frequency, content} = habit;
+  const {not_achieve_price, achieve_price, title, frequency, memo} = habit;
 
   return customFetchOnClientSide('/api/habit/original', {
     method: 'POST',
     authorize: 'private',
     body: {
       title,
-      content,
+      memo: memo,
       achieve_price: achieve_price,
       not_achieve_price: not_achieve_price ?? 0,
       frequency,

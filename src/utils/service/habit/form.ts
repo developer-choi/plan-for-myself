@@ -12,7 +12,7 @@ export function useHabitForm({onClose, data}: HabitModalProp) {
     mode: 'all',
     defaultValues: !data ? DEFAULT_FORM_DATA : {
       title: data.title,
-      content: data.content,
+      memo: data.memo,
       achievePrice: data.achieve_price.toString(),
       notAchievePrice: data.not_achieve_price.toString(),
       frequency: data.frequency,
@@ -98,7 +98,7 @@ export function useHabitForm({onClose, data}: HabitModalProp) {
     },
     inputProps: {
       title: register('title', TITLE_OPTIONS),
-      content: register('content'),
+      memo: register('memo'),
       achievePrice: register('achievePrice', ACHIEVE_OPTIONS),
       notAchievePrice: register('notAchievePrice'),
       radioList: HABIT_FREQUENCY_LIST.map(frequency => ({
@@ -127,7 +127,7 @@ export interface HabitFormData extends Omit<UpdateHabitRequest, 'not_achieve_pri
 const DEFAULT_FORM_DATA: HabitFormData = {
   pk: 0,
   title: '',
-  content: '',
+  memo: '',
   notAchievePrice: '',
   frequency: 'Daily',
   achievePrice: '',

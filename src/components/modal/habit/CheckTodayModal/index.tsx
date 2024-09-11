@@ -29,13 +29,13 @@ export default function CheckTodayModal({onClose, habitFullResponse}: CheckToday
       <DefaultModalHeader>습관 체크리스트</DefaultModalHeader>
       <DefaultModalBody>
         <form className={styles.styledForm} onSubmit={form.onSubmit}>
-          {radioList.map(({propsList, pk, title, content}) => (
+          {radioList.map(({propsList, pk, title, memo}) => (
             <div key={pk} >
               <div>{title}</div>
               {propsList.map(props => (
                 <Checkbox key={props.value as string} {...props}/>
               ))}
-              {!content ? null : <div className={styles.content}>{content}</div>}
+              {!memo ? null : <div className={styles.memo}>{memo}</div>}
             </div>
           ))}
           {!form.disabled ? null : (

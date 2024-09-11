@@ -2,7 +2,7 @@ export interface Habit {
   pk: number; //created timestamp
   title: string;
   achieve_price: number; //습관 달성금액, 자연수만 가능 (음수 및 소수 불가능)
-  content: string; // TODO 곧 memo같은걸로 수정예정
+  memo: string;
   not_achieve_price: number; //습관 달성실패 차감금액, 자연수만 가능
   frequency: HabitFrequency;
   children: SubHabit[];
