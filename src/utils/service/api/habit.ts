@@ -9,12 +9,12 @@ export async function getHabitListApi() {
   });
 }
 
-export interface PostHabitRequest extends Omit<Habit, 'pk' | 'not_achieve_price' | 'has_important' | 'children'>, Partial<Pick<Habit, 'not_achieve_price'>> {
+export interface PostHabitRequest extends Omit<Habit, 'pk' | 'has_important' | 'children'> {
   children: SubHabit[];
 }
 
 export async function postHabitApi(habit: PostHabitRequest, isImportant = true) {
-  const {not_achieve_price, achieve_price, title, frequency, memo} = habit;
+  const {title, frequency, memo} = habit;
 
   return customFetchOnClientSide('/api/habit/original', {
     method: 'POST',
@@ -22,8 +22,6 @@ export async function postHabitApi(habit: PostHabitRequest, isImportant = true) 
     body: {
       title,
       memo: memo,
-      achieve_price: achieve_price,
-      not_achieve_price: not_achieve_price ?? 0,
       frequency,
       is_important: isImportant
     }

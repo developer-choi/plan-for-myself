@@ -39,8 +39,6 @@ export default function HabitModal(props: HabitModalProp) {
             </div>
           </div>
           <TextArea placeholder="메모" {...inputProps.memo}/>
-          <Input type="number" placeholder="달성 시 금액 *" {...inputProps.achievePrice}/>
-          <Input type="number" placeholder="실패 시 금액" {...inputProps.notAchievePrice}/>
           <fieldset className={designSystemStyles.horizontalFieldset}>
             {inputProps.radioList.map(props => (
               <label key={props.value}>

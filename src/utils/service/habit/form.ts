@@ -13,8 +13,6 @@ export function useHabitForm({onClose, data}: HabitModalProp) {
     defaultValues: !data ? DEFAULT_FORM_DATA : {
       title: data.title,
       memo: data.memo,
-      achievePrice: data.achieve_price.toString(),
-      notAchievePrice: data.not_achieve_price.toString(),
       frequency: data.frequency,
       children: data.children
     },
@@ -39,16 +37,14 @@ export function useHabitForm({onClose, data}: HabitModalProp) {
     mutationFn: updateHabitApi
   });
 
-  const onError: SubmitErrorHandler<HabitFormData> = useCallback(({title, achievePrice, notAchievePrice,  children}) => {
-    baseHandleErrors([title, achievePrice, notAchievePrice, children?.root]);
+  const onError: SubmitErrorHandler<HabitFormData> = useCallback(({title,  children}) => {
+    baseHandleErrors([title, children?.root]);
   }, []);
 
   const onSubmit: SubmitHandler<HabitFormData> = useCallback(async formData => {
     if (!data) {
       const habitParameter: PostHabitRequest = {
         ...formData,
-        not_achieve_price: Number(formData.notAchievePrice),
-        achieve_price: Number(formData.achievePrice),
         frequency: formData.frequency as HabitFrequency
       };
 
@@ -57,8 +53,6 @@ export function useHabitForm({onClose, data}: HabitModalProp) {
       const habitParameter: UpdateHabitRequest = {
         ...formData,
         pk: data.pk,
-        not_achieve_price: Number(formData.notAchievePrice),
-        achieve_price: Number(formData.achievePrice),
         frequency: formData.frequency as HabitFrequency,
         children: formData.children
       };
@@ -99,8 +93,6 @@ export function useHabitForm({onClose, data}: HabitModalProp) {
     inputProps: {
       title: register('title', TITLE_OPTIONS),
       memo: register('memo'),
-      achievePrice: register('achievePrice', ACHIEVE_OPTIONS),
-      notAchievePrice: register('notAchievePrice'),
       radioList: HABIT_FREQUENCY_LIST.map(frequency => ({
         ...register('frequency'),
         value: frequency,
@@ -115,21 +107,12 @@ const TITLE_OPTIONS: RegisterOptions = {
   required: '제목은 필수입니다.'
 };
 
-const ACHIEVE_OPTIONS: RegisterOptions = {
-  required: '달성 시 금액은 필수입니다.'
-};
-
-export interface HabitFormData extends Omit<UpdateHabitRequest, 'not_achieve_price' | 'achieve_price' | 'isImportant'> {
-  notAchievePrice: string;
-  achievePrice: string;
-}
+export type HabitFormData = Omit<UpdateHabitRequest, 'isImportant'>;
 
 const DEFAULT_FORM_DATA: HabitFormData = {
   pk: 0,
   title: '',
   memo: '',
-  notAchievePrice: '',
   frequency: 'Daily',
-  achievePrice: '',
   children: []
 };

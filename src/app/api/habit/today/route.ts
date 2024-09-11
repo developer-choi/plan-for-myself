@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
   const user_id = request.headers.get('User-Id');
 
   try {
-    const originalHabitListResponse = await sql`SELECT pk, title, achieve_price, memo, not_achieve_price, frequency, children FROM original_habit where user_id=${user_id}`;
+    const originalHabitListResponse = await sql`SELECT pk, title, memo, frequency, children FROM original_habit where user_id=${user_id}`;
     const todayHistoryResponse = await sql`SELECT * FROM today_habit_history where user_id=${user_id}`;
 
     const originalHabitList = rearrangeImportantHabitList(originalHabitListResponse.rows as Habit[]).map(({children, ...rest}) => ({
@@ -59,8 +59,8 @@ export async function POST(request: NextRequest) {
     await sql`DELETE FROM today_habit_history where user_id=${user_id}`;
 
     await sql`
-      INSERT INTO today_habit_history (checked_timestamp, has_checked, checked_list, total_price, user_id)
-      VALUES (${Date.now()}, true, ${JSON.stringify(checkedHabitList)}, ${calculateTotal(checkedHabitList)}, ${user_id})`;
+      INSERT INTO today_habit_history (checked_timestamp, has_checked, checked_list, user_id)
+      VALUES (${Date.now()}, true, ${JSON.stringify(checkedHabitList)}, ${user_id})`;
 
     for (const habit of checkedHabitList) {
       const newChildren = habit.children.map(({checked, title}) => ({
@@ -83,16 +83,6 @@ export async function POST(request: NextRequest) {
 /*************************************************************************************************************
  * Non Export
  *************************************************************************************************************/
-function calculateTotal(checkedHabitList: CheckableHabit[]) {
-  return checkedHabitList.reduce((a, b) => {
-    if (b.children.every(({checked}) => checked)) {
-      return a + b.achieve_price;
-    } else {
-      return a - b.not_achieve_price;
-    }
-  }, 0);
-}
-
 // 평일인지 주말인지 매달인지 판단하는 기준값을 반환
 function getTodayFrequency(): HabitFrequency {
   const value = new Date();
@@ -156,7 +146,6 @@ const DEFAULT_HABIT_RESPONSE: HabitFullResponse = {
     has_checked: false,
     checked_list: [],
     checked_timestamp: undefined,
-    total_price: 0
   },
   todayHabitList: [],
   todayFrequency: 'Daily'

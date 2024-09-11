@@ -12,18 +12,6 @@
   }
 }
 
-.price {
-  margin-left: auto;
-  
-  &.positive {
-    color: blue;
-  }
-  
-  &.negative {
-    color: red;
-  }
-}
-
 .memo {
   margin-top: 6px;
   white-space: pre-line;
