@@ -96,6 +96,7 @@ export function useHabitForm({onClose, data}: HabitModalProp) {
       radioList: HABIT_FREQUENCY_LIST.map(frequency => ({
         ...register('frequency'),
         value: frequency,
+        label: frequency
       })),
       childrenList
     },
