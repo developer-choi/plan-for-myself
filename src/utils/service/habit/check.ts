@@ -14,7 +14,7 @@ export function useCheckHabitListForm({onClose, response}: {
   onClose: () => void,
   response: HabitFullResponse
 }) {
-  const todayHistory = response?.todayHistory;
+  const todayHistory = response.todayHistory;
 
   const {register, handleSubmit} = useForm<CheckHabitListFormData>({
     defaultValues: {
@@ -62,8 +62,10 @@ export function useCheckHabitListForm({onClose, response}: {
     return null
   }
 
-  const sourceHabitList = todayHistory?.checked_list.length ? todayHistory.checked_list : response.todayHabitList;
-  const hasChecked = todayHistory?.has_checked;
+  const sourceHabitList = todayHistory.checked_list.length ? todayHistory.checked_list : response.todayHabitList;
+  const hasChecked = todayHistory.has_checked;
+
+  console.log('todayHistory', todayHistory);
 
   const radioList = sourceHabitList.map((habit) => {
     const {pk, children, title, memo} = habit;
@@ -84,7 +86,7 @@ export function useCheckHabitListForm({onClose, response}: {
   return {
     form: {
       onSubmit: handleSubmit(onSubmit),
-      disabled: !!todayHistory?.has_checked,
+      disabled: todayHistory.has_checked,
       loading: isPending
     },
     radioList,

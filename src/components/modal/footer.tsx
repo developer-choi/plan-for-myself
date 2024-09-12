@@ -83,6 +83,7 @@ export function TwoButtonsModalFooter({style, className, left, right}: TwoButton
         onClick={right.onClick}
         type={right.buttonType}
         loading={right.loading}
+        disabled={right.disabled}
         className={right.customProps?.className}
         style={right.customProps?.style}
       >
