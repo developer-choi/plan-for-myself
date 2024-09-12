@@ -6,21 +6,7 @@
   @include design-system.commonForm;
   @include typography.body2;
   
-  :global(.is_important){
-    &:before {
-      content: ' ';
-      background-color: red;
-      
-      display: block;
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-    
-    position: relative;
+  :global(.is_important) > div {
+    border-color: red;
   }
 }

@@ -8,17 +8,28 @@ import IcUncheck from '@/components/icon/IcUncheck';
 export interface CheckboxProps extends Omit<ComponentPropsWithRef<'input'>, 'type'> {
   label?: string;
   color?: 'primary' | 'secondary';
+  square?: number; // 체크박스 아이콘 가로세로 크기
 }
 
-export default forwardRef(function Checkbox(props: CheckboxProps, ref: Ref<HTMLInputElement>) {
-  const { style, className, label, color = 'primary', ...rest } = props;
+const Checkbox = forwardRef(function Checkbox(props: CheckboxProps, ref: Ref<HTMLInputElement>) {
+  const { style, className, label, color = 'primary', square, ...rest } = props;
 
   return (
     <label style={style} className={classNames(styles.wrapper, styles[color], className)}>
-      <IcCheck className={styles.checked}/>
-      <IcUncheck className={styles.unchecked}/>
+      <IcCheck square={square} className={styles.checked}/>
+      <IcUncheck square={square} className={styles.unchecked}/>
       <input ref={ref} type="checkbox" {...rest} />
       {label}
     </label>
+  );
+})
+
+export default Checkbox;
+
+export const OutlinedCheckbox = forwardRef(function BigCheckbox(props: CheckboxProps, ref: Ref<HTMLInputElement>) {
+  const { className, ...rest } = props;
+
+  return (
+    <Checkbox ref={ref} className={classNames(styles.bigCheckbox, className)} square={20} {...rest}/>
   );
 });

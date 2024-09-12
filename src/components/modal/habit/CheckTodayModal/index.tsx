@@ -8,7 +8,9 @@ import {ComposedModalProps, ModalContainer} from '@/components/modal/container';
 import {DefaultModalHeader} from '@/components/modal/header';
 import DefaultModalBody from '@/components/modal/body';
 import {TwoButtonsModalFooter} from '@/components/modal/footer';
-import Checkbox from '@/components/form/Checkbox';
+import {OutlinedCheckbox} from '@/components/form/Checkbox';
+import designSystemStyles from '@/styles/design-system.module.scss';
+import {Label} from '@/components/form/form-elements';
 
 export interface CheckTodayModalProp extends ComposedModalProps {
   habitFullResponse: HabitFullResponse;
@@ -30,11 +32,13 @@ export default function CheckTodayModal({onClose, habitFullResponse}: CheckToday
       <DefaultModalBody>
         <form className={styles.styledForm} onSubmit={form.onSubmit}>
           {radioList.map(({propsList, pk, title, memo}) => (
-            <div key={pk} >
-              <div>{title}</div>
-              {propsList.map(props => (
-                <Checkbox key={props.value as string} {...props}/>
-              ))}
+            <div key={pk}>
+              <Label>{title}</Label>
+              <div className={designSystemStyles.commonSubForm}>
+                {propsList.map(props => (
+                  <OutlinedCheckbox key={props.value as string} {...props}/>
+                ))}
+              </div>
               {!memo ? null : <div className={styles.memo}>{memo}</div>}
             </div>
           ))}
