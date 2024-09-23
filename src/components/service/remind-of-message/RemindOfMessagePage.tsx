@@ -1,6 +1,6 @@
 'use client';
 
-import styles from '@/app/(service)/(private)/dashboard/page.module.scss';
+import styles from '@/app/(service)/(private)/habit/page.module.scss';
 import habitStyles from '@/components/service/habit/TotalHabitList/index.module.scss';
 import Button from '@/components/element/Button';
 import React, {useCallback} from 'react';

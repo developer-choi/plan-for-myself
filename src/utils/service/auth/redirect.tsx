@@ -7,7 +7,7 @@ export class LoginError extends Error {
   }
 }
 
-export const DEFAULT_HOME_URL = '/dashboard';
+export const DEFAULT_HOME_URL = '/habit';
 
 /**
  * 로그인 성공했을 때 리다이랙트 될 URL (pathname + search) 반환

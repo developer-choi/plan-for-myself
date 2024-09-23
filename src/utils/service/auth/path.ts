@@ -42,7 +42,7 @@ export function getNextNavigating({redirectUrl, nextPathname, isLoggedIn}: NextN
  * Non Export
  *************************************************************************************************************/
 const PRIVATE_PATHNAMES = [
-  "/dashboard",
+  "/habit",
   "/studied-time",
   '/remind-of-message'
 ];
