@@ -14,7 +14,7 @@ export interface PostHabitRequest extends Omit<Habit, 'pk' | 'has_important' | '
 }
 
 export async function postHabitApi(habit: PostHabitRequest, isImportant = true) {
-  const {title, frequency, memo} = habit;
+  const {title, frequency, memo, children} = habit;
 
   return customFetchOnClientSide('/api/habit/original', {
     method: 'POST',
@@ -23,6 +23,7 @@ export async function postHabitApi(habit: PostHabitRequest, isImportant = true) 
       title,
       memo: memo,
       frequency,
+      children,
       is_important: isImportant
     }
   })
