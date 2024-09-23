@@ -34,7 +34,7 @@ export default function HabitModal(props: HabitModalProp) {
             <Label>하위 습관</Label>
             <div className={designSystemStyles.commonSubForm}>
               {...inputProps.childrenList.map(({props, is_important}, index) => (
-                <Input key={props.name} className={classNames({is_important})} rightRender={<button onClick={() => form.removeChildren(index)}>삭제</button>} {...props}/>
+                <Input key={props.name} className={classNames({is_important})} rightRender={<button type="button" onClick={() => form.removeChildren(index)}>삭제</button>} {...props}/>
               ))}
               <Button onClick={form.appendChildren} color="secondary">Append</Button>
             </div>
