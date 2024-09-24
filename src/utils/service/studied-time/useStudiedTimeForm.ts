@@ -73,23 +73,30 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, ini
       ...data,
       studied_minutes: studiedMinutes,
       fail_keywords: data.fail_keywords.split(','),
-      timestamp: new Date(`${year}-${month}-${date} 13:00:00`).getTime(),
+      year,
+      month,
+      date
     };
 
-    const pk = history.data?.pk;
+    const historyData = history.data;
 
     try {
-      if (pk) {
+      if (historyData) {
         await updateMutation.mutateAsync({
-          pk,
+          pk: historyData.pk,
+          timestamp: historyData.timestamp,
           ...postParameter
         });
 
       } else {
         await postMutation.mutateAsync(postParameter);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
+
+      if (error.text) {
+        return alert(error.text);
+      }
     }
   }, [history, postMutation, updateMutation]);
 

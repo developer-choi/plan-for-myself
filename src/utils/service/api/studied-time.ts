@@ -10,7 +10,11 @@ import {
 import {isSameDate} from '@/utils/extend/date/util';
 import {padToTwoDigits} from '@/utils/extend/data-type/string';
 
-export type PostDailyStudyTimeParameter = Omit<DailyStudyTime, 'pk'>;
+export interface PostDailyStudyTimeParameter extends Omit<DailyStudyTime, 'pk' | 'timestamp'> {
+  year: number;
+  month: number;
+  date: number;
+}
 
 export async function postStudiedTimeApi(parameter: PostDailyStudyTimeParameter) {
   return customFetchOnClientSide('/api/studied-time', {

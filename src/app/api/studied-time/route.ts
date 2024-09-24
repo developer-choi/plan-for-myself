@@ -34,12 +34,21 @@ ORDER BY timestamp ASC;
 export async function POST(request: NextRequest) {
   const user_id = request.headers.get('User-Id');
   const parameter: PostDailyStudyTimeParameter = await request.json();
-  const {fail_keywords = [], fail_reason = '', studied_minutes, date_type, timestamp, wake_up_time, bed_time} = parameter;
+  const {fail_keywords = [], fail_reason = '', studied_minutes, date_type, year, month, date, wake_up_time, bed_time} = parameter;
+  const timestamp = makeTimestamp(year, month, date);
 
   const formattedStudiedMinutes = `{${studied_minutes.join(',')}}`;
   const formattedFailKeywords = `{${fail_keywords.map(k => `"${k}"`).join(',')}}`;
 
   try {
+    const {rows} = await sql`select pk from studied_time where timestamp=${timestamp}`;
+
+    if (rows.length) {
+      return new Response('Resource already exists.', {
+        status: 409
+      });
+    }
+
     await sql`
         INSERT INTO studied_time (studied_minutes, fail_keywords, fail_reason, date_type, timestamp, user_id, wake_up_time, bed_time)
         VALUES (${formattedStudiedMinutes}, ${formattedFailKeywords}, ${fail_reason}, ${date_type}, ${timestamp}, ${user_id}, ${wake_up_time}, ${bed_time})`;
@@ -51,4 +60,8 @@ export async function POST(request: NextRequest) {
       status: 500
     });
   }
+}
+
+function makeTimestamp(year: number, month: number, date: number) {
+  return new Date(`${year}-${month}-${date} 13:00:00`).getTime();
 }
