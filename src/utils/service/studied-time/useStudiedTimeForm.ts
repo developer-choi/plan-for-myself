@@ -171,13 +171,19 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, ini
     if(!history.data) {
       return;
     }
+    
+    const {calendarDate: {month, date}} = history;
+    
+    if(!confirm(`${month}월 ${date}일 기록을 삭제하시겠습니까?`)) {
+      return;
+    }
 
     try {
       await deleteMutation.mutateAsync(history.data.pk);
     } catch (error) {
       console.error(error);
     }
-  }, [deleteMutation, history.data]);
+  }, [deleteMutation, history]);
 
   return {
     form: {
