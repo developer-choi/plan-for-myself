@@ -9,14 +9,13 @@ import {PostHabitRequest} from '@/utils/service/api/habit';
  * 404 = pk가 존재하지않음
  */
 export async function PATCH(request: NextRequest, {params: {pk}}: {params: {pk: string}}) {
-  const {memo, title, frequency, children} = await request.json() as PostHabitRequest;
-
-    try {
-      await sql`
+  const {memo, title, frequency_list, children} = await request.json() as PostHabitRequest;
+  try {
+    await sql`
         UPDATE original_habit SET
           title = ${title},
           memo = ${memo},
-          frequency = ${frequency},
+          frequency_list = ${JSON.stringify(frequency_list)},
           children = ${JSON.stringify(children)}
         WHERE
           pk = ${pk}

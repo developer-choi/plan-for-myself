@@ -65,8 +65,6 @@ export function useCheckHabitListForm({onClose, response}: {
   const sourceHabitList = todayHistory.checked_list.length ? todayHistory.checked_list : response.todayHabitList;
   const hasChecked = todayHistory.has_checked;
 
-  console.log('todayHistory', todayHistory);
-
   const radioList = sourceHabitList.map((habit) => {
     const {pk, children, title, memo} = habit;
 

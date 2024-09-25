@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
   const user_id = request.headers.get('User-Id');
 
   try {
-    const originalHabitListResponse = await sql`SELECT pk, title, memo, frequency, children FROM original_habit where user_id=${user_id}`;
+    const originalHabitListResponse = await sql`SELECT pk, title, memo, frequency_list, children FROM original_habit where user_id=${user_id}`;
     const todayHistoryResponse = await sql`SELECT * FROM today_habit_history where user_id=${user_id}`;
 
     const originalHabitList = rearrangeImportantHabitList(originalHabitListResponse.rows as Habit[]).map(({children, ...rest}) => ({
@@ -95,23 +95,11 @@ function getTodayFrequency(): HabitFrequency {
 }
 
 /**
- * 평일이면 Daily만, 주말이면 Daily + Weekly까지 모두 합쳐서 반환
- * 주말에는 평일것까지, 매달마다는 평일,주말것 까지 같이 검토하기위함
+ * 평일이면 Daily만, 주말이면 Weekly꺼만.
  */
 function getTodayHabitFilterFrequency(habitList: Habit[]): Habit[] {
   const todayFilter = getTodayFrequency();
-  let result: Habit[] = [];
-
-  const habitRecord = habitList.reduce((a, b) => {
-    a[b.frequency].push(b);
-    return a;
-  }, {Daily: [], Weekly: []} as Record<HabitFrequency, Habit[]>);
-
-  if (todayFilter === 'Weekly') {
-    result = result.concat(habitRecord.Weekly);
-  }
-
-  return result.concat(habitRecord.Daily);
+  return habitList.filter(({frequency_list}) => frequency_list.includes(todayFilter));
 }
 
 

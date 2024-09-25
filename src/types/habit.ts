@@ -2,7 +2,7 @@ export interface Habit {
   pk: number; //created timestamp
   title: string;
   memo: string;
-  frequency: HabitFrequency;
+  frequency_list: HabitFrequency[];
   children: SubHabit[];
   has_important: boolean;
 }

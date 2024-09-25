@@ -21,7 +21,7 @@ export function useTotalHabitList(habitList: Habit[], todayFrequency: HabitFrequ
       ...register('frequency'),
       value: frequency,
     })),
-    filteredHabitList: habitList.filter(habit => habit.frequency === watch('frequency'))
+    filteredHabitList: habitList.filter(habit => habit.frequency_list.includes(watch('frequency')))
   };
 }
 

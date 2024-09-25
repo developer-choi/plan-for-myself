@@ -14,7 +14,8 @@ import {TwoButtonsModalFooter} from '@/components/modal/footer';
 import Button from '@/components/element/Button';
 import {Label} from '@/components/form/form-elements';
 import classNames from 'classnames';
-import Radio, {RadioGroup} from '@/components/form/Radio';
+import {RadioGroup} from '@/components/form/Radio';
+import Checkbox from '@/components/form/Checkbox';
 
 export interface HabitModalProp extends ComposedModalProps {
   data: Habit | undefined
@@ -41,8 +42,8 @@ export default function HabitModal(props: HabitModalProp) {
           </div>
           <TextArea placeholder="메모" {...inputProps.memo}/>
           <RadioGroup label="습관주기">
-            {inputProps.radioList.map(props => (
-              <Radio key={props.value} {...props}/>
+            {inputProps.checkboxList.map(props => (
+              <Checkbox key={props.value} {...props}/>
             ))}
           </RadioGroup>
         </form>

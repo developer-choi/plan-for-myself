@@ -1,8 +1,7 @@
 import {useCallback, useMemo} from 'react';
-import {RegisterOptions, SubmitErrorHandler, SubmitHandler, useFieldArray, useForm} from 'react-hook-form';
+import {FieldError, RegisterOptions, SubmitErrorHandler, SubmitHandler, useFieldArray, useForm} from 'react-hook-form';
 import {baseHandleErrors} from '@/utils/extend/react-hook-form';
 import type {HabitModalProp} from '@/components/modal/habit/HabitModal';
-import type {HabitFrequency} from '@/types/habit';
 import {HABIT_FREQUENCY_LIST} from '@/utils/service/habit/index';
 import {postHabitApi, PostHabitRequest, updateHabitApi, UpdateHabitRequest} from '@/utils/service/api/habit';
 import {useMutation} from '@tanstack/react-query';
@@ -13,7 +12,7 @@ export function useHabitForm({onClose, data}: HabitModalProp) {
     defaultValues: !data ? DEFAULT_FORM_DATA : {
       title: data.title,
       memo: data.memo,
-      frequency: data.frequency,
+      frequency_list: data.frequency_list,
       children: data.children
     },
     shouldFocusError: false
@@ -37,15 +36,14 @@ export function useHabitForm({onClose, data}: HabitModalProp) {
     mutationFn: updateHabitApi
   });
 
-  const onError: SubmitErrorHandler<HabitFormData> = useCallback(({title,  children}) => {
-    baseHandleErrors([title, children?.root]);
+  const onError: SubmitErrorHandler<HabitFormData> = useCallback(({title,  children, frequency_list}) => {
+    baseHandleErrors([title, children?.root, frequency_list as FieldError | undefined]);
   }, []);
 
   const onSubmit: SubmitHandler<HabitFormData> = useCallback(async formData => {
     if (!data) {
       const habitParameter: PostHabitRequest = {
         ...formData,
-        frequency: formData.frequency as HabitFrequency
       };
 
       await postMutation.mutateAsync(habitParameter);
@@ -53,7 +51,6 @@ export function useHabitForm({onClose, data}: HabitModalProp) {
       const habitParameter: UpdateHabitRequest = {
         ...formData,
         pk: data.pk,
-        frequency: formData.frequency as HabitFrequency,
         children: formData.children
       };
 
@@ -93,8 +90,10 @@ export function useHabitForm({onClose, data}: HabitModalProp) {
     inputProps: {
       title: register('title', TITLE_OPTIONS),
       memo: register('memo'),
-      radioList: HABIT_FREQUENCY_LIST.map(frequency => ({
-        ...register('frequency'),
+      checkboxList: HABIT_FREQUENCY_LIST.map(frequency => ({
+        ...register('frequency_list', {
+          required: '최소 1개 이상의 습관주기는 필수입니다.'
+        }),
         value: frequency,
         label: frequency
       })),
@@ -114,6 +113,6 @@ const DEFAULT_FORM_DATA: HabitFormData = {
   pk: 0,
   title: '',
   memo: '',
-  frequency: 'Daily',
+  frequency_list: [],
   children: []
 };
