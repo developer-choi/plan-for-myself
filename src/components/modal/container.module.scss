@@ -113,3 +113,8 @@ $modalPadding: 16px;
   // 모달 기본 배경색 지정
   background-color: white;
 }
+
+.disableOpenFocus {
+  position: absolute;
+  opacity: 0;
+}

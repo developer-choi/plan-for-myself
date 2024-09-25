@@ -1,4 +1,4 @@
-import React, {ComponentPropsWithRef, forwardRef, PropsWithChildren, Ref} from 'react';
+import React, {ComponentPropsWithRef, ForwardedRef, forwardRef, PropsWithChildren} from 'react';
 import styles from './index.module.scss';
 import classNames from 'classnames';
 import IcRadio from '@/components/icon/IcRadio';
@@ -12,7 +12,7 @@ interface CheckboxProps extends Omit<ComponentPropsWithRef<'input'>, 'type'> {
 export type RadioProps = CheckboxProps;
 
 // https://docs.google.com/document/d/1rqmOi11-M61mjOkk5i63SigHNN8BJYLpka8c73tSLb0/edit?usp=drivesdk
-export default forwardRef(function Radio(props: RadioProps, ref: Ref<HTMLInputElement>) {
+export default forwardRef(function Radio(props: RadioProps, ref: ForwardedRef<HTMLInputElement>) {
   const {label, color = 'primary', style, ...rest} = props;
 
   return (

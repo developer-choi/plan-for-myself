@@ -25,7 +25,7 @@ export default function HabitModal(props: HabitModalProp) {
   const {inputProps, form, isEdit} = useHabitForm(props)
 
   return (
-    <ModalContainer onClose={props.onClose}>
+    <ModalContainer onClose={props.onClose} disableOpenFocus={isEdit}>
       <DefaultModalHeader>습관 {isEdit ? '수정' : '등록'}</DefaultModalHeader>
       <DefaultModalBody>
         <form className={styles.habitForm} onSubmit={form.onSubmit}>

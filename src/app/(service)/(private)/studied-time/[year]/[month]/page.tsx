@@ -10,7 +10,7 @@ import {minutesFormat} from '@/utils/service/studied-time';
 import {getCalendarNavigation} from '@/utils/extend/date/calendar';
 import React, {useMemo} from 'react';
 import StudiedTimeSetting from '@/components/service/studied-time/StudiedTimeSetting';
-import StudiedStatistics from '@/components/modal/studied-time/statistics/StudiedStatistics';
+import StudiedStatistics from '@/components/service/studied-time/statistics/StudiedStatistics';
 import layoutStyles from '@/styles/layout.module.scss';
 import {H1} from '@/components/element/typography';
 

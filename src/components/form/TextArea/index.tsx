@@ -1,17 +1,22 @@
-import {ChangeEvent, ComponentPropsWithRef, forwardRef, Ref, useCallback, useState, KeyboardEvent} from "react";
-import styles from './index.module.scss';
 import {
-  FormElementWrapper,
-  FormElementWrapperProps
-} from "@/components/form/form-elements";
-import classNames from "classnames";
+  ChangeEvent,
+  ComponentPropsWithRef,
+  ForwardedRef,
+  forwardRef,
+  KeyboardEvent,
+  useCallback,
+  useState
+} from 'react';
+import styles from './index.module.scss';
+import {FormElementWrapper, FormElementWrapperProps} from '@/components/form/form-elements';
+import classNames from 'classnames';
 import {isMatchKeyboardEvent, KeyboardShortcut} from '@/utils/extend/event/keyboard';
 
 export interface TextAreaProps extends ComponentPropsWithRef<"textarea">, Omit<FormElementWrapperProps, "kind">{
   showCount?: boolean; // maxLength까지 같이 입력되야함.
 }
 
-export default forwardRef(function TextArea({label, error, style, className, maxLength, showCount, onChange, onKeyDown, rows = 4, ...rest}: TextAreaProps, ref: Ref<HTMLTextAreaElement>) {
+export default forwardRef(function TextArea({label, error, style, className, maxLength, showCount, onChange, onKeyDown, rows = 4, ...rest}: TextAreaProps, ref: ForwardedRef<HTMLTextAreaElement>) {
   const [textCount, setTextCount] = useState('');
 
   const customChange = useCallback((event: ChangeEvent<HTMLTextAreaElement>) => {

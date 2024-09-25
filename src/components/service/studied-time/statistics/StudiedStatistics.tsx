@@ -3,7 +3,7 @@
 import {useOpenModal} from '@/utils/extend/modal';
 import Button from '@/components/element/Button';
 import {useCallback} from 'react';
-import MonthlyStudiedStatisticsModal from '@/components/modal/studied-time/statistics/MonthlyStudiedStatisticsModal';
+import MonthlyStudiedStatisticsModal from '@/components/modal/studied-time/MonthlyStudiedStatisticsModal';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
 import {getMonthlyStatisticsApi} from '@/utils/service/api/studied-time';
 

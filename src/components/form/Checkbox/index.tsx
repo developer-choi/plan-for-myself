@@ -1,4 +1,4 @@
-import React, { ComponentPropsWithRef, forwardRef, Ref } from 'react';
+import React, {ComponentPropsWithRef, ForwardedRef, forwardRef} from 'react';
 import styles from './index.module.scss';
 import classNames from 'classnames';
 import IcCheck from '@/components/icon/IcCheck';
@@ -11,7 +11,7 @@ export interface CheckboxProps extends Omit<ComponentPropsWithRef<'input'>, 'typ
   square?: number; // 체크박스 아이콘 가로세로 크기
 }
 
-const Checkbox = forwardRef(function Checkbox(props: CheckboxProps, ref: Ref<HTMLInputElement>) {
+const Checkbox = forwardRef(function Checkbox(props: CheckboxProps, ref: ForwardedRef<HTMLInputElement>) {
   const { style, className, label, color = 'primary', square, ...rest } = props;
 
   return (
@@ -26,7 +26,7 @@ const Checkbox = forwardRef(function Checkbox(props: CheckboxProps, ref: Ref<HTM
 
 export default Checkbox;
 
-export const OutlinedCheckbox = forwardRef(function BigCheckbox(props: CheckboxProps, ref: Ref<HTMLInputElement>) {
+export const OutlinedCheckbox = forwardRef(function BigCheckbox(props: CheckboxProps, ref: ForwardedRef<HTMLInputElement>) {
   const { className, ...rest } = props;
 
   return (
