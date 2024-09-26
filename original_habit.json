@@ -1,0 +1,250 @@
+[
+  {
+    "pk": "65",
+    "user_id": "forworkchoe@gmail.com",
+    "title": "점심 루틴",
+    "memo": "",
+    "children": [
+      {
+        "title": "저번주 주간자료는 오감 (태블릿 손복습, 말하기복습)",
+        "is_important": true
+      },
+      {
+        "title": "어제 일일복습, 오늘 오전복습",
+        "is_important": true
+      }
+    ],
+    "frequency_list": [
+      "Daily"
+    ]
+  },
+  {
+    "pk": "61",
+    "user_id": "forworkchoe@gmail.com",
+    "title": "퇴근 후 루틴",
+    "memo": "늦게공부하면 2주간 아침공부 못해서 손해임\n늦게자면 내일도 망침...",
+    "children": [
+      {
+        "title": "퇴근 후 30분 안에 집에서 공부시작",
+        "is_important": false
+      },
+      {
+        "title": "회사복습 > 킵, 문서, 커밋 (LT, LW)",
+        "is_important": false
+      },
+      {
+        "title": "내꺼복습 > 문서, 커밋(RP, TP, 기타)",
+        "is_important": false
+      },
+      {
+        "title": "10시 이전 취침",
+        "is_important": false
+      }
+    ],
+    "frequency_list": [
+      "Daily"
+    ]
+  },
+  {
+    "pk": "70",
+    "user_id": "forworkchoe@gmail.com",
+    "title": "유튜브 습관",
+    "memo": "",
+    "children": [
+      {
+        "title": "끄기전 FW 유지",
+        "is_important": true
+      }
+    ],
+    "frequency_list": [
+      "Daily",
+      "Weekly"
+    ]
+  },
+  {
+    "pk": "88",
+    "user_id": "forworkchoe@gmail.com",
+    "title": "점심, 저녁 퇴근직전 루틴",
+    "memo": "",
+    "children": [
+      {
+        "title": "폰,키보드,마우스닦기",
+        "is_important": false
+      },
+      {
+        "title": "점심,퇴근전 미리 머리비우고 ==> 영듣",
+        "is_important": false
+      },
+      {
+        "title": "본캐로 반지,링크,업적 옮기고 사냥",
+        "is_important": false
+      }
+    ],
+    "frequency_list": [
+      "Daily"
+    ]
+  },
+  {
+    "pk": "74",
+    "user_id": "forworkchoe@gmail.com",
+    "title": "신호 뒤집기",
+    "memo": "",
+    "children": [
+      {
+        "title": "롤, 기타 유튜브 ==> 인생 망테크",
+        "is_important": true
+      },
+      {
+        "title": "샌, 햄, 짬, 국밥 ==> 먹어도 해결되는건 없음",
+        "is_important": false
+      },
+      {
+        "title": "김밥 ==> 아이패드",
+        "is_important": false
+      }
+    ],
+    "frequency_list": [
+      "Daily"
+    ]
+  },
+  {
+    "pk": "68",
+    "user_id": "forworkchoe@gmail.com",
+    "title": "Work Routine",
+    "memo": "",
+    "children": [
+      {
+        "title": "주기적으로 내려가서 PLF, 구글킵 보기",
+        "is_important": false
+      },
+      {
+        "title": "출근전에 멍X 공부 후 휴식X 한 후 회사와서 멍때리고 쉬면됨",
+        "is_important": false
+      }
+    ],
+    "frequency_list": [
+      "Daily"
+    ]
+  },
+  {
+    "pk": "75",
+    "user_id": "forworkchoe@gmail.com",
+    "title": "기타",
+    "memo": "매주 4시간정도를 휴대폰으로 날림",
+    "children": [
+      {
+        "title": "폰 구석에 넣기",
+        "is_important": true
+      },
+      {
+        "title": "제시간에 자야함 안그럼 월요일날림",
+        "is_important": true
+      }
+    ],
+    "frequency_list": [
+      "Weekly"
+    ]
+  },
+  {
+    "pk": "93",
+    "user_id": "forworkchoe@gmail.com",
+    "title": "신호 뒤집기",
+    "memo": "청사진을 세우고, 실천하면 절대 우울할일 없겠지? \n출발 ~ 도착 사이 어디에 내가 있는지 눈에 보이니까.",
+    "children": [
+      {
+        "title": "라면, 햄버거, 샌드위치 ==> 먹어도 해결되는거 없음",
+        "is_important": false
+      },
+      {
+        "title": "김밥, 아이스크립, 커피 ==> 아이패드",
+        "is_important": false
+      },
+      {
+        "title": "스타 ==> 물경력",
+        "is_important": false
+      },
+      {
+        "title": "스타 ==> 이거 공부해가지고 되나..",
+        "is_important": false
+      },
+      {
+        "title": "depression ==> blueprint / practice 부족",
+        "is_important": false
+      }
+    ],
+    "frequency_list": [
+      "Weekly"
+    ]
+  },
+  {
+    "pk": "84",
+    "user_id": "forworkchoe@gmail.com",
+    "title": "자투리시간 루틴",
+    "memo": "",
+    "children": [
+      {
+        "title": "설거지, 심부름 할때 고민거리 들고가기",
+        "is_important": true
+      }
+    ],
+    "frequency_list": [
+      "Weekly"
+    ]
+  },
+  {
+    "pk": "94",
+    "user_id": "forworkchoe@gmail.com",
+    "title": "공부습관",
+    "memo": "",
+    "children": [
+      {
+        "title": "캘린더, 구글문서 > 명사, 형용사를 영어로 대체",
+        "is_important": false
+      },
+      {
+        "title": "구글문서 > GPT 영작해서 이해되면 필기 대체",
+        "is_important": false
+      }
+    ],
+    "frequency_list": [
+      "Daily",
+      "Weekly"
+    ]
+  },
+  {
+    "pk": "57",
+    "user_id": "forworkchoe@gmail.com",
+    "title": "아침루틴",
+    "memo": "최대한 덜 쉬고 멍도 덜 때렸다가 회사가서 하면됨.",
+    "children": [
+      {
+        "title": "칼기상",
+        "is_important": true
+      },
+      {
+        "title": "스트레칭",
+        "is_important": false
+      },
+      {
+        "title": "손씻",
+        "is_important": false
+      },
+      {
+        "title": "눈곱 제거",
+        "is_important": false
+      },
+      {
+        "title": "메이플M이 아닌 노트북을 먼저 로그인",
+        "is_important": false
+      },
+      {
+        "title": "이후 출근전 옷입고 준비하는동안 영듣",
+        "is_important": false
+      }
+    ],
+    "frequency_list": [
+      "Daily",
+      "Weekly"
+    ]
+  }
+]
