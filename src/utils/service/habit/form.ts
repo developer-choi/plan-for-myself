@@ -115,5 +115,7 @@ const DEFAULT_FORM_DATA: HabitFormData = {
   title: '',
   memo: '',
   frequency_list: [],
-  children: []
+  children: [
+    {title: '', is_important: false}
+  ],
 };
