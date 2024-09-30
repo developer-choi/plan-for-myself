@@ -67,28 +67,22 @@ export default function StudiedCalendarCell({history, summary}: StudiedCalendarC
       
       default:
         return (
-          <StudiedHistory data={history.data}/>
+          <StudiedHistory data={history.data} summary={summary}/>
         );
     }
-  }, [cellMode, history.data]);
+  }, [cellMode, history.data, summary]);
 
   return (
     <td onClick={onClickCell} className={classNames(styles.tdWrap, {[styles.notMatched]: !history.calendarDate.state.calendar.isMatchedMonth})}>
       <span className={classNames(styles.calendarDate)}>
         <span className={classNames(styles.dateText, {[styles.today]: history.calendarDate.state.current.isToday})}>{history.calendarDate.date}</span>
         {cellRender}
-        {!summary?.success ? null : (
-          <span className={classNames(styles.summary)}>{summary.success}</span>
-        )}
-        {!summary?.fail ? null : (
-          <span className={classNames(styles.summary)}>{summary.fail}</span>
-        )}
       </span>
     </td>
   );
 }
 
-function StudiedHistory({data}: {data: DailyStudyTime}) {
+function StudiedHistory({data, summary}: {data: DailyStudyTime, summary: StudiedCalendarCellProps['summary']}) {
   const formatted = studiedTimeFormat(data.studied_minutes);
   const fail = data.fail_reason ? data.fail_reason : data.fail_keywords.length ? data.fail_keywords.join(',') : null;
 
@@ -96,6 +90,12 @@ function StudiedHistory({data}: {data: DailyStudyTime}) {
     <>
       {!formatted ? null : <span className={styles.primary}>{formatted}</span>}
       {!fail ? null : <span className={styles.failReason}>{fail}</span>}
+      {!summary?.success ? null : (
+        <span className={classNames(styles.summary)}>{summary.success}</span>
+      )}
+      {!summary?.fail ? null : (
+        <span className={classNames(styles.summary)}>{summary.fail}</span>
+      )}
     </>
   );
 }
