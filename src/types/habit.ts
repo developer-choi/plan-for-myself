@@ -1,3 +1,5 @@
+import {DailyStudyTimeDateType} from '@/types/studied-time';
+
 export interface Habit {
   pk: number; //created timestamp
   title: string;
@@ -21,7 +23,7 @@ export interface CheckableHabit extends Habit {
   children: CheckableHabitSubItem[];
 }
 
-export type HabitFrequency = 'Daily' | 'Weekly';
+export type HabitFrequency = DailyStudyTimeDateType;
 
 export interface HabitFullResponse {
   originalHabitList: Habit[];

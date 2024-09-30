@@ -3,6 +3,7 @@ import {sql} from '@vercel/postgres';
 import type {CheckableHabit, Habit, HabitFrequency} from '@/types/habit';
 import dayjs from 'dayjs';
 import type {HabitFullResponse} from '@/types/habit';
+import {isHolidayDate} from '@/utils/extend/date/holiday';
 
 /**
  * 기능 = 내 습관목록, 오늘 체크한거 히스토리, 오늘 체크할 습관목록, 오늘의 빈도값 가져오기
@@ -86,12 +87,17 @@ export async function POST(request: NextRequest) {
 // 평일인지 주말인지 매달인지 판단하는 기준값을 반환
 function getTodayFrequency(): HabitFrequency {
   const value = new Date();
+  const isHoliday = isHolidayDate({
+    year: value.getFullYear(),
+    month: value.getMonth() + 1,
+    date: value.getDate()
+  });
 
-  if (value.getDay() === 0) {
-    return 'Weekly';
+  if (isHoliday) {
+    return 'holiday';
   }
 
-  return 'Daily';
+  return 'weekday';
 }
 
 /**
@@ -128,5 +134,5 @@ const DEFAULT_HABIT_RESPONSE: HabitFullResponse = {
     checked_timestamp: undefined,
   },
   todayHabitList: [],
-  todayFrequency: 'Daily'
+  todayFrequency: 'weekday'
 };

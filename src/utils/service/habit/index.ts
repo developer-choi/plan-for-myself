@@ -3,7 +3,7 @@ import {useForm} from 'react-hook-form';
 import {useCallback} from 'react';
 import {deleteHabitApi} from '@/utils/service/api/habit';
 
-export const HABIT_FREQUENCY_LIST: HabitFrequency[] = ['Daily', 'Weekly'];
+export const HABIT_FREQUENCY_LIST: HabitFrequency[] = ['weekday', 'holiday'];
 
 interface FilteredHabitFormData {
   frequency: HabitFrequency;
