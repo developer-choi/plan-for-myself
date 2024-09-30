@@ -64,6 +64,7 @@ export function useHabitForm({onClose, data}: HabitModalProp) {
 
   const childrenList = useMemo(() => {
     return fields.map((field, index) => ({
+      id: field.id,
       props: register(`children.${index}.title`),
       is_important: field.is_important
     }));
