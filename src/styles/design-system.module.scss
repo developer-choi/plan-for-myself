@@ -27,20 +27,6 @@ $zIndexes: (
   pcStickyHeader: 10,
 );
 
-.horizontalFieldset {
-  gap: 12px;
-  display: flex;
-  
-  > label {
-    display: flex;
-    align-items: center;
-    
-    > input {
-      margin-right: 4px;
-    }
-  }
-}
-
 .mainPageH2 {
   font-size: 20px;
   margin-top: 30px;

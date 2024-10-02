@@ -16,10 +16,10 @@ export async function GET(request: NextRequest) {
     const originalHabitListResponse = await sql`SELECT pk, title, memo, frequency_list, children FROM original_habit where user_id=${user_id}`;
     const todayHistoryResponse = await sql`SELECT * FROM today_habit_history where user_id=${user_id}`;
 
-    const originalHabitList = rearrangeImportantHabitList(originalHabitListResponse.rows as Habit[]).map(({children, ...rest}) => ({
+    const originalHabitList = (originalHabitListResponse.rows as Habit[]).map(({children, ...rest}) => ({
       ...rest,
       children,
-      has_important: children.some(({is_important}) => is_important)
+      has_unachieved: children.some(({is_achieved}) => !is_achieved)
     }));
 
     const historyFromDB = todayHistoryResponse.rows[0] as HabitFullResponse['todayHistory'] | undefined;
@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
     for (const habit of checkedHabitList) {
       const newChildren = habit.children.map(({checked, title}) => ({
         title,
-        is_important: !checked
+        is_achieved: checked
       }));
 
       await sql`UPDATE original_habit SET children = ${JSON.stringify(newChildren)} WHERE pk = ${habit.pk}`;
@@ -106,24 +106,6 @@ function getTodayFrequency(): HabitFrequency {
 function getTodayHabitFilterFrequency(habitList: Habit[]): Habit[] {
   const todayFilter = getTodayFrequency();
   return habitList.filter(({frequency_list}) => frequency_list.includes(todayFilter));
-}
-
-
-function rearrangeImportantHabitList(list: Habit[]): Habit[] {
-  const {important, normal} = list.reduce((a, b) => {
-    if (b.children.some(({is_important}) => is_important)) {
-      a.important.push(b);
-    } else {
-      a.normal.push(b);
-    }
-
-    return a;
-  }, {
-    normal: [] as Habit[],
-    important: [] as Habit[]
-  });
-
-  return important.concat(normal);
 }
 
 const DEFAULT_HABIT_RESPONSE: HabitFullResponse = {

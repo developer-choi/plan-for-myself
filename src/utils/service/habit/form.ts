@@ -3,7 +3,7 @@ import {FieldError, RegisterOptions, SubmitErrorHandler, SubmitHandler, useField
 import {baseHandleErrors} from '@/utils/extend/react-hook-form';
 import type {HabitModalProp} from '@/components/modal/habit/HabitModal';
 import {HABIT_FREQUENCY_LIST} from '@/utils/service/habit/index';
-import {postHabitApi, PostHabitRequest, updateHabitApi, UpdateHabitRequest} from '@/utils/service/api/habit';
+import {postHabitApi, updateHabitApi, UpdateHabitRequest} from '@/utils/service/api/habit';
 import {useMutation} from '@tanstack/react-query';
 
 export function useHabitForm({onClose, data}: HabitModalProp) {
@@ -42,11 +42,7 @@ export function useHabitForm({onClose, data}: HabitModalProp) {
 
   const onSubmit: SubmitHandler<HabitFormData> = useCallback(async formData => {
     if (!data) {
-      const habitParameter: PostHabitRequest = {
-        ...formData,
-      };
-
-      await postMutation.mutateAsync(habitParameter);
+      await postMutation.mutateAsync(formData);
     } else {
       const habitParameter: UpdateHabitRequest = {
         ...formData,
@@ -66,14 +62,14 @@ export function useHabitForm({onClose, data}: HabitModalProp) {
     return fields.map((field, index) => ({
       id: field.id,
       props: register(`children.${index}.title`),
-      is_important: field.is_important
+      is_achieved: field.is_achieved
     }));
   }, [fields, register]);
 
   const appendChildren = useCallback(() => {
     append({
       title: '',
-      is_important: false
+      is_achieved: false
     });
   }, [append]);
 
@@ -108,7 +104,7 @@ const TITLE_OPTIONS: RegisterOptions = {
   required: '제목은 필수입니다.'
 };
 
-export type HabitFormData = Omit<UpdateHabitRequest, 'isImportant'>;
+export type HabitFormData = UpdateHabitRequest;
 
 const DEFAULT_FORM_DATA: HabitFormData = {
   pk: 0,
@@ -116,6 +112,6 @@ const DEFAULT_FORM_DATA: HabitFormData = {
   memo: '',
   frequency_list: [],
   children: [
-    {title: '', is_important: false}
+    {title: '', is_achieved: false}
   ],
 };

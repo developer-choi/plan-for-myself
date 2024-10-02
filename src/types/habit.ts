@@ -6,13 +6,13 @@ export interface Habit {
   memo: string;
   frequency_list: HabitFrequency[];
   children: SubHabit[];
-  has_important: boolean;
+  has_unachieved: boolean;
 }
 
 // 네이밍 고민중
 export interface SubHabit {
   title: string;
-  is_important: boolean;
+  is_achieved: boolean;
 }
 
 export interface CheckableHabitSubItem extends SubHabit {

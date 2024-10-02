@@ -9,11 +9,11 @@ export async function getHabitListApi() {
   });
 }
 
-export interface PostHabitRequest extends Omit<Habit, 'pk' | 'has_important' | 'children'> {
+export interface PostHabitRequest extends Omit<Habit, 'pk' | 'has_unachieved' | 'children'> {
   children: SubHabit[];
 }
 
-export async function postHabitApi(habit: PostHabitRequest, isImportant = true) {
+export async function postHabitApi(habit: PostHabitRequest) {
   const {title, frequency_list, memo, children} = habit;
 
   return customFetchOnClientSide('/api/habit/original', {
@@ -24,7 +24,6 @@ export async function postHabitApi(habit: PostHabitRequest, isImportant = true) 
       memo: memo,
       frequency_list,
       children,
-      is_important: isImportant
     }
   })
 }

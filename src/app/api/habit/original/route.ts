@@ -8,7 +8,7 @@ import {Habit} from '@/types/habit';
  * 400 = habit 데이터중 일부가 유효하지않은 경우
  */
 export async function POST(request: NextRequest) {
-  const {memo, frequency_list, title, children} = await request.json() as Habit;
+  const {memo, frequency_list, title, children} = await request.json() as Pick<Habit, 'memo' | 'frequency_list' | 'title' | 'children'>;
   const user_id = request.headers.get('User-Id') as string;
 
   try {
