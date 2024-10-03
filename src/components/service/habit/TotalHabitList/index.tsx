@@ -18,7 +18,7 @@ export interface TotalHabitListProp {
 }
 
 export default function TotalHabitList({habitList, todayFrequency}: TotalHabitListProp) {
-  const {radioPropsList, filteredHabitList, hiddenArchieved} = useTotalHabitList(habitList, todayFrequency);
+  const {radioPropsList, filteredHabitList, hiddenAchieved} = useTotalHabitList(habitList, todayFrequency);
   const deleteHabit = useDeleteHabit();
   const {openModal} = useOpenModal();
 
@@ -42,7 +42,7 @@ export default function TotalHabitList({habitList, todayFrequency}: TotalHabitLi
           ))}
         </RadioGroup>
 
-        <Checkbox {...hiddenArchieved}/>
+        <Checkbox {...hiddenAchieved}/>
       </form>
 
       <ul>

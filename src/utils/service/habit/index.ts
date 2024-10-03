@@ -8,23 +8,23 @@ export const HABIT_FREQUENCY_LIST: HabitFrequency[] = ['weekday', 'holiday'];
 
 interface FilteredHabitFormData {
   frequency: HabitFrequency;
-  hiddenArchieved: boolean;
+  hiddenAchieved: boolean;
 }
 
 export function useTotalHabitList(habitList: Habit[], todayFrequency: HabitFrequency) {
   const {register, watch,} = useForm<FilteredHabitFormData>({
     defaultValues: {
       frequency: todayFrequency,
-      hiddenArchieved: true
+      hiddenAchieved: true
     }
   });
 
-  const hiddenArchievedProps: CheckboxProps = {
-    ...register('hiddenArchieved'),
+  const hiddenAchievedProps: CheckboxProps = {
+    ...register('hiddenAchieved'),
     label: '달성한 습관 숨기기'
   };
 
-  const filteredHabitList = habitList.filter(habit => habit.frequency_list.includes(watch('frequency')) && (watch('hiddenArchieved') ? habit.has_unachieved : true));
+  const filteredHabitList = habitList.filter(habit => habit.frequency_list.includes(watch('frequency')) && (watch('hiddenAchieved') ? habit.has_unachieved : true));
 
   return {
     radioPropsList: HABIT_FREQUENCY_LIST.map(frequency => ({
@@ -32,7 +32,7 @@ export function useTotalHabitList(habitList: Habit[], todayFrequency: HabitFrequ
       label: frequency,
       value: frequency,
     })),
-    hiddenArchieved: hiddenArchievedProps,
+    hiddenAchieved: hiddenAchievedProps,
     filteredHabitList
   };
 }

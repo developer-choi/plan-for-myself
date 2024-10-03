@@ -30,6 +30,7 @@ export default function HabitModal(props: HabitModalProp) {
       <DefaultModalHeader>습관 {isEdit ? '수정' : '등록'}</DefaultModalHeader>
       <DefaultModalBody>
         <form className={styles.habitForm} onSubmit={form.onSubmit}>
+          {!isEdit ? null : <Checkbox {...inputProps.hiddenAchieved}/>}
           <Input placeholder="제목 *" {...inputProps.title}/>
           <div>
             <Label>하위 습관</Label>
