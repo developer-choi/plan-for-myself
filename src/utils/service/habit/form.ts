@@ -75,7 +75,7 @@ export function useHabitForm({onClose, data}: HabitModalProp) {
     })).filter(({is_achieved}) => hiddenAchieved ? !is_achieved : true);
   }, [fields, hiddenAchieved, register]);
 
-  const hiddenAchievedProps: CheckboxProps = {
+  const hiddenAchievedProps: CheckboxProps | null = !data || data.children.every(({is_achieved}) => !is_achieved) ? null : {
     ...register('hiddenAchieved'),
     label: '달성한 습관 숨기기'
   };
