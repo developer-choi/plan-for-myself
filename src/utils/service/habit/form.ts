@@ -8,6 +8,13 @@ import {useMutation} from '@tanstack/react-query';
 import {CheckboxProps} from '@/components/form/Checkbox';
 
 export function useHabitForm({onClose, data}: HabitModalProp) {
+  /**
+   * 1. 수정 모달이어야하고, (data &&)
+   * 2. 모든 하위습관이 미달성이어서도 안되고,
+   * 3. 모두 달성이어서도 안됨.
+   */
+  const visibleHiddenAchieve = data && !data.children.every(({is_achieved}) => !is_achieved) && !data.children.every(({is_achieved}) => is_achieved)
+
   const {watch, register, handleSubmit, control} = useForm<HabitFormData>({
     mode: 'all',
     defaultValues: !data ? DEFAULT_FORM_DATA : {
@@ -15,7 +22,7 @@ export function useHabitForm({onClose, data}: HabitModalProp) {
       memo: data.memo,
       frequency_list: data.frequency_list,
       children: data.children,
-      hiddenAchieved: true
+      hiddenAchieved: visibleHiddenAchieve
     },
     shouldFocusError: false
   });
@@ -75,7 +82,7 @@ export function useHabitForm({onClose, data}: HabitModalProp) {
     })).filter(({is_achieved}) => hiddenAchieved ? !is_achieved : true);
   }, [fields, hiddenAchieved, register]);
 
-  const hiddenAchievedProps: CheckboxProps | null = !data || data.children.every(({is_achieved}) => !is_achieved) ? null : {
+  const hiddenAchievedProps: CheckboxProps | null = !visibleHiddenAchieve ? null : {
     ...register('hiddenAchieved'),
     label: '달성한 습관 숨기기'
   };
