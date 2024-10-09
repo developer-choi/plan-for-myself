@@ -72,7 +72,7 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, ini
     const postParameter: PostDailyStudyTimeParameter = {
       ...data,
       studied_minutes: studiedMinutes,
-      fail_keywords: data.fail_keywords.split(','),
+      fail_keywords: data.fail_keywords.split(',').map(keyword => keyword.trim()),
       year,
       month,
       date
