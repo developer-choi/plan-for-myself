@@ -22,6 +22,8 @@ interface StudiedCalendarCellProps {
 export default function StudiedCalendarCell({history, summary}: StudiedCalendarCellProps) {
   const {openModal} = useOpenModal();
 
+  console.log('history', history, summary);
+
   const onClickCell = useCallback(() => {
     openModal({
       Component: StudiedTimeFormModal,
@@ -67,22 +69,25 @@ export default function StudiedCalendarCell({history, summary}: StudiedCalendarC
       
       default:
         return (
-          <StudiedHistory data={history.data} summary={summary}/>
+          <StudiedHistory data={history.data}/>
         );
     }
-  }, [cellMode, history.data, summary]);
+  }, [cellMode, history.data]);
 
   return (
     <td onClick={onClickCell} className={classNames(styles.tdWrap, {[styles.notMatched]: !history.calendarDate.state.calendar.isMatchedMonth})}>
       <span className={classNames(styles.calendarDate)}>
         <span className={classNames(styles.dateText, {[styles.today]: history.calendarDate.state.current.isToday})}>{history.calendarDate.date}</span>
         {cellRender}
+        {!summary ? null : (
+          <StudiedSummary summary={summary}/>
+        )}
       </span>
     </td>
   );
 }
 
-function StudiedHistory({data, summary}: {data: DailyStudyTime, summary: StudiedCalendarCellProps['summary']}) {
+function StudiedHistory({data}: {data: DailyStudyTime}) {
   const formatted = studiedTimeFormat(data.studied_minutes);
   const fail = data.fail_reason ? data.fail_reason : data.fail_keywords.length ? data.fail_keywords.join(',') : null;
 
@@ -90,6 +95,13 @@ function StudiedHistory({data, summary}: {data: DailyStudyTime, summary: Studied
     <>
       {!formatted ? null : <span className={styles.primary}>{formatted}</span>}
       {!fail ? null : <span className={styles.failReason}>{fail}</span>}
+    </>
+  );
+}
+
+function StudiedSummary({summary}: {summary: StudiedCalendarCellProps['summary']}) {
+  return (
+    <>
       {!summary?.success ? null : (
         <span className={classNames(styles.summary)}>{summary.success}</span>
       )}
@@ -97,7 +109,7 @@ function StudiedHistory({data, summary}: {data: DailyStudyTime, summary: Studied
         <span className={classNames(styles.summary)}>{summary.fail}</span>
       )}
     </>
-  );
+  )
 }
 
 function SleepHistory({data}: {data: DailyStudyTime}) {

@@ -1,18 +1,17 @@
 import styles from './page.module.scss';
 import {Metadata, ServerComponentProps} from 'next';
-import CustomLink from '@/components/element/link/CustomLink';
 import StudiedCalendarCell from '@/components/service/studied-time/StudiedCalendarCell';
 import {calculateTotal} from '@/utils/extend/data-type/number';
 import {classifyStrings} from '@/utils/extend/data-type/string';
 import {sortByNumber} from '@/utils/extend/data-type/array';
 import {getStudiedTimeCalendarApi, StudiedTimeCalendarWeek} from '@/utils/service/api/studied-time';
 import {minutesFormat} from '@/utils/service/studied-time';
-import {getCalendarNavigation} from '@/utils/extend/date/calendar';
-import React, {useMemo} from 'react';
+import React from 'react';
 import StudiedTimeSetting from '@/components/service/studied-time/StudiedTimeSetting';
 import StudiedStatistics from '@/components/service/studied-time/statistics/StudiedStatistics';
 import layoutStyles from '@/styles/layout.module.scss';
 import {H1} from '@/components/element/typography';
+import StudiedTimeNavigation from '@/components/service/studied-time/StudiedTimeNavigation';
 
 export const metadata: Metadata = {
   title: 'Calendar',
@@ -23,20 +22,13 @@ export default async function Page({params}: ServerComponentProps) {
   const year = Number(params.year);
   const month = Number(params.month);
   
-  const {previousCalendar, nextCalendar} = useMemo(() => {
-    return getCalendarNavigation(year, month);
-  }, [month, year])
-
   const weekList = await getStudiedTimeCalendarApi(year, month);
   const haveData = weekList.some(week => week.some(({data}) => data));
 
   return (
     <div className={layoutStyles.pageContentLarge}>
       <H1 className={styles.title}>{year} / {month}</H1>
-      <div className={styles.navigator}>
-        <CustomLink href={`/studied-time/${previousCalendar.year}/${previousCalendar.month}`}>Previous</CustomLink>
-        <CustomLink href={`/studied-time/${nextCalendar.year}/${nextCalendar.month}`}>Next</CustomLink>
-      </div>
+      <StudiedTimeNavigation year={year} month={month}/>
       <StudiedTimeSetting/>
       <table className={styles.table}>
         <thead>
