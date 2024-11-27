@@ -1,6 +1,6 @@
 import {FormElementWrapper, FormElementWrapperProps} from '@/components/form/form-elements';
 import classNames from 'classnames';
-import {ComponentPropsWithRef, ForwardedRef, forwardRef, MouseEvent, ReactNode, useCallback} from 'react';
+import {ComponentPropsWithRef, forwardRef, MouseEvent, ReactNode, useCallback} from 'react';
 import styles from './index.module.scss';
 
 export interface InputProps extends ComponentPropsWithRef<"input">, Omit<FormElementWrapperProps, "kind"> {
@@ -9,7 +9,9 @@ export interface InputProps extends ComponentPropsWithRef<"input">, Omit<FormEle
   type?: 'text' | 'password' | 'email' | 'number' | 'tel' | 'search' | 'url';
 }
 
-export default forwardRef(function Input({label, error, rightRender, style, className, hiddenErrorMessage, disabled, ...rest}: InputProps, ref: ForwardedRef<HTMLInputElement>) {
+export default forwardRef<HTMLInputElement, InputProps>(function Input(props, ref) {
+  const {label, error, rightRender, style, className, hiddenErrorMessage, disabled, ...rest} = props;
+
   const onClickCapture = useCallback((event: MouseEvent<HTMLInputElement>) => {
     if (disabled) {
       event.stopPropagation();
