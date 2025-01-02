@@ -5,7 +5,7 @@ import Radio, {RadioGroup} from '@/components/form/Radio';
 import Input from '@/components/form/Input';
 import Button from '@/components/element/Button';
 import {H2} from '@/components/element/typography';
-import React from 'react';
+import React, {PropsWithChildren} from 'react';
 import useRoutineForm, {RoutineFormParameter} from '@/utils/service/routine/useRoutineForm';
 
 export default function RoutineForm({record, detail}: RoutineFormParameter) {
@@ -33,42 +33,49 @@ export default function RoutineForm({record, detail}: RoutineFormParameter) {
       {step.list.map((item, index) => {
         const remove = () => step.remove(index);
 
+        function DraggableStepContainer({children}: PropsWithChildren) {
+          return (
+            <div
+              className={designSystemStyles.commonSubForm}
+              onDragStart={step.dragAndDrop.onDragStartCallback(index)}
+              onDrop={step.dragAndDrop.onDropCallback(index)}
+              draggable={step.dragAndDrop.draggable}
+              onDragOver={step.dragAndDrop.onDragOver}
+            >
+              {children}
+            </div>
+          );
+        }
+
         switch (item.type) {
           case 'link':
             return (
-              <div
-                key={item.id}
-                className={designSystemStyles.commonSubForm}
-                onDragStart={step.dragAndDrop.onDragStartCallback(index)}
-                onDrop={step.dragAndDrop.onDropCallback(index)}
-                draggable={step.dragAndDrop.draggable}
-                onDragOver={step.dragAndDrop.onDragOver}
-              >
+              <DraggableStepContainer key={item.id}>
                 <H2>{item.type}</H2>
                 <Button size="small" color="delete" onClick={remove}>삭제</Button>
                 <Input {...item.text}/>
                 <Input {...item.url}/>
-              </div>
+              </DraggableStepContainer>
             );
 
           case 'habit':
             return (
-              <div key={item.id} className={designSystemStyles.commonSubForm}>
+              <DraggableStepContainer key={item.id}>
                 <H2>{item.type}</H2>
                 <Button size="small" color="delete" onClick={remove}>삭제</Button>
                 <Input {...item.text}/>
                 <Input {...item.keyword}/>
-              </div>
+              </DraggableStepContainer>
             );
 
           case 'studied_minutes':
           case 'sleep_time':
             return (
-              <div key={item.id} className={designSystemStyles.commonSubForm}>
-                <Button size="small" color="delete" onClick={remove}>삭제</Button>
+              <DraggableStepContainer key={item.id}>
                 <H2>{item.type}</H2>
+                <Button size="small" color="delete" onClick={remove}>삭제</Button>
                 <Input {...item.input}/>
-              </div>
+              </DraggableStepContainer>
             );
         }
       })}

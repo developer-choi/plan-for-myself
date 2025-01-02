@@ -125,13 +125,13 @@ export default function useRoutineForm({record, detail}: RoutineFormParameter) {
               ...register(`steps.${index}.text`, {
                 required: '텍스트는 필수입니다.'
               }),
-              placeholder: 'text'
+              placeholder: '습관 내용'
             },
             keyword: {
               ...register(`steps.${index}.keyword`, {
                 required: '키워드는 필수입니다.'
               }),
-              placeholder: 'keyword'
+              placeholder: 'ex) Spare_Time 실패했을 때 카운트 될 keyword'
             },
           };
 
@@ -149,7 +149,7 @@ export default function useRoutineForm({record, detail}: RoutineFormParameter) {
               ...register(`steps.${index}.url`, {
                 required: 'URL은 필수입니다.'
               }),
-              placeholder: 'url'
+              placeholder: 'ex) https://... 문서 URL'
             },
           };
           
