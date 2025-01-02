@@ -1,4 +1,4 @@
-import {customFetchOnClientSide, customFetchOnServerSide} from '@/utils/extend/fetch';
+import {customFetchOnClientSide, customFetchOnServerSide} from '@/utils/extend/library/fetch';
 import type {CheckableHabit, Habit, SubHabit} from '@/types/habit';
 
 

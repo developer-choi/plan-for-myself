@@ -1,5 +1,5 @@
 import {DailyStudyTime} from '@/types/studied-time';
-import {customFetchOnClientSide, customFetchOnServerSide} from '@/utils/extend/fetch';
+import {customFetchOnClientSide, customFetchOnServerSide} from '@/utils/extend/library/fetch';
 import {
   CalendarDate,
   getCalendarBoundary,
