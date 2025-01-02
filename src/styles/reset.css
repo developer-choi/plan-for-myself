@@ -51,6 +51,12 @@ q:before, q:after {
 table {
   border-collapse: collapse;
   border-spacing: 0;
+  
+  /**
+   * https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Styling_tables#spacing_and_layout
+   */
+  table-layout: fixed;
+  width: 100%;
 }
 
 /*************************************************************************************************************
@@ -118,6 +124,10 @@ input::-webkit-search-results-decoration {
  *************************************************************************************************************/
 * {
   box-sizing: border-box;
+  
+  /* 1. 이거 안하면, width가 제한된 곳에서 텍스트가 공백없이 다 붙어있는 경우, 영역 뚫고 나감. */
+  /* 2. 그리고 공백이 있는 문자열이 올 경우 단어단위로 줄내림되는 기본 동작도 유지됨.  */
+  word-break: break-word;
 }
 
 a {
