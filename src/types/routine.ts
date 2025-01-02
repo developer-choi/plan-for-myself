@@ -20,6 +20,24 @@ export type ReadableRoutineStep = PureRoutineStep & {
   id: number;
 };
 
+// 루틴을 체크하는데 추가로 필요한 데이터 타입
+export interface ProcessableRoutine extends Omit<ReadableRoutine, 'steps'> {
+  steps: ProcessableRoutineStep[];
+}
+
+export type ProcessableRoutineStep = Pick<ReadableRoutineStep, 'id'> & {
+  is_processed: boolean; // 과거에 진행 완료한 루틴 아이템
+  is_processing: boolean; // 현재 진행중인 루틴 아이템 여부 (= 과거 제외하고 제일 먼저 있는 루틴 아이템)
+} & (LinkRoutineStep | HabitRoutineStep | ProcessableStudiedMinutesRoutineStep | ProcessableSleepTimeRoutineStep);
+
+export type ProcessableStudiedMinutesRoutineStep = StudiedMinutesRoutineStep & {
+  studied_minutes?: number; // DB에 required가 안걸려있어서 없을 수 있음.
+};
+
+export type ProcessableSleepTimeRoutineStep = SleepTimeRoutineStep & {
+  sleep_time?: string; // DB에 required가 안걸려있어서 없을 수 있음.
+};
+
 /*************************************************************************************************************
  * Pure Routine Steps
  *************************************************************************************************************/
@@ -47,3 +65,4 @@ export type SleepTimeRoutineStep = {
  * Etc
  *************************************************************************************************************/
 export type FixedRoutineType = 'morning' | 'lunch' | 'night';
+export type RoutineProcessingErrorState = 'all_done' | 'routine_is_empty' | 'select_date_type'

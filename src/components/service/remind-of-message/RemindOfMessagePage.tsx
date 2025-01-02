@@ -55,8 +55,10 @@ export default function RemindOfMessagePage({list}: RemindOfMessagePageProps) {
         {list.map((item) => (
           <ol key={item.id} className={habitStyles.habitOl}>
             <span className={habitStyles.title}>{item.message}</span>
-            <Button size="small" color="edit" className={habitStyles.smallButton} style={{width: 'auto'}} onClick={() => updateMessage(item.id)}>수정</Button>
-            <Button size="small" color="delete" className={habitStyles.smallButton} style={{width: 'auto'}} onClick={() => deleteMessage(item)}>삭제</Button>
+            <Button size="small" color="edit" className={habitStyles.smallButton} style={{width: 'auto'}}
+                    onClick={() => updateMessage(item.id)}>수정</Button>
+            <Button size="small" color="delete" className={habitStyles.smallButton} style={{width: 'auto'}}
+                    onClick={() => deleteMessage(item)}>삭제</Button>
           </ol>
         ))}
       </ul>

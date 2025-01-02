@@ -1,0 +1,18 @@
+.header {
+  display: flex;
+  align-items: center;
+  
+  h1 {
+    margin-right: auto;
+  }
+}
+
+.listContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.arrow {
+  margin-inline: auto;
+}
