@@ -15,6 +15,11 @@
   
   &:global(.row) {
     flex-direction: row;
+    
+    // 가로로 [인풋] - [버튼]이 배치되는 경우 버튼 크기는 더 줄어들면 안됨.
+    > button {
+      flex-shrink: 0;
+    }
   }
 }
 

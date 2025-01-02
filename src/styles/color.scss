@@ -1,3 +1,6 @@
+// [Design System Stylesheet] https://docs.google.com/document/d/1P05K5UDxKyNkFkSTeH3QiDy2AbXo7hfcHnTERO8yDsU/edit
+
+// 텍스트색, 테두리색, 배경색 등 다양한 회색에서 계층을 구분할 때 사용
 $grayColors: (
   #333333, // nth($grayColors, 1);
   #444444,
@@ -10,14 +13,23 @@ $grayColors: (
   #f5f5f5, // nth($grayColors, 9);
 );
 
+// 그 중 특히 텍스트에서 위계를 나눌 때 사용하는 gray 컬러
+$textColors: (
+  // default: #333333 은 <body로 부터 상속받아서 사용
+  sub: nth($grayColors, 4),
+  sub2: nth($grayColors, 6)
+);
+
+$stateColors: (
+  success: #3FB034, // map-get($stateColors, success);
+  error: #ff0000, // map-get($stateColors, error);
+  disabled: nth($grayColors, 6), // map-get($stateColors, disabled);
+  info: #1234aa
+);
+
 $brandColors: (
   primary: #7752FE, // map-get(color.$brandColors, primary);
   secondary: #A97DF5, // map-get(color.$brandColors, secondary);
   edit: orange,
   delete: red
-);
-
-$stateColors: (
-  disabled: darkgray, // map-get(color.$stateColors, disabled);
-  error: red
 );

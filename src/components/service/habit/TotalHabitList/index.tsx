@@ -50,8 +50,8 @@ export default function TotalHabitList({habitList, todayFrequency}: TotalHabitLi
           <ol key={habit.pk} className={styles.habitOl}>
             {!habit.has_unachieved ? null : <div className={styles.importantMark}/>}
             <span className={styles.title}>{habit.title}</span>
-            <Button size="xsmall" color="edit" className={classNames(styles.smallButton)} onClick={() => openHabitModal(habit)}>수정</Button>
-            <Button size="xsmall" color="delete" className={classNames(styles.smallButton)} onClick={() => deleteHabit(habit)}>삭제</Button>
+            <Button size="small" color="edit" className={classNames(styles.smallButton)} onClick={() => openHabitModal(habit)}>수정</Button>
+            <Button size="small" color="delete" className={classNames(styles.smallButton)} onClick={() => deleteHabit(habit)}>삭제</Button>
           </ol>
         ))}
       </ul>
