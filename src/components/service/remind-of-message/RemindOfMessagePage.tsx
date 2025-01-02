@@ -1,6 +1,5 @@
 'use client';
 
-import styles from '@/app/(service)/(private)/habit/page.module.scss';
 import habitStyles from '@/components/service/habit/TotalHabitList/index.module.scss';
 import Button from '@/components/element/Button';
 import React, {useCallback} from 'react';
@@ -11,6 +10,7 @@ import {
   updateRemindOfMessageApi
 } from '@/utils/service/api/remind-of-message';
 import {useRouter} from 'next/navigation';
+import layoutStyles from '@/styles/layout.module.scss';
 
 export interface RemindOfMessagePageProps {
   list: RemindOfMessageItem[];
@@ -50,7 +50,7 @@ export default function RemindOfMessagePage({list}: RemindOfMessagePageProps) {
   }, [refresh]);
 
   return (
-    <div className={styles.wrap}>
+    <div className={layoutStyles.pageContentMedium}>
       <ul>
         {list.map((item) => (
           <ol key={item.id} className={habitStyles.habitOl}>

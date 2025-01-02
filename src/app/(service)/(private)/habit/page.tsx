@@ -6,13 +6,14 @@ import styles from './page.module.scss';
 import HomeMenu from '@/components/service/home/HomeMenu';
 import {getHabitListApi} from '@/utils/service/api/habit';
 import {HabitFullResponse} from '@/types/habit';
+import layoutStyles from '@/styles/layout.module.scss';
 
 export default async function Home() {
   const habitFullResponse = (await getHabitListApi()).json as HabitFullResponse;
   const {originalHabitList, todayFrequency} = habitFullResponse;
 
   return (
-    <div className={styles.wrap}>
+    <div className={layoutStyles.pageContentMedium}>
       <div className={styles.remainWeek}>올해 <em>{getRemainWeek(new Date())}</em>주 남음</div>
 
       {originalHabitList.length === 0 ? (

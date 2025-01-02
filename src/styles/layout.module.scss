@@ -2,7 +2,7 @@ $layout: (
   horizontalPadding: 16px,
   pcHeaderHeight: 52px,
   large: 1600px,
-  medium: 800px,
+  medium: 600px,
 );
 
 /**
@@ -10,15 +10,26 @@ $layout: (
  * @size large, medium, small, xsmall
  */
 @mixin horizontalWidthContainer($size) {
-  width: calc(map-get($layout, $size));
+  width: 100%;
+  max-width: calc(map-get($layout, $size));
   margin: 0 auto;
-  padding-bottom: 24px; // 페이지 내용이 길어질 경우 푸터와 딱붙으면 안됨.
+  padding-block: 24px; // 페이지 상단, 하단여백
+}
+
+@mixin horizontalPaddingContainer {
+  padding-inline: map-get($layout, horizontalPadding);
+}
+
+.horizontalPaddingContainer {
+  @include horizontalPaddingContainer;
 }
 
 .pageContentLarge {
+  @include horizontalPaddingContainer;
   @include horizontalWidthContainer(large);
 }
 
 .pageContentMedium {
+  @include horizontalPaddingContainer;
   @include horizontalWidthContainer(medium);
 }
