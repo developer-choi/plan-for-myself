@@ -1,9 +1,8 @@
 import {NextRequest} from 'next/server';
 import {sql} from '@vercel/postgres';
-import type {CheckableHabit, Habit, HabitFrequency} from '@/types/habit';
+import type {CheckableHabit, Habit, HabitFullResponse} from '@/types/habit';
 import dayjs from 'dayjs';
-import type {HabitFullResponse} from '@/types/habit';
-import {isHolidayDate} from '@/utils/extend/date/holiday';
+import {getDefaultDateType} from '@/utils/extend/date/holiday';
 
 /**
  * 기능 = 내 습관목록, 오늘 체크한거 히스토리, 오늘 체크할 습관목록, 오늘의 빈도값 가져오기
@@ -29,7 +28,7 @@ export async function GET(request: NextRequest) {
         originalHabitList,
         todayHistory: DEFAULT_HABIT_RESPONSE.todayHistory,
         todayHabitList: getTodayHabitFilterFrequency(originalHabitList),
-        todayFrequency: getTodayFrequency()
+        todayFrequency: getDefaultDateType()
       });
     }
 
@@ -41,7 +40,7 @@ export async function GET(request: NextRequest) {
       originalHabitList,
       todayHistory,
       todayHabitList: todayHistory.has_checked ? [] : getTodayHabitFilterFrequency(originalHabitList),
-      todayFrequency: getTodayFrequency()
+      todayFrequency: getDefaultDateType()
     });
   } catch (error) {
     console.error(error);
@@ -84,27 +83,11 @@ export async function POST(request: NextRequest) {
 /*************************************************************************************************************
  * Non Export
  *************************************************************************************************************/
-// 평일인지 주말인지 매달인지 판단하는 기준값을 반환
-function getTodayFrequency(): HabitFrequency {
-  const value = new Date();
-  const isHoliday = isHolidayDate({
-    year: value.getFullYear(),
-    month: value.getMonth() + 1,
-    date: value.getDate()
-  });
-
-  if (isHoliday) {
-    return 'holiday';
-  }
-
-  return 'weekday';
-}
-
 /**
  * 평일이면 Daily만, 주말이면 Weekly꺼만.
  */
 function getTodayHabitFilterFrequency(habitList: Habit[]): Habit[] {
-  const todayFilter = getTodayFrequency();
+  const todayFilter = getDefaultDateType();
   return habitList.filter(({frequency_list}) => frequency_list.includes(todayFilter));
 }
 

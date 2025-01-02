@@ -1,10 +1,11 @@
 'use client';
 
 import {useMemo} from 'react';
-import {DailyStudyTime, DailyStudyTimeDateType} from '@/types/studied-time';
+import {DailyStudyTime} from '@/types/studied-time';
 import {useForm} from 'react-hook-form';
 import {RadioProps} from '@/components/form/Radio';
 import {CheckboxProps} from '@/components/form/Checkbox';
+import {DATE_TYPE_ITEMS, DateType} from '@/utils/service/constant/date-type';
 
 export default function useFilterDailyStudiedHistory(data: DailyStudyTime[]) {
   const {register, watch} = useForm<FilterFormData>({
@@ -14,7 +15,7 @@ export default function useFilterDailyStudiedHistory(data: DailyStudyTime[]) {
     }
   });
 
-  const dateTypeRadioList: RadioProps[] = DATE_TYPE_LIST.map(({name, value}) => ({
+  const dateTypeRadioList: RadioProps[] = DATE_TYPE_ITEMS.itemList.map(({name, value}) => ({
     ...register('date_type'),
     label: name,
     value,
@@ -43,20 +44,9 @@ export default function useFilterDailyStudiedHistory(data: DailyStudyTime[]) {
 }
 
 interface FilterFormData {
-  date_type: DailyStudyTimeDateType;
+  date_type: DateType;
   day: string[];
 }
-
-const DATE_TYPE_LIST = [
-  {
-    name: '평일',
-    value: 'weekday'
-  },
-  {
-    name: '휴일 (주말 포함)',
-    value: 'holiday'
-  },
-];
 
 const DAY_TYPE_LIST = [
   {

@@ -1,5 +1,6 @@
 import {convertLunarDateToSolar} from '@/utils/extend/date/lunar';
-import {SimpleDate} from '@/utils/extend/date/util';
+import {destructDate, SimpleDate} from '@/utils/extend/date/util';
+import {DateType} from '@/utils/service/constant/date-type';
 
 /**
  * @description 휴일인지 판단해서 반환합니다.
@@ -28,6 +29,11 @@ export function isHoliday(year: number, month: number, date: number) {
 
 export function isHolidayDate({year, month, date}: SimpleDate) {
   return isHoliday(year, month, date);
+}
+
+export function getDefaultDateType(): DateType {
+  const {year, month, date} = destructDate();
+  return isHoliday(year, month + 1, date) ? 'holiday' : 'weekday';
 }
 
 /*************************************************************************************************************

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import {DailyStudyTime, DailyStudyTimeDateType} from '@/types/studied-time';
+import {DailyStudyTime} from '@/types/studied-time';
 import dayjs from 'dayjs';
 import {minutesFormat} from '@/utils/service/studied-time';
 import {calculateTotal} from '@/utils/extend/data-type/number';
@@ -10,6 +10,7 @@ import Radio, {RadioGroup} from '@/components/form/Radio';
 import useFilterDailyStudiedHistory from '@/utils/service/studied-time/useFilterDailyStudiedHistory';
 import Checkbox from '@/components/form/Checkbox';
 import classNames from 'classnames';
+import {DateType} from '@/utils/service/constant/date-type';
 
 export interface DailyStudiedTimeTableProps {
   year: number;
@@ -24,7 +25,7 @@ export default function DailyStudiedTimeTable({data}: DailyStudiedTimeTableProps
     <>
       <RadioGroup>
         {inputProps.dateType.map(props => (
-          <Radio key={props.value as DailyStudyTimeDateType} {...props}/>
+          <Radio key={props.value as DateType} {...props}/>
         ))}
       </RadioGroup>
       <RadioGroup>

@@ -1,6 +1,7 @@
-import {DailyStudyTime, DailyStudyTimeDateType} from '@/types/studied-time';
+import {DailyStudyTime} from '@/types/studied-time';
 import {calculateTotal} from '@/utils/extend/data-type/number';
 import {getDaysInMonth} from '@/utils/extend/date/calendar';
+import {DateType} from '@/utils/service/constant/date-type';
 
 export interface DifferenceMonthlyStatisticsParam {
   year: number;
@@ -63,7 +64,7 @@ interface StudiedTimeStatistics {
   averageStudied: number; // (평일 or 휴일) 공부시간 평균, 단위 minutes
 }
 
-type MonthlyStudiedTimeStatistics = Record<DailyStudyTimeDateType, StudiedTimeStatistics>;
+type MonthlyStudiedTimeStatistics = Record<DateType, StudiedTimeStatistics>;
 
 function getMonthlyStatisticsSummary(data: DailyStudyTime[]): MonthlyStudiedTimeStatistics {
   const {total, count} = data.reduce((a, b) => {
@@ -97,7 +98,7 @@ interface DifferenceStudiedTime {
   previous: number; // 저번 달 (평균 or 총합) 공부시간
 }
 
-type MonthlyDifferenceStudiedTime = Record<DailyStudyTimeDateType, {
+type MonthlyDifferenceStudiedTime = Record<DateType, {
   totalStudied: DifferenceStudiedTime;
   averageStudied: DifferenceStudiedTime;
 }>;

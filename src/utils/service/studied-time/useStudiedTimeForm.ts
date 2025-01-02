@@ -13,6 +13,7 @@ import {
 } from '@/utils/service/api/studied-time';
 import {useMutation} from '@tanstack/react-query';
 import {isHolidayDate} from '@/utils/extend/date/holiday';
+import {DATE_TYPE_ITEMS} from '@/utils/service/constant/date-type';
 
 export interface StudiedTimeFormData extends Pick<DailyStudyTime, 'date_type' | 'wake_up_time' | 'bed_time'> {
   studied_minutes: {
@@ -67,8 +68,6 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, ini
     const studiedMinutes = [part1, part2, part3].map(value => Number(value)) as [number, number, number];
     const {calendarDate: {year, month, date}} = history;
 
-    // TODO date_type 외에 전부다 안입력하면 막긴 해야함. 공부시간 / 실패사유 / 기상취침시각 셋중 하나는 입력해야함.
-
     const postParameter: PostDailyStudyTimeParameter = {
       ...data,
       studied_minutes: studiedMinutes,
@@ -100,22 +99,13 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, ini
     }
   }, [history, postMutation, updateMutation]);
 
-  const dateTypeRadioList: RadioProps[] = [
-    {
-      label: '평일',
-      value: 'weekday',
-      ...register('date_type', {
-        required: '날짜 종류는 필수입니다.'
-      })
-    },
-    {
-      label: '휴일 (주말 포함)',
-      value: 'holiday',
-      ...register('date_type', {
-        required: '날짜 종류는 필수입니다.'
-      })
-    },
-  ];
+  const dateTypeRadioList: RadioProps[] = DATE_TYPE_ITEMS.itemList.map(({name, value}) => ({
+    label: name,
+    value,
+    ...register('date_type', {
+      required: '날짜 종류는 필수입니다.'
+    })
+  }));
 
   // TODO 숫자만 입력가능하게 패턴넣어야함.
   const studiedMinutesInputList: InputProps[] = [
@@ -188,7 +178,7 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, ini
   return {
     form: {
       onSubmit: handleSubmit(onSubmit, onError),
-      loading: postMutation.isPending || updateMutation.isPending, // TODO 추후 Button loading props에 enableMutating 추가
+      loading: postMutation.isPending || updateMutation.isPending,
       deleteHistory
     },
     props: {

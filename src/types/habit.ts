@@ -1,4 +1,4 @@
-import {DailyStudyTimeDateType} from '@/types/studied-time';
+import {DateType} from '@/utils/service/constant/date-type';
 
 export interface Habit {
   pk: number; //created timestamp
@@ -23,7 +23,7 @@ export interface CheckableHabit extends Habit {
   children: CheckableHabitSubItem[];
 }
 
-export type HabitFrequency = DailyStudyTimeDateType;
+export type HabitFrequency = DateType;
 
 export interface HabitFullResponse {
   originalHabitList: Habit[];
