@@ -48,6 +48,7 @@ const PRIVATE_PATHNAMES = [
   '/habit',
   '/studied-time',
   '/remind-of-message',
+  '/routine'
 ];
 
 const NOT_PRIVATE_PATHNAME = [

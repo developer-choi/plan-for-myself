@@ -25,7 +25,7 @@ export async function postHabitApi(habit: PostHabitRequest) {
       frequency_list,
       children,
     }
-  })
+  });
 }
 
 export async function postTodayCheckHabitApi(checkedHabitList: CheckableHabit[]) {
