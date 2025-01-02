@@ -7,7 +7,7 @@ export default function PrivateLayout({children}: PropsWithChildren) {
     <>
       <div className={styles.wrap}>
         <header className={styles.header}>
-          <TabBar widthMode="fix" activeMode="path" linkList={LINK_LIST}/>
+          <TabBar widthMode="fix" activeMode="startsWith" linkList={LINK_LIST}/>
         </header>
         <main className={styles.page}>
           {children}

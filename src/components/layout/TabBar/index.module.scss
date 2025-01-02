@@ -1,26 +1,26 @@
 @use '/src/styles/color';
 @use '/src/styles/util';
+@use '/src/styles/layout.module';
 
 .container {
   display: flex;
   width: 100%;
   border-bottom: 1px solid nth(color.$grayColors, 7);
   
-  //&.mobile {
-  //  @include layout.horizontalPaddingContainer;
-  //}
-
+  &.mobile {
+    @include layout.horizontalPaddingContainer;
+  }
+  
   &.fix {
     justify-content: flex-start;
-
+    
     > .item {
       padding-inline: 8px;
     }
   }
-
+  
   &.equal-rate > .item {
-    flex-grow: 1;
-    flex-shrink: 0;
+    flex: 1;
   }
 }
 
@@ -30,7 +30,7 @@
   position: relative;
   height: 52px;
   color: map-get(color.$stateColors, inactiveTab);
-
+  
   &::after {
     position: absolute;
     content: ' ';
@@ -42,9 +42,9 @@
   }
 }
 
-.item.active {
+.item:global(.active) {
   color: map-get(color.$brandColors, primary);
-
+  
   &::after {
     height: 3px;
     background-color: map-get(color.$brandColors, primary);
@@ -53,7 +53,7 @@
 
 .label {
   font-weight: 700;
-
+  
   // 텍스트 수직정렬이 피그마와 1px만큼 오차가 발생해서 미세 조정
   position: relative;
   top: 1px;
