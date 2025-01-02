@@ -1,7 +1,7 @@
 import styles from './header.module.scss';
 import classNames from 'classnames';
 import { ComponentPropsWithoutRef, MouseEventHandler } from 'react';
-import IcClose from '@/components/icon/IcClose';
+import CloseIcon from '@/components/icon/CloseIcon';
 import Image from 'next/image';
 
 export interface DefaultModalHeaderProps extends ModalHeaderProps {
@@ -18,7 +18,7 @@ export function DefaultModalHeader({ children, onClose, ...rest }: DefaultModalH
       <h3 className={styles.title}>{children}</h3>
       {onClose && (
         <button className={styles.closeButton} onClick={onClose}>
-          <IcClose />
+          <CloseIcon />
         </button>
       )}
     </ModalHeader>
