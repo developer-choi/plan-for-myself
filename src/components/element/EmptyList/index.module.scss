@@ -1,0 +1,8 @@
+@use "/src/styles/color";
+@use "/src/styles/util";
+
+.container {
+  @include util.flexCenter;
+  color: map-get(color.$textColors, sub);
+  padding: 64px;
+}

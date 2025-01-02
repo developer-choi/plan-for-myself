@@ -34,6 +34,18 @@ export async function getRoutineListApi() {
   return json as Record<DateType, ReadableRoutine[]>;
 }
 
+export type UpdateRoutineListOrderApiRequest = number[];
+
+export function updateRoutineListOrderApi(list: ReadableRoutine[]) {
+  const request: UpdateRoutineListOrderApiRequest = list.map(({id}) => id);
+
+  return customFetchOnClientSide('/api/routine/list', {
+    method: 'PATCH',
+    authorize: 'private',
+    body: request
+  });
+}
+
 export async function getRoutineDetailApi(id: number) {
   const {json} = await customFetchOnServerSide(`/api/routine/${id}`, {
     method: 'GET',
