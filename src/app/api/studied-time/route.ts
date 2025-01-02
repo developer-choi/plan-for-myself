@@ -1,6 +1,7 @@
 import {NextRequest} from 'next/server';
 import {sql} from '@vercel/postgres';
 import {PostDailyStudyTimeParameter} from '@/utils/service/api/studied-time';
+import {convertStudiedTimeTimestamp, insertStudiedTime} from '@/utils/server/studied-time';
 
 export async function GET(request: NextRequest) {
   const user_id = request.headers.get('User-Id');
@@ -32,15 +33,12 @@ ORDER BY timestamp ASC;
 }
 
 export async function POST(request: NextRequest) {
-  const user_id = request.headers.get('User-Id');
+  const user_id = request.headers.get('User-Id') as string;
   const parameter: PostDailyStudyTimeParameter = await request.json();
-  const {fail_keywords = [], fail_reason = '', studied_minutes, date_type, year, month, date, wake_up_time, bed_time} = parameter;
-  const timestamp = makeTimestamp(year, month, date);
-
-  const formattedStudiedMinutes = `{${studied_minutes.join(',')}}`;
-  const formattedFailKeywords = `{${fail_keywords.map(k => `"${k}"`).join(',')}}`;
 
   try {
+    const {year, month, date} = parameter;
+    const timestamp = convertStudiedTimeTimestamp(year, month, date);
     const {rows} = await sql`select pk from studied_time where timestamp=${timestamp}`;
 
     if (rows.length) {
@@ -49,19 +47,12 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    await sql`
-        INSERT INTO studied_time (studied_minutes, fail_keywords, fail_reason, date_type, timestamp, user_id, wake_up_time, bed_time)
-        VALUES (${formattedStudiedMinutes}, ${formattedFailKeywords}, ${fail_reason}, ${date_type}, ${timestamp}, ${user_id}, ${wake_up_time}, ${bed_time})`;
+    await insertStudiedTime(user_id, parameter);
     return new Response('');
-
   } catch (error) {
     console.error(error);
     return new Response('', {
       status: 500
     });
   }
-}
-
-function makeTimestamp(year: number, month: number, date: number) {
-  return new Date(`${year}-${month}-${date} 13:00:00`).getTime();
 }
