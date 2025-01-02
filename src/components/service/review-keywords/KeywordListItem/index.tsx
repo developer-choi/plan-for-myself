@@ -3,7 +3,7 @@
 import React, {useCallback} from 'react';
 import {toast} from 'react-toastify';
 import styles from './index.module.scss';
-import {useToggle} from '@/utils/extend/react';
+import {useToggle} from '@/utils/extend/library/react';
 import classNames from 'classnames';
 
 interface KeywordListItemProp {
