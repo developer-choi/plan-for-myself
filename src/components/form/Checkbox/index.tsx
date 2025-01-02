@@ -1,8 +1,8 @@
 import React, {ComponentPropsWithRef, forwardRef} from 'react';
 import styles from './index.module.scss';
 import classNames from 'classnames';
-import IcCheck from '@/components/icon/IcCheck';
-import IcUncheck from '@/components/icon/IcUncheck';
+import CheckIcon from '@/components/icon/CheckIcon';
+import UncheckIcon from '@/components/icon/UncheckIcon';
 
 // https://docs.google.com/document/d/1rqmOi11-M61mjOkk5i63SigHNN8BJYLpka8c73tSLb0/edit?usp=drivesdk
 export interface CheckboxProps extends Omit<ComponentPropsWithRef<'input'>, 'type'> {
@@ -16,8 +16,8 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(p
 
   return (
     <label style={style} className={classNames(styles.wrapper, styles[color], className)}>
-      <IcCheck square={square} className={styles.checked}/>
-      <IcUncheck square={square} className={styles.unchecked}/>
+      <CheckIcon square={square} className={styles.checked}/>
+      <UncheckIcon square={square} className={styles.unchecked}/>
       <input ref={ref} type="checkbox" {...rest} />
       {label}
     </label>

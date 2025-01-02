@@ -1,7 +1,7 @@
 import React, {ComponentPropsWithRef, forwardRef, PropsWithChildren} from 'react';
 import styles from './index.module.scss';
 import classNames from 'classnames';
-import IcRadio from '@/components/icon/IcRadio';
+import RadioIcon from '@/components/icon/RadioIcon';
 import {FormElementWrapper, FormElementWrapperProps} from '@/components/form/form-elements';
 
 interface CheckboxProps extends Omit<ComponentPropsWithRef<'input'>, 'type'> {
@@ -17,7 +17,7 @@ export default forwardRef<HTMLInputElement, RadioProps>(function Radio(props, re
 
   return (
     <label style={style} className={classNames(styles.wrapper, styles[color])}>
-      <IcRadio/>
+      <RadioIcon/>
       <input ref={ref} type="radio" {...rest} />
       {label}
     </label>

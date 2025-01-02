@@ -40,8 +40,8 @@
 
 .bigCheckbox {
   border: 1px solid nth(color.$grayColors, 6);
-  border-radius: 10px;
-  padding: 8px;
+  border-radius: 4px;
+  padding: 10px;
   
   &:has(:checked) {
     border-color: map-get(color.$brandColors, primary);

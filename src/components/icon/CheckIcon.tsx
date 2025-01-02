@@ -1,10 +1,10 @@
 import {ComponentPropsWithoutRef} from 'react';
 
-export interface IcCheckProps extends Omit<ComponentPropsWithoutRef<'svg'>, 'width' | 'height'> {
+export interface CheckIconProps extends Omit<ComponentPropsWithoutRef<'svg'>, 'width' | 'height'> {
   square?: number; // 가로세로 길이, default 20
 }
 
-export default function IcCheck({fill = "#0099bb", square = 20, ...rest}: IcCheckProps) {
+export default function CheckIcon({fill = "#0099bb", square = 20, ...rest}: CheckIconProps) {
   return (
     <svg width={square} height={square} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" {...rest}>
       <path

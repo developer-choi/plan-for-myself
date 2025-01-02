@@ -1,6 +1,6 @@
-import {IcCheckProps} from '@/components/icon/IcCheck';
+import {CheckIconProps} from '@/components/icon/CheckIcon';
 
-export default function IcUncheck({square = 20, ...rest}: IcCheckProps) {
+export default function UncheckIcon({square = 20, ...rest}: CheckIconProps) {
   return (
     <svg width={square} height={square} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" {...rest}>
       <path
