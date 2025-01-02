@@ -3,6 +3,10 @@ import {NextResponse} from 'next/server';
 import {getNextNavigating} from '@/utils/service/auth/path';
 import Google from '@auth/core/providers/google';
 
+/**
+ * [Next Auth Overview] https://docs.google.com/document/d/1PYKKPneIYB8j8vz8fQgqwBLAkEmB69KJfeFTSXhtdbk/edit#heading=h.mkk12las5ndq
+ * [Next Auth auth.ts] https://docs.google.com/document/d/1w0Kn91aacGsdKFPTxsdM3JsyRzKynTR4kgJzyS3rcbY/edit#heading=h.14tqv65n973
+ */
 export const {handlers, signOut, auth} = NextAuth({
   secret: 'Aeh9xmaxlq2swmiGAlOpAyHc49fVwrwrStF9/sjqe8w=',
   pages: {
@@ -32,9 +36,8 @@ export const {handlers, signOut, auth} = NextAuth({
       const isLoggedIn = !!auth?.user;
 
       const nextNavigating = getNextNavigating({
-        nextPathname: nextUrl.pathname,
-        isLoggedIn,
-        redirectUrl: nextUrl.pathname + nextUrl.search
+        nextUrl: nextUrl.pathname + nextUrl.search,
+        isLoggedIn
       });
 
       switch (nextNavigating.type) {
@@ -45,7 +48,13 @@ export const {handlers, signOut, auth} = NextAuth({
           // https://www.propelauth.com/post/getting-url-in-next-server-components
           const newHeaders = new Headers(headers);
           newHeaders.set(CURRENT_URL_IN_HEADER, nextUrl.pathname + nextUrl.search);
-          return NextResponse.next({headers: newHeaders});
+
+          // https://nextjs.org/docs/app/building-your-application/routing/middleware#setting-headers
+          return NextResponse.next({
+            request: {
+              headers: newHeaders,
+            },
+          });
         }
       }
     },

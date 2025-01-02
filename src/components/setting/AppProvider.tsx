@@ -1,7 +1,6 @@
 import React, {PropsWithChildren} from 'react';
 import {auth} from '@/utils/service/auth';
 import {SessionProvider} from 'next-auth/react';
-import InnerSessionProvider from '@/utils/service/auth/InnerSessionProvider';
 import ReactQueryProvider from '@/components/setting/ReactQueryProvider';
 import dynamic from 'next/dynamic';
 
@@ -14,14 +13,12 @@ export default async function AppProvider({children}: PropsWithChildren) {
 
   return (
     <SessionProvider refetchOnWindowFocus={false} session={session}>
-      <InnerSessionProvider>
-        <ReactQueryProvider>
-          <ModalProvider>
-            {children}
-          </ModalProvider>
-          <CustomToastContainer/>
-        </ReactQueryProvider>
-      </InnerSessionProvider>
+      <ReactQueryProvider>
+        <ModalProvider>
+          {children}
+        </ModalProvider>
+        <CustomToastContainer/>
+      </ReactQueryProvider>
     </SessionProvider>
   )
 }

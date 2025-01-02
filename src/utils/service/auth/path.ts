@@ -1,9 +1,8 @@
 import {DEFAULT_HOME_URL} from '@/utils/service/auth/redirect';
 
 interface NextNavigatingParam {
-  redirectUrl: string; // pathname + querystring
+  nextUrl: string; // pathname + querystring
   isLoggedIn: boolean;
-  nextPathname: string;
 }
 
 export type NextNavigatingResult = {
@@ -13,17 +12,20 @@ export type NextNavigatingResult = {
   type: "already-authenticated";
   nextUrl: typeof DEFAULT_HOME_URL
 } | {
-  type: "correct"
+  type: "correct",
+  nextUrl: string; // parameter로 전달했던 nextUrl과 같은 값
 };
 
-export function getNextNavigating({redirectUrl, nextPathname, isLoggedIn}: NextNavigatingParam): NextNavigatingResult {
+export function getNextNavigating({nextUrl, isLoggedIn}: NextNavigatingParam): NextNavigatingResult {
+  const nextUrlObject = new URL(`http://some.domain.com${nextUrl}`);
+  const nextPathname = nextUrlObject.pathname;
   const isPrivate = PRIVATE_PATHNAMES.some(pathname => nextPathname.startsWith(pathname));
   const isNotPrivate = NOT_PRIVATE_PATHNAME.some(pathname => nextPathname.startsWith(pathname));
 
   if (isPrivate && !isLoggedIn) {
     return {
       type: "not-authenticated",
-      nextUrl: `/guest/login?redirect=${redirectUrl}`
+      nextUrl: `/guest/login?redirect=${nextUrl}`
     };
   } else if (isNotPrivate && isLoggedIn) {
     return {
@@ -33,7 +35,8 @@ export function getNextNavigating({redirectUrl, nextPathname, isLoggedIn}: NextN
 
   } else {
     return {
-      type: "correct"
+      type: "correct",
+      nextUrl
     };
   }
 }
@@ -42,11 +45,11 @@ export function getNextNavigating({redirectUrl, nextPathname, isLoggedIn}: NextN
  * Non Export
  *************************************************************************************************************/
 const PRIVATE_PATHNAMES = [
-  "/habit",
-  "/studied-time",
-  '/remind-of-message'
+  '/habit',
+  '/studied-time',
+  '/remind-of-message',
 ];
 
 const NOT_PRIVATE_PATHNAME = [
-  "/guest",
+  '/guest',
 ];
