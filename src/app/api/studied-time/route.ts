@@ -1,7 +1,7 @@
 import {NextRequest} from 'next/server';
 import {sql} from '@vercel/postgres';
 import {PostDailyStudyTimeParameter} from '@/utils/service/api/studied-time';
-import {convertStudiedTimeTimestamp, insertStudiedTime} from '@/utils/server/studied-time';
+import {convertStudiedTimeTimestamp, insertStudiedTimeCalendar} from '@/utils/server/studied-time';
 
 export async function GET(request: NextRequest) {
   const user_id = request.headers.get('User-Id');
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    await insertStudiedTime(user_id, parameter);
+    await insertStudiedTimeCalendar(user_id, parameter);
     return new Response('');
   } catch (error) {
     console.error(error);

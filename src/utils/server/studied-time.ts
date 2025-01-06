@@ -1,7 +1,7 @@
 import {sql} from '@vercel/postgres';
 import {PostDailyStudyTimeParameter, UpdateDailyStudyTimeParameter} from '@/utils/service/api/studied-time';
 
-export function insertStudiedTime(user_id: string, parameter: PostDailyStudyTimeParameter) {
+export function insertStudiedTimeCalendar(user_id: string, parameter: PostDailyStudyTimeParameter) {
   const {fail_keywords = [], fail_reason = '', studied_minutes, date_type, year, month, date, wake_up_time, bed_time} = parameter;
   const timestamp = convertStudiedTimeTimestamp(year, month, date);
   const formattedStudiedMinutes = `{${studied_minutes.join(',')}}`;
@@ -12,7 +12,7 @@ export function insertStudiedTime(user_id: string, parameter: PostDailyStudyTime
         VALUES (${formattedStudiedMinutes}, ${formattedFailKeywords}, ${fail_reason}, ${date_type}, ${timestamp}, ${user_id}, ${wake_up_time}, ${bed_time})`;
 }
 
-export function patchStudiedTime(pk: number, parameter: Omit<UpdateDailyStudyTimeParameter, 'pk'>) {
+export function patchStudiedTimeCalendar(pk: number, parameter: Omit<UpdateDailyStudyTimeParameter, 'pk'>) {
   const {fail_keywords = [], fail_reason = '', studied_minutes, date_type, timestamp, wake_up_time, bed_time} = parameter;
 
   const formattedStudiedMinutes = `{${studied_minutes.join(',')}}`;

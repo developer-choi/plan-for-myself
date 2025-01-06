@@ -8,7 +8,7 @@ import {
   PostStudiedMinutesRoutineApiRequest
 } from '@/utils/service/api/routine';
 import {DateType} from '@/utils/service/constant/date-type';
-import {insertStudiedTime, patchStudiedTime} from '@/utils/server/studied-time';
+import {insertStudiedTimeCalendar, patchStudiedTimeCalendar} from '@/utils/server/studied-time';
 import {destructDate} from '@/utils/extend/date/util';
 import {removeDuplicatedItems} from '@/utils/extend/data-type/array';
 
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest, {params: {id, type}}: {params: 
     await createRoutineLog({body, user_id}, numericId, stepType);
 
     if (stepType !== 'link') {
-      await updateStudiedTime({body, user_id}, numericId, stepType);
+      await updateStudiedTimeCalendar({body, user_id}, numericId, stepType);
     }
 
     return new Response('');
@@ -85,7 +85,7 @@ async function createRoutineLog(data: {body: any, user_id: string}, id: number, 
   }
 }
 
-async function updateStudiedTime(data: {body: any, user_id: string}, id: number, type: Exclude<ProcessableRoutineStep['type'], 'link'>) {
+async function updateStudiedTimeCalendar(data: {body: any, user_id: string}, id: number, type: Exclude<ProcessableRoutineStep['type'], 'link'>) {
   const {user_id, body} = data;
 
   const {rows} = await sql`SELECT * FROM studied_time WHERE TO_TIMESTAMP(timestamp / 1000)::DATE = CURRENT_DATE`;
@@ -118,7 +118,7 @@ async function updateStudiedTime(data: {body: any, user_id: string}, id: number,
       const {isAchieved} = body as PostHabitRoutineApiRequest;
 
       if (!todayRow) {
-        await insertStudiedTime(user_id, {
+        await insertStudiedTimeCalendar(user_id, {
           fail_keywords: isAchieved ? [] : [keyword],
           fail_reason: '',
           year,
@@ -130,7 +130,7 @@ async function updateStudiedTime(data: {body: any, user_id: string}, id: number,
           studied_minutes: [0, 0, 0]
         });
       } else {
-        await patchStudiedTime(todayRow.pk, {
+        await patchStudiedTimeCalendar(todayRow.pk, {
           fail_keywords: isAchieved ? todayRow.fail_keywords : removeDuplicatedItems(todayRow.fail_keywords.concat(keyword)),
           fail_reason: todayRow.fail_reason,
           studied_minutes: todayRow.studied_minutes,
@@ -147,7 +147,7 @@ async function updateStudiedTime(data: {body: any, user_id: string}, id: number,
       const {studied_minutes} = body as PostStudiedMinutesRoutineApiRequest;
 
       if (!todayRow) {
-        await insertStudiedTime(user_id, {
+        await insertStudiedTimeCalendar(user_id, {
           fail_keywords: [],
           fail_reason: '',
           year,
@@ -163,8 +163,8 @@ async function updateStudiedTime(data: {body: any, user_id: string}, id: number,
           ]
         });
       } else {
-        await patchStudiedTime(todayRow.pk, {
-          fail_keywords: removeDuplicatedItems(todayRow.fail_keywords.concat(keyword)),
+        await patchStudiedTimeCalendar(todayRow.pk, {
+          fail_keywords: todayRow.fail_keywords,
           fail_reason: todayRow.fail_reason,
           studied_minutes: [
             routine_type === 'morning' ? studied_minutes : todayRow.studied_minutes[0],
@@ -184,7 +184,7 @@ async function updateStudiedTime(data: {body: any, user_id: string}, id: number,
       const {sleep_time} = body as PostSleepTimeRoutineApiRequest;
 
       if (!todayRow) {
-        await insertStudiedTime(user_id, {
+        await insertStudiedTimeCalendar(user_id, {
           fail_keywords: [],
           fail_reason: '',
           year,
@@ -196,8 +196,8 @@ async function updateStudiedTime(data: {body: any, user_id: string}, id: number,
           studied_minutes: [0, 0, 0]
         });
       } else {
-        await patchStudiedTime(todayRow.pk, {
-          fail_keywords: removeDuplicatedItems(todayRow.fail_keywords.concat(keyword)),
+        await patchStudiedTimeCalendar(todayRow.pk, {
+          fail_keywords: todayRow.fail_keywords,
           fail_reason: todayRow.fail_reason,
           studied_minutes: todayRow.studied_minutes,
           wake_up_time: routine_type === 'morning' ? sleep_time : todayRow.wake_up_time,
