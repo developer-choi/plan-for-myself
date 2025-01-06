@@ -14,6 +14,7 @@ import {
 import {useMutation} from '@tanstack/react-query';
 import {isHolidayDate} from '@/utils/extend/date/holiday';
 import {DATE_TYPE_ITEMS} from '@/utils/service/constant/date-type';
+import {revalidateTagOnServerAction} from '@/utils/extend/library/revalidate-tag';
 
 export interface StudiedTimeFormData extends Pick<DailyStudyTime, 'date_type' | 'wake_up_time' | 'bed_time'> {
   studied_minutes: {
@@ -25,7 +26,7 @@ export interface StudiedTimeFormData extends Pick<DailyStudyTime, 'date_type' | 
   fail_reason: string;
 }
 
-export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, initialFormData?: StudiedTimeFormData) {
+export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, onClose: () => void, initialFormData?: StudiedTimeFormData) {
   const {register, handleSubmit, formState: {errors}} = useForm<StudiedTimeFormData>({
     defaultValues: {
       studied_minutes: {
@@ -90,6 +91,9 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, ini
       } else {
         await postMutation.mutateAsync(postParameter);
       }
+
+      await revalidateTagOnServerAction('STUDIED_TIME_CALENDAR');
+      onClose();
     } catch (error: any) {
       console.error(error);
 
@@ -97,7 +101,7 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, ini
         return alert(error.text);
       }
     }
-  }, [history, postMutation, updateMutation]);
+  }, [history, onClose, postMutation, updateMutation]);
 
   const dateTypeRadioList: RadioProps[] = DATE_TYPE_ITEMS.itemList.map(({name, value}) => ({
     label: name,
@@ -170,10 +174,12 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, ini
 
     try {
       await deleteMutation.mutateAsync(history.data.pk);
+      await revalidateTagOnServerAction('STUDIED_TIME_CALENDAR');
+      onClose();
     } catch (error) {
       console.error(error);
     }
-  }, [deleteMutation, history]);
+  }, [deleteMutation, history, onClose]);
 
   return {
     form: {

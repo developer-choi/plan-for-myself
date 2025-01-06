@@ -18,7 +18,7 @@ export interface StudiedTimeFormModalProps extends ComposedModalProps {
 }
 
 export default function StudiedTimeFormModal({initialFormData, history, onClose, ...rest}: StudiedTimeFormModalProps) {
-  const {form, props} = useStudiedTimeForm(history, initialFormData);
+  const {form, props} = useStudiedTimeForm(history, onClose, initialFormData);
 
   return (
     <ModalContainer onClose={onClose} {...rest} disableOpenFocus={false}>

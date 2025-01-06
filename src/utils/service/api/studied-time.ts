@@ -41,17 +41,6 @@ export async function deleteStudiedTimeApi(pk: DailyStudyTime['pk']) {
   });
 }
 
-async function getStudiedTimeApi(year: number, month: number) {
-  const {start, end} = getMonthBoundary(year, month);
-
-  const {json} = await customFetchOnClientSide(`/api/studied-time?start=${formatter(start)}&end=${formatter(end)}`, {
-    authorize: 'private',
-    method: 'GET'
-  });
-
-  return json as DailyStudyTime[];
-}
-
 export async function getMonthlyStatisticsApi(year: number, month: number) {
   const {previousCalendar} = getCalendarNavigation(year, month);
 
@@ -76,7 +65,10 @@ export async function getStudiedTimeCalendarApi(year: number, month: number): Pr
 
   const {json} = await customFetchOnServerSide(`/api/studied-time?start=${formatter(start)}&end=${formatter(end)}`, {
     authorize: 'private',
-    method: 'GET'
+    method: 'GET',
+    next: {
+      tags: ['STUDIED_TIME_CALENDAR']
+    }
   });
 
   return getCalendarWeekList(year, month, function (calendarDate) {
@@ -89,6 +81,23 @@ export async function getStudiedTimeCalendarApi(year: number, month: number): Pr
       data: matchData,
     };
   });
+}
+
+/*************************************************************************************************************
+ * Non Export
+ *************************************************************************************************************/
+async function getStudiedTimeApi(year: number, month: number) {
+  const {start, end} = getMonthBoundary(year, month);
+
+  const {json} = await customFetchOnClientSide(`/api/studied-time?start=${formatter(start)}&end=${formatter(end)}`, {
+    authorize: 'private',
+    method: 'GET',
+    next: {
+      tags: ['STUDIED_TIME_CALENDAR']
+    }
+  });
+
+  return json as DailyStudyTime[];
 }
 
 function formatter(value: Date) {
