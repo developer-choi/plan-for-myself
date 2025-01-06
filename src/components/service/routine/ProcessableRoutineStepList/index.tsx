@@ -1,7 +1,7 @@
 'use client';
 
 import ProcessableRoutineStepCard from '@/components/service/routine/ProcessableRoutineStepCard';
-import React, {Fragment, useEffect} from 'react';
+import React, {Fragment, useCallback, useEffect} from 'react';
 import {ProcessableRoutine} from '@/types/routine';
 import {H1} from '@/components/element/typography';
 import Button, {ButtonLink} from '@/components/element/Button';
@@ -12,6 +12,8 @@ import IconDoubleArrow from '@/components/icon/IconDoubleArrow';
 import {BRAND_COLOR, GRAY_COLOR} from '@/styles/color';
 import {getProcessingRoutineStepId} from '@/utils/service/constant/routine';
 import {scrollToElement} from '@/utils/extend/browser/scroll';
+import {useHandleClientSideError} from '@/utils/service/error/client-side';
+import {revalidateTagOnServerAction} from '@/utils/extend/library/revalidate-tag';
 
 export interface ProcessableRoutinePageProps {
   routine: ProcessableRoutine;
@@ -21,6 +23,16 @@ export default function ProcessableRoutinePage({routine}: ProcessableRoutinePage
   const {mutateAsync, isPending} = useMutation({
     mutationFn: resetRoutineLogsApi
   });
+
+  const handleClientSideError = useHandleClientSideError();
+  const resetRoutineLogs = useCallback(async () => {
+    try {
+      await mutateAsync();
+      revalidateTagOnServerAction('PROCESSABLE_ROUTINE_LIST');
+    } catch (error) {
+      handleClientSideError(error);
+    }
+  }, [handleClientSideError, mutateAsync]);
 
   useEffect(() => {
     const processingStep = routine.steps.find(step => step.is_processing);
@@ -43,7 +55,7 @@ export default function ProcessableRoutinePage({routine}: ProcessableRoutinePage
       <div className={styles.header}>
         <H1>{routine.title}</H1>
         <ButtonLink href={`/routine/${routine.id}/edit`} color="edit">수정</ButtonLink>
-        <Button loading={isPending} color="delete" onClick={() => mutateAsync()}>오늘 루틴 초기화</Button>
+        <Button loading={isPending} color="delete" onClick={resetRoutineLogs}>오늘 루틴 초기화</Button>
       </div>
       <div className={styles.listContainer}>
         {routine.steps.map((step, index) => (

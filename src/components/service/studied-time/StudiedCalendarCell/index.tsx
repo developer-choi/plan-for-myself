@@ -22,8 +22,6 @@ interface StudiedCalendarCellProps {
 export default function StudiedCalendarCell({history, summary}: StudiedCalendarCellProps) {
   const {openModal} = useOpenModal();
 
-  console.log('history', history, summary);
-
   const onClickCell = useCallback(() => {
     openModal({
       Component: StudiedTimeFormModal,

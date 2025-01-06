@@ -5,7 +5,10 @@ import {customFetchOnClientSide, customFetchOnServerSide} from '@/utils/extend/l
 export async function resetRoutineLogsApi() {
   return customFetchOnClientSide('/api/routine', {
     method: 'DELETE',
-    authorize: 'private'
+    authorize: 'private',
+    next: {
+      tags: ['PROCESSABLE_ROUTINE_LIST']
+    }
   });
 }
 

@@ -27,6 +27,7 @@ import {baseHandleErrors} from '@/utils/extend/react-hook-form';
 import {Body2} from '@/components/element/typography';
 import {useRouter} from 'next/navigation';
 import {getProcessingRoutineStepId} from '@/utils/service/constant/routine';
+import {revalidateTagOnServerAction} from '@/utils/extend/library/revalidate-tag';
 
 export interface ProcessableRoutineStepCardProps {
   step: ProcessableRoutineStep;
@@ -72,6 +73,7 @@ function LinkRoutineCard({id, step}: SpecificRoutineCardProps<LinkRoutineStep>) 
       await postLinkRoutineStepApi({
         stepId: step.id,
       });
+      await revalidateTagOnServerAction('PROCESSABLE_ROUTINE_LIST');
       window.open(step.url);
     } catch (error) {
       handleOnClientError(error);
@@ -99,6 +101,7 @@ function HabitRoutineCard({id, step}: SpecificRoutineCardProps<HabitRoutineStep>
         stepId: step.id,
         isAchieved
       });
+      await revalidateTagOnServerAction('PROCESSABLE_ROUTINE_LIST');
     } catch (error) {
       handleOnClientError(error);
     }
@@ -141,6 +144,7 @@ function StudiedMinutesRoutineCard({id, step}: SpecificRoutineCardProps<Processa
         stepId: step.id,
         studied_minutes: Number(data.studied_minutes)
       });
+      await revalidateTagOnServerAction('PROCESSABLE_ROUTINE_LIST');
     } catch (error: any) {
       handleOnClientError(error);
     }
@@ -188,6 +192,7 @@ function SleepTimeRoutineCard({id, step}: SpecificRoutineCardProps<ProcessableSl
         stepId: step.id,
         sleep_time: data.sleep_time
       });
+      await revalidateTagOnServerAction('PROCESSABLE_ROUTINE_LIST');
     } catch (error: any) {
       handleOnClientError(error);
     }
