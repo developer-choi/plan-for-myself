@@ -243,7 +243,7 @@ export default function useRoutineForm({record, detail}: RoutineFormParameter) {
     step: {
       list: stepList,
       dragAndDrop: dragAndDropProps,
-      remove
+      remove // TODO 삭제 기능을 넣되, 주의사항으로 이 스탭을 진행한 기록이 모두 삭제된다고 묻기
     }
   };
 }

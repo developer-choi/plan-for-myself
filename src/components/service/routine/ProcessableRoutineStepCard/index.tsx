@@ -193,6 +193,7 @@ function SleepTimeRoutineCard({id, step}: SpecificRoutineCardProps<ProcessableSl
     }
   }, [handleOnClientError, isPending, step.id, mutateAsync]);
 
+  // TODO 여기 label, placeholder를 useRoutineForm이랑 같은 로직으로 만들어야하는데...
   return (
     <form id={id} className={classNames(styles.container, designSystemStyles.commonSubForm, 'row')} onSubmit={handleSubmit(onSubmit, onError)}>
       <Input placeholder="sleep time" disabled={disabled} {...register('sleep_time')}/>

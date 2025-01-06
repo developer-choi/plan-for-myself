@@ -16,6 +16,7 @@ export interface ReadableRoutineListProps {
 
 export default function ReadableRoutineList({record}: ReadableRoutineListProps) {
   const [dateType, setDateType] = useState<DateType>(getDefaultDateType());
+  // TODO 수정, 생성 성공 후 쿼리스트링 들어간거 보고 초기값 설정
   const list = useMemo(() => record[dateType], [dateType, record]);
 
   const onChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -34,7 +35,7 @@ export default function ReadableRoutineList({record}: ReadableRoutineListProps) 
     }
   });
 
-  // TODO 삭제 기능이 없음...
+  // TODO 삭제 기능을 넣되, 주의사항으로 해당 루틴의 모든 스텝과, 오늘 그 스탭을 진행한 기록이 모두 삭제된다고 묻기
   return (
     <div className={styles.container}>
       <RadioGroup label="date_type">
