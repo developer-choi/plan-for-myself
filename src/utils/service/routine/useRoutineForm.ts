@@ -2,7 +2,7 @@ import {PureRoutine, PureRoutineStep, ReadableRoutine} from '@/types/routine';
 import {useHandleClientSideError} from '@/utils/service/error/client-side';
 import {SubmitErrorHandler, SubmitHandler, useFieldArray, useForm} from 'react-hook-form';
 import {useMutation} from '@tanstack/react-query';
-import {useCallback, useEffect, useMemo} from 'react';
+import {useCallback, useMemo} from 'react';
 import {baseHandleErrors} from '@/utils/extend/react-hook-form';
 import {postRoutineApi, updateRoutineApi} from '@/utils/service/api/routine';
 import {InputProps} from '@/components/form/Input';
@@ -79,13 +79,9 @@ export default function useRoutineForm({record, detail}: RoutineFormParameter) {
   const dateType = watch('date_type');
 
   // date_type, routine_type으로 title 자동완성
-  useEffect(() => {
-    if (routineType === 'custom') {
-      setValue('title', '');
-    } else {
-      setValue('title', `${DATE_TYPE_ITEMS.record[dateType]} ${ROUTINE_TYPE_ITEMS.record[routineType]}`);
-    }
-  }, [dateType, routineType, setValue]);
+  useEffectFromTheSecondTime(useCallback(() => {
+    setValue('title', getDefaultTitle(dateType, routineType))
+  }, [dateType, routineType, setValue]));
 
   // date_type이 바뀌면 routine_type 리셋 (아,점,저는 1개씩만 만들어져야해서 다시계산)
   useEffectFromTheSecondTime(useCallback(() => {
@@ -280,12 +276,13 @@ function getDefaultFormData({record, detail}: RoutineFormParameter): CreateRouti
     };
   }
 
-  const date_type = getDefaultDateType();
+  const dateType = getDefaultDateType();
+  const routineType = getDefaultRoutineType(dateType, record);
 
   return {
-    date_type,
-    routine_type: getDefaultRoutineType(date_type, record),
-    title: '',
+    date_type: dateType,
+    routine_type: getDefaultRoutineType(dateType, record),
+    title: getDefaultTitle(dateType, routineType),
     steps: [] 
   };
 }
@@ -299,6 +296,14 @@ function getDefaultRoutineType(dateType: DateType, record: Record<DateType, Read
   } else {
     return 'custom';
   }
+}
+
+function getDefaultTitle(dateType: DateType, routineType: PureRoutine['routine_type']) {
+  if (routineType === 'custom') {
+    return '';
+  }
+
+  return `${DATE_TYPE_ITEMS.record[dateType]} ${ROUTINE_TYPE_ITEMS.record[routineType]}`;
 }
 
 interface CreateRoutineFormData extends Pick<PureRoutine, 'title' | 'routine_type' | 'date_type'> {
