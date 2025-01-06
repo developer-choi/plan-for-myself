@@ -89,7 +89,7 @@ export async function PATCH(request: NextRequest, {params: {id}}: {params: {id: 
           routine_id: Number(id),
           order: order
         });
-        console.log(`#### insert routine_steps success - ${step} ####`);
+        console.log(`#### insert routine_steps success - ${JSON.stringify(step)} ####`);
       }
     }
 
