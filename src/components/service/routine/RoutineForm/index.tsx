@@ -79,7 +79,7 @@ export default function RoutineForm({record, detail}: RoutineFormParameter) {
             );
         }
       })}
-      <Button type="submit" size="large">제출</Button>
+      <Button loading={form.isLoading} type="submit" size="large">제출</Button>
     </form>
   );
 }

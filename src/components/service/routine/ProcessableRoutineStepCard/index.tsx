@@ -89,23 +89,26 @@ function LinkRoutineCard({id, step}: SpecificRoutineCardProps<LinkRoutineStep>) 
 function HabitRoutineCard({id, step}: SpecificRoutineCardProps<HabitRoutineStep>) {
   const handleOnClientError = useHandleClientSideError();
   const {disabled} = useRoutineState(step);
+  const {isPending, mutateAsync} = useMutation({
+    mutationFn: postHabitRoutineStepApi
+  });
   
   const achieve = useCallback(async (isAchieved: boolean) => {
     try {
-      await postHabitRoutineStepApi({
+      await mutateAsync({
         stepId: step.id,
         isAchieved
       });
     } catch (error) {
       handleOnClientError(error);
     }
-  }, [handleOnClientError, step.id]);
+  }, [handleOnClientError, mutateAsync, step.id]);
 
   return (
     <div id={id} className={classNames(styles.container, styles.habit)}>
       <Body2>{step.text}</Body2>
-      <Button disabled={disabled} size="small" color="secondary" onClick={() => achieve(false)}>미달성</Button>
-      <Button disabled={disabled} size="small" color="primary" onClick={() => achieve(true)}>달성</Button>
+      <Button disabled={disabled} loading={isPending} size="small" color="secondary" onClick={() => achieve(false)}>미달성</Button>
+      <Button disabled={disabled} loading={isPending} size="small" color="primary" onClick={() => achieve(true)}>달성</Button>
       <Dim step={step}/>
     </div>
   );
@@ -147,7 +150,7 @@ function StudiedMinutesRoutineCard({id, step}: SpecificRoutineCardProps<Processa
     <form id={id} className={classNames(styles.container, designSystemStyles.commonSubForm, 'row')} onSubmit={handleSubmit(onSubmit, onError)}>
       <Input placeholder="studied minutes" disabled={disabled} {...register('studied_minutes')}/>
       {is_processed ? null : (
-        <Button type="submit">저장</Button>
+        <Button loading={isPending} type="submit">저장</Button>
       )}
       <Dim step={step}/>
     </form>
@@ -194,7 +197,7 @@ function SleepTimeRoutineCard({id, step}: SpecificRoutineCardProps<ProcessableSl
     <form id={id} className={classNames(styles.container, designSystemStyles.commonSubForm, 'row')} onSubmit={handleSubmit(onSubmit, onError)}>
       <Input placeholder="sleep time" disabled={disabled} {...register('sleep_time')}/>
       {is_processed ? null : (
-        <Button type="submit">저장</Button>
+        <Button loading={isPending} type="submit">저장</Button>
       )}
       <Dim step={step}/>
     </form>

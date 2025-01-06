@@ -12,6 +12,7 @@ import {DATE_TYPE_ITEMS, DateType} from '@/utils/service/constant/date-type';
 import {getDefaultDateType} from '@/utils/extend/date/holiday';
 import {useSortListWithDragAndDrop} from '@/utils/extend/useSortListWithDragAndDrop';
 import {useEffectFromTheSecondTime} from '@/utils/extend/library/react';
+import {useRouter} from 'next/navigation';
 
 export interface RoutineFormParameter {
   record: Record<DateType, ReadableRoutine[]>;
@@ -19,6 +20,7 @@ export interface RoutineFormParameter {
 }
 
 export default function useRoutineForm({record, detail}: RoutineFormParameter) {
+  const {push} = useRouter();
   const handleOnClientError = useHandleClientSideError();
   const {watch, register, handleSubmit, control, setValue} = useForm<CreateRoutineFormData>({
     defaultValues: getDefaultFormData({record, detail})
@@ -66,10 +68,12 @@ export default function useRoutineForm({record, detail}: RoutineFormParameter) {
       } else {
         await createMutation.mutateAsync(data);
       }
+
+      push(`/routine/list?date_type=${data.date_type}`);
     } catch (error: any) {
       handleOnClientError(error);
     }
-  }, [createMutation, detail, handleOnClientError, isPending, updateMutation]);
+  }, [isPending, detail, push, updateMutation, createMutation, handleOnClientError]);
 
   const routineType = watch('routine_type');
   const dateType = watch('date_type');
@@ -170,7 +174,7 @@ export default function useRoutineForm({record, detail}: RoutineFormParameter) {
         case 'sleep_time':
           const inputProps: InputProps = {
             disabled: true,
-            label: routineType === 'morning' ? '기상 시각' : routineType === 'night' ? '수면 시각' : '',
+            label: routineType === 'morning' ? '기상 시각' : routineType === 'night' ? '취침 시각' : '',
             placeholder: 'ex) 130분'
           };
 
