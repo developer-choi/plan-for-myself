@@ -6,6 +6,7 @@ import {auth} from '@/utils/service/auth';
 import {isServer} from '@/utils/extend/library/next';
 import {InvalidEnvironmentError} from '@/utils/service/error/both-side';
 import {ConvertableQuery, stringifyQuery} from '@/utils/extend/browser/query-string/convert';
+import {ValueOf} from 'next/constants';
 
 /** customFetchOnXXXSide() 공통 주석
  * @throws LoginError 세션정보가 없는 상태로 API를 호출하려고 시도하거나, API에서 401에러가 응답된 경우 발생
@@ -61,6 +62,8 @@ export interface CustomResponse extends Pick<Response, 'status' | 'headers' | 'u
 export const REVALIDATE_TAG = {
 };
 
+export type RevalidateTagType = ValueOf<typeof REVALIDATE_TAG>;
+
 /*************************************************************************************************************
  * Non Export
  *************************************************************************************************************/
@@ -78,7 +81,7 @@ interface ExtendedCustomFetchParameter extends Omit<RequestInit, 'body'> {
   authorize: 'private' | 'public' | 'none' | 'guest';
 
   next?: RequestInit['next'] & {
-    tags?: (keyof typeof REVALIDATE_TAG)[]
+    tags?: RevalidateTagType[]
   };
 
   // cache ==> authorize 가 private이면, "기본" no-store로 설정됨. 로그인 해야만 얻을 수 있는 정보는 대부분 API 호출 시점에 최신화된 데이터가 필요한 경우가 많았음.
