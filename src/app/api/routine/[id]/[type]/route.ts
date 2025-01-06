@@ -88,7 +88,10 @@ async function createRoutineLog(data: {body: any, user_id: string}, id: number, 
 async function updateStudiedTimeCalendar(data: {body: any, user_id: string}, id: number, type: Exclude<ProcessableRoutineStep['type'], 'link'>) {
   const {user_id, body} = data;
 
-  const {rows} = await sql`SELECT * FROM studied_time WHERE TO_TIMESTAMP(timestamp / 1000)::DATE = CURRENT_DATE`;
+  // TODO 한국시간 기준으로 조회하는거 나중에 다른데도 다 적용해야함. 너무 불편해; 한국에서만 쓸려고 만든건데 자꾸 UTC 기준으로 들어가는곳이 있더라.
+  const {rows} = await sql`SELECT * 
+FROM studied_time 
+WHERE TO_CHAR((TO_TIMESTAMP(timestamp / 1000) AT TIME ZONE 'Asia/Seoul')::DATE, 'YYYY-MM-DD') = TO_CHAR(NOW() AT TIME ZONE 'Asia/Seoul', 'YYYY-MM-DD')`;
 
   if (rows.length > 1) {
     throw new Response(`오늘 날짜로 생성된 studied time 기록이 ${rows.length}개 입니다. 1개만 남을 수 있도록 데이터를 수정해야합니다.`, {
