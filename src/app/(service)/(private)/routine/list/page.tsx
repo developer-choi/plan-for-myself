@@ -23,7 +23,8 @@ const KEYWORD = {
   Sleepy: 'Sleepy',
   Health: 'Health',
   Review: 'Review',
-  Effort: 'Effort'
+  Effort: 'Effort',
+  StudyRule: 'StudyRule'
 };
 
 const WEEKDAY_MORNING_ROUTINE: PureRoutine = {
@@ -269,6 +270,11 @@ const HOLIDAY_AFTER_LUNCH_ROUTINE: PureRoutine = {
   routine_type: 'custom',
   title: '휴일 낮 루틴',
   steps: [
+    {
+      type: 'habit',
+      text: '1주일간 RP에 수정한 공통코드 PFM에도 반영',
+      keyword: KEYWORD.StudyRule
+    },
     {
       type: 'habit',
       text: '졸리면 양치>씻>집안일>걷, 낮잠X',
