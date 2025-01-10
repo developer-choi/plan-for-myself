@@ -113,7 +113,15 @@ JOIN latest_log ll ON rs.id = ll.routine_step_id;
 
     let foundedIndex: null | {routine: number, step: number;} = null;
 
-    for(const routineIndex of list.keys()) {
+    const todayRoutineList = list.filter(({date_type}) => hasLogs.rows[0].date_type === date_type);
+
+    if (todayRoutineList.length === 0) {
+      return new Response('오늘 루틴을 진행한 기록은 있는데, 그 루틴의 date_type과 일치하는 루틴 리스트가 없음.', {
+        status: 500
+      });
+    }
+
+    for(const routineIndex of todayRoutineList.keys()) {
       const routine = list[routineIndex];
 
       for(const stepIndex of routine.steps.keys()) {
