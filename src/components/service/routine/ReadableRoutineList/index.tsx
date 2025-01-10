@@ -1,15 +1,16 @@
 'use client';
 
 import {ReadableRoutine} from '@/types/routine';
-import {ButtonLink} from '@/components/element/Button';
+import Button, {ButtonLink} from '@/components/element/Button';
 import {DATE_TYPE_ITEMS, DateType} from '@/utils/service/constant/date-type';
-import {ChangeEvent, useCallback, useMemo, useState} from 'react';
+import React, {ChangeEvent, useCallback, useMemo, useState} from 'react';
 import styles from './index.module.scss';
 import Radio, {RadioGroup} from '@/components/form/Radio';
 import {getDefaultDateType} from '@/utils/extend/date/holiday';
 import {useSortListWithDragAndDrop} from '@/utils/extend/useSortListWithDragAndDrop';
-import {updateRoutineListOrderApi} from '@/utils/service/api/routine';
+import {deleteRoutineApi, updateRoutineListOrderApi} from '@/utils/service/api/routine';
 import {revalidateTagOnServerAction} from '@/utils/extend/library/revalidate-tag';
+import {useHandleClientSideError} from '@/utils/service/error/client-side';
 
 export interface ReadableRoutineListProps {
   record: Record<DateType, ReadableRoutine[]>;
@@ -19,6 +20,7 @@ export default function ReadableRoutineList({record}: ReadableRoutineListProps) 
   const [dateType, setDateType] = useState<DateType>(getDefaultDateType());
   // TODO 수정, 생성 성공 후 쿼리스트링 들어간거 보고 초기값 설정
   const list = useMemo(() => record[dateType], [dateType, record]);
+  const handleClientSideError = useHandleClientSideError()
 
   const onChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setDateType(event.target.value as DateType);
@@ -27,7 +29,7 @@ export default function ReadableRoutineList({record}: ReadableRoutineListProps) 
   const onChangeRoutineList = useCallback(async (list: ReadableRoutine[]) => {
     // TODO 유효성검증 추가 필요. 아>점>저 순으로 되야함.
     await updateRoutineListOrderApi(list);
-    revalidateTagOnServerAction('READABLE_ROUTINE_LIST');
+    await revalidateTagOnServerAction('READABLE_ROUTINE_LIST');
   }, []);
 
   const {onDropCallback, onDragStartCallback, onDragOver, draggable} = useSortListWithDragAndDrop({
@@ -37,7 +39,17 @@ export default function ReadableRoutineList({record}: ReadableRoutineListProps) 
     }
   });
 
-  // TODO 삭제 기능을 넣되, 주의사항으로 해당 루틴의 모든 스텝과, 오늘 그 스탭을 진행한 기록이 모두 삭제된다고 묻기
+  const deleteRoutine = useCallback(async (id: number) => {
+    if (confirm('오늘 해당 루틴을 진행한 모든 기록이 같이 삭제됩니다. 삭제하시겠습니까?')) {
+      try {
+        await deleteRoutineApi(id);
+        await revalidateTagOnServerAction('READABLE_ROUTINE_LIST');
+      } catch (error) {
+        handleClientSideError(error);
+      }
+    }
+  }, [handleClientSideError]);
+
   return (
     <div className={styles.container}>
       <RadioGroup label="date_type">
@@ -49,7 +61,7 @@ export default function ReadableRoutineList({record}: ReadableRoutineListProps) 
         <div key={routine.id} className={styles.row} draggable={draggable} onDragOver={onDragOver} onDrop={onDropCallback(index)} onDragStart={onDragStartCallback(index)}>
           <span className={styles.title}>{routine.title}</span>
           <ButtonLink href={`/routine/${routine.id}/edit`} color="edit">수정</ButtonLink>
-          <ButtonLink href={`/routine/${routine.id}/edit`} color="delete">삭제</ButtonLink>
+          <Button onClick={() => deleteRoutine(routine.id)} color="delete">삭제</Button>
         </div>
       ))}
     </div>

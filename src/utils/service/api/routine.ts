@@ -47,6 +47,13 @@ export async function getRoutineListApi() {
   return json as Record<DateType, ReadableRoutine[]>;
 }
 
+export async function deleteRoutineApi(id: number) {
+  return customFetchOnClientSide(`/api/routine/${id}`, {
+    method: 'DELETE',
+    authorize: 'private',
+  });
+}
+
 export type UpdateRoutineListOrderApiRequest = number[];
 
 export function updateRoutineListOrderApi(list: ReadableRoutine[]) {

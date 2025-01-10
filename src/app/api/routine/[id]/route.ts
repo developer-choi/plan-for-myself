@@ -4,6 +4,20 @@ import {HabitRoutineStep, LinkRoutineStep, ReadableRoutine, ReadableRoutineStep}
 import {UpdateRoutineApiRequest} from '@/utils/service/api/routine';
 import {insertRoutineStep} from '@/utils/server/routine-step';
 
+export async function DELETE(request: NextRequest, {params: {id}}: {params: {id: string}}) {
+  const user_id = request.headers.get('User-Id') as string;
+
+  try {
+    await sql`delete from routines where user_id=${user_id} AND id=${id}`;
+    return new Response('');
+  } catch (error) {
+    console.error(error);
+    return new Response('', {
+      status: 500
+    });
+  }
+}
+
 export async function GET(request: NextRequest, {params: {id}}: {params: {id: string}}) {
   const user_id = request.headers.get('User-Id') as string;
 
