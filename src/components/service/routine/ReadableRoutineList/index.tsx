@@ -11,6 +11,7 @@ import {useSortListWithDragAndDrop} from '@/utils/extend/useSortListWithDragAndD
 import {deleteRoutineApi, updateRoutineListOrderApi} from '@/utils/service/api/routine';
 import {revalidateTagOnServerAction} from '@/utils/extend/library/revalidate-tag';
 import {useHandleClientSideError} from '@/utils/service/error/client-side';
+import RollbackRoutine from '@/components/service/routine/RollbackRoutine';
 
 export interface ReadableRoutineListProps {
   record: Record<DateType, ReadableRoutine[]>;
@@ -64,6 +65,7 @@ export default function ReadableRoutineList({record}: ReadableRoutineListProps) 
           <Button onClick={() => deleteRoutine(routine.id)} color="delete">삭제</Button>
         </div>
       ))}
+      <RollbackRoutine dateType={dateType}/>
     </div>
   );
 }
