@@ -56,6 +56,11 @@ const WEEKDAY_MORNING_ROUTINE: PureRoutine = {
       keyword: KEYWORD.EnglishStudy
     },
     {
+      type: 'link',
+      text: 'P1, S2 진행',
+      url: 'https://docs.google.com/document/d/1fCIh5gV9aqoILTWnU7p0FHffSQVoBLC-13IJdcK4lEE/edit?tab=t.0#heading=h.d77gh1hf6g9r'
+    },
+    {
       type: 'habit',
       text: '지난주 > 어제 > 새벽 복습',
       keyword: KEYWORD.Review
