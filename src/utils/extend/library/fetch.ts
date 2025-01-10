@@ -61,6 +61,7 @@ export interface CustomResponse extends Pick<Response, 'status' | 'headers' | 'u
 
 export const REVALIDATE_TAG = {
   PROCESSABLE_ROUTINE_LIST: 'PROCESSABLE_ROUTINE_LIST' as const,
+  READABLE_ROUTINE_LIST: 'READABLE_ROUTINE_LIST' as const,
   STUDIED_TIME_CALENDAR: 'STUDIED_TIME_CALENDAR' as const
 };
 

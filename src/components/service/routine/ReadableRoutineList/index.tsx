@@ -9,6 +9,7 @@ import Radio, {RadioGroup} from '@/components/form/Radio';
 import {getDefaultDateType} from '@/utils/extend/date/holiday';
 import {useSortListWithDragAndDrop} from '@/utils/extend/useSortListWithDragAndDrop';
 import {updateRoutineListOrderApi} from '@/utils/service/api/routine';
+import {revalidateTagOnServerAction} from '@/utils/extend/library/revalidate-tag';
 
 export interface ReadableRoutineListProps {
   record: Record<DateType, ReadableRoutine[]>;
@@ -26,6 +27,7 @@ export default function ReadableRoutineList({record}: ReadableRoutineListProps) 
   const onChangeRoutineList = useCallback(async (list: ReadableRoutine[]) => {
     // TODO 유효성검증 추가 필요. 아>점>저 순으로 되야함.
     await updateRoutineListOrderApi(list);
+    revalidateTagOnServerAction('READABLE_ROUTINE_LIST');
   }, []);
 
   const {onDropCallback, onDragStartCallback, onDragOver, draggable} = useSortListWithDragAndDrop({

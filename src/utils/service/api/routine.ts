@@ -39,6 +39,9 @@ export async function getRoutineListApi() {
   const {json} = await customFetchOnServerSide('/api/routine/list', {
     method: 'GET',
     authorize: 'private',
+    next: {
+      tags: ['READABLE_ROUTINE_LIST']
+    }
   });
 
   return json as Record<DateType, ReadableRoutine[]>;
