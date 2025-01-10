@@ -40,8 +40,18 @@ export interface SimpleDate {
   date: number;
 }
 
+export interface DateProperty {
+  year: number
+  month: number
+  date: number
+  hour: number
+  minute: number
+  second: number
+  milliSecond: number;
+}
+
 // 주의 : month는 실제 month보다 1 작습니다. 0부터 시작하기 때문입니다.
-export function destructDate(target = new Date()) {
+export function destructDate(target = new Date()): DateProperty {
   const year = target.getFullYear();
   const month = target.getMonth();
   const date = target.getDate();

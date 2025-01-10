@@ -9,7 +9,7 @@ import {
 } from '@/utils/service/api/routine';
 import {DateType} from '@/utils/service/constant/date-type';
 import {insertStudiedTimeCalendar, patchStudiedTimeCalendar} from '@/utils/server/studied-time';
-import {destructDate} from '@/utils/extend/date/util';
+import {getKoreanDate} from '@/utils/extend/date/korean';
 import {removeDuplicatedItems} from '@/utils/extend/data-type/array';
 
 interface StudiedTimeDbRow {
@@ -114,7 +114,7 @@ WHERE TO_CHAR((TO_TIMESTAMP(timestamp / 1000) AT TIME ZONE 'Asia/Seoul')::DATE, 
   }
 
   const {date_type, keyword, routine_type} = row as {date_type: DateType, keyword: string, routine_type: FixedRoutineType};
-  const {year, month, date} = destructDate();
+  const {year, month, date} = getKoreanDate();
 
   switch (type) {
     case 'habit': {

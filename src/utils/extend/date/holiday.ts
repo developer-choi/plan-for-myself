@@ -1,5 +1,6 @@
 import {convertLunarDateToSolar} from '@/utils/extend/date/lunar';
-import {destructDate, SimpleDate} from '@/utils/extend/date/util';
+import {getKoreanDate} from '@/utils/extend/date/korean';
+import {SimpleDate} from '@/utils/extend/date/util';
 import {DateType} from '@/utils/service/constant/date-type';
 
 /**
@@ -32,7 +33,7 @@ export function isHolidayDate({year, month, date}: SimpleDate) {
 }
 
 export function getDefaultDateType(): DateType {
-  const {year, month, date} = destructDate();
+  const {year, month, date} = getKoreanDate();
   return isHoliday(year, month + 1, date) ? 'holiday' : 'weekday';
 }
 
