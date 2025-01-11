@@ -122,7 +122,7 @@ JOIN latest_log ll ON rs.id = ll.routine_step_id;
     }
 
     for(const routineIndex of todayRoutineList.keys()) {
-      const routine = list[routineIndex];
+      const routine = todayRoutineList[routineIndex];
 
       for(const stepIndex of routine.steps.keys()) {
         if (!todayRoutineList[routineIndex].steps[stepIndex].is_processed) {
