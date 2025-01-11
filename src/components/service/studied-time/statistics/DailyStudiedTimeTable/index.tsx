@@ -48,7 +48,7 @@ export default function DailyStudiedTimeTable({data}: DailyStudiedTimeTableProps
         </tr>
         </thead>
         <tbody>
-        {list.map(({pk, bed_time, wake_up_time, fail_keywords, fail_reason, studied_minutes, timestamp}) => {
+        {list.map(({pk, bed_time, wake_up_time, fail_keywords, studied_minutes, timestamp}) => {
           const dateText = dayjs(timestamp).format('YYYY-MM-DD ddd');
           const totalStudiedTime = totalStudiedTimeFormat(studied_minutes);
           const studiedTime = {
@@ -66,7 +66,6 @@ export default function DailyStudiedTimeTable({data}: DailyStudiedTimeTableProps
               <td className={classNames({[styles.empty]: !studiedTime.lunch})}>{studiedTime.lunch}</td>
               <td className={classNames({[styles.empty]: !studiedTime.dinner})}>{studiedTime.dinner}</td>
               <td className={classNames(styles.fail, {[styles.empty]: !failKeywords})}>{failKeywords}</td>
-              <td className={classNames(styles.fail, {[styles.empty]: !fail_reason})}>{fail_reason}</td>
               <td className={classNames({[styles.empty]: !wake_up_time})}>{wake_up_time}</td>
               <td className={classNames({[styles.empty]: !bed_time})}>{bed_time}</td>
             </tr>

@@ -16,7 +16,6 @@ interface StudiedTimeDbRow {
   pk: number;
   timestamp: string;
   fail_keywords: string[];
-  fail_reason: string;
   studied_minutes: [number, number, number];
   wake_up_time: string; // ex: hh:mm
   bed_time: string; // ex: hh:mm
@@ -123,7 +122,6 @@ WHERE TO_CHAR((TO_TIMESTAMP(timestamp / 1000) AT TIME ZONE 'Asia/Seoul')::DATE, 
       if (!todayRow) {
         await insertStudiedTimeCalendar(user_id, {
           fail_keywords: isAchieved ? [] : [keyword],
-          fail_reason: '',
           year,
           month: month + 1,
           date,
@@ -135,7 +133,6 @@ WHERE TO_CHAR((TO_TIMESTAMP(timestamp / 1000) AT TIME ZONE 'Asia/Seoul')::DATE, 
       } else {
         await patchStudiedTimeCalendar(todayRow.pk, {
           fail_keywords: isAchieved ? todayRow.fail_keywords : removeDuplicatedItems(todayRow.fail_keywords.concat(keyword)),
-          fail_reason: todayRow.fail_reason,
           studied_minutes: todayRow.studied_minutes,
           wake_up_time: todayRow.wake_up_time,
           bed_time: todayRow.bed_time,
@@ -152,7 +149,6 @@ WHERE TO_CHAR((TO_TIMESTAMP(timestamp / 1000) AT TIME ZONE 'Asia/Seoul')::DATE, 
       if (!todayRow) {
         await insertStudiedTimeCalendar(user_id, {
           fail_keywords: [],
-          fail_reason: '',
           year,
           month: month + 1,
           date,
@@ -168,7 +164,6 @@ WHERE TO_CHAR((TO_TIMESTAMP(timestamp / 1000) AT TIME ZONE 'Asia/Seoul')::DATE, 
       } else {
         await patchStudiedTimeCalendar(todayRow.pk, {
           fail_keywords: todayRow.fail_keywords,
-          fail_reason: todayRow.fail_reason,
           studied_minutes: [
             routine_type === 'morning' ? studied_minutes : todayRow.studied_minutes[0],
             routine_type === 'lunch' ? studied_minutes : todayRow.studied_minutes[1],
@@ -189,7 +184,6 @@ WHERE TO_CHAR((TO_TIMESTAMP(timestamp / 1000) AT TIME ZONE 'Asia/Seoul')::DATE, 
       if (!todayRow) {
         await insertStudiedTimeCalendar(user_id, {
           fail_keywords: [],
-          fail_reason: '',
           year,
           month: month + 1,
           date,
@@ -201,7 +195,6 @@ WHERE TO_CHAR((TO_TIMESTAMP(timestamp / 1000) AT TIME ZONE 'Asia/Seoul')::DATE, 
       } else {
         await patchStudiedTimeCalendar(todayRow.pk, {
           fail_keywords: todayRow.fail_keywords,
-          fail_reason: todayRow.fail_reason,
           studied_minutes: todayRow.studied_minutes,
           wake_up_time: routine_type === 'morning' ? sleep_time : todayRow.wake_up_time,
           bed_time: routine_type === 'night' ? sleep_time : todayRow.bed_time,

@@ -36,8 +36,6 @@ export default function StudiedTimeFormModal({initialFormData, history, onClose,
           ))}
 
           <Input {...props.fail.keywords}/>
-          <Input {...props.fail.reason}/>
-
           <Input {...props.wakeupTimeInputProps}/>
           <Input {...props.bedTimeInputProps}/>
         </form>

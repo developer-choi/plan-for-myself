@@ -23,7 +23,6 @@ export interface StudiedTimeFormData extends Pick<DailyStudyTime, 'date_type' | 
     part3: string;
   };
   fail_keywords: string; // ,로 구분
-  fail_reason: string;
 }
 
 export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, onClose: () => void, initialFormData?: StudiedTimeFormData) {
@@ -35,21 +34,19 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, onC
         part3: initializeStudiedMinute(initialFormData?.studied_minutes.part3)
       },
       fail_keywords: initialFormData?.fail_keywords ?? '',
-      fail_reason: initialFormData?.fail_reason ?? '',
       date_type: initialFormData?.date_type ?? (isHolidayDate(history.calendarDate) ? 'holiday' : 'weekday'),
       wake_up_time: initialFormData?.wake_up_time,
       bed_time: initialFormData?.bed_time
     }
   });
 
-  const onError: SubmitErrorHandler<StudiedTimeFormData> = useCallback(({studied_minutes, date_type, fail_keywords, fail_reason}) => {
+  const onError: SubmitErrorHandler<StudiedTimeFormData> = useCallback(({studied_minutes, date_type, fail_keywords}) => {
     baseHandleErrors([
       studied_minutes?.part1,
       studied_minutes?.part2,
       studied_minutes?.part3,
       date_type,
       fail_keywords,
-      fail_reason
     ]);
   }, []);
 
@@ -140,13 +137,6 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, onC
     error: errors.fail_keywords?.message,
   };
 
-  const failReasonInputProps: InputProps = {
-    label: '(선택) 실패 사유',
-    placeholder: '하루종일 유튜브 보느라 공부안함',
-    error: errors.fail_reason?.message,
-    ...register('fail_reason')
-  };
-
   const wakeupTimeInputProps: InputProps = {
     ...register('wake_up_time', HOUR_MINUTE_OPTIONS),
     label: '기상 시각',
@@ -195,7 +185,6 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, onC
       studiedMinutesInputList,
       fail: {
         keywords: failKeywordsInputProps,
-        reason: failReasonInputProps
       },
       wakeupTimeInputProps,
       bedTimeInputProps

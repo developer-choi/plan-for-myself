@@ -35,7 +35,6 @@ export default function StudiedCalendarCell({history, summary}: StudiedCalendarC
             part3: history.data.studied_minutes?.[2].toString()
           },
           fail_keywords: history.data.fail_keywords.join(','),
-          fail_reason: history.data.fail_reason ?? '',
           wake_up_time: history.data.wake_up_time,
           bed_time: history.data.bed_time
         }
@@ -52,7 +51,7 @@ export default function StudiedCalendarCell({history, summary}: StudiedCalendarC
       return null;
     }
 
-    if (calculateTotal(history.data.studied_minutes, value => value) === 0 && !history.data.fail_reason && !history.data.fail_keywords.length) {
+    if (calculateTotal(history.data.studied_minutes, value => value) === 0 && !history.data.fail_keywords.length) {
       return (
         <SleepHistory data={history.data}/>
       );
@@ -87,7 +86,7 @@ export default function StudiedCalendarCell({history, summary}: StudiedCalendarC
 
 function StudiedHistory({data}: {data: DailyStudyTime}) {
   const formatted = studiedTimeFormat(data.studied_minutes);
-  const fail = data.fail_reason ? data.fail_reason : data.fail_keywords.length ? data.fail_keywords.join(',') : null;
+  const fail = data.fail_keywords.length ? data.fail_keywords.join(',') : null;
 
   return (
     <>
