@@ -1,6 +1,6 @@
 'use client';
 
-import habitStyles from '@/components/service/habit/TotalHabitList/index.module.scss';
+import styles from './index.module.scss';
 import Button from '@/components/element/Button';
 import React, {useCallback} from 'react';
 import {
@@ -53,12 +53,10 @@ export default function RemindOfMessagePage({list}: RemindOfMessagePageProps) {
     <div className={layoutStyles.pageContentMedium}>
       <ul>
         {list.map((item) => (
-          <ol key={item.id} className={habitStyles.habitOl}>
-            <span className={habitStyles.title}>{item.message}</span>
-            <Button size="small" color="edit" className={habitStyles.smallButton} style={{width: 'auto'}}
-                    onClick={() => updateMessage(item.id)}>수정</Button>
-            <Button size="small" color="delete" className={habitStyles.smallButton} style={{width: 'auto'}}
-                    onClick={() => deleteMessage(item)}>삭제</Button>
+          <ol key={item.id} className={styles.habitOl}>
+            <span className={styles.title}>{item.message}</span>
+            <Button size="small" color="edit" className={styles.smallButton} style={{width: 'auto'}} onClick={() => updateMessage(item.id)}>수정</Button>
+            <Button size="small" color="delete" className={styles.smallButton} style={{width: 'auto'}} onClick={() => deleteMessage(item)}>삭제</Button>
           </ol>
         ))}
       </ul>

@@ -24,10 +24,6 @@ const LINK_LIST: TabBarItem[] = [
     children: 'Routine'
   },
   {
-    href: '/habit',
-    children: 'Habit'
-  },
-  {
     href: '/studied-time',
     children: 'Studied Time'
   },
