@@ -182,6 +182,11 @@ const WEEKDAY_BEFORE_LEAVE_WORK_ROUTINE: PureRoutine = {
       url: 'https://docs.google.com/document/d/1zDSa7Z4FJzFAbwOu84h5xLs8VgYZiaIwd1y1nyZUJCU/edit?tab=t.0#heading=h.4x5fr5ue44yi'
     },
     {
+      type: 'habit',
+      text: 'RP, TP, LW, LT, LA 커밋, 구글킵, 구글문서 정리',
+      keyword: KEYWORD.StudyRule
+    },
+    {
       type: 'link',
       text: '목표 이력서 확인',
       url: 'https://docs.google.com/document/d/16FQFmdvvssLpjBZ4kmjmo_Y4AZH0RzBXHvvKQXeX-Bk/edit?tab=t.0#heading=h.zevby2z2imrc'
@@ -228,6 +233,11 @@ const HOLIDAY_MORNING_ROUTINE: PureRoutine = {
     },
     {
       type: 'link',
+      text: 'Weekly Remind',
+      url: 'https://docs.google.com/document/d/19zD1wMyKvAu1Qwc3K5MHwRgbFjOJGBydcQfHnO6L03s/edit?tab=t.0#heading=h.826886qqpxfp'
+    },
+    {
+      type: 'link',
       text: '기술 블로그',
       url: 'https://docs.google.com/document/d/1qx4KZkQ1U_7xCLqqB-8jToP_gnh0ki364QA3YY0oNdQ/edit?tab=t.0#heading=h.euly6qc2v9v5'
     },
@@ -242,9 +252,9 @@ const HOLIDAY_MORNING_ROUTINE: PureRoutine = {
       url: 'https://docs.google.com/document/d/1k5-3pJ1qNTzcK-1-73LmqbrYuWr5gxe2xJglYMd2E_0/edit?tab=t.0'
     },
     {
-      type: 'habit',
+      type: 'link',
       text: '평일에 진도 못뺀만큼 채워야함',
-      keyword: KEYWORD.Effort
+      url: 'https://docs.google.com/document/d/1fCIh5gV9aqoILTWnU7p0FHffSQVoBLC-13IJdcK4lEE/edit?tab=t.0'
     },
     {
       type: 'habit',
@@ -257,6 +267,11 @@ const HOLIDAY_MORNING_ROUTINE: PureRoutine = {
       keyword: KEYWORD.Effort
     },
     {
+      type: 'link',
+      text: 'P1, S2 진행',
+      url: 'https://docs.google.com/document/d/1fCIh5gV9aqoILTWnU7p0FHffSQVoBLC-13IJdcK4lEE/edit?tab=t.0'
+    },
+    {
       type: 'studied_minutes'
     }
   ]
@@ -265,7 +280,7 @@ const HOLIDAY_MORNING_ROUTINE: PureRoutine = {
 const HOLIDAY_LUNCH_ROUTINE: PureRoutine = {
   date_type: 'holiday',
   routine_type: 'lunch',
-  title: '주말 점심 루틴',
+  title: '휴일 점심 루틴',
   steps: [
     {
       type: 'habit',
@@ -281,6 +296,11 @@ const HOLIDAY_LUNCH_ROUTINE: PureRoutine = {
       type: 'habit',
       text: '우울하면 걷기',
       keyword: KEYWORD.Depression
+    },
+    {
+      type: 'link',
+      text: 'P1, S2 진행',
+      url: 'https://docs.google.com/document/d/1fCIh5gV9aqoILTWnU7p0FHffSQVoBLC-13IJdcK4lEE/edit?tab=t.0'
     },
     {
       type: 'studied_minutes'
@@ -312,14 +332,34 @@ const HOLIDAY_AFTER_LUNCH_ROUTINE: PureRoutine = {
 }
 
 const HOLIDAY_NIGHT_ROUTINE: PureRoutine = {
-  date_type: 'weekday',
-  routine_type: 'custom',
-  title: '주말 저녁',
+  date_type: 'holiday',
+  routine_type: 'night',
+  title: '휴일 저녁 루틴',
   steps: [
     {
       type: 'habit',
       text: '폰 구석에 넣기',
       keyword: KEYWORD.Sleep
+    },
+    {
+      type: 'link',
+      text: 'P1, S2 진행',
+      url: 'https://docs.google.com/document/d/1fCIh5gV9aqoILTWnU7p0FHffSQVoBLC-13IJdcK4lEE/edit?tab=t.0'
+    },
+    {
+      type: 'habit',
+      text: 'RP, TP, 구글문서 정리',
+      keyword: KEYWORD.StudyRule
+    },
+    {
+      type: 'habit',
+      text: '새벽 > 오전 > 점심 > 저녁 복습',
+      keyword: KEYWORD.Review
+    },
+    {
+      type: 'link',
+      text: '루틴문서 정리',
+      url: 'https://docs.google.com/document/d/1fCIh5gV9aqoILTWnU7p0FHffSQVoBLC-13IJdcK4lEE/edit?tab=t.0'
     },
     {
       type: 'studied_minutes',

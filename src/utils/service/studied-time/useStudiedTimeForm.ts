@@ -132,7 +132,7 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, onC
 
   const failKeywordsInputProps: InputProps = {
     ...register('fail_keywords'),
-    label: '(선택) 실패 키워드',
+    label: '실패 키워드',
     placeholder: '유튜브,수면 (,로 구분)',
     error: errors.fail_keywords?.message,
   };
