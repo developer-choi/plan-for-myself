@@ -42,7 +42,6 @@ export default function DailyStudiedTimeTable({data}: DailyStudiedTimeTableProps
           <th>점심</th>
           <th>저녁</th>
           <th className={styles.fail}>실패 키워드</th>
-          <th className={styles.fail}>실패 사유</th>
           <th>기상 시각</th>
           <th>취침 시각</th>
         </tr>
