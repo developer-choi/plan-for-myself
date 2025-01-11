@@ -125,7 +125,7 @@ JOIN latest_log ll ON rs.id = ll.routine_step_id;
       const routine = list[routineIndex];
 
       for(const stepIndex of routine.steps.keys()) {
-        if (!list[routineIndex].steps[stepIndex].is_processed) {
+        if (!todayRoutineList[routineIndex].steps[stepIndex].is_processed) {
           foundedIndex = {
             step: stepIndex,
             routine: routineIndex
@@ -141,8 +141,8 @@ JOIN latest_log ll ON rs.id = ll.routine_step_id;
 
     if (foundedIndex) {
       const result: ProcessableRoutine = {
-        ...list[foundedIndex.routine],
-        steps: list[foundedIndex.routine].steps.map((step, index) => ({
+        ...todayRoutineList[foundedIndex.routine],
+        steps: todayRoutineList[foundedIndex.routine].steps.map((step, index) => ({
           ...step,
           is_processing: foundedIndex.step === index
         })),
