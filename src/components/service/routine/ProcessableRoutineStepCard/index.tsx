@@ -28,6 +28,7 @@ import {Body2} from '@/components/element/typography';
 import {useRouter} from 'next/navigation';
 import {getProcessingRoutineStepId} from '@/utils/service/constant/routine';
 import {revalidateTagOnServerAction} from '@/utils/extend/library/revalidate-tag';
+import {isLoadingUntilRefresh} from '@/utils/extend/library/react-query';
 
 export interface ProcessableRoutineStepCardProps {
   step: ProcessableRoutineStep;
@@ -70,11 +71,11 @@ function LinkRoutineCard({id, step}: SpecificRoutineCardProps<LinkRoutineStep>) 
 
   const onClick = useCallback(async () => {
     try {
+      window.open(step.url);
       await postLinkRoutineStepApi({
         stepId: step.id,
       });
       await revalidateTagOnServerAction('PROCESSABLE_ROUTINE_LIST');
-      window.open(step.url);
     } catch (error) {
       handleOnClientError(error);
     }
@@ -91,9 +92,10 @@ function LinkRoutineCard({id, step}: SpecificRoutineCardProps<LinkRoutineStep>) 
 function HabitRoutineCard({id, step}: SpecificRoutineCardProps<HabitRoutineStep>) {
   const handleOnClientError = useHandleClientSideError();
   const {disabled} = useRoutineState(step);
-  const {isPending, mutateAsync} = useMutation({
+  const {mutateAsync, isSuccess, isPending} = useMutation({
     mutationFn: postHabitRoutineStepApi
   });
+  const isLoading = isLoadingUntilRefresh({isSuccess, isPending});
   
   const achieve = useCallback(async (isAchieved: boolean) => {
     try {
@@ -110,8 +112,8 @@ function HabitRoutineCard({id, step}: SpecificRoutineCardProps<HabitRoutineStep>
   return (
     <div id={id} className={classNames(styles.container, styles.habit)}>
       <Body2>{step.text}</Body2>
-      <Button disabled={disabled} loading={isPending} size="small" color="secondary" onClick={() => achieve(false)}>미달성</Button>
-      <Button disabled={disabled} loading={isPending} size="small" color="primary" onClick={() => achieve(true)}>달성</Button>
+      <Button disabled={disabled} loading={isLoading} size="small" color="secondary" onClick={() => achieve(false)}>미달성</Button>
+      <Button disabled={disabled} loading={isLoading} size="small" color="primary" onClick={() => achieve(true)}>달성</Button>
       <Dim step={step}/>
     </div>
   );
@@ -126,19 +128,20 @@ function StudiedMinutesRoutineCard({id, step}: SpecificRoutineCardProps<Processa
   });
   const {disabled, is_processed} = useRoutineState(step);
 
-  const {isPending, mutateAsync} = useMutation({
+  const {mutateAsync, isPending, isSuccess} = useMutation({
     mutationFn: postStudiedMinutesRoutineStepApi
   });
+  const isLoading = isLoadingUntilRefresh({isSuccess, isPending});
 
   const onError: SubmitErrorHandler<StudiedMinutesFormData> = useCallback(({studied_minutes}) => {
     baseHandleErrors([studied_minutes]);
   }, []);
 
   const onSubmit: SubmitHandler<StudiedMinutesFormData> = useCallback(async (data) => {
-    if (isPending) {
+    if(isLoading) {
       return;
     }
-
+    
     try {
       await mutateAsync({
         stepId: step.id,
@@ -148,13 +151,13 @@ function StudiedMinutesRoutineCard({id, step}: SpecificRoutineCardProps<Processa
     } catch (error: any) {
       handleOnClientError(error);
     }
-  }, [handleOnClientError, isPending, step.id, mutateAsync]);
+  }, [isLoading, mutateAsync, step.id, handleOnClientError]);
 
   return (
     <form id={id} className={classNames(styles.container, designSystemStyles.commonSubForm, 'row')} onSubmit={handleSubmit(onSubmit, onError)}>
       <Input placeholder="studied minutes" disabled={disabled} {...register('studied_minutes')}/>
       {is_processed ? null : (
-        <Button loading={isPending} type="submit">저장</Button>
+        <Button loading={isLoading} type="submit">저장</Button>
       )}
       <Dim step={step}/>
     </form>
@@ -174,19 +177,20 @@ function SleepTimeRoutineCard({id, step}: SpecificRoutineCardProps<ProcessableSl
   });
   const {disabled, is_processed} = useRoutineState(step);
 
-  const {isPending, mutateAsync} = useMutation({
+  const {isSuccess, isPending, mutateAsync} = useMutation({
     mutationFn: postSleepTimeRoutineStepApi
   });
+  const isLoading = isLoadingUntilRefresh({isPending, isSuccess});
 
   const onError: SubmitErrorHandler<SleepTimeFormData> = useCallback(({sleep_time}) => {
     baseHandleErrors([sleep_time]);
   }, []);
-
+  
   const onSubmit: SubmitHandler<SleepTimeFormData> = useCallback(async (data) => {
-    if (isPending) {
+    if(isLoading) {
       return;
     }
-
+    
     try {
       await mutateAsync({
         stepId: step.id,
@@ -196,14 +200,14 @@ function SleepTimeRoutineCard({id, step}: SpecificRoutineCardProps<ProcessableSl
     } catch (error: any) {
       handleOnClientError(error);
     }
-  }, [handleOnClientError, isPending, step.id, mutateAsync]);
+  }, [handleOnClientError, isLoading, mutateAsync, step.id]);
 
   // TODO 여기 label, placeholder를 useRoutineForm이랑 같은 로직으로 만들어야하는데...
   return (
     <form id={id} className={classNames(styles.container, designSystemStyles.commonSubForm, 'row')} onSubmit={handleSubmit(onSubmit, onError)}>
       <Input placeholder="sleep time" disabled={disabled} {...register('sleep_time')}/>
       {is_processed ? null : (
-        <Button loading={isPending} type="submit">저장</Button>
+        <Button loading={isLoading} type="submit">저장</Button>
       )}
       <Dim step={step}/>
     </form>

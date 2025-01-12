@@ -15,6 +15,7 @@ import {useMutation} from '@tanstack/react-query';
 import {isHolidayDate} from '@/utils/extend/date/holiday';
 import {DATE_TYPE_ITEMS} from '@/utils/service/constant/date-type';
 import {revalidateTagOnServerAction} from '@/utils/extend/library/revalidate-tag';
+import {isLoadingUntilRefresh} from '@/utils/extend/library/react-query';
 
 export interface StudiedTimeFormData extends Pick<DailyStudyTime, 'date_type' | 'wake_up_time' | 'bed_time'> {
   studied_minutes: {
@@ -50,13 +51,13 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, onC
     ]);
   }, []);
 
-  const postMutation = useMutation({
+  const {mutateAsync: postMutateAsync, ...postMutation} = useMutation({
     mutationFn: postStudiedTimeApi
   });
-  const updateMutation = useMutation({
+  const {mutateAsync: updateMutateAsync, ...updateMutation} = useMutation({
     mutationFn: patchStudiedTimeApi
   });
-  const deleteMutation = useMutation({
+  const {mutateAsync: deleteMutateAsync} = useMutation({
     mutationFn: deleteStudiedTimeApi
   });
 
@@ -79,14 +80,14 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, onC
 
     try {
       if (historyData) {
-        await updateMutation.mutateAsync({
+        await updateMutateAsync({
           pk: historyData.pk,
           timestamp: historyData.timestamp,
           ...postParameter
         });
 
       } else {
-        await postMutation.mutateAsync(postParameter);
+        await postMutateAsync(postParameter);
       }
 
       await revalidateTagOnServerAction('STUDIED_TIME_CALENDAR');
@@ -98,7 +99,7 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, onC
         return alert(error.text);
       }
     }
-  }, [history, onClose, postMutation, updateMutation]);
+  }, [history, onClose, postMutateAsync, updateMutateAsync]);
 
   const dateTypeRadioList: RadioProps[] = DATE_TYPE_ITEMS.itemList.map(({name, value}) => ({
     label: name,
@@ -163,18 +164,18 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, onC
     }
 
     try {
-      await deleteMutation.mutateAsync(history.data.pk);
+      await deleteMutateAsync(history.data.pk);
       await revalidateTagOnServerAction('STUDIED_TIME_CALENDAR');
       onClose();
     } catch (error) {
       console.error(error);
     }
-  }, [deleteMutation, history, onClose]);
+  }, [deleteMutateAsync, history, onClose]);
 
   return {
     form: {
       onSubmit: handleSubmit(onSubmit, onError),
-      loading: postMutation.isPending || updateMutation.isPending,
+      loading: isLoadingUntilRefresh(postMutation) || isLoadingUntilRefresh(updateMutation),
       deleteHistory
     },
     props: {
