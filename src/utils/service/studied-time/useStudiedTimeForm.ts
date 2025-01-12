@@ -15,7 +15,6 @@ import {useMutation} from '@tanstack/react-query';
 import {isHolidayDate} from '@/utils/extend/date/holiday';
 import {DATE_TYPE_ITEMS} from '@/utils/service/constant/date-type';
 import {revalidateTagOnServerAction} from '@/utils/extend/library/revalidate-tag';
-import {isLoadingUntilRefresh} from '@/utils/extend/library/react-query';
 
 export interface StudiedTimeFormData extends Pick<DailyStudyTime, 'date_type' | 'wake_up_time' | 'bed_time'> {
   studied_minutes: {
@@ -175,7 +174,7 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, onC
   return {
     form: {
       onSubmit: handleSubmit(onSubmit, onError),
-      loading: isLoadingUntilRefresh(postMutation) || isLoadingUntilRefresh(updateMutation),
+      loading: postMutation.isPending || updateMutation.isPending,
       deleteHistory
     },
     props: {

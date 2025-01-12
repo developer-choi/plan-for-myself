@@ -14,27 +14,25 @@ import {getProcessingRoutineStepId} from '@/utils/service/constant/routine';
 import {scrollToElement} from '@/utils/extend/browser/scroll';
 import {useHandleClientSideError} from '@/utils/service/error/client-side';
 import {revalidateTagOnServerAction} from '@/utils/extend/library/revalidate-tag';
-import {isLoadingUntilRefresh} from '@/utils/extend/library/react-query';
 
 export interface ProcessableRoutinePageProps {
   routine: ProcessableRoutine;
 }
 
 export default function ProcessableRoutinePage({routine}: ProcessableRoutinePageProps) {
-  const mutation = useMutation({
+  const {mutateAsync, isPending} = useMutation({
     mutationFn: resetRoutineLogsApi
   });
-  const isLoading = isLoadingUntilRefresh(mutation);
 
   const handleClientSideError = useHandleClientSideError();
   const resetRoutineLogs = useCallback(async () => {
     try {
-      await mutation.mutateAsync();
+      await mutateAsync();
       revalidateTagOnServerAction('PROCESSABLE_ROUTINE_LIST');
     } catch (error) {
       handleClientSideError(error);
     }
-  }, [handleClientSideError, mutation]);
+  }, [handleClientSideError, mutateAsync]);
 
   useEffect(() => {
     const processingStep = routine.steps.find(step => step.is_processing);
@@ -57,7 +55,7 @@ export default function ProcessableRoutinePage({routine}: ProcessableRoutinePage
       <div className={styles.header}>
         <H1>{routine.title}</H1>
         <ButtonLink href={`/routine/${routine.id}/edit`} color="edit">수정</ButtonLink>
-        <Button loading={isLoading} color="delete" onClick={resetRoutineLogs}>오늘 루틴 초기화</Button>
+        <Button loading={isPending} color="delete" onClick={resetRoutineLogs}>오늘 루틴 초기화</Button>
       </div>
       <div className={styles.listContainer}>
         {routine.steps.map((step, index) => (
