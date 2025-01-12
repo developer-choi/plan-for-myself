@@ -13,6 +13,7 @@ import {getDefaultDateType} from '@/utils/extend/date/holiday';
 import {useSortListWithDragAndDrop} from '@/utils/extend/useSortListWithDragAndDrop';
 import {useEffectFromTheSecondTime} from '@/utils/extend/library/react';
 import {useRouter} from 'next/navigation';
+import {isLoadingUntilRefresh} from '@/utils/extend/library/react-query';
 
 export interface RoutineFormParameter {
   record: Record<DateType, ReadableRoutine[]>;
@@ -44,7 +45,7 @@ export default function useRoutineForm({record, detail}: RoutineFormParameter) {
   const updateMutation = useMutation({
     mutationFn: updateRoutineApi
   });
-  const isPending = createMutation.isPending || updateMutation.isPending;
+  const isLoading = isLoadingUntilRefresh(createMutation) || isLoadingUntilRefresh(updateMutation);
 
   const onError: SubmitErrorHandler<CreateRoutineFormData> = useCallback(({title, date_type, steps, routine_type}) => {
     // TODO 타입정의 필요
@@ -55,7 +56,7 @@ export default function useRoutineForm({record, detail}: RoutineFormParameter) {
   }, []);
 
   const onSubmit: SubmitHandler<CreateRoutineFormData> = useCallback(async (data) => {
-    if (isPending) {
+    if (isLoading) {
       return;
     }
 
@@ -73,7 +74,7 @@ export default function useRoutineForm({record, detail}: RoutineFormParameter) {
     } catch (error: any) {
       handleOnClientError(error);
     }
-  }, [isPending, detail, push, updateMutation, createMutation, handleOnClientError]);
+  }, [isLoading, detail, push, updateMutation, createMutation, handleOnClientError]);
 
   const routineType = watch('routine_type');
   const dateType = watch('date_type');
@@ -223,7 +224,7 @@ export default function useRoutineForm({record, detail}: RoutineFormParameter) {
   return {
     form: {
       onSubmit: handleSubmit(onSubmit, onError),
-      isLoading: isPending,
+      isLoading: isLoading,
       append: {
         link: appendLinkStep,
         habit: appendHabitStep,
