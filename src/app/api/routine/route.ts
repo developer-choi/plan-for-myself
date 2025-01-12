@@ -24,7 +24,9 @@ export async function GET(request: NextRequest) {
   const user_id = request.headers.get('User-Id');
 
   try {
-    await sql`DELETE FROM routine_logs WHERE TO_TIMESTAMP(created_at)::DATE != CURRENT_DATE AND user_id = ${user_id}`;
+    await sql`delete FROM routine_logs
+WHERE user_id=${user_id} AND TO_CHAR((TO_TIMESTAMP(created_at) AT TIME ZONE 'Asia/Seoul')::DATE, 'YYYY-MM-DD') != TO_CHAR(NOW() AT TIME ZONE 'Asia/Seoul', 'YYYY-MM-DD');
+`;
 
     const response = await sql`
 SELECT 
