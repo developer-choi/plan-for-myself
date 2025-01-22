@@ -7,6 +7,11 @@ import {ButtonLink} from '@/components/element/Button';
 import ProcessableRoutinePage from '@/components/service/routine/ProcessableRoutineStepList';
 import EmptyList from '@/components/element/EmptyList';
 import {DateType} from '@/utils/service/constant/date-type';
+import {Metadata} from 'next';
+
+export const metadata: Metadata = {
+  title: 'Routine'
+}
 
 export default async function Page() {
   try {
