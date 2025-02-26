@@ -6,7 +6,7 @@ export interface CustomLinkProps extends PropsWithChildren<LinkProps> {
   className?: string;
 }
 
-export default function CustomLink({prefetch = false, ...rest}: CustomLinkProps) {
+export default function CustomLink({prefetch = true, ...rest}: CustomLinkProps) {
   return (
     <Link prefetch={prefetch} {...rest}/>
   );
