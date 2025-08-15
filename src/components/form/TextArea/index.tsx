@@ -2,7 +2,7 @@ import {ChangeEvent, ComponentPropsWithRef, forwardRef, KeyboardEvent, useCallba
 import styles from './index.module.scss';
 import {FormElementWrapper, FormElementWrapperProps} from '@/components/form/form-elements';
 import classNames from 'classnames';
-import {isMatchKeyboardEvent, KeyboardShortcut} from '@/utils/extend/event/keyboard';
+import {isMatchKeyboardShortcut, KeyboardShortcut} from '@/utils/extend/event/keyboard';
 
 export interface TextAreaProps extends ComponentPropsWithRef<"textarea">, Omit<FormElementWrapperProps, "kind">{
   showCount?: boolean; // maxLength까지 같이 입력되야함.
@@ -37,7 +37,7 @@ export default forwardRef<HTMLTextAreaElement, TextAreaProps>(function TextArea(
   const customOnKeyDown = useCallback((event: KeyboardEvent<HTMLTextAreaElement>) => {
     onKeyDown?.(event);
 
-    if (isMatchKeyboardEvent(event, CTRL_ENTER_EVENT)) {
+    if (isMatchKeyboardShortcut(event, CTRL_ENTER_EVENT)) {
       const formElement = (event.target as HTMLFormElement).closest('form');
 
       if (formElement) {
