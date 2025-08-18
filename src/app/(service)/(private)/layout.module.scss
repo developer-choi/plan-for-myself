@@ -16,6 +16,17 @@
   height: map-get(layout.$layout, pcHeaderHeight);
   z-index: map-get(design-system.$zIndexes, pcStickyHeader);
   background: white;
+  
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+  .right {
+    flex-shrink: 0;
+    display: flex;
+    gap: 8px;
+    margin-right: 16px;
+  }
 }
 
 .page {
