@@ -21,6 +21,7 @@ export default async function Page() {
       <ProcessableRoutinePage routine={routine}/>
     );
   } catch (error: any) {
+    // TODO 미래에 이 API 에러응답좀 바꾸기. 이게 에런가 싶기도 하고...
     if (error?.status === 404 && error.json.state) {
       switch (error.json.state as RoutineProcessingErrorState) {
         case 'all_done':
