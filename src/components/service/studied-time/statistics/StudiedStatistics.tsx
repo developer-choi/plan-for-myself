@@ -16,7 +16,7 @@ export default function StudiedStatistics({year, month}: StudiedStatisticsProps)
   const {openModal} = useOpenModal();
 
   const {isLoading} = useQuery({
-    queryKey: ['daily-studied-time'],
+    queryKey: ['daily-studied-time', year, month],
     enabled: false
   });
 
