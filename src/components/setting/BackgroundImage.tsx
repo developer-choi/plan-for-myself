@@ -2,13 +2,14 @@
 
 import {useCallback, useEffect} from 'react';
 import {useKeyboardShortcut} from '@/utils/extend/event/keyboard';
-import {StorageObjectManager, useStorageObjectManager} from '@/utils/extend/browser/storage-object';
+import {useStorageObjectManager} from '@/utils/extend/browser/storage-object';
 import {BACKGROUND_SETTING_SHORTCUT} from '@/utils/service/shortcuts';
 import '@/styles/background-setting.scss';
 import styles from '@/app/(service)/(private)/layout.module.scss';
+import {backgroundImageManager, googleDriveShareImageToPublicUrl} from '@/utils/service/background-image';
 
 export default function BackgroundImage() {
-  const {state, changeState} = useStorageObjectManager(manager);
+  const {state, changeState} = useStorageObjectManager(backgroundImageManager);
 
   useEffect(() => {
     if (!state.image) {
@@ -25,7 +26,7 @@ export default function BackgroundImage() {
     if (image) {
       changeState({
         ...state,
-        image: convert(image)
+        image: googleDriveShareImageToPublicUrl(image)
       });
     }
   }, [changeState, state]);
@@ -50,28 +51,4 @@ export default function BackgroundImage() {
       <button onClick={changeBackgroundImage}>Image</button>
     </div>
   );
-}
-
-interface BackgroundSetting {
-  image: string;
-  opacity: number;
-}
-
-const manager = new StorageObjectManager<BackgroundSetting>({
-  key: 'background-setting',
-  storage: 'LOCAL_STORAGE',
-  defaultValue: {
-    image: '',
-    opacity: 0.9
-  }
-});
-
-function convert(url: string) {
-  const match = url.match(/https:\/\/drive\.google\.com\/file\/d\/([^\/]+)/);
-
-  if (match) {
-    return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w1000`;
-  } else {
-    return url;
-  }
 }
