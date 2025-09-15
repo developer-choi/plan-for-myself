@@ -8,6 +8,7 @@ import React from 'react';
 import {useStorageObjectManager} from '@/utils/extend/browser/storage-object';
 import {backgroundImageManager} from '@/utils/service/background-image';
 import styles from './index.module.scss';
+import {useDelay} from '@/utils/extend/library/react';
 
 export interface DisturbModalProps extends ComposedModalProps {
   year: number;
@@ -15,12 +16,14 @@ export interface DisturbModalProps extends ComposedModalProps {
   monthData: DifferenceMonthlyStatisticsParam['monthData'];
 }
 
-export default function DisturbModal({year, month, monthData, ...rest}: DisturbModalProps) {
+export default function DisturbModal({year, month, monthData, onClose, ...rest}: DisturbModalProps) {
   const {state} = useStorageObjectManager(backgroundImageManager);
+  const active = useDelay(2000);
+  const _onClose = active ? onClose : () => {}
 
   return (
-    <ModalContainer type="fullScreen" {...rest}>
-      <DefaultModalHeader onClose={rest.onClose}>{year}-{padToTwoDigits(month)} 월별 통계</DefaultModalHeader>
+    <ModalContainer type="fullScreen" onClose={_onClose} {...rest}>
+      <DefaultModalHeader onClose={_onClose}>{year}-{padToTwoDigits(month)} 월별 통계</DefaultModalHeader>
       <DefaultModalBody>
         <MonthlyStatisticsSummary year={year} month={month} monthData={monthData} />
         {/* eslint-disable-next-line @next/next/no-img-element */}
