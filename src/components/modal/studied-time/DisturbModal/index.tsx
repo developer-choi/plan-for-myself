@@ -18,7 +18,7 @@ export interface DisturbModalProps extends ComposedModalProps {
 
 export default function DisturbModal({year, month, monthData, onClose, ...rest}: DisturbModalProps) {
   const {state} = useStorageObjectManager(backgroundImageManager);
-  const active = useDelay(2000);
+  const active = useDelay(5000);
   const _onClose = active ? onClose : () => {}
 
   return (
