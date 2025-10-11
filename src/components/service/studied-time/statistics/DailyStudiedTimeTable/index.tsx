@@ -4,7 +4,7 @@ import React from 'react';
 import {DailyStudyTime} from '@/types/studied-time';
 import dayjs from 'dayjs';
 import {minutesFormat} from '@/utils/service/studied-time';
-import {calculateTotal} from '@/utils/extend/data-type/number';
+import {calculateTotal} from '@forworkchoe/core/utils';
 import styles from './index.module.scss';
 import Radio, {RadioGroup} from '@/components/form/Radio';
 import useFilterDailyStudiedHistory from '@/utils/service/studied-time/useFilterDailyStudiedHistory';

@@ -9,7 +9,7 @@ import {studiedTimeFormat} from '@/utils/service/studied-time';
 import {useOpenModal} from '@/utils/extend/modal';
 import StudiedTimeFormModal from '@/components/modal/studied-time/StudiedTimeFormModal';
 import {useSearchParams} from 'next/navigation';
-import {calculateTotal} from '@/utils/extend/data-type/number';
+import {calculateTotal} from '@forworkchoe/core/utils';
 
 interface StudiedCalendarCellProps {
   history: StudiedTimeCalendarWeek;

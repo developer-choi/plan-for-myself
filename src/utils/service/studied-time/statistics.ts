@@ -1,6 +1,5 @@
 import {DailyStudyTime} from '@/types/studied-time';
-import {calculateTotal} from '@/utils/extend/data-type/number';
-import {getDaysInMonth} from '@forworkchoe/core/utils';
+import {calculateTotal, getDaysInMonth} from '@forworkchoe/core/utils';
 import {DateType} from '@/utils/service/constant/date-type';
 
 export interface DifferenceMonthlyStatisticsParam {

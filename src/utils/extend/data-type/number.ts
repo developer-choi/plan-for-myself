@@ -1,9 +1,3 @@
-export function calculateTotal<T>(list: T[], callback: (item: T) => number) {
-  return list.reduce((a, b) => {
-    return a + callback(b);
-  }, 0);
-}
-
 export function getAbsoluteValueWithSign(value: number) {
   const absoluteValue = Math.abs(value);
   const signType = value >= 0 ? 'positive' : 'negative';
