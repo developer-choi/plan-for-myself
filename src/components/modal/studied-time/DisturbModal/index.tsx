@@ -5,10 +5,9 @@ import {padToTwoDigits} from '@forworkchoe/core/utils';
 import DefaultModalBody from '@/components/modal/body';
 import MonthlyStatisticsSummary from '@/components/service/studied-time/statistics/MonthlyStatisticsSummary';
 import React from 'react';
-import {useStorageObjectManager} from '@forworkchoe/core/hooks';
+import {useDelay, useStorageObjectManager} from '@forworkchoe/core/hooks';
 import {backgroundImageManager} from '@/utils/service/background-image';
 import styles from './index.module.scss';
-import {useDelay} from '@/utils/extend/library/react';
 
 export interface DisturbModalProps extends ComposedModalProps {
   year: number;
