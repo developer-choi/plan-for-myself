@@ -3,7 +3,7 @@
 import {PureRoutine} from '@/types/routine';
 import {DateType} from '@/utils/service/constant/date-type';
 import {useCallback, useMemo} from 'react';
-import Button from '@/components/element/Button';
+import {Button} from '@forworkchoe/core/components';
 import {postRoutineApi} from '@/utils/service/api/routine';
 import {useMutation} from '@tanstack/react-query';
 import {useHandleClientSideError} from '@/utils/service/error/client-side';

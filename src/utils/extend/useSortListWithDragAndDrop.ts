@@ -1,4 +1,4 @@
-import {preventDefault} from '@/utils/extend/event';
+import {preventDefault} from '@forworkchoe/core/utils';
 import {HTMLAttributes, useCallback, DragEvent} from 'react';
 
 export interface SortListWithDragAndDropParam<T> {

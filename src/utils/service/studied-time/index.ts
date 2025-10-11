@@ -1,6 +1,5 @@
 import {DailyStudyTime} from '@/types/studied-time';
-import {calculateTotal} from '@/utils/extend/data-type/number';
-import {padToTwoDigits} from '@/utils/extend/data-type/string';
+import {calculateTotal, padToTwoDigits} from '@forworkchoe/core/utils';
 
 /**
  * @example (90) ==> '1:30'

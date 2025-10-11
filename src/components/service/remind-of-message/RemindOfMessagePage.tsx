@@ -1,7 +1,7 @@
 'use client';
 
 import styles from './index.module.scss';
-import Button from '@/components/element/Button';
+import {Button} from '@forworkchoe/core/components';
 import React, {useCallback} from 'react';
 import {
   deleteRemindOfMessageApi,

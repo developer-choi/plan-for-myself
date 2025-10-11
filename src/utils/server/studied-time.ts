@@ -1,5 +1,6 @@
 import {sql} from '@vercel/postgres';
 import {PostDailyStudyTimeParameter, UpdateDailyStudyTimeParameter} from '@/utils/service/api/studied-time';
+import {padToTwoDigits} from '@forworkchoe/core/utils';
 
 export function insertStudiedTimeCalendar(user_id: string, parameter: PostDailyStudyTimeParameter) {
   const {fail_keywords = [], studied_minutes, date_type, year, month, date, wake_up_time, bed_time} = parameter;
@@ -33,4 +34,15 @@ export function patchStudiedTimeCalendar(pk: number, parameter: Omit<UpdateDaily
 
 export function convertStudiedTimeTimestamp(year: number, month: number, date: number) {
   return new Date(`${year}-${month}-${date} 13:00:00`).getTime();
+}
+
+export function dateFormatter(value: Date) {
+  const year = padToTwoDigits(value.getFullYear());
+  const month = padToTwoDigits(value.getMonth() + 1);
+  const date = padToTwoDigits(value.getDate());
+  const hour = padToTwoDigits(value.getHours());
+  const minute = padToTwoDigits(value.getMinutes());
+  const second = padToTwoDigits(value.getSeconds());
+
+  return `${year}-${month}-${date} ${hour}:${minute}:${second}`;
 }

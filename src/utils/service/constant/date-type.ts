@@ -1,4 +1,4 @@
-import {itemListToDataOfType} from '@/utils/extend/data-type/object';
+import {itemListToDataOfType} from '@forworkchoe/core/utils';
 
 /**
  * holiday = 주말, 휴일, 연차 등 하루종일 공부할 수 있었던 날

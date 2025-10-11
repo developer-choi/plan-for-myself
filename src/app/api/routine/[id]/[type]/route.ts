@@ -10,7 +10,7 @@ import {
 import {DateType} from '@/utils/service/constant/date-type';
 import {insertStudiedTimeCalendar, patchStudiedTimeCalendar} from '@/utils/server/studied-time';
 import {getKoreanDate} from '@/utils/extend/date/korean';
-import {removeDuplicatedItems} from '@/utils/extend/data-type/array';
+import {removeDuplicatedItems} from '@forworkchoe/core/utils';
 
 interface StudiedTimeDbRow {
   pk: number;

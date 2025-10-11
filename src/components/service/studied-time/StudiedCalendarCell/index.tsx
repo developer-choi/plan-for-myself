@@ -1,15 +1,15 @@
 'use client';
 
 import classNames from 'classnames';
-import {StudiedTimeCalendarWeek} from '@/utils/service/api/studied-time';
+import {StudiedTimeCalendarWeek} from '@/utils/service/api/studied-time-server';
 import {DailyStudyTime, StudiedTimeCellMode} from '@/types/studied-time';
 import styles from './index.module.scss';
 import {useCallback, useMemo} from 'react';
 import {studiedTimeFormat} from '@/utils/service/studied-time';
-import {useOpenModal} from '@/utils/extend/modal';
+import {useModal} from '@forworkchoe/core/hooks';
 import StudiedTimeFormModal from '@/components/modal/studied-time/StudiedTimeFormModal';
 import {useSearchParams} from 'next/navigation';
-import {calculateTotal} from '@/utils/extend/data-type/number';
+import {calculateTotal} from '@forworkchoe/core/utils';
 
 interface StudiedCalendarCellProps {
   history: StudiedTimeCalendarWeek;
@@ -20,10 +20,10 @@ interface StudiedCalendarCellProps {
 }
 
 export default function StudiedCalendarCell({history, summary}: StudiedCalendarCellProps) {
-  const {openModal} = useOpenModal();
+  const modal = useModal();
 
   const onClickCell = useCallback(() => {
-    openModal({
+    modal.open.custom({
       Component: StudiedTimeFormModal,
       props: {
         history,
@@ -40,7 +40,7 @@ export default function StudiedCalendarCell({history, summary}: StudiedCalendarC
         }
       }
     });
-  }, [history, openModal]);
+  }, [history, modal.open]);
 
   const searchParams = useSearchParams();
   // TODO 이런부분 유효성검증 어떻게 통일하려고했더라

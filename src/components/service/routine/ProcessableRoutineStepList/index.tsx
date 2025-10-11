@@ -4,14 +4,14 @@ import ProcessableRoutineStepCard from '@/components/service/routine/Processable
 import React, {Fragment, useCallback, useEffect} from 'react';
 import {ProcessableRoutine} from '@/types/routine';
 import {H1} from '@/components/element/typography';
-import Button, {ButtonLink} from '@/components/element/Button';
+import {Button, ButtonLink} from '@forworkchoe/core/components';
 import {resetRoutineLogsApi} from '@/utils/service/api/routine';
 import {useMutation} from '@tanstack/react-query';
 import styles from './index.module.scss';
 import IconDoubleArrow from '@/components/icon/IconDoubleArrow';
 import {BRAND_COLOR, GRAY_COLOR} from '@/styles/color';
 import {getProcessingRoutineStepId} from '@/utils/service/constant/routine';
-import {scrollToElement} from '@/utils/extend/browser/scroll';
+import {scrollToElement} from '@forworkchoe/core/utils';
 import {useHandleClientSideError} from '@/utils/service/error/client-side';
 import {revalidateTagOnServerAction} from '@/utils/extend/library/revalidate-tag';
 import {isLoadingUntilRefresh} from '@/utils/extend/library/react-query';

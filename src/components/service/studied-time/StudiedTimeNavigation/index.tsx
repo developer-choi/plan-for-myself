@@ -1,8 +1,8 @@
 'use client';
 
-import CustomLink from '@/components/element/link/CustomLink';
+import {CustomLink} from '@forworkchoe/core/components';
 import React, {useMemo} from 'react';
-import {getCalendarNavigation} from '@/utils/extend/date/calendar';
+import {getCalendarNavigation} from '@forworkchoe/core/utils';
 import styles from './index.module.scss';
 
 export interface StudiedTimeNavigationProps {

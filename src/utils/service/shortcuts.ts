@@ -1,4 +1,4 @@
-import {KeyboardShortcut} from '@/utils/extend/event/keyboard';
+import {KeyboardShortcut} from '@forworkchoe/core/utils';
 
 /*************************************************************************************************************
  * Background Settings
