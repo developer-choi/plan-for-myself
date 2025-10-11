@@ -13,7 +13,7 @@ import React, {useCallback} from 'react';
 import Input from '@/components/form/Input';
 import designSystemStyles from '@/styles/design-system.module.scss';
 import classNames from 'classnames';
-import Button from '@/components/element/Button';
+import {Button} from '@forworkchoe/core/components';
 import {useMutation} from '@tanstack/react-query';
 import {
   postHabitRoutineStepApi,

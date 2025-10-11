@@ -1,5 +1,5 @@
 import React from 'react';
-import {ButtonLink} from '@/components/element/Button';
+import {ButtonLink} from '@forworkchoe/core/components';
 import RoutineForm from '@/components/service/routine/RoutineForm';
 import {getRoutineListApi} from '@/utils/service/api/routine-server';
 

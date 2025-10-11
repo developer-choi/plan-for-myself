@@ -3,7 +3,7 @@ import React from 'react';
 import {ProcessableRoutine, RoutineProcessingErrorState} from '@/types/routine';
 import {redirect} from 'next/navigation';
 import ChooseRoutineDateType from '@/components/service/routine/ChooseRoutineDateType';
-import {ButtonLink} from '@/components/element/Button';
+import {ButtonLink} from '@forworkchoe/core/components';
 import ProcessableRoutinePage from '@/components/service/routine/ProcessableRoutineStepList';
 import EmptyList from '@/components/element/EmptyList';
 import {DateType} from '@/utils/service/constant/date-type';

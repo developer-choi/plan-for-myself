@@ -3,7 +3,7 @@
 import React, {ChangeEvent, FormEvent, useCallback, useEffect, useRef, useState} from 'react';
 import styles from './index.module.scss';
 import Input from '@/components/form/Input';
-import Button from '../../../element/Button';
+import {Button} from '@forworkchoe/core/components';
 
 export interface KeywordFormProp {
   addKeyword: (keyword: string) => void

@@ -1,5 +1,5 @@
 import {getRoutineListApi} from '@/utils/service/api/routine-server';
-import {ButtonLink} from '@/components/element/Button';
+import {ButtonLink} from '@forworkchoe/core/components';
 import ReadableRoutineList from '@/components/service/routine/ReadableRoutineList';
 
 export default async function Page() {

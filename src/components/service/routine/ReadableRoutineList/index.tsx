@@ -1,7 +1,7 @@
 'use client';
 
 import {ReadableRoutine} from '@/types/routine';
-import Button, {ButtonLink} from '@/components/element/Button';
+import {Button, ButtonLink} from '@forworkchoe/core/components';
 import {DATE_TYPE_ITEMS, DateType} from '@/utils/service/constant/date-type';
 import React, {ChangeEvent, useCallback, useMemo, useState} from 'react';
 import styles from './index.module.scss';

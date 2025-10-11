@@ -1,7 +1,7 @@
 'use client';
 
 import {useModal} from '@forworkchoe/core/hooks';
-import Button from '@/components/element/Button';
+import {Button} from '@forworkchoe/core/components';
 import {useCallback} from 'react';
 import MonthlyStudiedStatisticsModal from '@/components/modal/studied-time/MonthlyStudiedStatisticsModal';
 import {useQuery, useQueryClient} from '@tanstack/react-query';
