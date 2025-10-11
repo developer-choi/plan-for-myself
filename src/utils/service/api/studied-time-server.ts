@@ -1,5 +1,5 @@
 import {DailyStudyTime} from '@/types/studied-time';
-import {CalendarDate, getCalendarBoundary, getCalendarWeekList} from '@/utils/extend/date/calendar';
+import {CalendarDate, getCalendarBoundary, getCalendarWeekList} from '@forworkchoe/core/utils';
 import {isSameDate} from '@/utils/extend/date/util';
 import {fetchFromServer} from '@/utils/extend/library/fetch/fromServer';
 import {dateFormatter} from '@/utils/server/studied-time';

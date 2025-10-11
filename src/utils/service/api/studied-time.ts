@@ -1,6 +1,6 @@
 import {DailyStudyTime} from '@/types/studied-time';
 import {fetchFromClient} from '@/utils/extend/library/fetch/fromClient';
-import {getCalendarNavigation, getMonthBoundary} from '@/utils/extend/date/calendar';
+import {getCalendarNavigation, getMonthBoundary} from '@forworkchoe/core/utils';
 import {dateFormatter} from '@/utils/server/studied-time';
 
 export interface PostDailyStudyTimeParameter extends Omit<DailyStudyTime, 'pk' | 'timestamp'> {
