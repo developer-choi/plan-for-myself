@@ -1,8 +1,7 @@
 import styles from './page.module.scss';
 import {Metadata, ServerComponentProps} from 'next';
 import StudiedCalendarCell from '@/components/service/studied-time/StudiedCalendarCell';
-import {classifyStrings} from '@/utils/extend/data-type/string';
-import {calculateTotal, sortByNumber} from '@forworkchoe/core/utils';
+import {calculateTotal, classifyStrings, sortByNumber} from '@forworkchoe/core/utils';
 import {getStudiedTimeCalendarApi, StudiedTimeCalendarWeek} from '@/utils/service/api/studied-time-server';
 import {minutesFormat} from '@/utils/service/studied-time';
 import React from 'react';

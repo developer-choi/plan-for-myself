@@ -6,7 +6,7 @@ import React from 'react';
 import DailyStudiedTimeTable from '@/components/service/studied-time/statistics/DailyStudiedTimeTable';
 import MonthlyStatisticsSummary from '@/components/service/studied-time/statistics/MonthlyStatisticsSummary';
 import {H2} from '@/components/element/typography';
-import {padToTwoDigits} from '@/utils/extend/data-type/string';
+import {padToTwoDigits} from '@forworkchoe/core/utils';
 import {DefaultModalHeader} from '@/components/modal/header';
 import styles from './index.module.scss';
 import {DifferenceMonthlyStatisticsParam} from '@/utils/service/studied-time/statistics';

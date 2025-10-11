@@ -1,6 +1,6 @@
 import {sql} from '@vercel/postgres';
 import {PostDailyStudyTimeParameter, UpdateDailyStudyTimeParameter} from '@/utils/service/api/studied-time';
-import {padToTwoDigits} from '@/utils/extend/data-type/string';
+import {padToTwoDigits} from '@forworkchoe/core/utils';
 
 export function insertStudiedTimeCalendar(user_id: string, parameter: PostDailyStudyTimeParameter) {
   const {fail_keywords = [], studied_minutes, date_type, year, month, date, wake_up_time, bed_time} = parameter;

@@ -1,7 +1,7 @@
 import {ComposedModalProps, ModalContainer} from '@/components/modal/container';
 import {DifferenceMonthlyStatisticsParam} from '@/utils/service/studied-time/statistics';
 import {DefaultModalHeader} from '@/components/modal/header';
-import {padToTwoDigits} from '@/utils/extend/data-type/string';
+import {padToTwoDigits} from '@forworkchoe/core/utils';
 import DefaultModalBody from '@/components/modal/body';
 import MonthlyStatisticsSummary from '@/components/service/studied-time/statistics/MonthlyStatisticsSummary';
 import React from 'react';
