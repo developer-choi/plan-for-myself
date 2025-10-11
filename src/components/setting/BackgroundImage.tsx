@@ -2,7 +2,7 @@
 
 import {useCallback, useEffect} from 'react';
 import {useKeyboardShortcut} from '@/utils/extend/event/keyboard';
-import {useStorageObjectManager} from '@/utils/extend/browser/storage-object';
+import {useStorageObjectManager} from '@forworkchoe/core/hooks';
 import {BACKGROUND_SETTING_SHORTCUT} from '@/utils/service/shortcuts';
 import '@/styles/background-setting.scss';
 import styles from '@/app/(service)/(private)/layout.module.scss';

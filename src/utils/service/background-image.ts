@@ -1,4 +1,4 @@
-import {StorageObjectManager} from '@/utils/extend/browser/storage-object';
+import {StorageObjectManager} from '@forworkchoe/core/hooks';
 
 export function googleDriveShareImageToPublicUrl(url: string) {
   const match = url.match(/https:\/\/drive\.google\.com\/file\/d\/([^\/]+)/);
