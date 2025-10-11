@@ -2,9 +2,9 @@
 
 import {useEffect} from 'react';
 import {getRemindOfMessageListApiOnClient} from '@/utils/service/api/remind-of-message';
-import {randomInArray} from '@/utils/extend/random';
 import {toast, ToastContainer, ToastPosition} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {randomInArray} from '@forworkchoe/core/utils';
 
 export default function CustomToastContainer() {
   useEffect(() => {
