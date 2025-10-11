@@ -13,7 +13,7 @@ import React, {useCallback} from 'react';
 import Input from '@/components/form/Input';
 import designSystemStyles from '@/styles/design-system.module.scss';
 import classNames from 'classnames';
-import {Button} from '@forworkchoe/core/components';
+import {Body2, Button} from '@forworkchoe/core/components';
 import {useMutation} from '@tanstack/react-query';
 import {
   postHabitRoutineStepApi,
@@ -24,7 +24,6 @@ import {
 import {useHandleClientSideError} from '@/utils/service/error/client-side';
 import {SubmitErrorHandler, SubmitHandler, useForm} from 'react-hook-form';
 import {baseHandleErrors} from '@/utils/extend/react-hook-form';
-import {Body2} from '@/components/element/typography';
 import {useRouter} from 'next/navigation';
 import {getProcessingRoutineStepId} from '@/utils/service/constant/routine';
 import {revalidateTagOnServerAction} from '@/utils/extend/library/revalidate-tag';

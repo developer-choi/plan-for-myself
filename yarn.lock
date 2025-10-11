@@ -54,10 +54,10 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.57.0.tgz#a5417ae8427873f1dd08b70b3574b453e67b5f7f"
   integrity sha512-Ys+3g2TaW7gADOJzPt83SJtCDhMjndcDMFVQ/Tj9iA1BfJzFKD9mAUXT3OenpuPHbI6P/myECxRJrofUsDx/5g==
 
-"@forworkchoe/core@^0.0.51":
-  version "0.0.51"
-  resolved "https://registry.yarnpkg.com/@forworkchoe/core/-/core-0.0.51.tgz#a77a37287dc9d1fe6da3770678648e4fbb9f3b4f"
-  integrity sha512-zh1pZzL5/I0xk2zAO1JbUj/XJM0GRi+VWWST6CEk+ExyOGx4rNqD9CXN1TCa7B6IyLObNvdddoBohLmpJkTkqw==
+"@forworkchoe/core@^0.0.52":
+  version "0.0.52"
+  resolved "https://registry.yarnpkg.com/@forworkchoe/core/-/core-0.0.52.tgz#83948e709d36d3c1584da7aac83c1355e4ac2780"
+  integrity sha512-0eHACuZWbBP+ckZiIxQY18heIbPmmUSC5RGiygpMxgtVDw+Q2N10h8Os3IFcIs0egINrXr0tGoPQRrUZSuSsZQ==
 
 "@humanwhocodes/config-array@^0.11.14":
   version "0.11.14"

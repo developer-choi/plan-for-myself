@@ -3,8 +3,7 @@
 import designSystemStyles from '@/styles/design-system.module.scss';
 import Radio, {RadioGroup} from '@/components/form/Radio';
 import Input from '@/components/form/Input';
-import {Button} from '@forworkchoe/core/components';
-import {H2} from '@/components/element/typography';
+import {Button, H2} from '@forworkchoe/core/components';
 import React, {PropsWithChildren} from 'react';
 import useRoutineForm, {RoutineFormParameter} from '@/utils/service/routine/useRoutineForm';
 

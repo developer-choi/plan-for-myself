@@ -8,7 +8,7 @@ import React from 'react';
 import StudiedTimeSetting from '@/components/service/studied-time/StudiedTimeSetting';
 import StudiedStatistics from '@/components/service/studied-time/statistics/StudiedStatistics';
 import layoutStyles from '@/styles/layout.module.scss';
-import {H1} from '@/components/element/typography';
+import {H1} from '@forworkchoe/core/components';
 import StudiedTimeNavigation from '@/components/service/studied-time/StudiedTimeNavigation';
 
 export const metadata: Metadata = {

@@ -3,8 +3,7 @@
 import ProcessableRoutineStepCard from '@/components/service/routine/ProcessableRoutineStepCard';
 import React, {Fragment, useCallback, useEffect} from 'react';
 import {ProcessableRoutine} from '@/types/routine';
-import {H1} from '@/components/element/typography';
-import {Button, ButtonLink} from '@forworkchoe/core/components';
+import {Button, ButtonLink, H1} from '@forworkchoe/core/components';
 import {resetRoutineLogsApi} from '@/utils/service/api/routine';
 import {useMutation} from '@tanstack/react-query';
 import styles from './index.module.scss';
