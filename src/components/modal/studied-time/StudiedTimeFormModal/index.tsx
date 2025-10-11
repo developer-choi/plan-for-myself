@@ -6,10 +6,14 @@ import Input from '@/components/form/Input';
 import Radio, {RadioGroup} from '@/components/form/Radio';
 import React from 'react';
 import {StudiedTimeCalendarWeek} from '@/utils/service/api/studied-time-server';
-import {ComposedModalProps, ModalContainer} from '@/components/modal/container';
-import {DefaultModalHeader} from '@/components/modal/header';
-import DefaultModalBody from '@/components/modal/body';
-import {OneButtonModalFooter, TwoButtonsModalFooter} from '@/components/modal/footer';
+import {
+  ComposedModalProps,
+  DefaultModalBody,
+  DefaultModalHeader,
+  ModalContainer,
+  OneButtonModalFooter,
+  TwoButtonsModalFooter
+} from '@forworkchoe/core/components';
 import dayjs from 'dayjs';
 
 export interface StudiedTimeFormModalProps extends ComposedModalProps {

@@ -1,6 +1,6 @@
 'use client';
 
-import {useOpenModal} from '@/utils/extend/modal';
+import {useModal} from '@forworkchoe/core/hooks';
 import Button from '@/components/element/Button';
 import {useCallback} from 'react';
 import MonthlyStudiedStatisticsModal from '@/components/modal/studied-time/MonthlyStudiedStatisticsModal';
@@ -13,7 +13,7 @@ export interface StudiedStatisticsProps {
 }
 
 export default function StudiedStatistics({year, month}: StudiedStatisticsProps) {
-  const {openModal} = useOpenModal();
+  const modal = useModal();
 
   const {isLoading} = useQuery({
     queryKey: ['daily-studied-time', year, month],
@@ -28,8 +28,8 @@ export default function StudiedStatistics({year, month}: StudiedStatisticsProps)
       queryFn: () => getMonthlyStatisticsApi(year, month),
       staleTime: 0
     });
-    
-    openModal({
+
+    modal.open.custom({
       Component: MonthlyStudiedStatisticsModal,
       props: {
         year,
@@ -37,7 +37,7 @@ export default function StudiedStatistics({year, month}: StudiedStatisticsProps)
         monthData
       }
     });
-  }, [month, openModal, queryClient, year]);
+  }, [modal.open, month, queryClient, year]);
 
   return (
     <div>

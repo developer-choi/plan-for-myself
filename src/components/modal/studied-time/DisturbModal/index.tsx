@@ -1,13 +1,11 @@
-import {ComposedModalProps, ModalContainer} from '@/components/modal/container';
 import {DifferenceMonthlyStatisticsParam} from '@/utils/service/studied-time/statistics';
-import {DefaultModalHeader} from '@/components/modal/header';
 import {padToTwoDigits} from '@forworkchoe/core/utils';
-import DefaultModalBody from '@/components/modal/body';
 import MonthlyStatisticsSummary from '@/components/service/studied-time/statistics/MonthlyStatisticsSummary';
 import React from 'react';
 import {useDelay, useStorageObjectManager} from '@forworkchoe/core/hooks';
 import {backgroundImageManager} from '@/utils/service/background-image';
 import styles from './index.module.scss';
+import {ComposedModalProps, DefaultModalBody, DefaultModalHeader, ModalContainer} from '@forworkchoe/core/components';
 
 export interface DisturbModalProps extends ComposedModalProps {
   year: number;
