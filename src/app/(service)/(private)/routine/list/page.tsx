@@ -1,4 +1,4 @@
-import {getRoutineListApi} from '@/utils/service/api/routine';
+import {getRoutineListApi} from '@/utils/service/api/routine-server';
 import {ButtonLink} from '@/components/element/Button';
 import ReadableRoutineList from '@/components/service/routine/ReadableRoutineList';
 

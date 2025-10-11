@@ -5,7 +5,7 @@ import styles from './index.module.scss';
 import Input from '@/components/form/Input';
 import Radio, {RadioGroup} from '@/components/form/Radio';
 import React from 'react';
-import {StudiedTimeCalendarWeek} from '@/utils/service/api/studied-time';
+import {StudiedTimeCalendarWeek} from '@/utils/service/api/studied-time-server';
 import {ComposedModalProps, ModalContainer} from '@/components/modal/container';
 import {DefaultModalHeader} from '@/components/modal/header';
 import DefaultModalBody from '@/components/modal/body';

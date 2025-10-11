@@ -4,7 +4,7 @@ import StudiedCalendarCell from '@/components/service/studied-time/StudiedCalend
 import {calculateTotal} from '@/utils/extend/data-type/number';
 import {classifyStrings} from '@/utils/extend/data-type/string';
 import {sortByNumber} from '@/utils/extend/data-type/array';
-import {getStudiedTimeCalendarApi, StudiedTimeCalendarWeek} from '@/utils/service/api/studied-time';
+import {getStudiedTimeCalendarApi, StudiedTimeCalendarWeek} from '@/utils/service/api/studied-time-server';
 import {minutesFormat} from '@/utils/service/studied-time';
 import React from 'react';
 import StudiedTimeSetting from '@/components/service/studied-time/StudiedTimeSetting';

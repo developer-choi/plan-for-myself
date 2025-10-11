@@ -1,27 +1,18 @@
-import {customFetchOnClientSide, customFetchOnServerSide} from '@/utils/extend/library/fetch';
-
-export async function getRemindOfMessageListApiOnServer() {
-  const {json} = await customFetchOnServerSide('/api/remind-of-message', {
-    method: 'GET',
-    authorize: 'private'
-  });
-
-  return json as RemindOfMessageItem[];
-}
+import {fetchFromClient} from '@/utils/extend/library/fetch/fromClient';
 
 export async function getRemindOfMessageListApiOnClient() {
-  const {json} = await customFetchOnClientSide('/api/remind-of-message', {
+  const {data} = await fetchFromClient<RemindOfMessageItem[]>('/api/remind-of-message', {
     method: 'GET',
-    authorize: 'private'
+    authPolicy: 'private'
   });
 
-  return json as RemindOfMessageItem[];
+  return data;
 }
 
 export async function postRemindOfMessageApi(message: string) {
-  return customFetchOnClientSide('/api/remind-of-message', {
+  return fetchFromClient('/api/remind-of-message', {
     method: 'POST',
-    authorize: 'private',
+    authPolicy: 'private',
     body: {
       message
     }
@@ -34,16 +25,16 @@ export interface RemindOfMessageItem {
 }
 
 export async function updateRemindOfMessageApi(parameter: RemindOfMessageItem) {
-  return customFetchOnClientSide('/api/remind-of-message', {
+  return fetchFromClient('/api/remind-of-message', {
     method: 'PATCH',
-    authorize: 'private',
+    authPolicy: 'private',
     body: parameter
   });
 }
 
 export async function deleteRemindOfMessageApi(id: RemindOfMessageItem['id']) {
-  return customFetchOnClientSide(`/api/remind-of-message/${id}`, {
+  return fetchFromClient(`/api/remind-of-message/${id}`, {
     method: 'DELETE',
-    authorize: 'private',
+    authPolicy: 'private',
   });
 }

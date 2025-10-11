@@ -1,7 +1,7 @@
 import React from 'react';
 import {ButtonLink} from '@/components/element/Button';
 import RoutineForm from '@/components/service/routine/RoutineForm';
-import {getRoutineListApi} from '@/utils/service/api/routine';
+import {getRoutineListApi} from '@/utils/service/api/routine-server';
 
 export default async function Page() {
   const record = await getRoutineListApi();

@@ -1,14 +1,7 @@
 import {DailyStudyTime} from '@/types/studied-time';
-import {customFetchOnClientSide, customFetchOnServerSide} from '@/utils/extend/library/fetch';
-import {
-  CalendarDate,
-  getCalendarBoundary,
-  getCalendarNavigation,
-  getCalendarWeekList,
-  getMonthBoundary
-} from '@/utils/extend/date/calendar';
-import {isSameDate} from '@/utils/extend/date/util';
-import {padToTwoDigits} from '@/utils/extend/data-type/string';
+import {fetchFromClient} from '@/utils/extend/library/fetch/fromClient';
+import {getCalendarNavigation, getMonthBoundary} from '@/utils/extend/date/calendar';
+import {dateFormatter} from '@/utils/server/studied-time';
 
 export interface PostDailyStudyTimeParameter extends Omit<DailyStudyTime, 'pk' | 'timestamp'> {
   year: number;
@@ -17,9 +10,9 @@ export interface PostDailyStudyTimeParameter extends Omit<DailyStudyTime, 'pk' |
 }
 
 export async function postStudiedTimeApi(parameter: PostDailyStudyTimeParameter) {
-  return customFetchOnClientSide('/api/studied-time', {
+  return fetchFromClient('/api/studied-time', {
     method: 'POST',
-    authorize: 'private',
+    authPolicy: 'private',
     body: parameter
   });
 }
@@ -27,17 +20,17 @@ export async function postStudiedTimeApi(parameter: PostDailyStudyTimeParameter)
 export type UpdateDailyStudyTimeParameter = DailyStudyTime;
 
 export async function patchStudiedTimeApi({pk, ...parameter}: UpdateDailyStudyTimeParameter) {
-  return customFetchOnClientSide(`/api/studied-time/${pk}`, {
+  return fetchFromClient(`/api/studied-time/${pk}`, {
     method: 'PATCH',
-    authorize: 'private',
+    authPolicy: 'private',
     body: parameter
   });
 }
 
 export async function deleteStudiedTimeApi(pk: DailyStudyTime['pk']) {
-  return customFetchOnClientSide(`/api/studied-time/${pk}`, {
+  return fetchFromClient(`/api/studied-time/${pk}`, {
     method: 'DELETE',
-    authorize: 'private',
+    authPolicy: 'private',
   });
 }
 
@@ -55,58 +48,19 @@ export async function getMonthlyStatisticsApi(year: number, month: number) {
   }
 }
 
-export interface StudiedTimeCalendarWeek {
-  calendarDate: CalendarDate;
-  data?: DailyStudyTime; // 해당 날짜에 공부한 기록이 없으면 없음
-}
-
-export async function getStudiedTimeCalendarApi(year: number, month: number): Promise<StudiedTimeCalendarWeek[][]> {
-  const {start, end} = getCalendarBoundary(year, month);
-
-  const {json} = await customFetchOnServerSide(`/api/studied-time?start=${formatter(start)}&end=${formatter(end)}`, {
-    authorize: 'private',
-    method: 'GET',
-    next: {
-      tags: ['STUDIED_TIME_CALENDAR']
-    }
-  });
-
-  return getCalendarWeekList(year, month, function (calendarDate) {
-    const matchData = (json as DailyStudyTime[]).find(({timestamp}) => {
-      return isSameDate(new Date(timestamp), calendarDate.original);
-    });
-
-    return {
-      calendarDate,
-      data: matchData,
-    };
-  });
-}
-
 /*************************************************************************************************************
  * Non Export
  *************************************************************************************************************/
 async function getStudiedTimeApi(year: number, month: number) {
   const {start, end} = getMonthBoundary(year, month);
 
-  const {json} = await customFetchOnClientSide(`/api/studied-time?start=${formatter(start)}&end=${formatter(end)}`, {
-    authorize: 'private',
+  const {data} = await fetchFromClient<DailyStudyTime[]>(`/api/studied-time?start=${dateFormatter(start)}&end=${dateFormatter(end)}`, {
+    authPolicy: 'private',
     method: 'GET',
     next: {
       tags: ['STUDIED_TIME_CALENDAR']
     }
   });
 
-  return json as DailyStudyTime[];
-}
-
-function formatter(value: Date) {
-  const year = padToTwoDigits(value.getFullYear());
-  const month = padToTwoDigits(value.getMonth() + 1);
-  const date = padToTwoDigits(value.getDate());
-  const hour = padToTwoDigits(value.getHours());
-  const minute = padToTwoDigits(value.getMinutes());
-  const second = padToTwoDigits(value.getSeconds());
-
-  return `${year}-${month}-${date} ${hour}:${minute}:${second}`;
+  return data;
 }

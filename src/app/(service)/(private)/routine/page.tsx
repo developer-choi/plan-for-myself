@@ -1,4 +1,4 @@
-import {getProcessingRoutine} from '@/utils/service/api/routine';
+import {getProcessingRoutine} from '@/utils/service/api/routine-server';
 import React from 'react';
 import {ProcessableRoutine, RoutineProcessingErrorState} from '@/types/routine';
 import {redirect} from 'next/navigation';
@@ -8,6 +8,7 @@ import ProcessableRoutinePage from '@/components/service/routine/ProcessableRout
 import EmptyList from '@/components/element/EmptyList';
 import {DateType} from '@/utils/service/constant/date-type';
 import {Metadata} from 'next';
+import {ApiResponseError} from '@forworkchoe/core/utils';
 
 export const metadata: Metadata = {
   title: 'Routine'
@@ -22,8 +23,8 @@ export default async function Page() {
     );
   } catch (error: any) {
     // TODO 미래에 이 API 에러응답좀 바꾸기. 이게 에런가 싶기도 하고...
-    if (error?.status === 404 && error.json.state) {
-      switch (error.json.state as RoutineProcessingErrorState) {
+    if (error instanceof ApiResponseError && error.response.data.state) {
+      switch (error.response.data.state as RoutineProcessingErrorState) {
         case 'all_done':
           return (
             <>
@@ -34,7 +35,7 @@ export default async function Page() {
 
         case 'select_date_type':
           return (
-            <ChooseRoutineDateType record={error.json.record as Record<DateType, ProcessableRoutine[]>}/>
+            <ChooseRoutineDateType record={error.response.data.record as Record<DateType, ProcessableRoutine[]>}/>
           );
 
         case 'routine_is_empty': {

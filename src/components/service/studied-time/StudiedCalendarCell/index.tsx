@@ -1,7 +1,7 @@
 'use client';
 
 import classNames from 'classnames';
-import {StudiedTimeCalendarWeek} from '@/utils/service/api/studied-time';
+import {StudiedTimeCalendarWeek} from '@/utils/service/api/studied-time-server';
 import {DailyStudyTime, StudiedTimeCellMode} from '@/types/studied-time';
 import styles from './index.module.scss';
 import {useCallback, useMemo} from 'react';

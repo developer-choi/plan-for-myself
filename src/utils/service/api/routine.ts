@@ -1,11 +1,10 @@
-import {ProcessableRoutine, PureRoutine, PureRoutineStep, ReadableRoutine} from '@/types/routine';
-import {DateType} from '@/utils/service/constant/date-type';
-import {customFetchOnClientSide, customFetchOnServerSide} from '@/utils/extend/library/fetch';
+import {PureRoutine, PureRoutineStep, ReadableRoutine} from '@/types/routine';
+import {fetchFromClient} from '@/utils/extend/library/fetch/fromClient';
 
 export async function resetRoutineLogsApi() {
-  return customFetchOnClientSide('/api/routine', {
+  return fetchFromClient('/api/routine', {
     method: 'DELETE',
-    authorize: 'private',
+    authPolicy: 'private',
     next: {
       tags: ['PROCESSABLE_ROUTINE_LIST']
     }
@@ -14,9 +13,9 @@ export async function resetRoutineLogsApi() {
 
 export type PostRoutineApiRequest = PureRoutine;
 export async function postRoutineApi(data: PostRoutineApiRequest) {
-  return customFetchOnClientSide('/api/routine', {
+  return fetchFromClient('/api/routine', {
     method: 'POST',
-    authorize: 'private',
+    authPolicy: 'private',
     body: data
   });
 }
@@ -28,29 +27,17 @@ export interface UpdateRoutineApiRequest extends Omit<ReadableRoutine, 'steps'> 
 }
 
 export async function updateRoutineApi(data: UpdateRoutineApiRequest) {
-  return customFetchOnClientSide(`/api/routine/${data.id}`, {
+  return fetchFromClient(`/api/routine/${data.id}`, {
     method: 'PATCH',
-    authorize: 'private',
+    authPolicy: 'private',
     body: data
   });
 }
 
-export async function getRoutineListApi() {
-  const {json} = await customFetchOnServerSide('/api/routine/list', {
-    method: 'GET',
-    authorize: 'private',
-    next: {
-      tags: ['READABLE_ROUTINE_LIST']
-    }
-  });
-
-  return json as Record<DateType, ReadableRoutine[]>;
-}
-
 export async function deleteRoutineApi(id: number) {
-  return customFetchOnClientSide(`/api/routine/${id}`, {
+  return fetchFromClient(`/api/routine/${id}`, {
     method: 'DELETE',
-    authorize: 'private',
+    authPolicy: 'private',
   });
 }
 
@@ -59,36 +46,12 @@ export type UpdateRoutineListOrderApiRequest = number[];
 export function updateRoutineListOrderApi(list: ReadableRoutine[]) {
   const request: UpdateRoutineListOrderApiRequest = list.map(({id}) => id);
 
-  return customFetchOnClientSide('/api/routine/list', {
+  return fetchFromClient('/api/routine/list', {
     method: 'PATCH',
-    authorize: 'private',
+    authPolicy: 'private',
     body: request
   });
 }
-
-export async function getRoutineDetailApi(id: number) {
-  const {json} = await customFetchOnServerSide(`/api/routine/${id}`, {
-    method: 'GET',
-    authorize: 'private',
-  });
-
-  return json as ReadableRoutine;
-}
-
-/**
- * @exception 애초에 루틴이 없는 경우
- * @exception 오늘 할거 다 한 경우
- * @exception 주말이냐 평일이냐 조차 안고른 경우
- */
-export async function getProcessingRoutine(): Promise<ProcessableRoutine> {
-  const {json} = await customFetchOnServerSide('/api/routine', {
-    method: 'GET',
-    authorize: 'private',
-  });
-
-  return json;
-}
-
 
 /**
  * @exception 404 다른 사람 루틴인 경우 or 아예 없는 루틴인 경우
@@ -100,9 +63,9 @@ export interface PostRoutineStepApiRequest {
 }
 
 export async function postLinkRoutineStepApi({stepId}: PostRoutineStepApiRequest) {
-  return customFetchOnClientSide(`/api/routine/${stepId}/link`, {
+  return fetchFromClient(`/api/routine/${stepId}/link`, {
     method: 'POST',
-    authorize: 'private',
+    authPolicy: 'private',
   });
 }
 
@@ -111,9 +74,9 @@ export interface PostHabitRoutineApiRequest extends PostRoutineStepApiRequest {
 }
 
 export async function postHabitRoutineStepApi({stepId, isAchieved}: PostHabitRoutineApiRequest) {
-  return customFetchOnClientSide(`/api/routine/${stepId}/habit`, {
+  return fetchFromClient(`/api/routine/${stepId}/habit`, {
     method: 'POST',
-    authorize: 'private',
+    authPolicy: 'private',
     body: {
       isAchieved
     }
@@ -125,9 +88,9 @@ export interface PostStudiedMinutesRoutineApiRequest extends PostRoutineStepApiR
 }
 
 export async function postStudiedMinutesRoutineStepApi({stepId, studied_minutes}: PostStudiedMinutesRoutineApiRequest) {
-  return customFetchOnClientSide(`/api/routine/${stepId}/studied_minutes`, {
+  return fetchFromClient(`/api/routine/${stepId}/studied_minutes`, {
     method: 'POST',
-    authorize: 'private',
+    authPolicy: 'private',
     body: {
       studied_minutes
     }
@@ -139,9 +102,9 @@ export interface PostSleepTimeRoutineApiRequest extends PostRoutineStepApiReques
 }
 
 export async function postSleepTimeRoutineStepApi({stepId, sleep_time}: PostSleepTimeRoutineApiRequest) {
-  return customFetchOnClientSide(`/api/routine/${stepId}/sleep_time`, {
+  return fetchFromClient(`/api/routine/${stepId}/sleep_time`, {
     method: 'POST',
-    authorize: 'private',
+    authPolicy: 'private',
     body: {
       sleep_time
     }
