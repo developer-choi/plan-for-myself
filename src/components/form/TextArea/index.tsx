@@ -2,7 +2,7 @@ import {ChangeEvent, ComponentPropsWithRef, forwardRef, KeyboardEvent, useCallba
 import styles from './index.module.scss';
 import {FormElementWrapper, FormElementWrapperProps} from '@/components/form/form-elements';
 import classNames from 'classnames';
-import {isMatchKeyboardShortcut, KeyboardShortcut} from '@/utils/extend/event/keyboard';
+import {isMatchKeyboardShortcut, KeyboardShortcut} from '@forworkchoe/core/utils';
 
 export interface TextAreaProps extends ComponentPropsWithRef<"textarea">, Omit<FormElementWrapperProps, "kind">{
   showCount?: boolean; // maxLength까지 같이 입력되야함.
