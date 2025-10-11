@@ -11,7 +11,7 @@ import styles from './index.module.scss';
 import IconDoubleArrow from '@/components/icon/IconDoubleArrow';
 import {BRAND_COLOR, GRAY_COLOR} from '@/styles/color';
 import {getProcessingRoutineStepId} from '@/utils/service/constant/routine';
-import {scrollToElement} from '@/utils/extend/browser/scroll';
+import {scrollToElement} from '@forworkchoe/core/utils';
 import {useHandleClientSideError} from '@/utils/service/error/client-side';
 import {revalidateTagOnServerAction} from '@/utils/extend/library/revalidate-tag';
 import {isLoadingUntilRefresh} from '@/utils/extend/library/react-query';
