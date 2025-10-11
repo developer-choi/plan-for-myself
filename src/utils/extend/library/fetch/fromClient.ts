@@ -1,7 +1,6 @@
-import {isServer} from '@/utils/extend/library/next';
 import {getSession, signOut} from 'next-auth/react';
 import {customFetch, FetchOptions} from '@/utils/extend/library/fetch/base';
-import {InvalidDevelopPolicyError, NotAuthenticatedError} from '@forworkchoe/core/utils';
+import {InvalidDevelopPolicyError, isServer, NotAuthenticatedError} from '@forworkchoe/core/utils';
 
 export async function fetchFromClient<D>(input: string, options: FetchOptions) {
   if(isServer()) {
