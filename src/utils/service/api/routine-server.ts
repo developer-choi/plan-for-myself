@@ -28,7 +28,7 @@ export async function getRoutineDetailApi(id: number) {
  * @exception 오늘 할거 다 한 경우
  * @exception 주말이냐 평일이냐 조차 안고른 경우
  */
-export async function getProcessingRoutine() {
+export async function getProcessingRoutineApi() {
   const {data} = await fetchFromServer<ProcessableRoutine>('/api/routine', {
     method: 'GET',
     authPolicy: 'private',

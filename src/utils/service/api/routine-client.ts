@@ -5,7 +5,7 @@ import {ApiResponseError} from '@forworkchoe/core/utils';
 /**
  * @return 루틴이 진행중인지 여부를 반환
  */
-export async function getIsRoutineProcessing(): Promise<boolean> {
+export async function getIsRoutineProcessingApi(): Promise<boolean> {
   try {
     await fetchFromClient('/api/routine', {
       method: 'GET',

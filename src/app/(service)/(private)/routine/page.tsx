@@ -1,4 +1,4 @@
-import {getProcessingRoutine} from '@/utils/service/api/routine-server';
+import {getProcessingRoutineApi} from '@/utils/service/api/routine-server';
 import React from 'react';
 import {ProcessableRoutine, RoutineProcessingErrorState} from '@/types/routine';
 import {redirect} from 'next/navigation';
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   try {
-    const routine = await getProcessingRoutine();
+    const routine = await getProcessingRoutineApi();
 
     return (
       <ProcessableRoutinePage routine={routine}/>
