@@ -1,4 +1,4 @@
-export type TopicCategory = 'LONG_TERM' | 'SHORT_TERM' | 'CONSTANT';
+export type TopicCategory = 'SHORT_TERM' | 'LONG_TERM' | 'CONSTANT';
 
 export interface Topic {
   id: number;

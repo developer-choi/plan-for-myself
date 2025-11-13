@@ -1,20 +1,20 @@
 'use client';
 
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import styles from './index.module.scss';
 import {Topic, TopicCategory} from '@/types/topic';
 import {Button} from '@forworkchoe/core/components';
 import TopicModal from './TopicModal';
-import {randomInArray} from '@forworkchoe/core/utils';
+import {itemListToDataOfType, randomInArray} from '@forworkchoe/core/utils';
 import {useMutation} from '@tanstack/react-query';
 import {deleteTopicApi} from '@/utils/service/api/topic-client';
 import {revalidateTagOnServerAction} from '@/utils/extend/library/revalidate-tag';
 
 interface TopicClientPageProps {
-  initialTopics: Topic[];
+  topics: Topic[];
 }
 
-export default function TopicClientPage({initialTopics}: TopicClientPageProps) {
+export default function TopicClientPage({topics}: TopicClientPageProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [displayTopic, setDisplayTopic] = useState<Topic | null>(null);
 
@@ -38,27 +38,37 @@ export default function TopicClientPage({initialTopics}: TopicClientPageProps) {
     }
   }, [deleteMutate, displayTopic, reset]);
 
-  const getRandomTopic = (category: TopicCategory) => {
-    const filteredTopics = initialTopics.filter(topic => topic.category === category && topic.id !== displayTopic?.id);
+  const getRandomTopic = useCallback((category: TopicCategory) => {
+    const filteredTopics = topics.filter(topic => topic.category === category && topic.id !== displayTopic?.id);
     if (filteredTopics.length === 0) {
       alert(`${category} 카테고리에 해당하는 고민이 없습니다.`);
       return;
     }
     const randomTopic = randomInArray(filteredTopics)[0];
     setDisplayTopic(randomTopic);
-  };
+  }, [displayTopic?.id, topics]);
+
+  const countRecord = useMemo(() => {
+    return topics.reduce((a, b) => {
+      a[b.category]++;
+      return a;
+    }, {
+      CONSTANT: 0,
+      LONG_TERM: 0,
+      SHORT_TERM: 0
+    } as Record<TopicCategory, number>)
+  }, [topics]);
 
   return (
     <>
       <div className={styles.container}>
-        <h1 className={styles.title}>오늘의 고민</h1>
         <div className={styles.categoryButtons}>
-          <Button onClick={() => getRandomTopic('LONG_TERM')}>장기 고민 꺼내기</Button>
-          <Button onClick={() => getRandomTopic('SHORT_TERM')}>단기 고민 꺼내기</Button>
-          <Button onClick={() => getRandomTopic('CONSTANT')}>상시 고민 꺼내기</Button>
+          {itemList.map(item => (
+            countRecord[item.value] === 0 ? null : <Button key={item.value} onClick={() => getRandomTopic(item.value)}>{item.name} 고민 꺼내기</Button>
+          ))}
         </div>
         <div>
-          <Button color="success" onClick={() => setIsModalOpen(true)}>고민 관리하기</Button>
+          <Button style={{width: '100%'}} color="success" onClick={() => setIsModalOpen(true)}>고민 관리하기</Button>
         </div>
         <div className={styles.worryDisplayArea}>
           <p>{displayTopic ? displayTopic.content : '버튼을 눌러 고민을 꺼내보세요!'}</p>
@@ -72,10 +82,25 @@ export default function TopicClientPage({initialTopics}: TopicClientPageProps) {
 
       {isModalOpen && (
         <TopicModal
-          topics={initialTopics}
+          topics={topics}
           onClose={() => setIsModalOpen(false)}
         />
       )}
     </>
   );
 }
+
+const {itemList} = itemListToDataOfType<TopicCategory>([
+  {
+    name: '단기',
+    value: 'SHORT_TERM'
+  },
+  {
+    name: '장기',
+    value: 'LONG_TERM'
+  },
+  {
+    name: '상시',
+    value: 'CONSTANT'
+  },
+])
