@@ -1,0 +1,123 @@
+@use '/src/styles/color';
+@use '/src/styles/util';
+
+.container {
+  max-width: 600px;
+  width: 100%;
+  margin: 20px auto;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.title {
+  color: nth(color.$grayColors, 1);
+  margin-bottom: 30px;
+}
+
+.categoryButtons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+
+  button {
+    flex: 1 1 150px;
+    max-width: 200px;
+  }
+}
+
+.worryDisplayArea {
+  min-height: 150px;
+  margin-top: 30px;
+  background-color: nth(color.$grayColors, 9);
+  border: 1px dashed nth(color.$grayColors, 6);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.3em;
+  word-break: keep-all;
+
+  p {
+    flex-grow: 1;
+    text-align: center;
+    margin: 0;
+  }
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  position: relative;
+}
+
+.modalCloseBtn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 2em;
+  cursor: pointer;
+  color: #aaa;
+}
+
+.worryControls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.worryManagementList {
+  list-style: none;
+  padding: 0;
+  max-height: 400px;
+  overflow-y: auto;
+  border-top: 1px solid nth(color.$grayColors, 7);
+  padding-top: 15px;
+
+  li {
+    display: flex;
+    align-items: center;
+    padding: 12px 8px;
+    border-bottom: 1px solid nth(color.$grayColors, 9);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+.worryItemContent {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+}
+
+.worryItemButtons {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
