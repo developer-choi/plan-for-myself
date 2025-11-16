@@ -120,3 +120,15 @@
   gap: 8px;
   flex-shrink: 0;
 }
+
+.tip {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: nth(color.$grayColors, 9);
+  border-radius: 8px;
+  p {
+    margin: 0;
+    font-size: 0.9em;
+    color: nth(color.$grayColors, 4);
+  }
+}

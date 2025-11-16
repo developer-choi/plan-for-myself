@@ -78,6 +78,9 @@ export default function TopicClientPage({topics}: TopicClientPageProps) {
             </Button>
           )}
         </div>
+        <div className={styles.tip}>
+          <p>Tip: 고민 적당히 해보다가 AI에게 조언을 구해보세요!</p>
+        </div>
       </div>
 
       {isModalOpen && (
