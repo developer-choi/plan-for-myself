@@ -79,7 +79,7 @@ export default function TopicClientPage({topics}: TopicClientPageProps) {
           )}
         </div>
         <div className={styles.tip}>
-          <p>Tip: 고민 적당히 해보다가 AI에게 조언을 구해보세요!</p>
+          <p>Tip: 시험에 안나오는 고민은 1분만 해보고 AI에게 물어보세요!</p>
         </div>
       </div>
 
