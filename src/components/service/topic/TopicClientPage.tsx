@@ -62,6 +62,9 @@ export default function TopicClientPage({topics}: TopicClientPageProps) {
   return (
     <>
       <div className={styles.container}>
+        <div className={styles.advice}>
+          <p><strong>시험에 안나오는</strong> 고민은 <strong>1분만</strong> 하고, 안되면 AI에게</p>
+        </div>
         <div className={styles.categoryButtons}>
           {itemList.map(item => (
             countRecord[item.value] === 0 ? null : <Button key={item.value} onClick={() => getRandomTopic(item.value)}>{item.name} 고민 꺼내기</Button>
@@ -77,9 +80,6 @@ export default function TopicClientPage({topics}: TopicClientPageProps) {
               삭제
             </Button>
           )}
-        </div>
-        <div className={styles.tip}>
-          <p>Tip: 시험에 안나오는 고민은 1분만 해보고 AI에게 물어보세요!</p>
         </div>
       </div>
 

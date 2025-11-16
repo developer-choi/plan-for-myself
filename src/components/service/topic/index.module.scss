@@ -132,3 +132,21 @@
     color: nth(color.$grayColors, 4);
   }
 }
+
+.advice {
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: nth(color.$grayColors, 9);
+  border-radius: 8px;
+  border: 1px solid nth(color.$grayColors, 8);
+  p {
+    margin: 5px 0;
+    font-size: 0.95em;
+    color: nth(color.$grayColors, 3);
+    strong {
+      font-weight: bold;
+      font-size: 1.1em;
+      color: nth(color.$grayColors, 1);
+    }
+  }
+}
