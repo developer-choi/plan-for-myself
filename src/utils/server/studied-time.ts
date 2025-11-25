@@ -6,7 +6,7 @@ export function insertStudiedTimeCalendar(user_id: string, parameter: PostDailyS
   const {fail_keywords = [], studied_minutes, date_type, year, month, date, wake_up_time, bed_time} = parameter;
   const timestamp = convertStudiedTimeTimestamp(year, month, date);
   const formattedStudiedMinutes = `{${studied_minutes.join(',')}}`;
-  const formattedFailKeywords = `{${fail_keywords.map(k => `"${k}"`).join(',')}}`;
+  const formattedFailKeywords = `{${fail_keywords.filter(k => k).map(k => `"${k}"`).join(',')}}`;
 
   return sql`
         INSERT INTO studied_time (studied_minutes, fail_keywords, date_type, timestamp, user_id, wake_up_time, bed_time)
@@ -17,7 +17,7 @@ export function patchStudiedTimeCalendar(pk: number, parameter: Omit<UpdateDaily
   const {fail_keywords = [], studied_minutes, date_type, timestamp, wake_up_time, bed_time} = parameter;
 
   const formattedStudiedMinutes = `{${studied_minutes.join(',')}}`;
-  const formattedFailKeywords = `{${fail_keywords.map(key => `"${key}"`).join(',')}}`;
+  const formattedFailKeywords = `{${fail_keywords.filter(key => key).map(key => `"${key}"`).join(',')}}`;
 
   return sql`
         UPDATE studied_time SET
