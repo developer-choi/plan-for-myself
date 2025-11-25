@@ -14,6 +14,7 @@ import {useSortListWithDragAndDrop} from '@/utils/extend/useSortListWithDragAndD
 import {useEffectFromTheSecondTime} from '@forworkchoe/core/hooks';
 import {useRouter} from 'next/navigation';
 import {isLoadingUntilRefresh} from '@/utils/extend/library/react-query';
+import {revalidatePathOnServerAction} from '@/utils/extend/library/revalidate-tag';
 
 export interface RoutineFormParameter {
   record: Record<DateType, ReadableRoutine[]>;
@@ -76,6 +77,7 @@ export default function useRoutineForm({record, detail}: RoutineFormParameter) {
         await postMutateAsync(data);
       }
 
+      await revalidatePathOnServerAction(location.pathname);
       push(`/routine/list?date_type=${data.date_type}`);
     } catch (error: any) {
       handleOnClientError(error);
