@@ -3,7 +3,7 @@
 import ProcessableRoutineStepCard from '@/components/service/routine/ProcessableRoutineStepCard';
 import React, {Fragment, useCallback, useEffect} from 'react';
 import {ProcessableRoutine} from '@/types/routine';
-import {Button, ButtonLink, H1} from '@forworkchoe/core/components';
+import {Button, ButtonLink, H2} from '@forworkchoe/core/components';
 import {resetRoutineLogsApi} from '@/utils/service/api/routine';
 import {useMutation} from '@tanstack/react-query';
 import styles from './index.module.scss';
@@ -54,9 +54,11 @@ export default function ProcessableRoutinePage({routine}: ProcessableRoutinePage
     <>
       <ButtonLink style={{marginBottom: 16}} href="/routine/list" size="large" className="full">루틴 관리</ButtonLink>
       <div className={styles.header}>
-        <H1>{routine.title}</H1>
-        <ButtonLink href={`/routine/${routine.id}/edit`} color="edit">수정</ButtonLink>
-        <Button loading={isLoading} color="delete" onClick={resetRoutineLogs}>오늘 루틴 초기화</Button>
+        <H2>{routine.title}</H2>
+        <div>
+          <ButtonLink href={`/routine/${routine.id}/edit`} color="edit">수정</ButtonLink>
+          <Button loading={isLoading} color="delete" onClick={resetRoutineLogs}>초기화</Button>
+        </div>
       </div>
       <div className={styles.listContainer}>
         {routine.steps.map((step, index) => (
