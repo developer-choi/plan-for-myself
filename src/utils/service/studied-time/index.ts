@@ -17,5 +17,5 @@ export function studiedTimeFormat(studiedMinutes: DailyStudyTime['studied_minute
     return null;
   }
 
-  return `${minutesFormat(total)} (${studiedMinutes.join('+')})`;
+  return `${minutesFormat(total)}`;
 }

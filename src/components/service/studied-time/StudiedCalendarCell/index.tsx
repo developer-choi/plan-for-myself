@@ -86,12 +86,10 @@ export default function StudiedCalendarCell({history, summary}: StudiedCalendarC
 
 function StudiedHistory({data}: {data: DailyStudyTime}) {
   const formatted = studiedTimeFormat(data.studied_minutes);
-  const fail = data.fail_keywords.length ? data.fail_keywords.join(',') : null;
 
   return (
     <>
       {!formatted ? null : <span className={styles.primary}>{formatted}</span>}
-      {!fail ? null : <span className={styles.failReason}>{fail}</span>}
     </>
   );
 }
@@ -101,9 +99,6 @@ function StudiedSummary({summary}: {summary: StudiedCalendarCellProps['summary']
     <>
       {!summary?.success ? null : (
         <span className={classNames(styles.summary)}>{summary.success}</span>
-      )}
-      {!summary?.fail ? null : (
-        <span className={classNames(styles.summary)}>{summary.fail}</span>
       )}
     </>
   )
