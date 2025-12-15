@@ -24,10 +24,6 @@ export default function PrivateLayout({children}: PropsWithChildren) {
 
 const LINK_LIST: TabBarItem[] = [
   {
-    href: '/routine',
-    children: 'Routine'
-  },
-  {
     href: '/studied-time',
     children: 'Studied'
   },

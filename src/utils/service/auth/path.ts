@@ -47,8 +47,7 @@ export function getNextNavigating({nextUrl, isLoggedIn}: NextNavigatingParam): N
 const PRIVATE_PATHNAMES = [
   '/habit',
   '/studied-time',
-  '/remind-of-message',
-  '/routine'
+  '/remind-of-message'
 ];
 
 const NOT_PRIVATE_PATHNAME = [
