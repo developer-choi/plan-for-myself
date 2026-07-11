@@ -1,0 +1,12 @@
+{
+  "groups": [
+    {
+      "name": "색 팔레트 JS ↔ SCSS 이중 정의",
+      "files": [
+        "src/styles/color.ts",
+        "src/styles/color.scss"
+      ],
+      "note": "같은 색 팔레트를 JS(color.ts: BRAND_COLOR·GRAY_COLOR)와 SCSS(color.scss: $grayColors·$brandColors·$textColors·$stateColors)에 각각 정의한다. 한쪽 색을 추가·변경하면 다른 쪽도 맞춘다 — 어떤 도구도 두 언어 간 값 일치를 검사하지 않는다. (현재 secondary가 이미 어긋나 있음: color.ts #C2D9FF vs color.scss $brandColors.secondary #A97DF5.)"
+    }
+  ]
+}
