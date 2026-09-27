@@ -2,13 +2,12 @@
 
 import classNames from 'classnames';
 import {StudiedTimeCalendarWeek} from '@/utils/service/api/studied-time-server';
-import {DailyStudyTime, StudiedTimeCellMode} from '@/types/studied-time';
+import {DailyStudyTime} from '@/types/studied-time';
 import styles from './index.module.scss';
 import {useCallback, useMemo} from 'react';
 import {studiedTimeFormat} from '@/utils/service/studied-time';
 import {useModal} from '@forworkchoe/core/hooks';
 import StudiedTimeFormModal from '@/components/modal/studied-time/StudiedTimeFormModal';
-import {useSearchParams} from 'next/navigation';
 import {calculateTotal} from '@forworkchoe/core/utils';
 
 interface StudiedCalendarCellProps {
@@ -42,10 +41,6 @@ export default function StudiedCalendarCell({history, summary}: StudiedCalendarC
     });
   }, [history, modal.open]);
 
-  const searchParams = useSearchParams();
-  // TODO 이런부분 유효성검증 어떻게 통일하려고했더라
-  const cellMode = searchParams.get('cellMode') as StudiedTimeCellMode ?? 'default';
-
   const cellRender = useMemo(() => {
     if (!history.data) {
       return null;
@@ -57,19 +52,10 @@ export default function StudiedCalendarCell({history, summary}: StudiedCalendarC
       );
     }
 
-    switch (cellMode) {
-      case 'sleep_time': {
-        return (
-          <SleepHistory data={history.data}/>
-        );
-      }
-      
-      default:
-        return (
-          <StudiedHistory data={history.data}/>
-        );
-    }
-  }, [cellMode, history.data]);
+    return (
+      <StudiedHistory data={history.data}/>
+    );
+  }, [history.data]);
 
   return (
     <td onClick={onClickCell} className={classNames(styles.tdWrap, {[styles.notMatched]: !history.calendarDate.state.calendar.isMatchedMonth})}>
