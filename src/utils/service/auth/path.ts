@@ -45,7 +45,6 @@ export function getNextNavigating({nextUrl, isLoggedIn}: NextNavigatingParam): N
  * Non Export
  *************************************************************************************************************/
 const PRIVATE_PATHNAMES = [
-  '/habit',
   '/studied-time',
 ];
 
