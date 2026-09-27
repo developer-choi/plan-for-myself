@@ -1,4 +1,4 @@
-import {RegisterOptions, SubmitErrorHandler, SubmitHandler, useForm} from 'react-hook-form';
+import {SubmitErrorHandler, SubmitHandler, useForm} from 'react-hook-form';
 import {useCallback} from 'react';
 import {baseHandleErrors} from '@/utils/extend/react-hook-form';
 import {DailyStudyTime} from '@/types/studied-time';
@@ -17,7 +17,7 @@ import {revalidateTagOnServerAction} from '@/utils/extend/library/revalidate-tag
 import {isLoadingUntilRefresh} from '@/utils/extend/library/react-query';
 import {StudiedTimeCalendarWeek} from '@/utils/service/api/studied-time-server';
 
-export interface StudiedTimeFormData extends Pick<DailyStudyTime, 'date_type' | 'wake_up_time' | 'bed_time'> {
+export interface StudiedTimeFormData extends Pick<DailyStudyTime, 'date_type'> {
   studied_minutes: {
     part1: string;
     part2: string;
@@ -35,9 +35,7 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, onC
         part3: initializeStudiedMinute(initialFormData?.studied_minutes.part3)
       },
       fail_keywords: initialFormData?.fail_keywords ?? '',
-      date_type: initialFormData?.date_type ?? (isHolidayDate(history.calendarDate) ? 'holiday' : 'weekday'),
-      wake_up_time: initialFormData?.wake_up_time,
-      bed_time: initialFormData?.bed_time
+      date_type: initialFormData?.date_type ?? (isHolidayDate(history.calendarDate) ? 'holiday' : 'weekday')
     }
   });
 
@@ -138,20 +136,6 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, onC
     error: errors.fail_keywords?.message,
   };
 
-  const wakeupTimeInputProps: InputProps = {
-    ...register('wake_up_time', HOUR_MINUTE_OPTIONS),
-    label: '기상 시각',
-    placeholder: 'HH:mm',
-    error: errors.wake_up_time?.message,
-  };
-
-  const bedTimeInputProps: InputProps = {
-    ...register('bed_time', HOUR_MINUTE_OPTIONS),
-    label: '취침 시각',
-    placeholder: 'HH:mm',
-    error: errors.bed_time?.message,
-  };
-
   const deleteHistory = useCallback(async () => {
     if(!history.data) {
       return;
@@ -186,9 +170,7 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, onC
       studiedMinutesInputList,
       fail: {
         keywords: failKeywordsInputProps,
-      },
-      wakeupTimeInputProps,
-      bedTimeInputProps
+      }
     }
   };
 }
@@ -196,22 +178,6 @@ export default function useStudiedTimeForm(history: StudiedTimeCalendarWeek, onC
 /*************************************************************************************************************
  * Non Export
  *************************************************************************************************************/
-const HOUR_MINUTE_OPTIONS: RegisterOptions = {
-  validate: {
-    pattern: value => {
-      if (!value) {
-        return true;
-      }
-
-      if (/^([01]\d|2[0-3]):[0-5]\d$/.test(value)) {
-        return true;
-      }
-
-      return 'HH:mm 형식으로 입력해주세요.';
-    }
-  }
-};
-
 // undefined이거나 '0'분이면 빈문자열 반환 (인풋에서 0분이라고 들어있는게 불편해서...)
 function initializeStudiedMinute(minute: string | undefined): '' | string {
   return !minute || minute === '0' ? '' : minute;

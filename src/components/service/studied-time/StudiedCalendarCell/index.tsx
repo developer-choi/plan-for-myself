@@ -2,14 +2,12 @@
 
 import classNames from 'classnames';
 import {StudiedTimeCalendarWeek} from '@/utils/service/api/studied-time-server';
-import {DailyStudyTime, StudiedTimeCellMode} from '@/types/studied-time';
+import {DailyStudyTime} from '@/types/studied-time';
 import styles from './index.module.scss';
-import {useCallback, useMemo} from 'react';
+import {useCallback} from 'react';
 import {studiedTimeFormat} from '@/utils/service/studied-time';
 import {useModal} from '@forworkchoe/core/hooks';
 import StudiedTimeFormModal from '@/components/modal/studied-time/StudiedTimeFormModal';
-import {useSearchParams} from 'next/navigation';
-import {calculateTotal} from '@forworkchoe/core/utils';
 
 interface StudiedCalendarCellProps {
   history: StudiedTimeCalendarWeek;
@@ -34,48 +32,19 @@ export default function StudiedCalendarCell({history, summary}: StudiedCalendarC
             part2: history.data.studied_minutes?.[1].toString(),
             part3: history.data.studied_minutes?.[2].toString()
           },
-          fail_keywords: history.data.fail_keywords.join(','),
-          wake_up_time: history.data.wake_up_time,
-          bed_time: history.data.bed_time
+          fail_keywords: history.data.fail_keywords.join(',')
         }
       }
     });
   }, [history, modal.open]);
 
-  const searchParams = useSearchParams();
-  // TODO 이런부분 유효성검증 어떻게 통일하려고했더라
-  const cellMode = searchParams.get('cellMode') as StudiedTimeCellMode ?? 'default';
-
-  const cellRender = useMemo(() => {
-    if (!history.data) {
-      return null;
-    }
-
-    if (calculateTotal(history.data.studied_minutes, value => value) === 0 && !history.data.fail_keywords.length) {
-      return (
-        <SleepHistory data={history.data}/>
-      );
-    }
-
-    switch (cellMode) {
-      case 'sleep_time': {
-        return (
-          <SleepHistory data={history.data}/>
-        );
-      }
-      
-      default:
-        return (
-          <StudiedHistory data={history.data}/>
-        );
-    }
-  }, [cellMode, history.data]);
-
   return (
     <td onClick={onClickCell} className={classNames(styles.tdWrap, {[styles.notMatched]: !history.calendarDate.state.calendar.isMatchedMonth})}>
       <span className={classNames(styles.calendarDate)}>
         <span className={classNames(styles.dateText, {[styles.today]: history.calendarDate.state.current.isToday})}>{history.calendarDate.date}</span>
-        {cellRender}
+        {!history.data ? null : (
+          <StudiedHistory data={history.data}/>
+        )}
         {!summary ? null : (
           <StudiedSummary summary={summary}/>
         )}
@@ -107,15 +76,4 @@ function StudiedSummary({summary}: {summary: StudiedCalendarCellProps['summary']
       )}
     </>
   )
-}
-
-function SleepHistory({data}: {data: DailyStudyTime}) {
-  const {wake_up_time, bed_time} = data;
-
-  return (
-    <>
-      {!wake_up_time ? null : <span className={styles.primary}>기상 시각 : {wake_up_time}</span>}
-      {!bed_time ? null : <span className={styles.secondary}>취침 시각 : {bed_time}</span>}
-    </>
-  );
 }
