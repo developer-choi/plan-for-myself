@@ -27,8 +27,4 @@ const LINK_LIST: TabBarItem[] = [
     href: '/studied-time',
     children: 'Studied'
   },
-  {
-    href: '/topic',
-    children: 'Topic'
-  },
 ];
