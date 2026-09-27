@@ -27,12 +27,4 @@ const LINK_LIST: TabBarItem[] = [
     href: '/studied-time',
     children: 'Studied'
   },
-  {
-    href: '/remind-of-message',
-    children: 'Remind'
-  },
-  {
-    href: '/topic',
-    children: 'Topic'
-  },
 ];
