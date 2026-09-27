@@ -1,11 +1,8 @@
 import styles from './page.module.scss';
 import {Metadata, ServerComponentProps} from 'next';
 import StudiedCalendarCell from '@/components/service/studied-time/StudiedCalendarCell';
-import {calculateTotal, classifyStrings, sortByNumber} from '@forworkchoe/core/utils';
-import {getStudiedTimeCalendarApi, StudiedTimeCalendarWeek} from '@/utils/service/api/studied-time-server';
-import {minutesFormat} from '@/utils/service/studied-time';
+import {getStudiedTimeCalendarApi} from '@/utils/service/api/studied-time-server';
 import React from 'react';
-import StudiedStatistics from '@/components/service/studied-time/statistics/StudiedStatistics';
 import layoutStyles from '@/styles/layout.module.scss';
 import {H1} from '@forworkchoe/core/components';
 import StudiedTimeNavigation from '@/components/service/studied-time/StudiedTimeNavigation';
@@ -20,7 +17,6 @@ export default async function Page({params}: ServerComponentProps) {
   const month = Number(params.month);
   
   const weekList = await getStudiedTimeCalendarApi(year, month);
-  const haveData = weekList.some(week => week.some(({data}) => data));
 
   return (
     <div className={layoutStyles.pageContentLarge}>
@@ -45,41 +41,12 @@ export default async function Page({params}: ServerComponentProps) {
               <StudiedCalendarCell
                 key={`${history.calendarDate.month}-${history.calendarDate.date}`}
                 history={history}
-                summary={!history.calendarDate.state.calendar.isLastDate ? undefined : getThisMonthSummary(weekList)}
               />
             ))}
           </tr>
         ))}
         </tbody>
       </table>
-      {!haveData ? null : (
-        <StudiedStatistics year={year} month={month}/>
-      )}
     </div>
   );
-}
-
-function getThisMonthSummary(weekList: StudiedTimeCalendarWeek[][]) {
-  const {totalKeywords, totalMinutes} = weekList.flat().reduce((a, b) => {
-    if (!b.data || !b.calendarDate.state.calendar.isMatchedMonth) {
-      return a;
-    }
-
-    if (b.data.fail_keywords.length > 1 || b.data.fail_keywords[0] !== '') {
-      a.totalKeywords = a.totalKeywords.concat(b.data.fail_keywords);
-    }
-
-    a.totalMinutes += calculateTotal(b.data.studied_minutes, value => value);
-    return a;
-  }, {
-    totalMinutes: 0,
-    totalKeywords: [] as string[]
-  });
-
-  const top3Keywords = sortByNumber('desc', classifyStrings(totalKeywords), ({count}) => count).slice(0, 3).map(({value, count}) => `${value}${count}`);
-
-  return {
-    success: totalMinutes === 0 ? undefined : minutesFormat(totalMinutes),
-    fail: top3Keywords.length === 0 ? undefined : top3Keywords.join(' / ')
-  };
 }

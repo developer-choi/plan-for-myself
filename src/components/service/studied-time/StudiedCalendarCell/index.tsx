@@ -11,13 +11,9 @@ import StudiedTimeFormModal from '@/components/modal/studied-time/StudiedTimeFor
 
 interface StudiedCalendarCellProps {
   history: StudiedTimeCalendarWeek;
-  summary?: {
-    success?: string; //한달내내 공부안했으면 없음
-    fail?: string; //한달내내 실패 안했으면 없음
-  };
 }
 
-export default function StudiedCalendarCell({history, summary}: StudiedCalendarCellProps) {
+export default function StudiedCalendarCell({history}: StudiedCalendarCellProps) {
   const modal = useModal();
 
   const onClickCell = useCallback(() => {
@@ -45,9 +41,6 @@ export default function StudiedCalendarCell({history, summary}: StudiedCalendarC
         {!history.data ? null : (
           <StudiedHistory data={history.data}/>
         )}
-        {!summary ? null : (
-          <StudiedSummary summary={summary}/>
-        )}
       </span>
     </td>
   );
@@ -63,17 +56,4 @@ function StudiedHistory({data}: {data: DailyStudyTime}) {
       {!fail ? null : <span className={styles.failReason}>{fail}</span>}
     </>
   );
-}
-
-function StudiedSummary({summary}: {summary: StudiedCalendarCellProps['summary']}) {
-  return (
-    <>
-      {!summary?.success ? null : (
-        <span className={classNames(styles.summary)}>{summary.success}</span>
-      )}
-      {!summary?.fail ? null : (
-        <span className={classNames(styles.summary)}>{summary.fail}</span>
-      )}
-    </>
-  )
 }
