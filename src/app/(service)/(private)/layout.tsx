@@ -1,7 +1,6 @@
 import {PropsWithChildren} from 'react';
 import TabBar, {TabBarItem} from '@/components/layout/TabBar';
 import styles from './layout.module.scss';
-import BackgroundImage from '@/components/setting/BackgroundImage';
 
 export default function PrivateLayout({children}: PropsWithChildren) {
   return (
@@ -9,7 +8,6 @@ export default function PrivateLayout({children}: PropsWithChildren) {
       <div className={styles.wrap}>
         <header className={styles.header}>
           <TabBar widthMode="fix" activeMode="startsWith" linkList={LINK_LIST}/>
-          <BackgroundImage/>
         </header>
         <main className={styles.page}>
           {children}
