@@ -3,18 +3,18 @@ import {PostDailyStudyTimeParameter, UpdateDailyStudyTimeParameter} from '@/util
 import {padToTwoDigits} from '@forworkchoe/core/utils';
 
 export function insertStudiedTimeCalendar(user_id: string, parameter: PostDailyStudyTimeParameter) {
-  const {fail_keywords = [], studied_minutes, date_type, year, month, date, wake_up_time, bed_time} = parameter;
+  const {fail_keywords = [], studied_minutes, date_type, year, month, date} = parameter;
   const timestamp = convertStudiedTimeTimestamp(year, month, date);
   const formattedStudiedMinutes = `{${studied_minutes.join(',')}}`;
   const formattedFailKeywords = `{${fail_keywords.filter(k => k).map(k => `"${k}"`).join(',')}}`;
 
   return sql`
-        INSERT INTO studied_time (studied_minutes, fail_keywords, date_type, timestamp, user_id, wake_up_time, bed_time)
-        VALUES (${formattedStudiedMinutes}, ${formattedFailKeywords}, ${date_type}, ${timestamp}, ${user_id}, ${wake_up_time}, ${bed_time})`;
+        INSERT INTO studied_time (studied_minutes, fail_keywords, date_type, timestamp, user_id)
+        VALUES (${formattedStudiedMinutes}, ${formattedFailKeywords}, ${date_type}, ${timestamp}, ${user_id})`;
 }
 
 export function patchStudiedTimeCalendar(pk: number, parameter: Omit<UpdateDailyStudyTimeParameter, 'pk'>) {
-  const {fail_keywords = [], studied_minutes, date_type, timestamp, wake_up_time, bed_time} = parameter;
+  const {fail_keywords = [], studied_minutes, date_type, timestamp} = parameter;
 
   const formattedStudiedMinutes = `{${studied_minutes.join(',')}}`;
   const formattedFailKeywords = `{${fail_keywords.filter(key => key).map(key => `"${key}"`).join(',')}}`;
@@ -24,9 +24,7 @@ export function patchStudiedTimeCalendar(pk: number, parameter: Omit<UpdateDaily
           studied_minutes = ${formattedStudiedMinutes},
           fail_keywords = ${formattedFailKeywords},
           date_type = ${date_type},
-          timestamp = ${timestamp},
-          wake_up_time = ${wake_up_time},
-          bed_time = ${bed_time}
+          timestamp = ${timestamp}
         WHERE
           pk = ${pk}
     `;
