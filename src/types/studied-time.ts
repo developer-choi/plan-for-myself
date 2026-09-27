@@ -10,5 +10,3 @@ export interface DailyStudyTime {
   wake_up_time: string | ''; // hh;mm
   bed_time: string | ''; // hh;mm
 }
-
-export type StudiedTimeCellMode = 'default' | 'sleep_time';

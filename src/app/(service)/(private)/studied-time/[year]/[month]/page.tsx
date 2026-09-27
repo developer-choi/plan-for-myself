@@ -5,7 +5,6 @@ import {calculateTotal, classifyStrings, sortByNumber} from '@forworkchoe/core/u
 import {getStudiedTimeCalendarApi, StudiedTimeCalendarWeek} from '@/utils/service/api/studied-time-server';
 import {minutesFormat} from '@/utils/service/studied-time';
 import React from 'react';
-import StudiedTimeSetting from '@/components/service/studied-time/StudiedTimeSetting';
 import StudiedStatistics from '@/components/service/studied-time/statistics/StudiedStatistics';
 import layoutStyles from '@/styles/layout.module.scss';
 import {H1} from '@forworkchoe/core/components';
@@ -27,7 +26,6 @@ export default async function Page({params}: ServerComponentProps) {
     <div className={layoutStyles.pageContentLarge}>
       <H1 className={styles.title}>{year} / {month}</H1>
       <StudiedTimeNavigation year={year} month={month}/>
-      <StudiedTimeSetting/>
       <table className={styles.table}>
         <thead>
         <tr>
