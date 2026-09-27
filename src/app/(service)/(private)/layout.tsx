@@ -2,7 +2,6 @@ import {PropsWithChildren} from 'react';
 import TabBar, {TabBarItem} from '@/components/layout/TabBar';
 import styles from './layout.module.scss';
 import BackgroundImage from '@/components/setting/BackgroundImage';
-import DisturbSetting from '@/components/setting/DisturbSetting';
 
 export default function PrivateLayout({children}: PropsWithChildren) {
   return (
@@ -11,7 +10,6 @@ export default function PrivateLayout({children}: PropsWithChildren) {
         <header className={styles.header}>
           <TabBar widthMode="fix" activeMode="startsWith" linkList={LINK_LIST}/>
           <BackgroundImage/>
-          <DisturbSetting/>
         </header>
         <main className={styles.page}>
           {children}
