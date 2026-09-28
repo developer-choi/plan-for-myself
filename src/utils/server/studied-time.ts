@@ -1,34 +1,4 @@
-import {sql} from '@vercel/postgres';
-import {PostDailyStudyTimeParameter, UpdateDailyStudyTimeParameter} from '@/utils/service/api/studied-time';
 import {padToTwoDigits} from '@forworkchoe/core/utils';
-
-export function insertStudiedTimeCalendar(user_id: string, parameter: PostDailyStudyTimeParameter) {
-  const {fail_keywords = [], studied_minutes, date_type, year, month, date} = parameter;
-  const timestamp = convertStudiedTimeTimestamp(year, month, date);
-  const formattedStudiedMinutes = `{${studied_minutes.join(',')}}`;
-  const formattedFailKeywords = `{${fail_keywords.filter(k => k).map(k => `"${k}"`).join(',')}}`;
-
-  return sql`
-        INSERT INTO studied_time (studied_minutes, fail_keywords, date_type, timestamp, user_id)
-        VALUES (${formattedStudiedMinutes}, ${formattedFailKeywords}, ${date_type}, ${timestamp}, ${user_id})`;
-}
-
-export function patchStudiedTimeCalendar(pk: number, parameter: Omit<UpdateDailyStudyTimeParameter, 'pk'>) {
-  const {fail_keywords = [], studied_minutes, date_type, timestamp} = parameter;
-
-  const formattedStudiedMinutes = `{${studied_minutes.join(',')}}`;
-  const formattedFailKeywords = `{${fail_keywords.filter(key => key).map(key => `"${key}"`).join(',')}}`;
-
-  return sql`
-        UPDATE studied_time SET
-          studied_minutes = ${formattedStudiedMinutes},
-          fail_keywords = ${formattedFailKeywords},
-          date_type = ${date_type},
-          timestamp = ${timestamp}
-        WHERE
-          pk = ${pk}
-    `;
-}
 
 export function convertStudiedTimeTimestamp(year: number, month: number, date: number) {
   return new Date(`${year}-${month}-${date} 13:00:00`).getTime();
