@@ -1,4 +1,4 @@
-import {SimpleDate} from '@/utils/extend/date/lunar';
+import type {SimpleDate} from './lunar';
 
 interface DestructedDate extends SimpleDate {
   hour: number;

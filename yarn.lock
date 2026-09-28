@@ -771,6 +771,14 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@plan-for-myself/shared@workspace:packages/shared":
+  version: 0.0.0-use.local
+  resolution: "@plan-for-myself/shared@workspace:packages/shared"
+  dependencies:
+    typescript: "npm:^5"
+  languageName: unknown
+  linkType: soft
+
 "@rtsao/scc@npm:^1.1.0":
   version: 1.1.0
   resolution: "@rtsao/scc@npm:1.1.0"
