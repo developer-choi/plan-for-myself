@@ -39,3 +39,6 @@ yarn-error.log*
 # Claude Code local settings
 .claude/
 GEMINI.md
+
+# yarn install byproduct
+.yarn/install-state.gz
