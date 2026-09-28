@@ -43,3 +43,6 @@ GEMINI.md
 
 # typescript incremental build cache
 *.tsbuildinfo
+
+# next dev·next build가 번갈아 다시 쓰는 파일
+next-env.d.ts
