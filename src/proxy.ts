@@ -2,10 +2,10 @@ import {NextAuthRequest} from "next-auth";
 import {auth} from '@/utils/service/auth';
 
 export const proxy = auth((_: NextAuthRequest) => {
-  // additional middleware logic
+  // additional proxy logic
 });
 
-// https://nextjs.org/docs/pages/building-your-application/routing/middleware#matcher
+// https://nextjs.org/docs/app/api-reference/file-conventions/proxy#matcher
 export const config = {
   matcher: [
     /*
