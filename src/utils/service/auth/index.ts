@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth';
 import {NextResponse} from 'next/server';
 import {getNextNavigating} from '@/utils/service/auth/path';
-import Google from '@auth/core/providers/google';
+import Google from 'next-auth/providers/google';
 
 /**
  * [Next Auth Overview] https://docs.google.com/document/d/1PYKKPneIYB8j8vz8fQgqwBLAkEmB69KJfeFTSXhtdbk/edit#heading=h.mkk12las5ndq

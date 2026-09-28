@@ -14,7 +14,7 @@ export declare module 'next-auth' {
   }
 }
 
-export declare module '@auth/core/jwt' {
+export declare module 'next-auth/jwt' {
   interface JWT {
     user: User;
   }
