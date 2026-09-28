@@ -1,19 +1,23 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
-/node_modules
-/.pnp
+# dependencies — 모노레포라 경로 앞에 /를 붙이지 않아 apps/*·packages/* 아래에서도 잡는다
+node_modules
+.pnp
 .pnp.js
 
 # testing
-/coverage
+coverage
 
 # next.js
-/.next/
-/out/
+.next/
+out/
 
 # production
-/build
+build
+
+# turborepo — AGENTS.md는 turbo 설치가 만드는 에이전트용 안내 파일이다 (MP도 무시한다)
+.turbo
+AGENTS.md
 
 # misc
 .DS_Store
