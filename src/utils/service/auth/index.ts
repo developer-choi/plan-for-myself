@@ -8,7 +8,7 @@ import Google from '@auth/core/providers/google';
  * [Next Auth auth.ts] https://docs.google.com/document/d/1w0Kn91aacGsdKFPTxsdM3JsyRzKynTR4kgJzyS3rcbY/edit#heading=h.14tqv65n973
  */
 export const {handlers, signOut, auth} = NextAuth({
-  secret: 'Aeh9xmaxlq2swmiGAlOpAyHc49fVwrwrStF9/sjqe8w=',
+  secret: process.env.AUTH_SECRET,
   pages: {
     signIn: '/guest/login',
     error: '/guest/login'
