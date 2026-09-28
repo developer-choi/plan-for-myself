@@ -32,7 +32,7 @@ export const {handlers, signOut, auth} = NextAuth({
       session.user = token.user;
       return session;
     },
-    authorized({auth, request: {headers, nextUrl, url}}) {
+    authorized({auth, request: {nextUrl, url}}) {
       const isLoggedIn = !!auth?.user;
 
       const nextNavigating = getNextNavigating({
@@ -44,24 +44,12 @@ export const {handlers, signOut, auth} = NextAuth({
         case 'already-authenticated':
         case 'not-authenticated':
           return NextResponse.redirect(new URL(nextNavigating.nextUrl, url));
-        default: {
-          // https://www.propelauth.com/post/getting-url-in-next-server-components
-          const newHeaders = new Headers(headers);
-          newHeaders.set(CURRENT_URL_IN_HEADER, nextUrl.pathname + nextUrl.search);
-
-          // https://nextjs.org/docs/app/building-your-application/routing/middleware#setting-headers
-          return NextResponse.next({
-            request: {
-              headers: newHeaders,
-            },
-          });
-        }
+        default:
+          return NextResponse.next();
       }
     },
   },
 });
-
-export const CURRENT_URL_IN_HEADER = 'current-pathname-with-search';
 
 const ALLOW_ACCOUNT_LIST = [
   'forworkchoe@gmail.com'
