@@ -1,6 +1,5 @@
 'use client';
 
-import {Button} from '@forworkchoe/core/components';
 import {useCallback, useEffect} from 'react';
 import {signIn} from 'next-auth/react';
 import {getRedirectUrlWhenLoginSuccess} from '@/utils/service/auth/redirect';
@@ -22,6 +21,6 @@ export default function Page() {
   }, []);
 
   return (
-    <Button onClick={onClick}>Sign in Google</Button>
+    <button type="button" onClick={onClick}>Sign in Google</button>
   );
 }

@@ -84,20 +84,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@forworkchoe/core@npm:^0.0.52":
-  version: 0.0.52
-  resolution: "@forworkchoe/core@npm:0.0.52"
-  peerDependencies:
-    classnames: ">=2.5.1"
-    dayjs: 1.11.13
-    next: 14.2.4
-    react: ">=18.0.0"
-    react-dom: ">=18.0.0"
-    sass: ">=1.89.2"
-  checksum: 10c0/e05c834921756df9af2fdc0b914e5c5418ea342546d7f90e0ed77f52b2ef29eb9f5a3440830f6d975112938bb51e9d16d541665d4bb444cca88847ecb865dad0
-  languageName: node
-  linkType: hard
-
 "@humanwhocodes/config-array@npm:^0.11.14":
   version: 0.11.14
   resolution: "@humanwhocodes/config-array@npm:0.11.14"
@@ -3937,7 +3923,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@forworkchoe/core": "npm:^0.0.52"
     "@tanstack/eslint-plugin-query": "npm:^5.62.16"
     "@tanstack/react-query": "npm:^5.51.23"
     "@tanstack/react-query-devtools": "npm:^5.52.3"
