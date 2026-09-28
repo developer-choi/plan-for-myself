@@ -42,3 +42,6 @@ GEMINI.md
 
 # yarn install byproduct
 .yarn/install-state.gz
+
+# typescript incremental build cache
+*.tsbuildinfo
