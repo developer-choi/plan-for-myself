@@ -29,8 +29,7 @@ export const {handlers, signOut, auth} = NextAuth({
       return token;
     },
     session: async ({session, token}) => {
-      session.user = token.user;
-      return session;
+      return {...session, user: token.user};
     },
     authorized({auth, request: {nextUrl, url}}) {
       const isLoggedIn = !!auth?.user;
