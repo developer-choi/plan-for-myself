@@ -1,7 +1,7 @@
 import {NextAuthRequest} from "next-auth";
 import {auth} from '@/utils/service/auth';
 
-export const middleware = auth((_: NextAuthRequest) => {
+export const proxy = auth((_: NextAuthRequest) => {
   // additional middleware logic
 });
 
