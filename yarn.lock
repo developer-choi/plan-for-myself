@@ -771,7 +771,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@plan-for-myself/shared@workspace:packages/shared":
+"@plan-for-myself/shared@workspace:*, @plan-for-myself/shared@workspace:packages/shared":
   version: 0.0.0-use.local
   resolution: "@plan-for-myself/shared@workspace:packages/shared"
   dependencies:
@@ -5961,6 +5961,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "web@workspace:apps/web"
   dependencies:
+    "@plan-for-myself/shared": "workspace:*"
     "@tanstack/eslint-plugin-query": "npm:^5.91.3"
     "@tanstack/react-query": "npm:^5.90.20"
     "@tanstack/react-query-devtools": "npm:^5.52.3"
