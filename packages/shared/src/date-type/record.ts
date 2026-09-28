@@ -1,4 +1,4 @@
-import {DateType} from '@/utils/service/constant/date-type';
+import type {DateType} from './type';
 
 export function listToDateTypeRecord<T extends {date_type: DateType}>(list: T[]): Record<DateType, T[]> {
   return list.reduce((a, b) => {

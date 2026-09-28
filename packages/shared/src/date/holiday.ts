@@ -1,6 +1,6 @@
-import {getKoreanDate} from '@/utils/extend/date/korean';
-import {convertLunarDateToSolar, SimpleDate} from '@/utils/extend/date/lunar';
-import {DateType} from '@/utils/service/constant/date-type';
+import {getKoreanDate} from './korean';
+import {convertLunarDateToSolar, type SimpleDate} from './lunar';
+import type {DateType} from '../date-type/type';
 
 /**
  * @description 휴일인지 판단해서 반환합니다.

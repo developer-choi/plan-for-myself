@@ -38,7 +38,7 @@ export function convertLunarDateToSolar(year: number, month: number, date: numbe
   td = 0;
   for (i = 0; i < y1; i++) {
     for (j = 0; j < 12; j++) {
-      switch (KK[i][j]) {
+      switch (getMonthType(i, j)) {
         case 1:
           td = td + 29;
           break;
@@ -61,7 +61,7 @@ export function convertLunarDateToSolar(year: number, month: number, date: numbe
     }
   }
   for (j = 0; j < m1; j++) {
-    switch (KK[y1][j]) {
+    switch (getMonthType(y1, j)) {
       case 1:
         td = td + 29;
         break;
@@ -83,7 +83,7 @@ export function convertLunarDateToSolar(year: number, month: number, date: numbe
     }
   }
   if (leapyes == 1) {
-    switch (KK[y1][m1]) {
+    switch (getMonthType(y1, m1)) {
       case 3:
       case 4:
         td = td + 29;
@@ -118,10 +118,14 @@ export function convertLunarDateToSolar(year: number, month: number, date: numbe
 
   do {
     m1 = m1 + 1;
-    if (td <= md[m1 - 1]) {
+    const monthDays = md[m1 - 1];
+    if (monthDays === undefined) {
+      throw new Error('알 수 없는 에러입니다. (양력 월 계산하다 에러남)');
+    }
+    if (td <= monthDays) {
       break;
     } else {
-      td = td - md[m1 - 1];
+      td = td - monthDays;
     }
   } while (1);
 
@@ -144,13 +148,22 @@ function validateYear(year: number) {
   }
 }
 
+// KK[연도 인덱스][월 인덱스]. 연도는 validateYear가 먼저 거르므로 범위 밖이면 버그다.
+function getMonthType(y1: number, m1: number): number {
+  const monthType = KK[y1]?.[m1];
+  if (monthType === undefined) {
+    throw new RangeError(`KK에 없는 인덱스입니다. (y1: ${y1}, m1: ${m1})`);
+  }
+  return monthType;
+}
+
 function getLday(date: number, y1: number, m1: number) {
   const mm = (function () {
-    if(KK[y1][m1] <= 2) {
+    if(getMonthType(y1, m1) <= 2) {
       return undefined;
     }
 
-    switch (KK[y1][m1]) {
+    switch (getMonthType(y1, m1)) {
       case 1:
       case 3:
       case 4:

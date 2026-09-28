@@ -1,4 +1,4 @@
-import {DateType} from '@/utils/service/constant/date-type';
+import type {DateType} from '../date-type/type';
 
 export interface DailyStudyTime {
   pk: number;

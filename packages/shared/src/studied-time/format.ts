@@ -1,4 +1,4 @@
-import {DailyStudyTime} from '@/types/studied-time';
+import type {DailyStudyTime} from './type';
 
 /**
  * @example (90) ==> '1:30'
