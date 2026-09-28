@@ -1,7 +1,0 @@
-@use "/src/styles/util";
-
-.pageWrap {
-  width: 100%;
-  height: 100%;
-  @include util.flexCenter;
-}
