@@ -1,4 +1,11 @@
-import {DestructedDate} from '@forworkchoe/core/utils';
+import {SimpleDate} from '@/utils/extend/date/lunar';
+
+interface DestructedDate extends SimpleDate {
+  hour: number;
+  minute: number;
+  second: number;
+  milliSecond: number;
+}
 
 /**
  * 이 로직이 실행된 환경의 시스템 시간대가 한국이 아닌 다른 나라라고 할지라도, 한국 시간대로 변환함.
