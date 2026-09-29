@@ -3,7 +3,7 @@
 // ESLint는 각 패키지 폴더에서 돌린다.
 const quoteFiles = (files) => files.map((file) => `"${file.replaceAll('\\', '/')}"`).join(' ');
 const eslintIn = (workspace) => (files) =>
-  `yarn workspace ${workspace} exec eslint --fix --no-warn-ignored ${quoteFiles(files)}`;
+  `yarn workspace ${workspace} exec eslint --fix --max-warnings 0 --no-warn-ignored ${quoteFiles(files)}`;
 
 export default {
   '*.{ts,tsx,js,mjs,mts,json,css,scss,md}': 'prettier --write',

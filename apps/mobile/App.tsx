@@ -13,6 +13,14 @@ const KEY_ID_TOKEN = 'idToken';
 const KEY_SUB = 'sub';
 const KEY_GUEST_ID = 'guestId';
 
+const MS_PER_SECOND = 1000;
+
+// 첫 화면에서 공통 패키지 함수가 앱에서도 도는지 보여 주는 예시 입력
+const SHARED_PACKAGE_SAMPLE = {
+  studiedMinutes: {morning: 60, afternoon: 30, evening: 0},
+  lunarDate: {year: 2026, month: 8, date: 15},
+};
+
 // autoSelectOnSignIn: 이 앱을 허락한 계정이 하나이고 직전 세션에서 로그아웃하지 않았으면,
 // signIn()이 계정 선택 창 없이 새 토큰을 받는다
 GoogleOneTapSignIn.configure({webClientId: WEB_CLIENT_ID, autoSelectOnSignIn: true});
@@ -24,7 +32,7 @@ function issuedAt(idToken: string) {
   try {
     const payload = idToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
     const {iat} = JSON.parse(atob(payload)) as {iat: number};
-    return new Date(iat * 1000).toLocaleTimeString();
+    return new Date(iat * MS_PER_SECOND).toLocaleTimeString();
   } catch {
     return '알 수 없음';
   }
@@ -66,6 +74,7 @@ export default function App() {
     setSession(next);
     // 앱 밖에서 tokeninfo로 검증하려고 개발 서버 로그에 남긴다
     if (__DEV__) {
+      // eslint-disable-next-line no-console -- 개발용 확인 로그. 서버가 토큰을 검증하도록 앱 로그인을 서버와 붙일 때 지운다
       console.log('[auth] idToken', next.idToken);
     }
   };
@@ -174,8 +183,22 @@ export default function App() {
       {message !== '' && <Text style={styles.message}>{message}</Text>}
 
       <Text style={styles.title}>공통 패키지</Text>
-      <Text>{studiedTimeFormat([60, 30, 0])}</Text>
-      <Text>{JSON.stringify(convertLunarDateToSolar(2026, 8, 15))}</Text>
+      <Text>
+        {studiedTimeFormat([
+          SHARED_PACKAGE_SAMPLE.studiedMinutes.morning,
+          SHARED_PACKAGE_SAMPLE.studiedMinutes.afternoon,
+          SHARED_PACKAGE_SAMPLE.studiedMinutes.evening,
+        ])}
+      </Text>
+      <Text>
+        {JSON.stringify(
+          convertLunarDateToSolar(
+            SHARED_PACKAGE_SAMPLE.lunarDate.year,
+            SHARED_PACKAGE_SAMPLE.lunarDate.month,
+            SHARED_PACKAGE_SAMPLE.lunarDate.date,
+          ),
+        )}
+      </Text>
       <StatusBar style="auto" />
     </ScrollView>
   );

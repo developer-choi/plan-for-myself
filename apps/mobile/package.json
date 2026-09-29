@@ -29,7 +29,7 @@
     "web": "expo start --web",
     "check-types": "tsc --noEmit",
     "eas": "eas",
-    "lint": "eslint ."
+    "lint": "eslint . --max-warnings 0"
   },
   "private": true
 }

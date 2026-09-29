@@ -2,6 +2,11 @@ import {getKoreanDate} from './korean';
 import {convertLunarDateToSolar, type SimpleDate} from './lunar';
 import type {DateType} from '../date-type/type';
 
+const SUNDAY = 0;
+const SATURDAY = 6;
+// 음력 섣달그믐(12월 31일)은 양력으로 바꾸면 다음 해 설날 전날이라, 전해의 음력 날짜로 바꿔야 한다
+const LUNAR_NEW_YEAR_EVE = {month: 12, date: 31};
+
 /**
  * @description 휴일인지 판단해서 반환합니다.
  * 1. 토요일, 일요일이면 true
@@ -25,7 +30,7 @@ function isHoliday(year: number, month: number, date: number) {
   const value = new Date(`${year}-${month}-${date}`);
   const day = value.getDay();
 
-  if (day === 6 || day === 0) {
+  if (day === SATURDAY || day === SUNDAY) {
     return true;
   }
 
@@ -34,7 +39,7 @@ function isHoliday(year: number, month: number, date: number) {
   }
 
   return HOLIDAY.lunar.some((holiday) => {
-    const toPreviousYear = holiday.month === 12 && holiday.date === 31;
+    const toPreviousYear = holiday.month === LUNAR_NEW_YEAR_EVE.month && holiday.date === LUNAR_NEW_YEAR_EVE.date;
     const solar = convertLunarDateToSolar(toPreviousYear ? year - 1 : year, holiday.month, holiday.date);
     return solar.month === month && solar.date === date;
   });
