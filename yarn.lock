@@ -7487,6 +7487,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-crypto@npm:~57.0.3":
+  version: 57.0.3
+  resolution: "expo-crypto@npm:57.0.3"
+  peerDependencies:
+    expo: "*"
+  checksum: 10c0/33fd9eb978ef3a5032f2cbcecbff6fff03b2e34b615b9b218fe9e7c85161c15a2eaa497f54659bbbc2cae6c036567212d95beeee6f74c9c604621d29cacd8749
+  languageName: node
+  linkType: hard
+
 "expo-dev-client@npm:~57.0.19":
   version: 57.0.19
   resolution: "expo-dev-client@npm:57.0.19"
@@ -10856,6 +10865,7 @@ __metadata:
     "@types/react": "npm:~19.2.2"
     eas-cli: "npm:^24.8.0"
     expo: "npm:~57.0.25"
+    expo-crypto: "npm:~57.0.3"
     expo-dev-client: "npm:~57.0.19"
     expo-secure-store: "npm:~57.0.4"
     expo-status-bar: "npm:~57.0.1"

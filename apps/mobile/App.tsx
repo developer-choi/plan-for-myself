@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { Button, ScrollView, StyleSheet, Text, View } from 'react-native';
+import * as Crypto from 'expo-crypto';
 import * as SecureStore from 'expo-secure-store';
 import {
   GoogleOneTapSignIn,
@@ -14,6 +15,7 @@ const WEB_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID ?? '';
 
 const KEY_ID_TOKEN = 'idToken';
 const KEY_SUB = 'sub';
+const KEY_GUEST_ID = 'guestId';
 
 // autoSelectOnSignIn: 이 앱을 허락한 계정이 하나이고 직전 세션에서 로그아웃하지 않았으면,
 // signIn()이 계정 선택 창 없이 새 토큰을 받는다
@@ -39,16 +41,19 @@ function toMessage(error: unknown) {
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState<Session | null>(null);
+  const [guestId, setGuestId] = useState<string | null>(null);
   const [message, setMessage] = useState('');
 
   useEffect(() => {
     (async () => {
       try {
-        const [idToken, sub] = await Promise.all([
+        const [idToken, sub, storedGuestId] = await Promise.all([
           SecureStore.getItemAsync(KEY_ID_TOKEN),
           SecureStore.getItemAsync(KEY_SUB),
+          SecureStore.getItemAsync(KEY_GUEST_ID),
         ]);
         if (idToken && sub) setSession({ sub, idToken });
+        setGuestId(storedGuestId);
       } catch (error) {
         setMessage(toMessage(error));
       } finally {
@@ -112,6 +117,25 @@ export default function App() {
     }
   };
 
+  const createGuestId = async () => {
+    try {
+      const id = Crypto.randomUUID();
+      await SecureStore.setItemAsync(KEY_GUEST_ID, id);
+      setGuestId(id);
+    } catch (error) {
+      setMessage(toMessage(error));
+    }
+  };
+
+  const clearGuestId = async () => {
+    try {
+      await SecureStore.deleteItemAsync(KEY_GUEST_ID);
+      setGuestId(null);
+    } catch (error) {
+      setMessage(toMessage(error));
+    }
+  };
+
   if (loading) {
     return (
       <View style={styles.container}>
@@ -137,6 +161,14 @@ export default function App() {
           <Text>로그아웃 상태</Text>
           <Button title="구글로 로그인" onPress={signIn} />
         </>
+      )}
+
+      <Text style={styles.title}>게스트 식별자</Text>
+      <Text selectable>{guestId ?? '없음'}</Text>
+      {guestId ? (
+        <Button title="게스트 ID 지우기" onPress={clearGuestId} />
+      ) : (
+        <Button title="게스트 ID 만들기" onPress={createGuestId} />
       )}
 
       {message !== '' && <Text style={styles.message}>{message}</Text>}
