@@ -1,7 +1,7 @@
 import {DEFAULT_HOME_URL} from '@/utils/service/auth/redirect';
 
 interface NextNavigatingParam {
-  nextUrl: string; // pathname + querystring
+  pathWithSearch: string;
   isLoggedIn: boolean;
 }
 
@@ -16,11 +16,11 @@ export type NextNavigatingResult =
     }
   | {
       type: 'correct';
-      nextUrl: string; // parameter로 전달했던 nextUrl과 같은 값
+      nextUrl: string;
     };
 
-export function getNextNavigating({nextUrl, isLoggedIn}: NextNavigatingParam): NextNavigatingResult {
-  const nextUrlObject = new URL(`http://some.domain.com${nextUrl}`);
+export function getNextNavigating({pathWithSearch, isLoggedIn}: NextNavigatingParam): NextNavigatingResult {
+  const nextUrlObject = new URL(`http://some.domain.com${pathWithSearch}`);
   const nextPathname = nextUrlObject.pathname;
   const isPrivate = PRIVATE_PATHNAMES.some((pathname) => nextPathname.startsWith(pathname));
   const isNotPrivate = NOT_PRIVATE_PATHNAME.some((pathname) => nextPathname.startsWith(pathname));
@@ -28,7 +28,7 @@ export function getNextNavigating({nextUrl, isLoggedIn}: NextNavigatingParam): N
   if (isPrivate && !isLoggedIn) {
     return {
       type: 'not-authenticated',
-      nextUrl: `/guest/login?redirect=${nextUrl}`,
+      nextUrl: `/guest/login?redirect=${pathWithSearch}`,
     };
   } else if (isNotPrivate && isLoggedIn) {
     return {
@@ -38,14 +38,11 @@ export function getNextNavigating({nextUrl, isLoggedIn}: NextNavigatingParam): N
   } else {
     return {
       type: 'correct',
-      nextUrl,
+      nextUrl: pathWithSearch,
     };
   }
 }
 
-/*************************************************************************************************************
- * Non Export
- *************************************************************************************************************/
 const PRIVATE_PATHNAMES = ['/studied-time'];
 
 const NOT_PRIVATE_PATHNAME = ['/guest'];
