@@ -1,6 +1,9 @@
+import '@developer-choi/design-system/style.css';
 import React, {PropsWithChildren} from 'react';
 import type {Metadata} from 'next';
 import {Noto_Sans} from 'next/font/google';
+import classNames from 'classnames';
+import {themeClassName} from '@developer-choi/design-system';
 
 const font = Noto_Sans({
   subsets: ['latin'],
@@ -15,7 +18,7 @@ export const metadata: Metadata = {
 export default function RootLayout({children}: PropsWithChildren) {
   return (
     <html lang="en">
-      <body className={font.className}>{children}</body>
+      <body className={classNames(font.className, themeClassName)}>{children}</body>
     </html>
   );
 }
