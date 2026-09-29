@@ -4,20 +4,18 @@ import {Noto_Sans} from 'next/font/google';
 
 const font = Noto_Sans({
   subsets: ['latin'],
-  weight: ['400', '700']
+  weight: ['400', '700'],
 });
 
 export const metadata: Metadata = {
   title: 'Plan for myself',
-  description: "스스로 계획을 세우고 실천하도록 돕습니다.",
+  description: '스스로 계획을 세우고 실천하도록 돕습니다.',
 };
 
-export default async function RootLayout({children}: PropsWithChildren) {
+export default function RootLayout({children}: PropsWithChildren) {
   return (
     <html lang="en">
-    <body className={font.className}>
-    {children}
-    </body>
+      <body className={font.className}>{children}</body>
     </html>
   );
 }

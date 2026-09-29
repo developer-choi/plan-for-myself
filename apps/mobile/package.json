@@ -17,7 +17,10 @@
   "devDependencies": {
     "@types/react": "~19.2.2",
     "eas-cli": "^24.8.0",
-    "typescript": "~6.0.3"
+    "eslint": "^9",
+    "eslint-config-expo": "~57.0.2",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.57.2"
   },
   "scripts": {
     "dev": "expo start",
@@ -25,7 +28,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "check-types": "tsc --noEmit",
-    "eas": "eas"
+    "eas": "eas",
+    "lint": "eslint . --max-warnings 0"
   },
   "private": true
 }

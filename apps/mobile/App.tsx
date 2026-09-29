@@ -1,14 +1,10 @@
-import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
-import { Button, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {StatusBar} from 'expo-status-bar';
+import {useEffect, useState} from 'react';
+import {Button, ScrollView, StyleSheet, Text, View} from 'react-native';
 import * as Crypto from 'expo-crypto';
 import * as SecureStore from 'expo-secure-store';
-import {
-  GoogleOneTapSignIn,
-  isErrorWithCode,
-  isSuccessResponse,
-} from 'react-native-nitro-google-signin';
-import { convertLunarDateToSolar, studiedTimeFormat } from '@plan-for-myself/shared';
+import {GoogleOneTapSignIn, isErrorWithCode, isSuccessResponse} from 'react-native-nitro-google-signin';
+import {convertLunarDateToSolar, studiedTimeFormat} from '@plan-for-myself/shared';
 
 // 웹(Auth.js)이 쓰는 구글 웹 클라이언트 ID. ID 토큰의 aud가 이 값이 된다
 const WEB_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID ?? '';
@@ -17,18 +13,26 @@ const KEY_ID_TOKEN = 'idToken';
 const KEY_SUB = 'sub';
 const KEY_GUEST_ID = 'guestId';
 
+const MS_PER_SECOND = 1000;
+
+// 첫 화면에서 공통 패키지 함수가 앱에서도 도는지 보여 주는 예시 입력
+const SHARED_PACKAGE_SAMPLE = {
+  studiedMinutes: {morning: 60, afternoon: 30, evening: 0},
+  lunarDate: {year: 2026, month: 8, date: 15},
+};
+
 // autoSelectOnSignIn: 이 앱을 허락한 계정이 하나이고 직전 세션에서 로그아웃하지 않았으면,
 // signIn()이 계정 선택 창 없이 새 토큰을 받는다
-GoogleOneTapSignIn.configure({ webClientId: WEB_CLIENT_ID, autoSelectOnSignIn: true });
+GoogleOneTapSignIn.configure({webClientId: WEB_CLIENT_ID, autoSelectOnSignIn: true});
 
-type Session = { sub: string; idToken: string };
+type Session = {sub: string; idToken: string};
 
 // ID 토큰(JWT) 본문의 iat를 읽는다. 검증이 아니라 새 토큰인지 눈으로 보려는 용도다
 function issuedAt(idToken: string) {
   try {
     const payload = idToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
-    const { iat } = JSON.parse(atob(payload)) as { iat: number };
-    return new Date(iat * 1000).toLocaleTimeString();
+    const {iat} = JSON.parse(atob(payload)) as {iat: number};
+    return new Date(iat * MS_PER_SECOND).toLocaleTimeString();
   } catch {
     return '알 수 없음';
   }
@@ -52,7 +56,9 @@ export default function App() {
           SecureStore.getItemAsync(KEY_SUB),
           SecureStore.getItemAsync(KEY_GUEST_ID),
         ]);
-        if (idToken && sub) setSession({ sub, idToken });
+        if (idToken && sub) {
+          setSession({sub, idToken});
+        }
         setGuestId(storedGuestId);
       } catch (error) {
         setMessage(toMessage(error));
@@ -67,7 +73,10 @@ export default function App() {
     await SecureStore.setItemAsync(KEY_SUB, next.sub);
     setSession(next);
     // 앱 밖에서 tokeninfo로 검증하려고 개발 서버 로그에 남긴다
-    if (__DEV__) console.log('[auth] idToken', next.idToken);
+    if (__DEV__) {
+      // eslint-disable-next-line no-console -- 개발용 확인 로그. 서버가 토큰을 검증하도록 앱 로그인을 서버와 붙일 때 지운다
+      console.log('[auth] idToken', next.idToken);
+    }
   };
 
   // createAccount()는 기기의 모든 구글 계정을 보여 주는 선택 창이다.
@@ -78,7 +87,7 @@ export default function App() {
       await GoogleOneTapSignIn.checkPlayServices();
       const response = await GoogleOneTapSignIn.createAccount();
       if (isSuccessResponse(response)) {
-        await saveSession({ sub: response.data.user.id, idToken: response.data.idToken });
+        await saveSession({sub: response.data.user.id, idToken: response.data.idToken});
         setMessage('로그인 성공');
       } else {
         setMessage(`로그인 안 됨: ${response.type}`);
@@ -95,7 +104,7 @@ export default function App() {
     try {
       const response = await GoogleOneTapSignIn.signIn();
       if (isSuccessResponse(response)) {
-        await saveSession({ sub: response.data.user.id, idToken: response.data.idToken });
+        await saveSession({sub: response.data.user.id, idToken: response.data.idToken});
         setMessage('새 토큰을 받았다');
       } else {
         setMessage(`새 토큰 못 받음: ${response.type}`);
@@ -174,8 +183,22 @@ export default function App() {
       {message !== '' && <Text style={styles.message}>{message}</Text>}
 
       <Text style={styles.title}>공통 패키지</Text>
-      <Text>{studiedTimeFormat([60, 30, 0])}</Text>
-      <Text>{JSON.stringify(convertLunarDateToSolar(2026, 8, 15))}</Text>
+      <Text>
+        {studiedTimeFormat([
+          SHARED_PACKAGE_SAMPLE.studiedMinutes.morning,
+          SHARED_PACKAGE_SAMPLE.studiedMinutes.afternoon,
+          SHARED_PACKAGE_SAMPLE.studiedMinutes.evening,
+        ])}
+      </Text>
+      <Text>
+        {JSON.stringify(
+          convertLunarDateToSolar(
+            SHARED_PACKAGE_SAMPLE.lunarDate.year,
+            SHARED_PACKAGE_SAMPLE.lunarDate.month,
+            SHARED_PACKAGE_SAMPLE.lunarDate.date,
+          ),
+        )}
+      </Text>
       <StatusBar style="auto" />
     </ScrollView>
   );

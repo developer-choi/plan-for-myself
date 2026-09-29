@@ -3,6 +3,9 @@ import {NextResponse} from 'next/server';
 import {getNextNavigating} from '@/utils/service/auth/path';
 import Google from 'next-auth/providers/google';
 
+const SECONDS_PER_DAY = 86_400;
+const SESSION_MAX_AGE_DAYS = 30;
+
 /**
  * [Next Auth Overview] https://docs.google.com/document/d/1PYKKPneIYB8j8vz8fQgqwBLAkEmB69KJfeFTSXhtdbk/edit#heading=h.mkk12las5ndq
  * [Next Auth auth.ts] https://docs.google.com/document/d/1w0Kn91aacGsdKFPTxsdM3JsyRzKynTR4kgJzyS3rcbY/edit#heading=h.14tqv65n973
@@ -11,24 +14,25 @@ export const {handlers, signOut, auth} = NextAuth({
   secret: process.env.AUTH_SECRET,
   pages: {
     signIn: '/guest/login',
-    error: '/guest/login'
+    error: '/guest/login',
   },
   session: {
-    maxAge: 60 * 60 * 24 * 30 // 단위 : second
+    maxAge: SESSION_MAX_AGE_DAYS * SECONDS_PER_DAY, // 단위 : second
   },
   providers: [Google],
   callbacks: {
     signIn: function (params) {
-      return ALLOW_ACCOUNT_LIST.includes(params.user.email as any);
+      const {email} = params.user;
+      return typeof email === 'string' && ALLOW_ACCOUNT_LIST.includes(email);
     },
-    jwt: async ({token, user, trigger}) => {
+    jwt: ({token, user, trigger}) => {
       if (trigger === 'signIn') {
         token.user = user;
       }
 
       return token;
     },
-    session: async ({session, token}) => {
+    session: ({session, token}) => {
       return {...session, user: token.user};
     },
     authorized({auth, request: {nextUrl, url}}) {
@@ -36,20 +40,18 @@ export const {handlers, signOut, auth} = NextAuth({
 
       const nextNavigating = getNextNavigating({
         nextUrl: nextUrl.pathname + nextUrl.search,
-        isLoggedIn
+        isLoggedIn,
       });
 
       switch (nextNavigating.type) {
         case 'already-authenticated':
         case 'not-authenticated':
           return NextResponse.redirect(new URL(nextNavigating.nextUrl, url));
-        default:
+        case 'correct':
           return NextResponse.next();
       }
     },
   },
 });
 
-const ALLOW_ACCOUNT_LIST = [
-  'forworkchoe@gmail.com'
-];
+const ALLOW_ACCOUNT_LIST = ['forworkchoe@gmail.com'];

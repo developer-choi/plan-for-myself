@@ -1,7 +1,6 @@
-import {NextAuthRequest} from "next-auth";
 import {auth} from '@/utils/service/auth';
 
-export const proxy = auth((_: NextAuthRequest) => {
+export const proxy = auth(() => {
   // additional proxy logic
 });
 
@@ -17,4 +16,4 @@ export const config = {
      */
     '/((?!api|_next/static|_next/image|favicon.ico).*)',
   ],
-}
+};

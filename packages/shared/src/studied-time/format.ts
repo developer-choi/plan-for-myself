@@ -1,11 +1,15 @@
 import type {DailyStudyTime} from './type';
 
+const MINUTES_PER_HOUR = 60;
+
 /**
  * @example (90) ==> '1:30'
  */
 export function minutesFormat(totalMinutes: number) {
-  const hours = Math.floor(totalMinutes / 60);
-  const minutes = Math.floor(totalMinutes % 60).toString().padStart(2, '0');
+  const hours = Math.floor(totalMinutes / MINUTES_PER_HOUR);
+  const minutes = Math.floor(totalMinutes % MINUTES_PER_HOUR)
+    .toString()
+    .padStart(2, '0');
   return `${hours}:${minutes}`;
 }
 

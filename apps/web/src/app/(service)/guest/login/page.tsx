@@ -7,7 +7,7 @@ import {getRedirectUrlWhenLoginSuccess} from '@/utils/service/auth/redirect';
 export default function Page() {
   const onClick = useCallback(() => {
     signIn('google', {
-      callbackUrl: getRedirectUrlWhenLoginSuccess()
+      callbackUrl: getRedirectUrlWhenLoginSuccess(),
     });
   }, []);
 
@@ -21,6 +21,8 @@ export default function Page() {
   }, []);
 
   return (
-    <button type="button" onClick={onClick}>Sign in Google</button>
+    <button type="button" onClick={onClick}>
+      Sign in Google
+    </button>
   );
 }
