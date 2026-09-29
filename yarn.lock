@@ -7346,6 +7346,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "mobile@workspace:apps/mobile"
   dependencies:
+    "@plan-for-myself/shared": "workspace:*"
     "@types/react": "npm:~19.2.2"
     expo: "npm:~57.0.25"
     expo-status-bar: "npm:~57.0.1"
