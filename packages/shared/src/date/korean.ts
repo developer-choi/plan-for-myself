@@ -26,6 +26,8 @@ export function getKoreanDate(date = new Date()): DestructedDate {
   return convertUTCDateProperty(koreaDate);
 }
 
+export const KST = 9; // GMT + 9
+
 function convertUTCDateProperty(date: Date): DestructedDate {
   return {
     year: date.getUTCFullYear(),
@@ -37,5 +39,3 @@ function convertUTCDateProperty(date: Date): DestructedDate {
     milliSecond: date.getUTCMilliseconds(),
   };
 }
-
-export const KST = 9; // GMT + 9

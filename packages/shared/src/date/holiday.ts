@@ -2,10 +2,10 @@ import {getKoreanDate} from './korean';
 import {convertLunarDateToSolar, type SimpleDate} from './lunar';
 import type {DateType} from '../date-type/type';
 
-const SUNDAY = 0;
-const SATURDAY = 6;
-// 음력 섣달그믐(12월 31일)은 양력으로 바꾸면 다음 해 설날 전날이라, 전해의 음력 날짜로 바꿔야 한다
-const LUNAR_NEW_YEAR_EVE = {month: 12, date: 31};
+interface HolidayDate extends Omit<SimpleDate, 'year'> {
+  type: 'solar' | 'lunar';
+  name: string;
+}
 
 /**
  * @description 휴일인지 판단해서 반환합니다.
@@ -25,30 +25,10 @@ export function getDefaultDateType(): DateType {
 /*************************************************************************************************************
  * Non Export
  *************************************************************************************************************/
-// month는 1부터 시작합니다.
-function isHoliday(year: number, month: number, date: number) {
-  const value = new Date(`${year}-${month}-${date}`);
-  const day = value.getDay();
-
-  if (day === SATURDAY || day === SUNDAY) {
-    return true;
-  }
-
-  if (HOLIDAY.solar.some((holiday) => holiday.month === month && holiday.date === date)) {
-    return true;
-  }
-
-  return HOLIDAY.lunar.some((holiday) => {
-    const toPreviousYear = holiday.month === LUNAR_NEW_YEAR_EVE.month && holiday.date === LUNAR_NEW_YEAR_EVE.date;
-    const solar = convertLunarDateToSolar(toPreviousYear ? year - 1 : year, holiday.month, holiday.date);
-    return solar.month === month && solar.date === date;
-  });
-}
-
-interface HolidayDate extends Omit<SimpleDate, 'year'> {
-  type: 'solar' | 'lunar';
-  name: string;
-}
+const SUNDAY = 0;
+const SATURDAY = 6;
+// 음력 섣달그믐(12월 31일)은 양력으로 바꾸면 다음 해 설날 전날이라, 전해의 음력 날짜로 바꿔야 한다
+const LUNAR_NEW_YEAR_EVE = {month: 12, date: 31};
 
 // 양력기준 달력에 나오는 순서대로 작성했음.
 const HOLIDAY_LIST: HolidayDate[] = [
@@ -74,3 +54,23 @@ const HOLIDAY: Record<HolidayDate['type'], HolidayDate[]> = {
   solar: HOLIDAY_LIST.filter(({type}) => type === 'solar'),
   lunar: HOLIDAY_LIST.filter(({type}) => type === 'lunar'),
 };
+
+// month는 1부터 시작합니다.
+function isHoliday(year: number, month: number, date: number) {
+  const value = new Date(`${year}-${month}-${date}`);
+  const day = value.getDay();
+
+  if (day === SATURDAY || day === SUNDAY) {
+    return true;
+  }
+
+  if (HOLIDAY.solar.some((holiday) => holiday.month === month && holiday.date === date)) {
+    return true;
+  }
+
+  return HOLIDAY.lunar.some((holiday) => {
+    const toPreviousYear = holiday.month === LUNAR_NEW_YEAR_EVE.month && holiday.date === LUNAR_NEW_YEAR_EVE.date;
+    const solar = convertLunarDateToSolar(toPreviousYear ? year - 1 : year, holiday.month, holiday.date);
+    return solar.month === month && solar.date === date;
+  });
+}
