@@ -4,7 +4,7 @@ import {Button, ScrollView, StyleSheet, Text, View} from 'react-native';
 import * as Crypto from 'expo-crypto';
 import * as SecureStore from 'expo-secure-store';
 import {GoogleOneTapSignIn, isErrorWithCode, isSuccessResponse} from 'react-native-nitro-google-signin';
-import {convertLunarDateToSolar, studiedTimeFormat} from '@plan-for-myself/shared';
+import {colors, convertLunarDateToSolar, studiedTimeFormat} from '@plan-for-myself/shared';
 
 interface Session {
   sub: string;
@@ -200,7 +200,7 @@ GoogleOneTapSignIn.configure({webClientId: WEB_CLIENT_ID, autoSelectOnSignIn: tr
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.card,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 12,
