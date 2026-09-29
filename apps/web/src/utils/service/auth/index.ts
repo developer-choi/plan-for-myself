@@ -39,7 +39,7 @@ export const {handlers, signOut, auth} = NextAuth({
       const isLoggedIn = !!auth?.user;
 
       const nextNavigating = getNextNavigating({
-        nextUrl: nextUrl.pathname + nextUrl.search,
+        pathWithSearch: nextUrl.pathname + nextUrl.search,
         isLoggedIn,
       });
 

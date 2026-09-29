@@ -55,22 +55,21 @@ const HOLIDAY: Record<HolidayDate['type'], HolidayDate[]> = {
   lunar: HOLIDAY_LIST.filter(({type}) => type === 'lunar'),
 };
 
-// month는 1부터 시작합니다.
-function isHoliday(year: number, month: number, date: number) {
-  const value = new Date(`${year}-${month}-${date}`);
+function isHoliday(year: number, oneBasedMonth: number, date: number) {
+  const value = new Date(`${year}-${oneBasedMonth}-${date}`);
   const day = value.getDay();
 
   if (day === SATURDAY || day === SUNDAY) {
     return true;
   }
 
-  if (HOLIDAY.solar.some((holiday) => holiday.month === month && holiday.date === date)) {
+  if (HOLIDAY.solar.some((holiday) => holiday.month === oneBasedMonth && holiday.date === date)) {
     return true;
   }
 
   return HOLIDAY.lunar.some((holiday) => {
     const toPreviousYear = holiday.month === LUNAR_NEW_YEAR_EVE.month && holiday.date === LUNAR_NEW_YEAR_EVE.date;
     const solar = convertLunarDateToSolar(toPreviousYear ? year - 1 : year, holiday.month, holiday.date);
-    return solar.month === month && solar.date === date;
+    return solar.month === oneBasedMonth && solar.date === date;
   });
 }
