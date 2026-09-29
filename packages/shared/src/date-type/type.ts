@@ -1,5 +1,2 @@
-/**
- * holiday = 주말, 휴일, 연차 등 하루종일 공부할 수 있었던 날
- * weekday = 평일, 학교, 회사 다녀오느라 공부 하루종일못했던 날
- */
+/* 하루 종일 공부할 수 있었던 날(주말·공휴일·연차)은 holiday, 학교·회사에 다녀온 날은 weekday다 */
 export type DateType = 'weekday' | 'holiday';

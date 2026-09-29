@@ -1,8 +1,5 @@
 import type {DailyStudyTime} from './type';
 
-/**
- * @example (90) ==> '1:30'
- */
 export function minutesFormat(totalMinutes: number) {
   const hours = Math.floor(totalMinutes / MINUTES_PER_HOUR);
   const minutes = Math.floor(totalMinutes % MINUTES_PER_HOUR)

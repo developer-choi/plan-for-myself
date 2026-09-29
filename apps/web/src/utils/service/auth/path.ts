@@ -16,7 +16,7 @@ export type NextNavigatingResult =
     }
   | {
       type: 'correct';
-      nextUrl: string; // parameter로 전달했던 nextUrl과 같은 값
+      nextUrl: string;
     };
 
 export function getNextNavigating({pathWithSearch, isLoggedIn}: NextNavigatingParam): NextNavigatingResult {
@@ -43,9 +43,6 @@ export function getNextNavigating({pathWithSearch, isLoggedIn}: NextNavigatingPa
   }
 }
 
-/*************************************************************************************************************
- * Non Export
- *************************************************************************************************************/
 const PRIVATE_PATHNAMES = ['/studied-time'];
 
 const NOT_PRIVATE_PATHNAME = ['/guest'];

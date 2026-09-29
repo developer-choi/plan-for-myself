@@ -6,10 +6,6 @@ import Google from 'next-auth/providers/google';
 const SECONDS_PER_DAY = 86_400;
 const SESSION_MAX_AGE_DAYS = 30;
 
-/**
- * [Next Auth Overview] https://docs.google.com/document/d/1PYKKPneIYB8j8vz8fQgqwBLAkEmB69KJfeFTSXhtdbk/edit#heading=h.mkk12las5ndq
- * [Next Auth auth.ts] https://docs.google.com/document/d/1w0Kn91aacGsdKFPTxsdM3JsyRzKynTR4kgJzyS3rcbY/edit#heading=h.14tqv65n973
- */
 export const {handlers, signOut, auth} = NextAuth({
   secret: process.env.AUTH_SECRET,
   pages: {
@@ -17,7 +13,7 @@ export const {handlers, signOut, auth} = NextAuth({
     error: '/guest/login',
   },
   session: {
-    maxAge: SESSION_MAX_AGE_DAYS * SECONDS_PER_DAY, // 단위 : second
+    maxAge: SESSION_MAX_AGE_DAYS * SECONDS_PER_DAY,
   },
   providers: [Google],
   callbacks: {

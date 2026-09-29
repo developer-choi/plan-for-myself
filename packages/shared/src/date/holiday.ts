@@ -7,12 +7,7 @@ interface HolidayDate extends Omit<SimpleDate, 'year'> {
   name: string;
 }
 
-/**
- * @description 휴일인지 판단해서 반환합니다.
- * 1. 토요일, 일요일이면 true
- * 2. 매년 무조건 있는 대한민국 공휴일이면 true
- * 3. 대체공휴일, 선거일 등의 규칙이 없는 공휴일은 false
- */
+/* 대체공휴일·선거일처럼 해마다 규칙 없이 정해지는 공휴일은 휴일로 잡지 못한다 */
 export function isHolidayDate({year, month, date}: SimpleDate) {
   return isHoliday(year, month, date);
 }
@@ -22,15 +17,11 @@ export function getDefaultDateType(): DateType {
   return isHoliday(year, month + 1, date) ? 'holiday' : 'weekday';
 }
 
-/*************************************************************************************************************
- * Non Export
- *************************************************************************************************************/
 const SUNDAY = 0;
 const SATURDAY = 6;
-// 음력 섣달그믐(12월 31일)은 양력으로 바꾸면 다음 해 설날 전날이라, 전해의 음력 날짜로 바꿔야 한다
+/* 음력 섣달그믐(12월 31일)은 양력으로 바꾸면 다음 해 설날 전날이라, 전해의 음력 날짜로 바꿔야 한다 */
 const LUNAR_NEW_YEAR_EVE = {month: 12, date: 31};
 
-// 양력기준 달력에 나오는 순서대로 작성했음.
 const HOLIDAY_LIST: HolidayDate[] = [
   {type: 'solar', month: 1, date: 1, name: '새해'},
   {type: 'lunar', month: 12, date: 31, name: '설날'},
