@@ -5,12 +5,18 @@
   "dependencies": {
     "@plan-for-myself/shared": "workspace:*",
     "expo": "~57.0.25",
+    "expo-crypto": "~57.0.3",
+    "expo-dev-client": "~57.0.19",
+    "expo-secure-store": "~57.0.4",
     "expo-status-bar": "~57.0.1",
     "react": "19.2.3",
-    "react-native": "0.86.3"
+    "react-native": "0.86.3",
+    "react-native-nitro-google-signin": "^2.3.0",
+    "react-native-nitro-modules": "^0.37.1"
   },
   "devDependencies": {
     "@types/react": "~19.2.2",
+    "eas-cli": "^24.8.0",
     "typescript": "~6.0.3"
   },
   "scripts": {
@@ -18,7 +24,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "eas": "eas"
   },
   "private": true
 }
