@@ -2,8 +2,8 @@
 
 export default function ErrorPage() {
   return (
-    <div>
+    <main>
       <h1>Internal Server Error</h1>
-    </div>
+    </main>
   );
 }
