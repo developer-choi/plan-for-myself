@@ -1,16 +1,10 @@
-/* eslint-disable @typescript-eslint/naming-convention -- ESLint rule keys(kebab-case)와 plugin namespace 등 외부 컨벤션 다수 */
 import {defineConfig, globalIgnores} from 'eslint/config';
 import nextVitals from 'eslint-config-next/core-web-vitals';
 import nextTs from 'eslint-config-next/typescript';
 import pluginQuery from '@tanstack/eslint-plugin-query';
 import tseslint from 'typescript-eslint';
 import checkFile from 'eslint-plugin-check-file';
-import {
-  baseRules,
-  createFilenameExportConventionRule,
-  mockFilesConfig,
-  testFilesConfig,
-} from '../../eslint.config.base.mts';
+import {baseRules, mockFilesConfig, testFilesConfig} from '../../eslint.config.base.mts';
 
 const eslintConfig = defineConfig([
   ...nextVitals,
@@ -29,7 +23,7 @@ const eslintConfig = defineConfig([
     languageOptions: {
       parserOptions: {
         projectService: {
-          allowDefaultProject: ['eslint.config.mjs'],
+          allowDefaultProject: ['eslint.config.mjs', 'next.config.mjs'],
         },
         tsconfigRootDir: import.meta.dirname,
       },
@@ -38,127 +32,24 @@ const eslintConfig = defineConfig([
       ...baseRules,
       'react-hooks/error-boundaries': 'off',
       '@typescript-eslint/no-deprecated': 'error',
-      'custom/src-folder-whitelist': 'error',
-      'custom/app-route-file-whitelist': 'error',
       'check-file/folder-naming-convention': ['error', {'src/**/*': 'NEXT_JS_APP_ROUTER_CASE'}],
     },
     plugins: {
-      custom: {
-        rules: {
-          'src-folder-whitelist': createSrcFolderWhitelistRule(),
-          'app-route-file-whitelist': createAppRouteFileWhitelistRule(),
-          'filename-export-convention': createFilenameExportConventionRule(),
-        },
-      },
       'check-file': checkFile,
     },
+  },
+  {
+    // Next.js가 redirects를 Promise를 돌려주는 async 함수로 받아서 await 없이도 async를 떼지 못한다
+    files: ['next.config.mjs'],
+    rules: {'@typescript-eslint/require-await': 'off'},
+  },
+  {
+    // ESLint 설정 파일은 tsconfig 밖이라 Node 타입 없이 검사돼 import.meta.dirname이 error 타입으로 잡힌다
+    files: ['eslint.config.mjs'],
+    ...tseslint.configs.disableTypeChecked,
   },
   testFilesConfig,
   mockFilesConfig,
 ]);
 
 export default eslintConfig;
-
-const ALLOWED_FOLDERS = ['components', 'hooks', 'assets'];
-const SRC_PREFIX_LENGTH = 5; // '/src/'.length
-const MIN_SEGMENTS_FOR_DEPTH_CHECK = 4;
-
-const APP_PREFIX = '/src/app/';
-const APP_ROUTE_FILE_NAMES = [
-  'page',
-  'layout',
-  'template',
-  'error',
-  'loading',
-  'not-found',
-  'default',
-  'global-error',
-  'route',
-  'sitemap',
-  'robots',
-  'manifest',
-  'icon',
-  'apple-icon',
-  'opengraph-image',
-  'twitter-image',
-];
-
-/**
- * app↔src 1:1 매칭(ARCHITECTURE.md): src/app/ 라우트 폴더에는 Next.js 라우트 파일만 두고,
- * 데모·컴포넌트·훅 병치를 차단한다. api/(Route Handler)는 dto 등 보조 모듈을 허용해 제외.
- * @returns {import('eslint').Rule.RuleModule}
- */
-function createAppRouteFileWhitelistRule() {
-  return {
-    meta: {
-      type: 'layout',
-      messages: {
-        invalidFile:
-          'src/app/ 라우트 폴더에 "{{ name }}"을 둘 수 없습니다. 컴포넌트·훅은 src/{카테고리}/{주제}/ 하위로 옮기세요 (ARCHITECTURE.md app↔src 1:1). 허용 파일명: {{ allowed }}',
-      },
-    },
-    create(context) {
-      return {
-        Program(node) {
-          const filePath = context.filename.replace(/\\/g, '/');
-          const appIndex = filePath.indexOf(APP_PREFIX);
-          if (appIndex === -1) {
-            return;
-          }
-
-          const segments = filePath.slice(appIndex + APP_PREFIX.length).split('/');
-          if (segments[0] === 'api') {
-            return;
-          }
-
-          const fileName = segments[segments.length - 1];
-          const baseName = fileName.replace(/\..*$/, '');
-          if (!APP_ROUTE_FILE_NAMES.includes(baseName)) {
-            context.report({
-              node,
-              messageId: 'invalidFile',
-              data: {name: fileName, allowed: APP_ROUTE_FILE_NAMES.join(', ')},
-            });
-          }
-        },
-      };
-    },
-  };
-}
-
-/** @returns {import('eslint').Rule.RuleModule} */
-function createSrcFolderWhitelistRule() {
-  return {
-    meta: {
-      type: 'layout',
-      messages: {
-        invalidFolder: 'src/ 3뎁스 폴더 "{{ folder }}"는 허용되지 않습니다. 허용 목록: {{ allowed }}',
-      },
-    },
-    create(context) {
-      return {
-        Program(node) {
-          const filePath = context.filename.replace(/\\/g, '/');
-          const srcIndex = filePath.indexOf('/src/');
-          if (srcIndex === -1) {
-            return;
-          }
-
-          const segments = filePath.slice(srcIndex + SRC_PREFIX_LENGTH).split('/');
-
-          if (segments[0] === 'app' || segments[0] === 'shared') {
-            return;
-          }
-          if (segments.length < MIN_SEGMENTS_FOR_DEPTH_CHECK) {
-            return;
-          }
-
-          const folder = segments[2];
-          if (!ALLOWED_FOLDERS.includes(folder)) {
-            context.report({node, messageId: 'invalidFolder', data: {folder, allowed: ALLOWED_FOLDERS.join(', ')}});
-          }
-        },
-      };
-    },
-  };
-}

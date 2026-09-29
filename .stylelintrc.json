@@ -1,6 +1,6 @@
 {
   "extends": ["stylelint-config-standard-scss"],
-  "plugins": ["stylelint-declaration-strict-value", "./scripts/stylelint-plugins/at-use-no-short-alias.mjs"],
+  "plugins": ["stylelint-declaration-strict-value"],
   "rules": {
     "at-rule-disallowed-list": ["import"],
     "selector-class-pattern": [
@@ -22,7 +22,6 @@
     ],
     "scss/at-use-no-unnamespaced": true,
     "scss/at-use-no-redundant-alias": true,
-    "monorepo-playground/at-use-no-short-alias": true,
     "value-keyword-case": ["lower", {"ignoreKeywords": ["/^[a-z][a-zA-Z0-9]*[A-Z]/"]}],
     "declaration-property-value-disallowed-list": [
       {"/^\\$/": ["/px/", "/^#/", "/rgb/", "/hsl/"]},

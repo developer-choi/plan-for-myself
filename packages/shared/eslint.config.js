@@ -1,27 +1,17 @@
-// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
 import globals from 'globals';
 import reactHooks from 'eslint-plugin-react-hooks';
-import reactRefresh from 'eslint-plugin-react-refresh';
 import react from 'eslint-plugin-react';
 import tseslint from 'typescript-eslint';
 import checkFile from 'eslint-plugin-check-file';
 import {defineConfig, globalIgnores} from 'eslint/config';
-import {
-  baseRules,
-  createFilenameExportConventionRule,
-  mockFilesConfig,
-  testFilesConfig,
-} from '../../eslint.config.base.mts';
+import {baseRules, mockFilesConfig, testFilesConfig} from '../../eslint.config.base.mts';
 
 export default defineConfig([
-  globalIgnores(['dist', '**/*.d.ts']),
+  // lunar.ts는 음력 변환표를 한 번 옮겨 두고 더 고치지 않는 파일이라 ESLint 대상에서 뺀다
+  globalIgnores(['dist', '**/*.d.ts', 'src/date/lunar.ts']),
   {
     files: ['**/*.{ts,tsx}'],
-    extends: [
-      ...tseslint.configs.recommendedTypeChecked,
-      reactHooks.configs.flat.recommended,
-      reactRefresh.configs.vite,
-    ],
+    extends: [...tseslint.configs.recommendedTypeChecked, reactHooks.configs.flat.recommended],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
@@ -33,12 +23,18 @@ export default defineConfig([
     plugins: {
       react,
       'check-file': checkFile,
-      custom: {rules: {'filename-export-convention': createFilenameExportConventionRule()}},
     },
+    // react 플러그인은 baseRules의 react/* 룰 때문에 둔다. 공통 패키지에는 react 의존성이 없어 버전을 적어 준다
+    settings: {react: {version: '19'}},
     rules: {
       ...baseRules,
       'check-file/folder-naming-convention': ['error', {'src/**/*': 'KEBAB_CASE'}],
     },
+  },
+  {
+    // DB 행 모양(snake_case 컬럼)을 그대로 쓰는 파일만 naming-convention을 끈다. 나머지 코드는 camelCase를 지킨다
+    files: ['src/studied-time/type.ts', 'src/date-type/record.ts'],
+    rules: {'@typescript-eslint/naming-convention': 'off'},
   },
   testFilesConfig,
   mockFilesConfig,

@@ -15,15 +15,16 @@ export default {
       2,
       'always',
       [
-        // apps/
-        'examples',
-        // packages/
-        'design-system',
-        // project-level
+        // 공통
         'setting',
-        'best-practice-map',
-        // docs/guides/
-        'guides',
+        'utils',
+        'ui',
+        'auth',
+        'intro',
+        'docs',
+        // 기능(도메인)
+        'study-record',
+        'study-record-stats',
       ],
     ],
     'scope-empty': [2, 'never'],
