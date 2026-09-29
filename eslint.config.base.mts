@@ -1,0 +1,638 @@
+/**
+ * TP(test-playground)에서 검증한 공통 ESLint 규칙.
+ * 각 워크스페이스의 eslint config에서 import해서 사용.
+ */
+import type {Rule, Scope, SourceCode} from 'eslint';
+import type * as ESTree from 'estree';
+
+export const baseRules = {
+  '@typescript-eslint/no-explicit-any': 'error',
+  '@typescript-eslint/no-require-imports': 'error',
+  '@typescript-eslint/ban-ts-comment': 'error',
+  '@typescript-eslint/no-unused-vars': [
+    'error',
+    {
+      argsIgnorePattern: '^_',
+      varsIgnorePattern: '^_',
+    },
+  ],
+  '@typescript-eslint/no-floating-promises': 'off',
+  '@typescript-eslint/return-await': ['error', 'in-try-catch'],
+  '@typescript-eslint/switch-exhaustiveness-check': 'error',
+  '@typescript-eslint/no-misused-promises': ['error', {checksVoidReturn: {attributes: false}}],
+  '@typescript-eslint/prefer-nullish-coalescing': 'error',
+  curly: ['error', 'all'],
+  eqeqeq: ['error', 'always'],
+  '@typescript-eslint/no-unnecessary-condition': 'error',
+  'no-console': ['error', {allow: ['warn', 'error']}],
+  '@typescript-eslint/restrict-template-expressions': ['error', {allowNullish: false}],
+  '@typescript-eslint/parameter-properties': 'error',
+  'id-length': ['error', {min: 2}],
+  'id-denylist': ['error', 'Props', 'State'],
+  'max-params': ['error', 2],
+  '@typescript-eslint/naming-convention': [
+    'error',
+    {selector: 'default', format: ['camelCase']},
+    {selector: 'variable', format: ['camelCase', 'UPPER_CASE']},
+    {selector: 'variable', types: ['function'], format: ['camelCase', 'PascalCase', 'UPPER_CASE']},
+    {selector: 'parameter', format: ['camelCase'], leadingUnderscore: 'allow'},
+    {selector: 'parameter', types: ['function'], format: ['camelCase', 'PascalCase'], leadingUnderscore: 'allow'},
+    {selector: 'function', format: ['camelCase', 'PascalCase']},
+    {selector: 'typeLike', format: ['PascalCase']},
+    {selector: 'property', format: ['camelCase', 'UPPER_CASE']},
+    {selector: 'method', format: ['camelCase']},
+    {selector: 'import', format: null},
+    {selector: 'variable', modifiers: ['destructured'], format: null},
+    {
+      selector: [
+        'classProperty',
+        'objectLiteralProperty',
+        'typeProperty',
+        'classMethod',
+        'objectLiteralMethod',
+        'typeMethod',
+        'accessor',
+        'enumMember',
+      ],
+      format: null,
+      modifiers: ['requiresQuotes'],
+    },
+  ],
+  'custom/filename-export-convention': 'error',
+  'no-magic-numbers': [
+    'error',
+    {
+      ignore: [-1, 0, 1, 2],
+      ignoreArrayIndexes: true,
+      ignoreDefaultValues: true,
+      enforceConst: true,
+    },
+  ],
+  'react/function-component-definition': [
+    'error',
+    {namedComponents: 'function-declaration', unnamedComponents: 'arrow-function'},
+  ],
+  'react/jsx-sort-props': [
+    'error',
+    {
+      callbacksLast: true,
+      shorthandFirst: true,
+      reservedFirst: true,
+    },
+  ],
+  'no-restricted-imports': [
+    'error',
+    {
+      paths: [
+        {
+          name: 'react',
+          importNames: ['forwardRef'],
+          message:
+            'forwardRef 사용 금지. React 19부터 함수 컴포넌트가 ref를 일반 prop으로 받습니다. 예: function Input({ref, ...props}: ComponentProps<"input">) { return <input ref={ref} {...props} />; }',
+        },
+        {
+          name: 'react',
+          importNames: ['ComponentPropsWithoutRef', 'ComponentPropsWithRef'],
+          message:
+            'ComponentPropsWithoutRef·ComponentPropsWithRef 사용 금지. ComponentProps를 사용하세요. React 19에서는 함수 컴포넌트·forwardRef·HTML 태그에 대해 ComponentProps가 ref를 포함하도록 동작합니다.',
+        },
+      ],
+      patterns: [
+        {
+          group: ['**/index', '**/index.ts', '**/index.tsx'],
+          message:
+            '내부 barrel(index) import 금지. 대상 모듈을 직접 import 하세요. 패키지 entry는 alias(@scope/pkg)로 import.',
+        },
+      ],
+    },
+  ],
+  'no-restricted-syntax': [
+    'error',
+    {
+      selector: "JSXAttribute[name.name='alt'][value.value='']",
+      message: '빈 alt 금지. 장식용 이미지라면 eslint-disable + 사유 주석을 남기세요.',
+    },
+    {
+      selector: "JSXAttribute[name.name='alt'] > JSXExpressionContainer > Literal[value='']",
+      message: '빈 alt 금지. 장식용 이미지라면 eslint-disable + 사유 주석을 남기세요.',
+    },
+    {
+      selector:
+        "JSXAttribute[name.name='alt'] > JSXExpressionContainer > TemplateLiteral[quasis.length=1][quasis.0.value.raw='']",
+      message: '빈 alt 금지. 장식용 이미지라면 eslint-disable + 사유 주석을 남기세요.',
+    },
+    {
+      selector: 'TSEnumDeclaration',
+      message: 'enum 대신 as const 객체를 사용하세요.',
+    },
+    {
+      selector: "JSXAttribute[name.name='style'] > JSXExpressionContainer > ObjectExpression",
+      message:
+        '인라인 스타일 객체 리터럴 금지. CSS Modules를 사용하세요. 변수 참조는 허용. 예외: 동적 값·CSS 변수 주입·스켈레톤. — eslint-disable + 사유 주석으로 처리.',
+    },
+    {
+      selector: "JSXElement > JSXOpeningElement[name.name='svg']",
+      message: 'SVG 직접 작성 금지. 아이콘 컴포넌트나 SVG 파일로 분리하세요.',
+    },
+    {
+      selector: 'TSTypeReference > TSQualifiedName[left.name="React"]',
+      message: 'React.X 대신 import { X } from "react"를 사용하세요.',
+    },
+    {
+      selector: 'MemberExpression[object.name="React"]',
+      message: 'React.X 대신 import { X } from "react"를 사용하세요.',
+    },
+    {
+      selector: 'JSXMemberExpression[object.name="React"]',
+      message: 'React.X 대신 import { X } from "react"를 사용하세요.',
+    },
+    {
+      selector: 'CatchClause > Identifier.param[typeAnnotation]',
+      message: 'catch 변수의 타입 어노테이션 금지. TS 4.4+에서 catch 변수는 기본 unknown입니다.',
+    },
+    {
+      selector: "ConditionalExpression > CallExpression[callee.name='clsx']",
+      message: 'clsx를 삼항으로 감싸지 마세요. 조건은 clsx(a, cond && b) 인자로 표현합니다.',
+    },
+    {
+      selector:
+        "Property[key.name='mutationFn'] > ArrowFunctionExpression[body.type='CallExpression'][body.callee.type='Identifier']",
+      message:
+        'mutationFn에 (args) => api(args) 인라인 래핑 금지. API 함수 reference만 박고 인자는 mutateAsync로 전달하세요. 예: mutationFn: postBoardApi',
+    },
+    {
+      selector: "Property[key.name='mutationFn'] > ArrowFunctionExpression[body.type='BlockStatement']",
+      message:
+        'mutationFn 안에 가드·조립 로직(블록 본문) 금지. 검증은 호출부 try 안에서 throw하고, mutationFn은 API 함수 reference만 유지하세요.',
+    },
+    {
+      selector: "Property[key.name='mutationFn'] > FunctionExpression",
+      message:
+        'mutationFn에 function 표현식 금지. API 함수 reference만 박고 인자는 mutateAsync로 전달하세요. 예: mutationFn: postBoardApi',
+    },
+    {
+      selector: "MemberExpression[object.name='module'][property.name='exports']",
+      message: 'CJS module.exports 금지. ESM export로 바꾸세요. (의도적 CJS는 .cjs 확장자로 분리)',
+    },
+    {
+      selector: "AssignmentExpression[left.object.name='exports']",
+      message: 'CJS exports.X 금지. ESM named export로 바꾸세요. (의도적 CJS는 .cjs 확장자로 분리)',
+    },
+    {
+      selector:
+        "CallExpression[callee.object.name='vi'][callee.property.name=/^(mock|doMock)$/][arguments.0.type='Literal']",
+      message:
+        "vi.mock/doMock의 첫 인자로 문자열 경로 금지. import('./x') 형태로 넘기세요. 그래야 factory 반환값이 실제 모듈 타입과 대조되고(잘못된 모킹 차단), IDE 파일 이동 시 경로가 자동 갱신됩니다.",
+    },
+    {
+      selector:
+        "CallExpression[callee.property.name='each']:matches([callee.object.name=/^(describe|it|test)$/], [callee.object.object.name=/^(describe|it|test)$/])",
+      message:
+        'each 금지 — for를 쓰세요(it.for/test.for/describe.for). each는 배열 인자를 spread하는 Jest 호환용 레거시입니다(it.for/test.for는 Test Context도 제공, Vitest 공식 "Prefer test.for in new code"). Jest 마이그레이션을 안 하므로 신규 코드는 for. 객체 케이스는 .each→.for로 충분합니다.',
+    },
+    {
+      selector:
+        "TaggedTemplateExpression[tag.property.name='each']:matches([tag.object.name=/^(describe|it|test)$/], [tag.object.object.name=/^(describe|it|test)$/])",
+      message:
+        'each 금지 — for를 쓰세요(it.for/test.for/describe.for). each는 배열 인자를 spread하는 Jest 호환용 레거시입니다(it.for/test.for는 Test Context도 제공, Vitest 공식 "Prefer test.for in new code"). Jest 마이그레이션을 안 하므로 신규 코드는 for. 객체 케이스는 .each→.for로 충분합니다.',
+    },
+    {
+      selector: "CallExpression[callee.property.name='resetHandlers'][arguments.length>0]",
+      message:
+        'Do not pass handlers to resetHandlers() — it wipes initial handlers and harms predictability. Use resetHandlers() then use(...) instead.',
+    },
+    {
+      selector: "Property[key.name='waitUntil'][value.value='networkidle']",
+      message:
+        'Playwright의 networkidle 금지 — 공식이 DISCOURAGED로 표시하며 "Don\'t use this method for testing, rely on web assertions to assess readiness instead"라고 명시합니다. 로드 상태를 기다리지 말고 expect(...).toBeVisible() 등 자동 재시도하는 검사문에 맡기세요.',
+    },
+    {
+      selector: "CallExpression[callee.property.name='waitForLoadState'][arguments.0.value='networkidle']",
+      message:
+        'Playwright의 networkidle 금지 — 공식이 DISCOURAGED로 표시하며 "Don\'t use this method for testing, rely on web assertions to assess readiness instead"라고 명시합니다. 로드 상태를 기다리지 말고 expect(...).toBeVisible() 등 자동 재시도하는 검사문에 맡기세요.',
+    },
+    {
+      selector:
+        "CallExpression[callee.property.name='catch'] > ArrowFunctionExpression:matches([body.type='Literal'][body.value=null], [body.type='Identifier'][body.name='undefined'])",
+      message:
+        '에러를 null·undefined로 뭉개는 catch 금지. 404·500·네트워크 오류가 한 결과로 합쳐져 장애가 "없음"으로 위장됩니다. 실패 종류를 구분해 처리하세요(예: 404만 null 반환, 나머지는 throw 전파). 이미 throw 중에 에러 본문을 파싱하는 등 정당한 경우만 eslint-disable + 사유 주석.',
+    },
+    {
+      selector: 'CatchClause[body.body.length=0]',
+      message:
+        '빈 catch 금지. 에러를 통째로 삼키면 실패가 흔적 없이 사라집니다. 처리하거나 재던지세요. 무시가 의도라면 eslint-disable + 사유 주석.',
+    },
+  ],
+};
+
+/**
+ * MSW resolver 스코프 룰(목/핸들러·테스트 파일에만 적용, `mockFilesConfig`·`testFilesConfig`에서 spread).
+ * 앱 소스에는 넣지 않는다 — `http.get(url, cb)`는 node:http에서 정당하게 쓰이므로 전역으로 잡으면 오탐.
+ */
+const mswResolverRules = [
+  {
+    selector:
+      "CallExpression[callee.object.name='http'][callee.property.name=/^(get|post|put|delete|patch|all)$/][arguments.0.value=/[?]/]",
+    message:
+      'MSW predicate(http.get 등 첫 인자)에 쿼리스트링(?) 금지. predicate는 경로만으로 매칭하고 MSW가 쿼리를 조용히 제거하므로(런타임 경고 없음), 쿼리 값은 resolver에서 new URL(request.url).searchParams.get("page")로 읽으세요.',
+  },
+  {
+    selector:
+      "CallExpression[callee.object.name='http'][callee.property.name=/^(get|post|put|delete|patch|all)$/] > TemplateLiteral.arguments TemplateElement[value.raw=/[?]/]",
+    message:
+      'MSW predicate(http.get 등 첫 인자)에 쿼리스트링(?) 금지. predicate는 경로만으로 매칭하고 MSW가 쿼리를 조용히 제거하므로(런타임 경고 없음), 쿼리 값은 resolver에서 new URL(request.url).searchParams.get("page")로 읽으세요.',
+  },
+];
+
+/**
+ * 테스트 파일 전용 override(각 워크스페이스 config 배열에 추가). 테스트 JSX의 `aria-*` 작성 금지 —
+ * a11y가 현재 우선순위가 아니라서. `getByRole`는 허용, base 기존 `no-restricted-syntax` 항목은 보존.
+ * `no-floating-promises`는 전역 off를 여기서만 되살린다(await 누락 차단).
+ */
+export const testFilesConfig = {
+  files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}'],
+  // 워크스페이스 config의 `custom` 네임스페이스를 여기서 다시 정의하면 ESLint가 plugin 재정의로 막으므로 별도 이름을 쓴다.
+  plugins: {
+    'custom-test': {rules: {'no-uniform-table-column': createNoUniformTableColumnRule()}},
+  },
+  rules: {
+    '@typescript-eslint/no-floating-promises': 'error',
+    'custom-test/no-uniform-table-column': 'error',
+    'no-restricted-syntax': [
+      'error',
+      ...baseRules['no-restricted-syntax'].slice(1),
+      {
+        selector: 'JSXAttribute[name.name=/^aria-/]',
+        message:
+          '테스트 JSX에 aria-* 속성을 직접 쓰지 않습니다. getByRole로 쿼리하거나, 불가피하면 eslint-disable + 사유 주석.',
+      },
+      {
+        selector:
+          "CallExpression[callee.name='expect'] MemberExpression[object.property.name='mock'][property.name=/^(calls|lastCall|results|settledResults|instances|invocationCallOrder)$/]",
+        message:
+          'expect() 안에서 목 내부(mock.calls 등)를 파헤치지 않습니다. 인자 검증은 toHaveBeenCalledWith + expect.objectContaining(한 겹)으로, DOM 이벤트면 클릭한 엘리먼트를 변수로 잡아 대조하세요. 꼭 꺼내야 하면 이름 붙인 헬퍼 함수로 분리합니다.',
+      },
+      ...mswResolverRules,
+    ],
+  },
+};
+
+/**
+ * MSW 목/핸들러 파일 전용 override(각 워크스페이스 config 배열에 추가). resolver 스코프 룰(predicate 쿼리 금지)을
+ * 목·핸들러 파일(`src/mocks/**`, `*.mock.*`)에 적용한다. 테스트 파일은 `testFilesConfig`가 담당하므로
+ * `ignores`로 겹침(no-restricted-syntax last-wins)을 막는다.
+ */
+export const mockFilesConfig = {
+  files: ['**/mocks/**/*.{ts,tsx}', '**/*.mock.{ts,tsx}'],
+  ignores: ['**/*.test.{ts,tsx}'],
+  rules: {
+    'no-restricted-syntax': ['error', ...baseRules['no-restricted-syntax'], ...mswResolverRules],
+  },
+};
+
+/**
+ * Next.js App Router 규약 파일. 프레임워크가 파일명을 소문자로 고정하지만
+ * default export 컴포넌트는 PascalCase(Page, RootLayout 등)라 파일명과 다르므로 검사에서 제외.
+ */
+const NEXT_APP_ROUTER_SPECIAL_FILES = new Set([
+  'page',
+  'layout',
+  'loading',
+  'error',
+  'global-error',
+  'not-found',
+  'template',
+  'default',
+  'route',
+  'middleware',
+  'instrumentation',
+  'sitemap',
+  'robots',
+  'manifest',
+  'opengraph-image',
+  'twitter-image',
+  'icon',
+  'apple-icon',
+]);
+
+/** `Button.test.tsx`, `Button.stories.tsx` 등 도구 규약 파일(중간 확장자)은 검사에서 제외. */
+const TOOLING_MIDDLE_EXTENSION = /\.(test|spec|stories|contract\.test)\./;
+
+/** 컴포넌트(PascalCase) 또는 훅(use*) 이름인지 판정. */
+function isComponentOrHookName(name: string): boolean {
+  return /^[A-Z]/.test(name) || /^use[A-Z]/.test(name);
+}
+
+/**
+ * 모듈 최상위 export 중 컴포넌트·훅에 해당하는 export 이름을 모은다.
+ * default/named, 함수·클래스·변수 선언, `export {X}` 스페시파이어를 모두 본다. 타입 전용 export는 무시.
+ */
+function collectComponentAndHookExportNames(body: ESTree.Program['body']): string[] {
+  const names: string[] = [];
+  const add = (name: unknown): void => {
+    if (typeof name === 'string' && isComponentOrHookName(name)) {
+      names.push(name);
+    }
+  };
+
+  for (const node of body) {
+    if (node.type === 'ExportDefaultDeclaration') {
+      const declaration = node.declaration;
+      if ((declaration.type === 'FunctionDeclaration' || declaration.type === 'ClassDeclaration') && declaration.id) {
+        add(declaration.id.name);
+      } else if (declaration.type === 'Identifier') {
+        add(declaration.name);
+      }
+    } else if (node.type === 'ExportNamedDeclaration') {
+      if (node.source) {
+        continue;
+      }
+      const declaration = node.declaration;
+      if (declaration) {
+        if ((declaration.type === 'FunctionDeclaration' || declaration.type === 'ClassDeclaration') && declaration.id) {
+          add(declaration.id.name);
+        } else if (declaration.type === 'VariableDeclaration') {
+          for (const declarator of declaration.declarations) {
+            if (declarator.id.type === 'Identifier') {
+              add(declarator.id.name);
+            }
+          }
+        }
+      } else {
+        for (const specifier of node.specifiers) {
+          const exported = specifier.exported;
+          if (exported.type === 'Identifier' && exported.name === 'default') {
+            if (specifier.local.type === 'Identifier') {
+              add(specifier.local.name);
+            }
+          } else {
+            add(exported.type === 'Identifier' ? exported.name : exported.value);
+          }
+        }
+      }
+    }
+  }
+  return names;
+}
+
+/**
+ * 단일 컴포넌트/훅 파일의 파일명 casing을 강제하는 커스텀 룰.
+ *
+ * src/ 하위에서 컴포넌트(PascalCase)·훅(use*) export가 정확히 하나인 파일은 파일명(첫 `.` 이전)에
+ * kebab-case(하이픈)·snake_case(언더스코어)를 쓸 수 없다 — PascalCase/camelCase여야 한다.
+ * 컴포넌트·훅이 0개거나 2개 이상(컬렉션)이면 검사하지 않는다(예: 여러 컴포넌트를 묶은 buttons.tsx).
+ * 파일명과 심볼명의 정확한 일치는 요구하지 않는다(컨텍스트 명명 client.tsx 등 허용).
+ *
+ * @returns 룰 모듈
+ */
+export function createFilenameExportConventionRule(): Rule.RuleModule {
+  return {
+    meta: {
+      type: 'layout',
+      schema: [],
+      messages: {
+        kebabCase:
+          '단일 컴포넌트/훅 파일명에 kebab-case·snake_case를 쓸 수 없습니다: "{{ file }}" (export: {{ name }}).\n' +
+          '- 컴포넌트는 PascalCase, 훅은 camelCase 파일명을 쓰세요 (예: SomeComponent.tsx, useSomeHook.ts).\n' +
+          '- 여러 멤버를 묶는 모듈이면 named export 묶음 + kebab-case 파일명으로 두세요 (예: buttons.tsx, math.ts).',
+      },
+    },
+    create(context: Rule.RuleContext): Rule.RuleListener {
+      const filePath = context.filename.replace(/\\/g, '/');
+      const fileName = filePath.slice(filePath.lastIndexOf('/') + 1);
+      const baseName = fileName.split('.')[0];
+
+      // src/ 하위 소스 모듈만 검사. 루트 설정 파일(*.config.*), .storybook 등 도구 규약 파일은 제외.
+      if (!filePath.includes('/src/')) {
+        return {};
+      }
+
+      if (
+        NEXT_APP_ROUTER_SPECIAL_FILES.has(baseName) ||
+        TOOLING_MIDDLE_EXTENSION.test(fileName) ||
+        fileName.endsWith('.d.ts')
+      ) {
+        return {};
+      }
+
+      return {
+        Program(node: ESTree.Program): void {
+          const names = collectComponentAndHookExportNames(node.body);
+          if (names.length !== 1) {
+            return;
+          }
+          if (!/^[a-zA-Z][a-zA-Z0-9]*$/.test(baseName)) {
+            context.report({node, messageId: 'kebabCase', data: {file: baseName, name: names[0]}});
+          }
+        },
+      };
+    },
+  };
+}
+
+const TABLE_CALLER_NAMES = new Set(['it', 'test', 'describe']);
+const TABLE_METHOD_NAMES = new Set(['for', 'each']);
+const TYPE_ASSERTION_TYPES = new Set([
+  'TSAsExpression',
+  'TSSatisfiesExpression',
+  'TSTypeAssertion',
+  'TSNonNullExpression',
+]);
+/** 호출·생성 표현식은 소스 텍스트가 같아도 행마다 결과가 달라질 수 있으므로 "같은 값"으로 보지 않는다(오탐 방지). */
+const VOLATILE_VALUE_TYPES = new Set([
+  'CallExpression',
+  'NewExpression',
+  'TaggedTemplateExpression',
+  'AwaitExpression',
+]);
+const MIN_TABLE_ROWS = 2;
+
+/** estree 타입에 없는 TS 어서션 노드(`[...] as const` 등)를 벗겨 실제 표현식을 얻는다. */
+function unwrapTypeAssertion(node: ESTree.Expression): ESTree.Expression {
+  const candidate = node as unknown as {type: string; expression: ESTree.Expression};
+  return TYPE_ASSERTION_TYPES.has(candidate.type) ? unwrapTypeAssertion(candidate.expression) : node;
+}
+
+/** 스코프 체인을 거슬러 올라가며 이름이 같은 변수를 찾는다. */
+function findVariable(scope: Scope.Scope, name: string): Scope.Variable | null {
+  for (let current: Scope.Scope | null = scope; current; current = current.upper) {
+    const found = current.variables.find((variable) => variable.name === name);
+    if (found) {
+      return found;
+    }
+  }
+  return null;
+}
+
+/** 계산된 키·문자열이 아닌 키는 열 이름을 정할 수 없으므로 null. */
+function getPropertyKeyName(property: ESTree.Property): string | null {
+  if (property.computed) {
+    return null;
+  }
+  if (property.key.type === 'Identifier') {
+    return property.key.name;
+  }
+  return property.key.type === 'Literal' ? String(property.key.value) : null;
+}
+
+function findPropertyValue(row: ESTree.ObjectExpression, columnName: string): ESTree.Expression | null {
+  for (const property of row.properties) {
+    if (property.type === 'Property' && getPropertyKeyName(property) === columnName) {
+      return property.value.type === 'ObjectPattern' ||
+        property.value.type === 'ArrayPattern' ||
+        property.value.type === 'AssignmentPattern' ||
+        property.value.type === 'RestElement'
+        ? null
+        : property.value;
+    }
+  }
+  return null;
+}
+
+/** 값 노드 목록이 "행마다 안 변하는 열"인지 판정. 비교할 수 없는 값이 섞이면 false. */
+function isUniformColumn(values: (ESTree.Node | null)[], sourceCode: SourceCode): boolean {
+  const texts = new Set<string>();
+  for (const value of values) {
+    if (!value || VOLATILE_VALUE_TYPES.has(value.type)) {
+      return false;
+    }
+    texts.add(sourceCode.getText(value));
+  }
+  return texts.size === 1;
+}
+
+/**
+ * it.for/test.for/describe.for 표에서 **모든 행이 같은 값인 열**을 금지하는 커스텀 룰.
+ *
+ * 표의 열은 "케이스를 가르는 축"으로 읽히므로, 행마다 안 변하는 값은 표 밖 상수로 빼야 한다.
+ * 호출 자리에 직접 쓴 배열과 같은 파일의 `const` 배열까지 검사하고, 값이 함수 호출이면 비교에서 뺀다
+ * (텍스트가 같아도 실제 값이 다를 수 있어서).
+ *
+ * @returns 룰 모듈
+ */
+export function createNoUniformTableColumnRule(): Rule.RuleModule {
+  return {
+    meta: {
+      type: 'suggestion',
+      schema: [],
+      messages: {
+        uniformColumn:
+          '표의 "{{ column }}" 열이 모든 행에서 {{ value }}로 같습니다. 행마다 달라지는 값만 표에 두고, 고정 값은 표 밖 상수로 빼세요.',
+        uniformRows:
+          '표의 모든 행이 {{ value }}로 같습니다. 케이스가 갈리지 않으므로 표를 없애고 일반 it()으로 쓰세요.',
+      },
+    },
+    create(context: Rule.RuleContext): Rule.RuleListener {
+      const {sourceCode} = context;
+
+      /** 인자로 넘어온 표(배열 리터럴 또는 같은 파일의 const 배열)를 찾는다. */
+      function resolveTableArray(argument: ESTree.Expression): ESTree.ArrayExpression | null {
+        const unwrapped = unwrapTypeAssertion(argument);
+        if (unwrapped.type === 'ArrayExpression') {
+          return unwrapped;
+        }
+        if (unwrapped.type !== 'Identifier') {
+          return null;
+        }
+
+        const definition = findVariable(sourceCode.getScope(unwrapped), unwrapped.name)?.defs[0];
+        if (definition?.type !== 'Variable' || definition.parent.kind !== 'const' || !definition.node.init) {
+          return null;
+        }
+
+        const init = unwrapTypeAssertion(definition.node.init);
+        return init.type === 'ArrayExpression' ? init : null;
+      }
+
+      function reportObjectColumns(rows: ESTree.ObjectExpression[]): void {
+        for (const property of rows[0].properties) {
+          if (property.type !== 'Property') {
+            continue;
+          }
+          const column = getPropertyKeyName(property);
+          if (column === null) {
+            continue;
+          }
+
+          const values = rows.map((row) => findPropertyValue(row, column));
+          if (isUniformColumn(values, sourceCode)) {
+            context.report({
+              node: property,
+              messageId: 'uniformColumn',
+              data: {column, value: sourceCode.getText(property.value)},
+            });
+          }
+        }
+      }
+
+      function reportArrayColumns(rows: ESTree.ArrayExpression[]): void {
+        const width = rows[0].elements.length;
+        if (rows.some((row) => row.elements.length !== width)) {
+          return;
+        }
+
+        for (let index = 0; index < width; index++) {
+          const values = rows.map((row) => {
+            const element = row.elements[index];
+            return element?.type === 'SpreadElement' ? null : element;
+          });
+          const first = values[0];
+          if (first && isUniformColumn(values, sourceCode)) {
+            context.report({
+              node: first,
+              messageId: 'uniformColumn',
+              data: {column: `${index + 1}번째`, value: sourceCode.getText(first)},
+            });
+          }
+        }
+      }
+
+      return {
+        CallExpression(node: ESTree.CallExpression): void {
+          if (!isTableCall(node.callee) || node.arguments[0]?.type === 'SpreadElement') {
+            return;
+          }
+
+          const argument = node.arguments[0];
+          const table = argument ? resolveTableArray(argument) : null;
+          const rows = table?.elements ?? [];
+          if (rows.length < MIN_TABLE_ROWS || rows.some((row) => !row || row.type === 'SpreadElement')) {
+            return;
+          }
+
+          if (rows.every((row) => row?.type === 'ObjectExpression')) {
+            reportObjectColumns(rows as ESTree.ObjectExpression[]);
+          } else if (rows.every((row) => row?.type === 'ArrayExpression')) {
+            reportArrayColumns(rows as ESTree.ArrayExpression[]);
+          } else if (isUniformColumn(rows, sourceCode)) {
+            context.report({
+              node: rows[0] as ESTree.Node,
+              messageId: 'uniformRows',
+              data: {value: sourceCode.getText(rows[0] as ESTree.Node)},
+            });
+          }
+        },
+      };
+    },
+  };
+}
+
+/** `it.for`·`test.each`·`describe.skip.for`처럼 표를 받는 호출인지 판정. */
+function isTableCall(callee: ESTree.Expression | ESTree.Super): boolean {
+  if (callee.type !== 'MemberExpression' || callee.computed || callee.property.type !== 'Identifier') {
+    return false;
+  }
+  if (!TABLE_METHOD_NAMES.has(callee.property.name)) {
+    return false;
+  }
+
+  const {object} = callee;
+  if (object.type === 'Identifier') {
+    return TABLE_CALLER_NAMES.has(object.name);
+  }
+  return (
+    object.type === 'MemberExpression' &&
+    object.object.type === 'Identifier' &&
+    TABLE_CALLER_NAMES.has(object.object.name)
+  );
+}
