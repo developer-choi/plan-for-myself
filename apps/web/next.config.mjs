@@ -7,7 +7,7 @@ const nextConfig = {
         destination: '/studied-time',
         permanent: false,
       },
-    ]
+    ];
   },
 };
 

@@ -9,5 +9,5 @@ export default async function AppProvider({children}: PropsWithChildren) {
     <SessionProvider refetchOnWindowFocus={false} session={session}>
       {children}
     </SessionProvider>
-  )
+  );
 }

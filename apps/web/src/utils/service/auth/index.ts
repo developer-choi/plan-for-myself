@@ -11,10 +11,10 @@ export const {handlers, signOut, auth} = NextAuth({
   secret: process.env.AUTH_SECRET,
   pages: {
     signIn: '/guest/login',
-    error: '/guest/login'
+    error: '/guest/login',
   },
   session: {
-    maxAge: 60 * 60 * 24 * 30 // 단위 : second
+    maxAge: 60 * 60 * 24 * 30, // 단위 : second
   },
   providers: [Google],
   callbacks: {
@@ -36,7 +36,7 @@ export const {handlers, signOut, auth} = NextAuth({
 
       const nextNavigating = getNextNavigating({
         nextUrl: nextUrl.pathname + nextUrl.search,
-        isLoggedIn
+        isLoggedIn,
       });
 
       switch (nextNavigating.type) {
@@ -50,6 +50,4 @@ export const {handlers, signOut, auth} = NextAuth({
   },
 });
 
-const ALLOW_ACCOUNT_LIST = [
-  'forworkchoe@gmail.com'
-];
+const ALLOW_ACCOUNT_LIST = ['forworkchoe@gmail.com'];

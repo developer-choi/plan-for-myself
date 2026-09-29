@@ -29,11 +29,11 @@ function isHoliday(year: number, month: number, date: number) {
     return true;
   }
 
-  if (HOLIDAY.solar.some(holiday => holiday.month === month && holiday.date === date)) {
+  if (HOLIDAY.solar.some((holiday) => holiday.month === month && holiday.date === date)) {
     return true;
   }
 
-  return HOLIDAY.lunar.some(holiday => {
+  return HOLIDAY.lunar.some((holiday) => {
     const toPreviousYear = holiday.month === 12 && holiday.date === 31;
     const solar = convertLunarDateToSolar(toPreviousYear ? year - 1 : year, holiday.month, holiday.date);
     return solar.month === month && solar.date === date;

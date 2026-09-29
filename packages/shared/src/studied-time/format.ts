@@ -5,7 +5,9 @@ import type {DailyStudyTime} from './type';
  */
 export function minutesFormat(totalMinutes: number) {
   const hours = Math.floor(totalMinutes / 60);
-  const minutes = Math.floor(totalMinutes % 60).toString().padStart(2, '0');
+  const minutes = Math.floor(totalMinutes % 60)
+    .toString()
+    .padStart(2, '0');
   return `${hours}:${minutes}`;
 }
 
