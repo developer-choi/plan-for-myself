@@ -1146,9 +1146,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@developer-choi/design-system@npm:^0.1.0":
-  version: 0.1.0
-  resolution: "@developer-choi/design-system@npm:0.1.0"
+"@developer-choi/design-system@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "@developer-choi/design-system@npm:0.3.0"
   dependencies:
     "@radix-ui/react-icons": "npm:^1.3.2"
     clsx: "npm:^2.1.1"
@@ -1156,7 +1156,7 @@ __metadata:
   peerDependencies:
     react: ^19.0.0
     react-dom: ^19.0.0
-  checksum: 10c0/9f89d088ccb0189456b7906d4e374290902a232f0f58e290ee85cdaa09e6696bfde07acc3c12a332d4eae898ab26c112d1e054d08dd9638417b0503858276d51
+  checksum: 10c0/2510c9b0a6acd2470d78ab6f455b07e61ea30327c78d7a1e53b00049eddbcd84b7df07a6fec9df38142a456b44f5a3f93161b70ddd01e22e107da5bf0df9a33c
   languageName: node
   linkType: hard
 
@@ -15954,7 +15954,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "web@workspace:apps/web"
   dependencies:
-    "@developer-choi/design-system": "npm:^0.1.0"
+    "@developer-choi/design-system": "npm:^0.3.0"
     "@plan-for-myself/shared": "workspace:*"
     "@tanstack/eslint-plugin-query": "npm:^5.91.3"
     "@tanstack/react-query": "npm:^5.90.20"
