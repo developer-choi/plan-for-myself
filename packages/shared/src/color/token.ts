@@ -14,5 +14,4 @@ export const colors = {
   card: '#fff',
   page: '#f7f8fa',
   off: '#f1f2f4',
-  logo: '#1d2025',
 } as const;

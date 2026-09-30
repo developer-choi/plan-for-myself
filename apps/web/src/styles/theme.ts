@@ -22,6 +22,5 @@ export const themeStyle: CSSProperties = {
   '--color-bg-secondary': colors.page,
   '--color-bg-neutral-soft': colors.off,
   '--color-bg-tertiary': colors.off,
-  '--color-bg-logo': colors.logo,
   '--shadow-focus': `0 0 0 3px color-mix(in srgb, ${colors.accent} 25%, transparent)`,
 } satisfies Record<ThemeVariable, string>;
