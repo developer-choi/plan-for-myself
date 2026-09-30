@@ -123,15 +123,6 @@ export const baseRules = {
       message: 'enum 대신 as const 객체를 사용하세요.',
     },
     {
-      selector: "JSXAttribute[name.name='style'] > JSXExpressionContainer > ObjectExpression",
-      message:
-        '인라인 스타일 객체 리터럴 금지. CSS Modules를 사용하세요. 변수 참조는 허용. 예외: 동적 값·CSS 변수 주입·스켈레톤. — eslint-disable + 사유 주석으로 처리.',
-    },
-    {
-      selector: "JSXElement > JSXOpeningElement[name.name='svg']",
-      message: 'SVG 직접 작성 금지. 아이콘 컴포넌트나 SVG 파일로 분리하세요.',
-    },
-    {
       selector: 'TSTypeReference > TSQualifiedName[left.name="React"]',
       message: 'React.X 대신 import { X } from "react"를 사용하세요.',
     },
