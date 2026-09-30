@@ -1,7 +1,8 @@
 /* 웹과 앱이 같은 값을 쓰도록 색 값은 이 파일에만 적는다 */
 export const colors = {
-  accent: '#2f6fed',
-  accentSoft: '#eaf1fd',
+  primary: '#2f6fed',
+  primarySoft: '#eaf1fd',
+  onPrimary: '#fff',
   fail: '#e5484d',
   failSoft: '#fdecec',
   failLight: '#f3a5a7',

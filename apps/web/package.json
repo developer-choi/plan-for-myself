@@ -10,7 +10,7 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
-    "@developer-choi/design-system": "^0.3.0",
+    "@developer-choi/design-system": "^0.4.1",
     "@plan-for-myself/shared": "workspace:*",
     "@tanstack/react-query": "^5.90.20",
     "@tanstack/react-query-devtools": "^5.52.3",

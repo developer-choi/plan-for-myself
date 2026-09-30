@@ -6,8 +6,8 @@ interface LogoProps {
 
 export default function Logo({
   size,
-  backgroundColor = 'var(--color-fg-primary)',
-  markColor = 'var(--color-bg-primary)',
+  backgroundColor = 'var(--color-primary)',
+  markColor = 'var(--color-on-primary)',
 }: LogoProps) {
   const markSize = (size * MOCKUP_MARK_SIZE) / MOCKUP_SIZE;
 
