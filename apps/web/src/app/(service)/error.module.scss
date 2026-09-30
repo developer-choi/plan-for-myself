@@ -1,0 +1,10 @@
+$viewportHeight: 100dvh;
+
+.main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: $viewportHeight;
+  padding-inline: var(--spacing-page-x);
+  background-color: var(--color-bg-subtle);
+}
