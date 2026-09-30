@@ -8,5 +8,8 @@ export const size = {width: ICON_SIZE, height: ICON_SIZE};
 export const contentType = 'image/png';
 
 export default function Icon() {
-  return new ImageResponse(<Logo backgroundColor={colors.text} markColor={colors.card} size={ICON_SIZE} />, size);
+  return new ImageResponse(
+    <Logo backgroundColor={colors.primary} markColor={colors.onPrimary} size={ICON_SIZE} />,
+    size,
+  );
 }

@@ -2,6 +2,7 @@
 export const colors = {
   primary: '#2f6fed',
   primarySoft: '#eaf1fd',
+  onPrimary: '#fff',
   fail: '#e5484d',
   failSoft: '#fdecec',
   failLight: '#f3a5a7',
