@@ -7,7 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --max-warnings 0",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "migrate": "node-pg-migrate --migrations-dir migrations --migration-file-language sql --database-url-var POSTGRES_URL_NON_POOLING --envPath .env.local",
+    "migrate:up": "yarn migrate up",
+    "migrate:down": "yarn migrate down",
+    "migrate:create": "yarn migrate create"
   },
   "dependencies": {
     "@developer-choi/design-system": "^0.4.1",
