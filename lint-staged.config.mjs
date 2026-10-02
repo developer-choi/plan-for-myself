@@ -4,11 +4,13 @@
 const quoteFiles = (files) => files.map((file) => `"${file.replaceAll('\\', '/')}"`).join(' ');
 const eslintIn = (workspace) => (files) =>
   `yarn workspace ${workspace} exec eslint --fix --max-warnings 0 --no-warn-ignored ${quoteFiles(files)}`;
+const vitestRelatedIn = (workspace) => (files) =>
+  `yarn workspace ${workspace} exec vitest related --run ${quoteFiles(files)}`;
 
 export default {
   '*.{ts,tsx,js,mjs,mts,json,css,scss,md}': 'prettier --write',
   '**/*.{scss,css}': 'stylelint --fix --max-warnings 0 --allow-empty-input',
-  'apps/web/**/*.{ts,tsx}': eslintIn('web'),
+  'apps/web/**/*.{ts,tsx}': [eslintIn('web'), vitestRelatedIn('web')],
   'apps/mobile/**/*.{ts,tsx}': eslintIn('mobile'),
   'packages/shared/**/*.{ts,tsx}': eslintIn('@plan-for-myself/shared'),
 };

@@ -11,7 +11,8 @@
     "migrate": "node-pg-migrate --migrations-dir migrations --migration-file-language sql --database-url-var POSTGRES_URL_NON_POOLING --envPath .env.local",
     "migrate:up": "yarn migrate up",
     "migrate:down": "yarn migrate down",
-    "migrate:create": "yarn migrate create"
+    "migrate:create": "yarn migrate create",
+    "test": "vitest"
   },
   "dependencies": {
     "@developer-choi/design-system": "^0.4.1",
@@ -31,15 +32,24 @@
   },
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "^5.91.3",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^20",
     "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^5.1.1",
     "dotenv": "^18.0.5",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
+    "jsdom": "^28.1.0",
     "node-pg-migrate": "^9.0.0",
     "typescript": "~6.0.3",
-    "typescript-eslint": "^8.57.2"
+    "typescript-eslint": "^8.57.2",
+    "vite": "^7.2.4",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^4.0.17"
   }
 }
