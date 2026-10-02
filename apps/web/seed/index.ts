@@ -1,10 +1,10 @@
 import {getKoreanDate, type StudyRecord} from '@plan-for-myself/shared';
 import pg from 'pg';
-import {toRecordTimestamp} from './date';
+import {toRecordDate, toRecordTimestamp} from './date';
 import {assertDevBranch} from './guard';
 import {isScenarioName, SCENARIOS} from './scenario';
 
-type SeedRow = Omit<StudyRecord, 'pk'>;
+type SeedRow = Omit<StudyRecord, 'pk'> & {record_date: string};
 
 const [scenarioName = '', googleSub] = process.argv.slice(2);
 if (!isScenarioName(scenarioName) || !googleSub) {
@@ -22,6 +22,7 @@ const {year, month, date} = getKoreanDate();
 const rows = SCENARIOS[scenarioName]({year, month: month + 1, date}).map(({day, ...record}) => ({
   ...record,
   timestamp: toRecordTimestamp(day),
+  record_date: toRecordDate(day),
 }));
 
 replaceUserRecords(connectionString, googleSub, rows)
@@ -55,10 +56,10 @@ async function replaceUserRecords(connectionString: string, googleSub: string, r
     } = await client.query<{id: string}>('SELECT id FROM users WHERE google_sub = $1', [googleSub]);
     const deleted = await client.query('DELETE FROM study_records WHERE user_id = $1', [userId]);
     const inserted = await client.query(
-      `INSERT INTO study_records (user_id, timestamp, date_type, studied_minutes, fail_tags)
-       SELECT $1, record.timestamp, record.date_type, record.studied_minutes, record.fail_tags
+      `INSERT INTO study_records (user_id, timestamp, record_date, date_type, studied_minutes, fail_tags)
+       SELECT $1, record.timestamp, record.record_date, record.date_type, record.studied_minutes, record.fail_tags
        FROM json_to_recordset($2::json)
-         AS record(timestamp bigint, date_type varchar, studied_minutes int[], fail_tags text[])`,
+         AS record(timestamp bigint, record_date date, date_type varchar, studied_minutes int[], fail_tags text[])`,
       [userId, JSON.stringify(rows)],
     );
     await client.query('COMMIT');

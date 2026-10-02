@@ -1,0 +1,44 @@
+import {NextRequest, NextResponse} from 'next/server';
+import {getRequestUserId} from '@/utils/service/auth/request-user';
+import {createStudyRecord, listStudyRecords} from '@/utils/service/study-record/repository';
+import {
+  badRequestResponse,
+  createdResponse,
+  duplicateDateResponse,
+  unauthorizedResponse,
+} from '@/utils/service/study-record/response';
+import {readJsonBody, validateMonth, validateNewStudyRecord} from '@/utils/service/study-record/validate';
+
+export async function GET(request: NextRequest) {
+  const userId = await getRequestUserId();
+  if (!userId) {
+    return unauthorizedResponse();
+  }
+
+  const month = request.nextUrl.searchParams.get('month');
+  if (month === null) {
+    return NextResponse.json(await listStudyRecords(userId, null));
+  }
+
+  const range = validateMonth(month);
+  if (!range.ok) {
+    return badRequestResponse(range.rejection);
+  }
+
+  return NextResponse.json(await listStudyRecords(userId, range.value));
+}
+
+export async function POST(request: NextRequest) {
+  const userId = await getRequestUserId();
+  if (!userId) {
+    return unauthorizedResponse();
+  }
+
+  const record = validateNewStudyRecord(await readJsonBody(request));
+  if (!record.ok) {
+    return badRequestResponse(record.rejection);
+  }
+
+  const created = await createStudyRecord(userId, record.value);
+  return created.ok ? createdResponse(created.record) : duplicateDateResponse();
+}
