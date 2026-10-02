@@ -1,9 +1,9 @@
-import {DefaultSession, Session, User} from 'next-auth';
+import {DefaultSession} from 'next-auth';
 import {NextRequest} from 'next/server';
 
 declare module 'next-auth' {
   interface Session extends DefaultSession {
-    user: User;
+    userId: string;
   }
 }
 
@@ -15,6 +15,6 @@ declare module 'next-auth' {
 
 declare module '@auth/core/jwt' {
   interface JWT {
-    user: User;
+    userId: string;
   }
 }

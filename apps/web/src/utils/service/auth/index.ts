@@ -1,7 +1,8 @@
 import NextAuth from 'next-auth';
 import {NextResponse} from 'next/server';
 import {getNextNavigating} from '@/utils/service/auth/path';
-import Google from 'next-auth/providers/google';
+import Google, {type GoogleProfile} from 'next-auth/providers/google';
+import {findOrCreateUserId} from '@/utils/service/user';
 
 const SECONDS_PER_DAY = 86_400;
 const SESSION_MAX_AGE_DAYS = 30;
@@ -15,24 +16,25 @@ export const {handlers, signOut, auth} = NextAuth({
   session: {
     maxAge: SESSION_MAX_AGE_DAYS * SECONDS_PER_DAY,
   },
-  providers: [Google],
+  providers: [
+    Google({
+      authorization: {params: {scope: 'openid'}},
+      profile: (profile: GoogleProfile) => ({id: profile.sub}),
+    }),
+  ],
   callbacks: {
-    signIn: function (params) {
-      const {email} = params.user;
-      return typeof email === 'string' && ALLOW_ACCOUNT_LIST.includes(email);
-    },
-    jwt: ({token, user, trigger}) => {
-      if (trigger === 'signIn') {
-        token.user = user;
+    jwt: async ({token, account}) => {
+      if (account) {
+        token.userId = await findOrCreateUserId(account.providerAccountId);
       }
 
       return token;
     },
     session: ({session, token}) => {
-      return {...session, user: token.user};
+      return {...session, userId: token.userId};
     },
     authorized({auth, request: {nextUrl, url}}) {
-      const isLoggedIn = !!auth?.user;
+      const isLoggedIn = !!auth?.userId;
 
       const nextNavigating = getNextNavigating({
         pathWithSearch: nextUrl.pathname + nextUrl.search,
@@ -49,5 +51,3 @@ export const {handlers, signOut, auth} = NextAuth({
     },
   },
 });
-
-const ALLOW_ACCOUNT_LIST = ['forworkchoe@gmail.com'];
