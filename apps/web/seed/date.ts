@@ -21,6 +21,10 @@ export function toRecordTimestamp(day: SimpleDate) {
   return Date.UTC(day.year, day.month - 1, day.date, RECORD_HOUR - KST);
 }
 
+export function toRecordDate(day: SimpleDate) {
+  return [day.year, day.month, day.date].map((value) => String(value).padStart(2, '0')).join('-');
+}
+
 const RECORD_HOUR = 13;
 
 function toUTCTime(day: SimpleDate) {
