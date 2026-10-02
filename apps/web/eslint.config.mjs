@@ -48,6 +48,10 @@ const eslintConfig = defineConfig([
     files: ['eslint.config.mjs'],
     ...tseslint.configs.disableTypeChecked,
   },
+  {
+    files: ['seed/scenario.ts', 'seed/index.ts'],
+    rules: {'@typescript-eslint/naming-convention': 'off'},
+  },
   testFilesConfig,
   mockFilesConfig,
 ]);
