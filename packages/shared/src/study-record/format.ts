@@ -1,4 +1,4 @@
-import type {DailyStudyTime} from './type';
+import type {StudyRecord} from './type';
 
 export function minutesFormat(totalMinutes: number) {
   const hours = Math.floor(totalMinutes / MINUTES_PER_HOUR);
@@ -8,7 +8,7 @@ export function minutesFormat(totalMinutes: number) {
   return `${hours}:${minutes}`;
 }
 
-export function studiedTimeFormat(studiedMinutes: DailyStudyTime['studied_minutes']): string | null {
+export function studiedTimeFormat(studiedMinutes: StudyRecord['studied_minutes']): string | null {
   const total = studiedMinutes.reduce((sum, value) => sum + value, 0);
 
   if (total === 0) {
