@@ -19,7 +19,7 @@
     "stylelint": "stylelint \"**/*.{scss,css}\" --max-warnings 0 --allow-empty-input",
     "stylelint:fix": "stylelint \"**/*.{scss,css}\" --fix --max-warnings 0 --allow-empty-input",
     "test-staged": "lint-staged --concurrent false && turbo check-types",
-    "test-all": "turbo check-types && turbo lint && yarn stylelint"
+    "test-all": "turbo check-types && turbo lint && yarn stylelint && turbo run test -- --run"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.5.0",
