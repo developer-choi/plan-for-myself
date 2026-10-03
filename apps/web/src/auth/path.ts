@@ -43,11 +43,11 @@ export function getNextNavigating({pathWithSearch, isLoggedIn}: NextNavigatingPa
   }
 }
 
-const PRIVATE_PATHNAMES = ['/studied-time'];
+const PRIVATE_PATHNAMES = ['/study-records'];
 
 const NOT_PRIVATE_PATHNAME = ['/guest'];
 
-/* startsWith만 쓰면 '/studied-time-old'처럼 이름이 이어지는 다른 경로까지 걸린다 */
+/* startsWith만 쓰면 '/study-records-old'처럼 이름이 이어지는 다른 경로까지 걸린다 */
 function isUnderPathname(target: string, pathname: string) {
   return target === pathname || target.startsWith(`${pathname}/`);
 }

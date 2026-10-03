@@ -1275,9 +1275,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@developer-choi/design-system@npm:^0.6.0":
-  version: 0.6.0
-  resolution: "@developer-choi/design-system@npm:0.6.0"
+"@developer-choi/design-system@npm:^0.7.0":
+  version: 0.7.0
+  resolution: "@developer-choi/design-system@npm:0.7.0"
   dependencies:
     "@radix-ui/react-icons": "npm:^1.3.2"
     clsx: "npm:^2.1.1"
@@ -1285,7 +1285,7 @@ __metadata:
   peerDependencies:
     react: ^19.0.0
     react-dom: ^19.0.0
-  checksum: 10c0/153b5f6b0cf1902a478808cbbe9a8dd5dca7c728f8e58ea57d70f38948610192fc793374723d0b037d6ab081d369f65a93e0d1203ef947fa15087b59be74c47f
+  checksum: 10c0/b810d2a15b4761191369f5ba2f5d6f83eeec3165b499f22e62dc15338670f528b975e14a27948dc337e7d86d76d0f110f6ee4d444d1a5eeeda31ad50938ab0f4
   languageName: node
   linkType: hard
 
@@ -17946,9 +17946,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "web@workspace:apps/web"
   dependencies:
-    "@developer-choi/design-system": "npm:^0.6.0"
+    "@developer-choi/design-system": "npm:^0.7.0"
     "@electric-sql/pglite": "npm:^0.5.8"
     "@plan-for-myself/shared": "workspace:*"
+    "@radix-ui/react-icons": "npm:^1.3.2"
     "@tanstack/eslint-plugin-query": "npm:^5.91.3"
     "@tanstack/react-query": "npm:^5.90.20"
     "@tanstack/react-query-devtools": "npm:^5.52.3"
@@ -17972,6 +17973,7 @@ __metadata:
     next-auth: "npm:5.0.0-beta.30"
     node-pg-migrate: "npm:^9.0.0"
     pg: "npm:^8.23.1"
+    radix-ui: "npm:^1.4.3"
     react: "npm:19.2.3"
     react-dom: "npm:19.2.3"
     react-hook-form: "npm:^7.71.1"
