@@ -2,7 +2,7 @@
 
 import {useCallback, useEffect} from 'react';
 import {signIn} from 'next-auth/react';
-import {getRedirectUrlWhenLoginSuccess} from '@/utils/service/auth/redirect';
+import {getRedirectUrlWhenLoginSuccess} from '@/auth/redirect';
 
 export default function Page() {
   const onClick = useCallback(() => {

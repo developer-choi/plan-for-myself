@@ -1,5 +1,5 @@
 import {NextRequest, NextResponse} from 'next/server';
-import {getRequestUserId} from '@/utils/service/auth/request-user';
+import {getRequestUserId} from '@/auth/request-user';
 import {createStudyRecord, listStudyRecords} from '@/server/study-record/repository';
 import {
   badRequestResponse,

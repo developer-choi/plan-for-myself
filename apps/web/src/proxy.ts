@@ -1,4 +1,4 @@
-import {auth} from '@/utils/service/auth';
+import {auth} from '@/auth/next-auth';
 
 export const proxy = auth;
 

@@ -1,3 +1,3 @@
-import {handlers} from '@/utils/service/auth';
+import {handlers} from '@/auth/next-auth';
 
 export const {GET, POST} = handlers;

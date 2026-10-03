@@ -1,5 +1,5 @@
 import React, {PropsWithChildren} from 'react';
-import {auth} from '@/utils/service/auth';
+import {auth} from '@/auth/next-auth';
 import {SessionProvider} from 'next-auth/react';
 
 export default async function AppProvider({children}: PropsWithChildren) {

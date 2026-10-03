@@ -1,6 +1,6 @@
 import NextAuth from 'next-auth';
 import {NextResponse} from 'next/server';
-import {getNextNavigating} from '@/utils/service/auth/path';
+import {getNextNavigating} from '@/auth/path';
 import Google, {type GoogleProfile} from 'next-auth/providers/google';
 import {findOrCreateUserId} from '@/server/user/repository';
 

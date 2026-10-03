@@ -1,4 +1,4 @@
-import {DEFAULT_HOME_URL} from '@/utils/service/auth/redirect';
+import {DEFAULT_HOME_URL} from '@/auth/redirect';
 
 interface NextNavigatingParam {
   pathWithSearch: string;
