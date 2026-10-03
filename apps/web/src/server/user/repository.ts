@@ -1,4 +1,4 @@
-import {pool} from '@/utils/service/db';
+import {pool} from '@/server/db/pool';
 
 interface Queryable {
   query(text: string, values: unknown[]): Promise<{rows: {id: string}[]}>;
