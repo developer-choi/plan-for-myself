@@ -2,7 +2,7 @@ import {afterEach, describe, expect, it} from 'vitest';
 import {getNextNavigating} from './path';
 import {DEFAULT_HOME_URL, getRedirectUrlWhenLoginSuccess} from './redirect';
 
-const PRIVATE_PATH = '/studied-time';
+const PRIVATE_PATH = '/study-records';
 const LOGGED_OUT_ONLY_PATH = '/guest';
 const PUBLIC_PATH = '/privacy';
 
