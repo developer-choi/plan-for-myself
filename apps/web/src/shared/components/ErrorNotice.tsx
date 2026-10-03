@@ -14,18 +14,21 @@ interface ErrorNoticeProps {
   title: string;
   content: string;
   action?: ErrorNoticeAction;
+  size?: 'large' | 'small';
 }
 
-export default function ErrorNotice({title, content, action}: ErrorNoticeProps) {
+export default function ErrorNotice({title, content, action, size = 'large'}: ErrorNoticeProps) {
+  const isSmall = size === 'small';
+
   return (
     <div className={styles.container}>
-      <Logo size={LOGO_SIZE} />
+      {!isSmall && <Logo size={LOGO_SIZE} />}
       <div className={styles.text}>
-        <h2 className={classNames(typography.h2, typography.bold)}>{title}</h2>
-        <p className={classNames(typography.body1, styles.content)}>{content}</p>
+        <h2 className={classNames(isSmall ? typography.h4 : typography.h2, typography.bold)}>{title}</h2>
+        <p className={classNames(isSmall ? typography.body2 : typography.body1, styles.content)}>{content}</p>
       </div>
       {action && (
-        <Button className={styles.action} size="large" onClick={action.onClick}>
+        <Button className={styles.action} size={isSmall ? 'medium' : 'large'} onClick={action.onClick}>
           {action.children}
         </Button>
       )}
