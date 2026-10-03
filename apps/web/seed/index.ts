@@ -42,12 +42,12 @@ async function replaceUserRecords(connectionString: string, googleSub: string, r
 
   try {
     const {
-      rows: [{branch_id}],
+      rows: [{branchId}],
     } = await client.query<{
       /* Neon이 아닌 DB(localhost 등)에는 이 설정이 없어 null이다 */
-      branch_id: string | null;
-    }>("SELECT current_setting('neon.branch_id', true) AS branch_id");
-    assertDevBranch(branch_id);
+      branchId: string | null;
+    }>(`SELECT current_setting('neon.branch_id', true) AS "branchId"`);
+    assertDevBranch(branchId);
 
     await client.query('BEGIN');
     await client.query('INSERT INTO users (google_sub) VALUES ($1) ON CONFLICT (google_sub) DO NOTHING', [googleSub]);
