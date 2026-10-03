@@ -2,7 +2,7 @@
 import {readFileSync} from 'node:fs';
 import {PGlite} from '@electric-sql/pglite';
 import {beforeEach, describe, expect, it} from 'vitest';
-import {findOrCreateUserId} from './repository';
+import {createGuestUserId, findOrCreateUserId} from './repository';
 
 const CREATE_USERS_TABLE = readFileSync(
   new URL('../../../migrations/1790924675472_create-users-and-link-study-records.sql', import.meta.url),
@@ -41,5 +41,32 @@ describe('findOrCreateUserId', () => {
     const idB = await findOrCreateUserId('sub-b', db);
 
     expect(idB).not.toBe(idA);
+  });
+});
+
+describe('createGuestUserId()', () => {
+  let db: PGlite;
+
+  beforeEach(async () => {
+    if (!CREATE_USERS_TABLE) {
+      throw new Error('마이그레이션에서 users 테이블 정의를 찾지 못했다');
+    }
+    db = new PGlite();
+    await db.exec(CREATE_USERS_TABLE);
+  });
+
+  describe('General cases', () => {
+    it('로그인 없이 시작할 때마다 구글 계정 없는 사용자를 새로 만든다', async () => {
+      const first = await createGuestUserId(db);
+      const second = await createGuestUserId(db);
+
+      const {rows} = await db.query<{id: string; isGuest: boolean; googleSub: string | null}>(
+        'SELECT id::text AS id, is_guest AS "isGuest", google_sub AS "googleSub" FROM users ORDER BY users.id',
+      );
+      expect(rows).toEqual([
+        {id: first, isGuest: true, googleSub: null},
+        {id: second, isGuest: true, googleSub: null},
+      ]);
+    });
   });
 });

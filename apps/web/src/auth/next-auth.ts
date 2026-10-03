@@ -1,11 +1,13 @@
 import NextAuth from 'next-auth';
 import {NextResponse} from 'next/server';
 import {getNextNavigating} from '@/auth/path';
+import Credentials from 'next-auth/providers/credentials';
 import Google, {type GoogleProfile} from 'next-auth/providers/google';
-import {findOrCreateUserId} from '@/server/user/repository';
+import {createGuestUserId, findOrCreateUserId} from '@/server/user/repository';
 
 const SECONDS_PER_DAY = 86_400;
 const SESSION_MAX_AGE_DAYS = 30;
+const GUEST_PROVIDER_ID = 'guest';
 
 export const {handlers, signOut, auth} = NextAuth({
   secret: process.env.AUTH_SECRET,
@@ -21,17 +23,24 @@ export const {handlers, signOut, auth} = NextAuth({
       authorization: {params: {scope: 'openid'}},
       profile: (profile: GoogleProfile) => ({id: profile.sub}),
     }),
+    Credentials({
+      id: GUEST_PROVIDER_ID,
+      credentials: {},
+      authorize: async () => ({id: await createGuestUserId()}),
+    }),
   ],
   callbacks: {
     jwt: async ({token, account}) => {
       if (account) {
-        token.userId = await findOrCreateUserId(account.providerAccountId);
+        const isGuest = account.provider === GUEST_PROVIDER_ID;
+        token.userId = isGuest ? account.providerAccountId : await findOrCreateUserId(account.providerAccountId);
+        token.isGuest = isGuest;
       }
 
       return token;
     },
     session: ({session, token}) => {
-      return {...session, userId: token.userId};
+      return {...session, userId: token.userId, isGuest: token.isGuest};
     },
     authorized({auth, request: {nextUrl, url}}) {
       const isLoggedIn = !!auth?.userId;

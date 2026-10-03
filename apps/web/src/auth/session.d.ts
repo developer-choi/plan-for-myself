@@ -4,6 +4,7 @@ import {NextRequest} from 'next/server';
 declare module 'next-auth' {
   interface Session extends DefaultSession {
     userId: string;
+    isGuest: boolean;
   }
 }
 
@@ -16,5 +17,6 @@ declare module 'next-auth' {
 declare module '@auth/core/jwt' {
   interface JWT {
     userId: string;
+    isGuest: boolean;
   }
 }
