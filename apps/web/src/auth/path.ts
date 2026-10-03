@@ -22,13 +22,13 @@ export type NextNavigatingResult =
 export function getNextNavigating({pathWithSearch, isLoggedIn}: NextNavigatingParam): NextNavigatingResult {
   const nextUrlObject = new URL(`http://some.domain.com${pathWithSearch}`);
   const nextPathname = nextUrlObject.pathname;
-  const isPrivate = PRIVATE_PATHNAMES.some((pathname) => nextPathname.startsWith(pathname));
-  const isNotPrivate = NOT_PRIVATE_PATHNAME.some((pathname) => nextPathname.startsWith(pathname));
+  const isPrivate = PRIVATE_PATHNAMES.some((pathname) => isUnderPathname(nextPathname, pathname));
+  const isNotPrivate = NOT_PRIVATE_PATHNAME.some((pathname) => isUnderPathname(nextPathname, pathname));
 
   if (isPrivate && !isLoggedIn) {
     return {
       type: 'not-authenticated',
-      nextUrl: `/guest/login?redirect=${pathWithSearch}`,
+      nextUrl: `/guest/login?redirect=${encodeURIComponent(pathWithSearch)}`,
     };
   } else if (isNotPrivate && isLoggedIn) {
     return {
@@ -46,3 +46,8 @@ export function getNextNavigating({pathWithSearch, isLoggedIn}: NextNavigatingPa
 const PRIVATE_PATHNAMES = ['/studied-time'];
 
 const NOT_PRIVATE_PATHNAME = ['/guest'];
+
+/* startsWith만 쓰면 '/studied-time-old'처럼 이름이 이어지는 다른 경로까지 걸린다 */
+function isUnderPathname(target: string, pathname: string) {
+  return target === pathname || target.startsWith(`${pathname}/`);
+}
