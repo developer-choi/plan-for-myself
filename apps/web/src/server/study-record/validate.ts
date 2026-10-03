@@ -79,9 +79,9 @@ const studyRecordOriginalSchema = z.object({
     .refine((date) => date >= STUDY_RECORD_LIMITS.date.min && date <= STUDY_RECORD_LIMITS.date.max, {
       error: DATE_MESSAGE,
     }),
-  date_type: z.enum(['weekday', 'holiday'], {error: '평일·휴일 중 하나를 골라 주세요'}),
-  studied_minutes: z.tuple([minutesSchema, minutesSchema, minutesSchema], {error: STUDIED_MINUTES_MESSAGE}),
-  fail_tags: z
+  dateType: z.enum(['weekday', 'holiday'], {error: '평일·휴일 중 하나를 골라 주세요'}),
+  studiedMinutes: z.tuple([minutesSchema, minutesSchema, minutesSchema], {error: STUDIED_MINUTES_MESSAGE}),
+  failTags: z
     .array(failTagSchema, {error: '실패 태그 목록이 올바르지 않아요'})
     .max(STUDY_RECORD_LIMITS.failTags.maxCount, {
       error: `실패 태그는 ${STUDY_RECORD_LIMITS.failTags.maxCount}개까지예요`,
@@ -90,9 +90,9 @@ const studyRecordOriginalSchema = z.object({
 
 const newStudyRecordSchema = studyRecordOriginalSchema;
 const studyRecordFieldsSchema = studyRecordOriginalSchema.pick({
-  date_type: true,
-  studied_minutes: true,
-  fail_tags: true,
+  dateType: true,
+  studiedMinutes: true,
+  failTags: true,
 });
 const studyRecordUpdateSchema = studyRecordFieldsSchema.extend({
   date: z.never({error: '날짜는 바꿀 수 없어요. 지우고 그 날짜에 새로 기록해 주세요'}).optional(),
@@ -123,9 +123,9 @@ const MONTH_LENGTH = 'YYYY-MM'.length;
 
 const REJECTION_CODES: Record<keyof z.infer<typeof studyRecordOriginalSchema>, Rejection['code']> = {
   date: 'INVALID_DATE',
-  date_type: 'INVALID_DATE_TYPE',
-  studied_minutes: 'INVALID_STUDIED_MINUTES',
-  fail_tags: 'INVALID_FAIL_TAGS',
+  dateType: 'INVALID_DATE_TYPE',
+  studiedMinutes: 'INVALID_STUDIED_MINUTES',
+  failTags: 'INVALID_FAIL_TAGS',
 };
 
 function validate<T>(schema: z.ZodType<T>, body: unknown): Validation<T> {

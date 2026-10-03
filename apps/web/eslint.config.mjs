@@ -48,11 +48,6 @@ const eslintConfig = defineConfig([
     files: ['eslint.config.mjs'],
     ...tseslint.configs.disableTypeChecked,
   },
-  {
-    // 기록 필드가 DB 컬럼과 같은 snake_case(StudyRecord)라 그 필드를 다루는 파일은 이름 규칙을 끈다
-    files: ['seed/scenario.ts', 'seed/index.ts', 'src/server/study-record/validate.ts'],
-    rules: {'@typescript-eslint/naming-convention': 'off'},
-  },
   testFilesConfig,
   mockFilesConfig,
 ]);

@@ -105,9 +105,9 @@ function createRecord(day: SimpleDate, failTags: string[] = [], dateType?: DateT
   const {morning, afternoon, evening} = STUDIED_MINUTES[day.date % STUDIED_MINUTES.length];
   return {
     day,
-    date_type: dateType ?? (isHolidayDate(day) ? 'holiday' : 'weekday'),
-    studied_minutes: [morning, afternoon, evening],
-    fail_tags: failTags,
+    dateType: dateType ?? (isHolidayDate(day) ? 'holiday' : 'weekday'),
+    studiedMinutes: [morning, afternoon, evening],
+    failTags,
   };
 }
 

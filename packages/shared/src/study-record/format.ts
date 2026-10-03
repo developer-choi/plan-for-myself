@@ -8,7 +8,7 @@ export function minutesFormat(totalMinutes: number) {
   return `${hours}:${minutes}`;
 }
 
-export function studiedTimeFormat(studiedMinutes: StudyRecord['studied_minutes']): string | null {
+export function studiedTimeFormat(studiedMinutes: StudyRecord['studiedMinutes']): string | null {
   const total = studiedMinutes.reduce((sum, value) => sum + value, 0);
 
   if (total === 0) {

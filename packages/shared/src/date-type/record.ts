@@ -1,9 +1,9 @@
 import type {DateType} from './type';
 
-export function listToDateTypeRecord<T extends {date_type: DateType}>(list: T[]): Record<DateType, T[]> {
+export function listToDateTypeRecord<T extends {dateType: DateType}>(list: T[]): Record<DateType, T[]> {
   return list.reduce(
     (grouped, item) => {
-      grouped[item.date_type].push(item);
+      grouped[item.dateType].push(item);
       return grouped;
     },
     {

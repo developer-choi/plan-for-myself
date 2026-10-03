@@ -31,11 +31,6 @@ export default defineConfig([
       'check-file/folder-naming-convention': ['error', {'src/**/*': 'KEBAB_CASE'}],
     },
   },
-  {
-    // DB 행 모양(snake_case 컬럼)을 그대로 쓰는 파일만 naming-convention을 끈다. 나머지 코드는 camelCase를 지킨다
-    files: ['src/study-record/type.ts', 'src/date-type/record.ts'],
-    rules: {'@typescript-eslint/naming-convention': 'off'},
-  },
   testFilesConfig,
   mockFilesConfig,
   {
