@@ -1,0 +1,25 @@
+@use 'sass:map';
+@use 'sass:math';
+@use '@developer-choi/design-system/styles/design-system';
+
+$pfmZIndexes: (
+  stickyHeader: 100,
+  bubble: 200,
+  dropdown: 300,
+);
+
+// PFM 층은 모두 디자인 시스템 모달 아래여야 한다. 디자인 시스템 값이 바뀌어 순서가 뒤집히면 빌드에서 잡는다.
+@if math.max(map.values($pfmZIndexes)...) >= map.get(design-system.$zIndexes, modal) {
+  @error 'PFM z-index가 디자인 시스템 modal(#{map.get(design-system.$zIndexes, modal)}) 이상이다';
+}
+
+$zIndexes: map.merge(design-system.$zIndexes, $pfmZIndexes);
+
+// map.get은 없는 키면 null을 돌려줘 z-index 선언이 조용히 빠진다. 빌드에서 잡는다.
+@function zIndex($key) {
+  @if not map.has-key($zIndexes, $key) {
+    @error 'z-index "#{$key}" not found';
+  }
+
+  @return map.get($zIndexes, $key);
+}

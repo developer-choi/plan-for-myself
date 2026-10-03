@@ -1275,9 +1275,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@developer-choi/design-system@npm:^0.4.1":
-  version: 0.4.1
-  resolution: "@developer-choi/design-system@npm:0.4.1"
+"@developer-choi/design-system@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "@developer-choi/design-system@npm:0.6.0"
   dependencies:
     "@radix-ui/react-icons": "npm:^1.3.2"
     clsx: "npm:^2.1.1"
@@ -1285,7 +1285,7 @@ __metadata:
   peerDependencies:
     react: ^19.0.0
     react-dom: ^19.0.0
-  checksum: 10c0/8f2d504661b5bbeed145439452c8ac9be3b3a52a74b8f6bf75d0b04e1af857df3a42bef9a0f1389b60d0f61bd9ab5efb88f148af7355cc4a4ff0fc92a3ef3e87
+  checksum: 10c0/153b5f6b0cf1902a478808cbbe9a8dd5dca7c728f8e58ea57d70f38948610192fc793374723d0b037d6ab081d369f65a93e0d1203ef947fa15087b59be74c47f
   languageName: node
   linkType: hard
 
@@ -17946,7 +17946,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "web@workspace:apps/web"
   dependencies:
-    "@developer-choi/design-system": "npm:^0.4.1"
+    "@developer-choi/design-system": "npm:^0.6.0"
     "@electric-sql/pglite": "npm:^0.5.8"
     "@plan-for-myself/shared": "workspace:*"
     "@tanstack/eslint-plugin-query": "npm:^5.91.3"

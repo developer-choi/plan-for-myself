@@ -16,7 +16,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@developer-choi/design-system": "^0.4.1",
+    "@developer-choi/design-system": "^0.6.0",
     "@plan-for-myself/shared": "workspace:*",
     "@tanstack/react-query": "^5.90.20",
     "@tanstack/react-query-devtools": "^5.52.3",
