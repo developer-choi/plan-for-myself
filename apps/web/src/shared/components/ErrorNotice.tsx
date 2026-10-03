@@ -2,7 +2,7 @@ import {ReactNode} from 'react';
 import classNames from 'classnames';
 import {Button} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
-import Logo from '@/components/logo/Logo';
+import Logo from '@/shared/components/Logo';
 import styles from './ErrorNotice.module.scss';
 
 interface ErrorNoticeAction {

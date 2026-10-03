@@ -1,5 +1,5 @@
 import type {StudyRecord} from '@plan-for-myself/shared';
-import {pool} from '@/utils/service/db';
+import {pool} from '@/server/db/pool';
 import type {NewStudyRecord, StudyRecordFields} from './validate';
 
 interface Queryable {

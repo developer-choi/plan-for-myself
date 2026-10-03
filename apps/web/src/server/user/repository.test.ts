@@ -2,10 +2,10 @@
 import {readFileSync} from 'node:fs';
 import {PGlite} from '@electric-sql/pglite';
 import {beforeEach, describe, expect, it} from 'vitest';
-import {findOrCreateUserId} from '.';
+import {findOrCreateUserId} from './repository';
 
 const CREATE_USERS_TABLE = readFileSync(
-  new URL('../../../../migrations/1790924675472_create-users-and-link-study-records.sql', import.meta.url),
+  new URL('../../../migrations/1790924675472_create-users-and-link-study-records.sql', import.meta.url),
   'utf8',
 ).match(/CREATE TABLE users \([^;]*\);/)?.[0];
 

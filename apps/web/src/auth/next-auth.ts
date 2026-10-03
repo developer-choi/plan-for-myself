@@ -1,8 +1,8 @@
 import NextAuth from 'next-auth';
 import {NextResponse} from 'next/server';
-import {getNextNavigating} from '@/utils/service/auth/path';
+import {getNextNavigating} from '@/auth/path';
 import Google, {type GoogleProfile} from 'next-auth/providers/google';
-import {findOrCreateUserId} from '@/utils/service/user';
+import {findOrCreateUserId} from '@/server/user/repository';
 
 const SECONDS_PER_DAY = 86_400;
 const SESSION_MAX_AGE_DAYS = 30;

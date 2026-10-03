@@ -1,6 +1,6 @@
 import {NextRequest} from 'next/server';
 import {redirect} from 'next/navigation';
-import {signOut} from '@/utils/service/auth';
+import {signOut} from '@/auth/next-auth';
 
 /* Server Component에서 로그아웃 하기 위한 Route Handler */
 export async function GET(request: NextRequest) {

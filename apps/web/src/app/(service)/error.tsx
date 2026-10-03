@@ -1,6 +1,6 @@
 'use client';
 
-import ErrorNotice from '@/components/error/ErrorNotice';
+import ErrorNotice from '@/shared/components/ErrorNotice';
 import styles from './error.module.scss';
 
 interface ErrorPageProps {

@@ -1,6 +1,6 @@
 import {ImageResponse} from 'next/og';
 import {colors} from '@plan-for-myself/shared';
-import Logo from '@/components/logo/Logo';
+import Logo from '@/shared/components/Logo';
 
 const ICON_SIZE = 32;
 

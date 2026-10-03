@@ -4,7 +4,7 @@ import type {Metadata} from 'next';
 import {Noto_Sans} from 'next/font/google';
 import classNames from 'classnames';
 import {themeClassName} from '@developer-choi/design-system';
-import {themeStyle} from '@/styles/theme';
+import {themeStyle} from '@/shared/styles/theme';
 
 const font = Noto_Sans({
   subsets: ['latin'],
