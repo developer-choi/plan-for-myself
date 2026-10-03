@@ -1,0 +1,22 @@
+.calendarHeader {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: var(--spacing-xs);
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-page-x-mobile) 0;
+}
+
+.monthNavigation {
+  display: flex;
+  gap: var(--spacing-xs);
+  align-items: center;
+}
+
+.calendarTitle {
+  white-space: nowrap;
+}
+
+.menuSlot {
+  display: flex;
+  align-items: center;
+}
