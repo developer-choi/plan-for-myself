@@ -16,7 +16,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@developer-choi/design-system": "^0.6.0",
+    "@developer-choi/design-system": "^0.7.0",
     "@plan-for-myself/shared": "workspace:*",
     "@radix-ui/react-icons": "^1.3.2",
     "@tanstack/react-query": "^5.90.20",
