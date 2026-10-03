@@ -40,7 +40,7 @@ export async function createStudyRecord(
          $3, $4, $5
        )
        RETURNING ${COLUMNS}`,
-      [userId, record.date, record.date_type, record.studied_minutes, record.fail_tags],
+      [userId, record.date, record.dateType, record.studiedMinutes, record.failTags],
     );
     return {ok: true, record: created};
   } catch (error) {
@@ -61,7 +61,7 @@ export async function updateStudyRecord(
     `UPDATE study_records SET date_type = $3, studied_minutes = $4, fail_tags = $5
      WHERE pk = $1 AND user_id = $2
      RETURNING ${COLUMNS}`,
-    [target.pk, target.userId, fields.date_type, fields.studied_minutes, fields.fail_tags],
+    [target.pk, target.userId, fields.dateType, fields.studiedMinutes, fields.failTags],
   );
   return rows[0] ?? null;
 }
@@ -74,8 +74,12 @@ export async function deleteStudyRecord(userId: string, pk: number, db: Queryabl
   return rows.length > 0;
 }
 
-/* bigint는 pg가 문자열로 돌려줘서 숫자로 받으려고 float8로 바꾼다. 밀리초 epoch는 float8에 정확히 담긴다 */
-const COLUMNS = 'pk, date_type, studied_minutes, fail_tags, timestamp::float8 AS timestamp';
+/*
+ * 따옴표가 없으면 Postgres가 별칭을 소문자로 바꾼다
+ * bigint는 pg가 문자열로 돌려줘서 숫자로 받으려고 float8로 바꾼다. 밀리초 epoch는 float8에 정확히 담긴다
+ */
+const COLUMNS =
+  'pk, date_type AS "dateType", studied_minutes AS "studiedMinutes", fail_tags AS "failTags", timestamp::float8 AS timestamp';
 const UNIQUE_VIOLATION = '23505';
 const DUPLICATE_DATE_CONSTRAINT = 'study_records_user_id_record_date_key';
 

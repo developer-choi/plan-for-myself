@@ -18,16 +18,16 @@ describe('streak', () => {
 
     expect(countByMonth(records, '2026-09')).toBeGreaterThan(0);
     expect(countByMonth(records, '2026-08')).toBeGreaterThan(0);
-    expect(new Set(records.map((record) => record.date_type))).toEqual(new Set(['weekday', 'holiday']));
-    expect(records.some((record) => record.fail_tags.length > 0)).toBe(true);
+    expect(new Set(records.map((record) => record.dateType))).toEqual(new Set(['weekday', 'holiday']));
+    expect(records.some((record) => record.failTags.length > 0)).toBe(true);
   });
 
   it('토·일요일과 공휴일 기록은 휴일이고 나머지는 평일이다', () => {
     const records = SCENARIOS.streak(OCTOBER_10);
 
-    expect(findRecord(records, toDay('2026-09-19'))?.date_type).toBe('holiday');
-    expect(findRecord(records, toDay('2026-09-25'))?.date_type).toBe('holiday');
-    expect(findRecord(records, toDay('2026-09-21'))?.date_type).toBe('weekday');
+    expect(findRecord(records, toDay('2026-09-19'))?.dateType).toBe('holiday');
+    expect(findRecord(records, toDay('2026-09-25'))?.dateType).toBe('holiday');
+    expect(findRecord(records, toDay('2026-09-21'))?.dateType).toBe('weekday');
   });
 });
 
@@ -63,16 +63,14 @@ describe('no-fail', () => {
 
     expect(countByMonth(records, '2026-08')).toBeGreaterThan(0);
     expect(countByMonth(records, '2026-09')).toBeGreaterThan(0);
-    expect(records.every((record) => record.fail_tags.length === 0)).toBe(true);
+    expect(records.every((record) => record.failTags.length === 0)).toBe(true);
   });
 });
 
 describe('tag-detail', () => {
   it('이번 달 실패 태그가 10개를 넘는다', () => {
     const records = SCENARIOS['tag-detail'](SEPTEMBER_24);
-    const tags = new Set(
-      records.filter((record) => isInMonth(record, '2026-09')).flatMap((record) => record.fail_tags),
-    );
+    const tags = new Set(records.filter((record) => isInMonth(record, '2026-09')).flatMap((record) => record.failTags));
 
     expect(tags.size).toBeGreaterThan(MANY_TAGS_THRESHOLD);
   });
@@ -92,7 +90,7 @@ describe('tag-detail', () => {
 
   it('두통은 이번 달에 처음 나온다', () => {
     const records = SCENARIOS['tag-detail'](SEPTEMBER_24);
-    const headache = records.filter((record) => record.fail_tags.includes('두통'));
+    const headache = records.filter((record) => record.failTags.includes('두통'));
 
     expect(headache.every((record) => isInMonth(record, '2026-09'))).toBe(true);
     expect(headache).toHaveLength(1);
@@ -110,8 +108,8 @@ describe('three-days', () => {
     const records = SCENARIOS['three-days'](SEPTEMBER_24);
 
     expect(records.map((record) => toKey(record.day))).toEqual(['2026-09-21', '2026-09-22', '2026-09-23']);
-    expect(records.every((record) => record.date_type === 'weekday')).toBe(true);
-    expect(records.every((record) => record.fail_tags.length > 0)).toBe(true);
+    expect(records.every((record) => record.dateType === 'weekday')).toBe(true);
+    expect(records.every((record) => record.failTags.length > 0)).toBe(true);
   });
 });
 
@@ -147,8 +145,8 @@ describe('모든 시나리오', () => {
     (name) => {
       const records = SCENARIOS[name](SEPTEMBER_24);
 
-      expect(records.every((record) => record.fail_tags.length <= 2)).toBe(true);
-      expect(records.flatMap((record) => record.fail_tags).some((tag) => /\s/.test(tag))).toBe(false);
+      expect(records.every((record) => record.failTags.length <= 2)).toBe(true);
+      expect(records.flatMap((record) => record.failTags).some((tag) => /\s/.test(tag))).toBe(false);
     },
   );
 });
@@ -193,7 +191,7 @@ function countTagByMonths(records: SeedRecord[], tag: string, monthKeys: string[
   return Object.fromEntries(
     monthKeys.map((monthKey) => [
       monthKey,
-      records.filter((record) => isInMonth(record, monthKey) && record.fail_tags.includes(tag)).length,
+      records.filter((record) => isInMonth(record, monthKey) && record.failTags.includes(tag)).length,
     ]),
   );
 }

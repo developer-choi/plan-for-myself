@@ -4,7 +4,7 @@ import {toRecordDate, toRecordTimestamp} from './date';
 import {assertDevBranch} from './guard';
 import {isScenarioName, SCENARIOS} from './scenario';
 
-type SeedRow = Omit<StudyRecord, 'pk'> & {record_date: string};
+type SeedRow = Omit<StudyRecord, 'pk'> & {recordDate: string};
 
 const [scenarioName = '', googleSub] = process.argv.slice(2);
 if (!isScenarioName(scenarioName) || !googleSub) {
@@ -22,7 +22,7 @@ const {year, month, date} = getKoreanDate();
 const rows = SCENARIOS[scenarioName]({year, month: month + 1, date}).map(({day, ...record}) => ({
   ...record,
   timestamp: toRecordTimestamp(day),
-  record_date: toRecordDate(day),
+  recordDate: toRecordDate(day),
 }));
 
 replaceUserRecords(connectionString, googleSub, rows)
@@ -55,11 +55,12 @@ async function replaceUserRecords(connectionString: string, googleSub: string, r
       rows: [{id: userId}],
     } = await client.query<{id: string}>('SELECT id FROM users WHERE google_sub = $1', [googleSub]);
     const deleted = await client.query('DELETE FROM study_records WHERE user_id = $1', [userId]);
+    /* 따옴표가 없으면 Postgres가 이름을 소문자로 바꿔 camelCase JSON 키를 못 읽는다 */
     const inserted = await client.query(
       `INSERT INTO study_records (user_id, timestamp, record_date, date_type, studied_minutes, fail_tags)
-       SELECT $1, record.timestamp, record.record_date, record.date_type, record.studied_minutes, record.fail_tags
+       SELECT $1, record.timestamp, record."recordDate", record."dateType", record."studiedMinutes", record."failTags"
        FROM json_to_recordset($2::json)
-         AS record(timestamp bigint, record_date date, date_type varchar, studied_minutes int[], fail_tags text[])`,
+         AS record(timestamp bigint, "recordDate" date, "dateType" varchar, "studiedMinutes" int[], "failTags" text[])`,
       [userId, JSON.stringify(rows)],
     );
     await client.query('COMMIT');
