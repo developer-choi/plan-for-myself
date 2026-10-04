@@ -1,6 +1,6 @@
 import NextAuth from 'next-auth';
 import {NextResponse} from 'next/server';
-import {getNextNavigating} from '@/auth/path';
+import {getLoginState, getNextNavigating} from '@/auth/path';
 import Credentials from 'next-auth/providers/credentials';
 import Google, {type GoogleProfile} from 'next-auth/providers/google';
 import {createGuestUserId, findOrCreateUserId} from '@/server/user/repository';
@@ -43,11 +43,9 @@ export const {handlers, signOut, auth} = NextAuth({
       return {...session, userId: token.userId, isGuest: token.isGuest};
     },
     authorized({auth, request: {nextUrl, url}}) {
-      const isLoggedIn = !!auth?.userId;
-
       const nextNavigating = getNextNavigating({
         pathWithSearch: nextUrl.pathname + nextUrl.search,
-        isLoggedIn,
+        loginState: getLoginState(auth),
       });
 
       switch (nextNavigating.type) {
