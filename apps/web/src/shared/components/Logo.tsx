@@ -1,14 +1,15 @@
 interface LogoProps {
-  size: number;
+  size: keyof typeof LOGO_SIZE;
   backgroundColor?: string;
   markColor?: string;
 }
 
 export default function Logo({
-  size,
+  size: sizeName,
   backgroundColor = 'var(--color-primary)',
   markColor = 'var(--color-on-primary)',
 }: LogoProps) {
+  const size = LOGO_SIZE[sizeName];
   const markSize = (size * MOCKUP_MARK_SIZE) / MOCKUP_SIZE;
 
   return (
@@ -39,6 +40,8 @@ export default function Logo({
     </div>
   );
 }
+
+export const LOGO_SIZE = {medium: 32, large: 52} as const;
 
 const MOCKUP_SIZE = 72;
 const MOCKUP_RADIUS = 20;

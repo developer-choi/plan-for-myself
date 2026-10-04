@@ -1,15 +1,10 @@
 import {ImageResponse} from 'next/og';
 import {colors} from '@plan-for-myself/shared';
-import Logo from '@/shared/components/Logo';
+import Logo, {LOGO_SIZE} from '@/shared/components/Logo';
 
-const ICON_SIZE = 32;
-
-export const size = {width: ICON_SIZE, height: ICON_SIZE};
+export const size = {width: LOGO_SIZE.medium, height: LOGO_SIZE.medium};
 export const contentType = 'image/png';
 
 export default function Icon() {
-  return new ImageResponse(
-    <Logo backgroundColor={colors.primary} markColor={colors.onPrimary} size={ICON_SIZE} />,
-    size,
-  );
+  return new ImageResponse(<Logo backgroundColor={colors.primary} markColor={colors.onPrimary} size="medium" />, size);
 }

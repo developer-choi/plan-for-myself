@@ -22,7 +22,7 @@ export default function ErrorNotice({title, content, action, size = 'large'}: Er
 
   return (
     <div className={styles.container}>
-      {!isSmall && <Logo size={LOGO_SIZE} />}
+      {!isSmall && <Logo size="large" />}
       <div className={styles.text}>
         <h2 className={classNames(isSmall ? typography.h4 : typography.h2, typography.bold)}>{title}</h2>
         <p className={classNames(isSmall ? typography.body2 : typography.body1, styles.content)}>{content}</p>
@@ -35,5 +35,3 @@ export default function ErrorNotice({title, content, action, size = 'large'}: Er
     </div>
   );
 }
-
-const LOGO_SIZE = 64;
