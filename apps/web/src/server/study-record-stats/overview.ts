@@ -1,15 +1,7 @@
-import type {StudyRecord} from '@plan-for-myself/shared';
+import type {StudyRecord, StudyRecordOverview} from '@plan-for-myself/shared';
 import {addDays, addMonths, listMonths, toMonth} from './date';
 import {sumMinutes} from './minutes';
 import {countTagsByMonth, getTagCount} from './tag-count';
-
-export interface StudyRecordOverview {
-  date: string;
-  /* 요청한 날짜까지 기록이 하나도 없으면 null */
-  firstRecordDate: string | null;
-  streak: {current: number; longest: number};
-  totals: {recordedDays: number; studiedMinutes: number; improvedFailures: number};
-}
 
 export function calculateOverview(records: StudyRecord[], date: string): StudyRecordOverview {
   const recordsUntilDate = records.filter((record) => record.date <= date);
