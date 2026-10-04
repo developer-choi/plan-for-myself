@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import {DropdownMenu} from 'radix-ui';
 import {HamburgerMenuIcon} from '@radix-ui/react-icons';
 import classNames from 'classnames';
@@ -26,7 +27,7 @@ export default function HeaderMenu({items}: HeaderMenuProps) {
         <DropdownMenu.Content align="start" className={styles.menu} sideOffset={6}>
           {items.map((item) => (
             <DropdownMenu.Item key={item.label} asChild className={classNames(typography.body1, styles.menuItem)}>
-              <a href={item.href}>{item.label}</a>
+              <Link href={item.href}>{item.label}</Link>
             </DropdownMenu.Item>
           ))}
         </DropdownMenu.Content>
