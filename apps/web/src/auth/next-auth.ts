@@ -10,8 +10,8 @@ const SESSION_MAX_AGE_DAYS = 30;
 export const {handlers, signOut, auth} = NextAuth({
   secret: process.env.AUTH_SECRET,
   pages: {
-    signIn: '/guest/login',
-    error: '/guest/login',
+    signIn: '/login',
+    error: '/login',
   },
   session: {
     maxAge: SESSION_MAX_AGE_DAYS * SECONDS_PER_DAY,

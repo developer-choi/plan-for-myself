@@ -9,7 +9,7 @@ interface CalendarMenuProps {
 
 export default function CalendarMenu({viewPath}: CalendarMenuProps) {
   const logout = () => {
-    signOut({redirectTo: `/guest/login?redirect=${encodeURIComponent(viewPath)}`});
+    signOut({redirectTo: `/login?redirect=${encodeURIComponent(viewPath)}`});
   };
 
   return (
