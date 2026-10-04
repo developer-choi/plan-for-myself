@@ -3,7 +3,7 @@ import {getNextNavigating} from './path';
 import {DEFAULT_HOME_URL, getRedirectUrlWhenLoginSuccess} from './redirect';
 
 const PRIVATE_PATH = '/study-records';
-const LOGGED_OUT_ONLY_PATH = '/guest';
+const LOGGED_OUT_ONLY_PATH = '/login';
 const PUBLIC_PATH = '/privacy';
 
 describe('getNextNavigating()', () => {
@@ -11,7 +11,7 @@ describe('getNextNavigating()', () => {
     it('로그인이 필요한 경로에 로그아웃 상태로 오면 원래 주소를 담아 로그인 페이지로 보내야 한다', () => {
       expect(getNextNavigating({pathWithSearch: PRIVATE_PATH, isLoggedIn: false})).toEqual({
         type: 'not-authenticated',
-        nextUrl: `/guest/login?redirect=${encodeURIComponent(PRIVATE_PATH)}`,
+        nextUrl: `/login?redirect=${encodeURIComponent(PRIVATE_PATH)}`,
       });
     });
 

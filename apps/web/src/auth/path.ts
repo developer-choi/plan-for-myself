@@ -8,7 +8,7 @@ interface NextNavigatingParam {
 export type NextNavigatingResult =
   | {
       type: 'not-authenticated';
-      nextUrl: `/guest/login?redirect=${string}`;
+      nextUrl: `/login?redirect=${string}`;
     }
   | {
       type: 'already-authenticated';
@@ -28,7 +28,7 @@ export function getNextNavigating({pathWithSearch, isLoggedIn}: NextNavigatingPa
   if (isPrivate && !isLoggedIn) {
     return {
       type: 'not-authenticated',
-      nextUrl: `/guest/login?redirect=${encodeURIComponent(pathWithSearch)}`,
+      nextUrl: `/login?redirect=${encodeURIComponent(pathWithSearch)}`,
     };
   } else if (isNotPrivate && isLoggedIn) {
     return {
@@ -45,7 +45,7 @@ export function getNextNavigating({pathWithSearch, isLoggedIn}: NextNavigatingPa
 
 const PRIVATE_PATHNAMES = ['/study-records'];
 
-const NOT_PRIVATE_PATHNAME = ['/guest'];
+const NOT_PRIVATE_PATHNAME = ['/login'];
 
 /* startsWith만 쓰면 '/study-records-old'처럼 이름이 이어지는 다른 경로까지 걸린다 */
 function isUnderPathname(target: string, pathname: string) {

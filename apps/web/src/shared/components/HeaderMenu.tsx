@@ -8,10 +8,7 @@ import {IconButton} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
 import styles from './HeaderMenu.module.scss';
 
-export interface HeaderMenuItem {
-  label: string;
-  href: string;
-}
+export type HeaderMenuItem = {label: string; href: string} | {label: string; onClick: () => void};
 
 interface HeaderMenuProps {
   items: HeaderMenuItem[];
@@ -25,11 +22,21 @@ export default function HeaderMenu({items}: HeaderMenuProps) {
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
         <DropdownMenu.Content align="start" className={styles.menu} sideOffset={6}>
-          {items.map((item) => (
-            <DropdownMenu.Item key={item.label} asChild className={classNames(typography.body1, styles.menuItem)}>
-              <Link href={item.href}>{item.label}</Link>
-            </DropdownMenu.Item>
-          ))}
+          {items.map((item) =>
+            'href' in item ? (
+              <DropdownMenu.Item key={item.label} asChild className={classNames(typography.body1, styles.menuItem)}>
+                <Link href={item.href}>{item.label}</Link>
+              </DropdownMenu.Item>
+            ) : (
+              <DropdownMenu.Item
+                key={item.label}
+                className={classNames(typography.body1, styles.menuItem)}
+                onSelect={item.onClick}
+              >
+                {item.label}
+              </DropdownMenu.Item>
+            ),
+          )}
         </DropdownMenu.Content>
       </DropdownMenu.Portal>
     </DropdownMenu.Root>
