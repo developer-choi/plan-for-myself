@@ -1,0 +1,15 @@
+.slot {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl) var(--spacing-page-x-mobile);
+}
+
+.card {
+  padding: var(--spacing-lg) var(--spacing-md);
+}
+
+.spinner {
+  color: var(--color-primary);
+}
