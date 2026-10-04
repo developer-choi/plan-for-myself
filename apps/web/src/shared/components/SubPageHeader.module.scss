@@ -1,0 +1,12 @@
+@use '../styles/z-index';
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: z-index.zIndex(stickyHeader);
+  display: flex;
+  gap: var(--spacing-xs);
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-page-x-mobile);
+  background: var(--color-bg-subtle);
+}
