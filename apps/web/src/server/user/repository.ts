@@ -16,3 +16,11 @@ export async function findOrCreateUserId(googleSub: string, db: Queryable = pool
 
   return id;
 }
+
+export async function createGuestUserId(db: Queryable = pool): Promise<string> {
+  const {
+    rows: [{id}],
+  } = await db.query('INSERT INTO users (is_guest) VALUES (true) RETURNING id::text AS id', []);
+
+  return id;
+}

@@ -1,77 +1,125 @@
 import {afterEach, describe, expect, it} from 'vitest';
-import {getNextNavigating} from './path';
+import {getLoginState, getNextNavigating, type LoginState, type NextNavigatingResult} from './path';
 import {DEFAULT_HOME_URL, getRedirectUrlWhenLoginSuccess} from './redirect';
 
 const PRIVATE_PATH = '/study-records';
-const LOGGED_OUT_ONLY_PATH = '/login';
+const LOGIN_PATH = '/login';
 const PUBLIC_PATH = '/privacy';
 
 describe('getNextNavigating()', () => {
   describe('General cases', () => {
-    it('로그인이 필요한 경로에 로그아웃 상태로 오면 원래 주소를 담아 로그인 페이지로 보내야 한다', () => {
-      expect(getNextNavigating({pathWithSearch: PRIVATE_PATH, isLoggedIn: false})).toEqual({
-        type: 'not-authenticated',
-        nextUrl: `/login?redirect=${encodeURIComponent(PRIVATE_PATH)}`,
-      });
-    });
+    const accessCases: {
+      name: string;
+      pathWithSearch: string;
+      loginState: LoginState;
+      expected: NextNavigatingResult;
+    }[] = [
+      {
+        name: '로그아웃 상태로 달력을 열면 보던 주소를 기억한 채 로그인 페이지로 보내야 한다',
+        pathWithSearch: PRIVATE_PATH,
+        loginState: 'logged-out',
+        expected: {type: 'not-authenticated', nextUrl: `/login?redirect=${encodeURIComponent(PRIVATE_PATH)}`},
+      },
+      {
+        name: '로그인 없이 이용 중이면 달력을 열어 줘야 한다',
+        pathWithSearch: PRIVATE_PATH,
+        loginState: 'guest',
+        expected: {type: 'correct', nextUrl: PRIVATE_PATH},
+      },
+      {
+        name: '구글로 로그인했으면 달력을 열어 줘야 한다',
+        pathWithSearch: PRIVATE_PATH,
+        loginState: 'google',
+        expected: {type: 'correct', nextUrl: PRIVATE_PATH},
+      },
+      {
+        name: '로그아웃 상태면 로그인 페이지를 열어 줘야 한다',
+        pathWithSearch: LOGIN_PATH,
+        loginState: 'logged-out',
+        expected: {type: 'correct', nextUrl: LOGIN_PATH},
+      },
+      {
+        name: '로그인 없이 이용 중이어도 구글 계정을 연결할 수 있게 로그인 페이지를 열어 줘야 한다',
+        pathWithSearch: LOGIN_PATH,
+        loginState: 'guest',
+        expected: {type: 'correct', nextUrl: LOGIN_PATH},
+      },
+      {
+        name: '구글로 로그인했으면 로그인 페이지 대신 홈으로 보내야 한다',
+        pathWithSearch: `${LOGIN_PATH}?redirect=/foo`,
+        loginState: 'google',
+        expected: {type: 'already-authenticated', nextUrl: DEFAULT_HOME_URL},
+      },
+      {
+        name: '로그아웃 상태에서도 개인정보 처리방침을 열어 줘야 한다',
+        pathWithSearch: PUBLIC_PATH,
+        loginState: 'logged-out',
+        expected: {type: 'correct', nextUrl: PUBLIC_PATH},
+      },
+      {
+        name: '로그인 없이 이용 중에도 개인정보 처리방침을 열어 줘야 한다',
+        pathWithSearch: PUBLIC_PATH,
+        loginState: 'guest',
+        expected: {type: 'correct', nextUrl: PUBLIC_PATH},
+      },
+      {
+        name: '구글로 로그인했어도 개인정보 처리방침을 열어 줘야 한다',
+        pathWithSearch: PUBLIC_PATH,
+        loginState: 'google',
+        expected: {type: 'correct', nextUrl: PUBLIC_PATH},
+      },
+    ];
 
-    it('로그인이 필요한 경로에 로그인 상태로 오면 그대로 통과시켜야 한다', () => {
-      expect(getNextNavigating({pathWithSearch: PRIVATE_PATH, isLoggedIn: true})).toEqual({
-        type: 'correct',
-        nextUrl: PRIVATE_PATH,
-      });
-    });
-
-    it('로그아웃 상태 전용 경로에 로그인 상태로 오면 홈으로 보내야 한다', () => {
-      expect(getNextNavigating({pathWithSearch: `${LOGGED_OUT_ONLY_PATH}?redirect=/foo`, isLoggedIn: true})).toEqual({
-        type: 'already-authenticated',
-        nextUrl: DEFAULT_HOME_URL,
-      });
-    });
-
-    it('로그아웃 상태 전용 경로에 로그아웃 상태로 오면 그대로 통과시켜야 한다', () => {
-      expect(getNextNavigating({pathWithSearch: LOGGED_OUT_ONLY_PATH, isLoggedIn: false})).toEqual({
-        type: 'correct',
-        nextUrl: LOGGED_OUT_ONLY_PATH,
-      });
-    });
-
-    it('누구나 볼 수 있는 경로에 로그인 상태로 오면 그대로 통과시켜야 한다', () => {
-      expect(getNextNavigating({pathWithSearch: PUBLIC_PATH, isLoggedIn: true})).toEqual({
-        type: 'correct',
-        nextUrl: PUBLIC_PATH,
-      });
-    });
-
-    it('누구나 볼 수 있는 경로에 로그아웃 상태로 오면 그대로 통과시켜야 한다', () => {
-      expect(getNextNavigating({pathWithSearch: PUBLIC_PATH, isLoggedIn: false})).toEqual({
-        type: 'correct',
-        nextUrl: PUBLIC_PATH,
+    accessCases.forEach(({name, pathWithSearch, loginState, expected}) => {
+      it(name, () => {
+        expect(getNextNavigating({pathWithSearch, loginState})).toEqual(expected);
       });
     });
   });
 
   describe('Boundary cases', () => {
-    it('로그인이 필요한 경로의 하위 경로도 로그아웃 상태면 로그인 페이지로 보내야 한다', () => {
-      expect(getNextNavigating({pathWithSearch: `${PRIVATE_PATH}/2026/10`, isLoggedIn: false}).type).toBe(
-        'not-authenticated',
-      );
-    });
+    const boundaryCases: {
+      name: string;
+      pathWithSearch: string;
+      loginState: LoginState;
+      expectedType: NextNavigatingResult['type'];
+    }[] = [
+      {
+        name: '로그인이 필요한 경로의 하위 경로도 로그아웃 상태면 로그인 페이지로 보내야 한다',
+        pathWithSearch: `${PRIVATE_PATH}/2026/10`,
+        loginState: 'logged-out',
+        expectedType: 'not-authenticated',
+      },
+      {
+        name: '로그인이 필요한 경로와 이름만 이어지는 다른 경로는 로그아웃 상태여도 열어 줘야 한다',
+        pathWithSearch: `${PRIVATE_PATH}-other`,
+        loginState: 'logged-out',
+        expectedType: 'correct',
+      },
+      {
+        name: '로그인 페이지의 하위 경로도 구글로 로그인했으면 홈으로 보내야 한다',
+        pathWithSearch: `${LOGIN_PATH}/callback`,
+        loginState: 'google',
+        expectedType: 'already-authenticated',
+      },
+      {
+        name: '로그인 페이지의 하위 경로는 로그인 없이 이용 중이어도 열어 줘야 한다',
+        pathWithSearch: `${LOGIN_PATH}/callback`,
+        loginState: 'guest',
+        expectedType: 'correct',
+      },
+      {
+        name: '로그인 페이지와 이름만 이어지는 다른 경로는 구글로 로그인했어도 열어 줘야 한다',
+        pathWithSearch: `${LOGIN_PATH}-help`,
+        loginState: 'google',
+        expectedType: 'correct',
+      },
+    ];
 
-    it('로그인이 필요한 경로와 이름만 이어지는 다른 경로는 로그아웃 상태여도 통과시켜야 한다', () => {
-      expect(getNextNavigating({pathWithSearch: `${PRIVATE_PATH}-other`, isLoggedIn: false}).type).toBe('correct');
-    });
-
-    it('로그아웃 상태 전용 경로의 하위 경로도 로그인 상태면 홈으로 보내야 한다', () => {
-      expect(getNextNavigating({pathWithSearch: `${LOGGED_OUT_ONLY_PATH}/callback`, isLoggedIn: true}).type).toBe(
-        'already-authenticated',
-      );
-    });
-
-    it('로그아웃 상태 전용 경로와 이름만 이어지는 다른 경로는 로그인 상태여도 통과시켜야 한다', () => {
-      expect(getNextNavigating({pathWithSearch: `${LOGGED_OUT_ONLY_PATH}-help`, isLoggedIn: true}).type).toBe(
-        'correct',
-      );
+    boundaryCases.forEach(({name, pathWithSearch, loginState, expectedType}) => {
+      it(name, () => {
+        expect(getNextNavigating({pathWithSearch, loginState}).type).toBe(expectedType);
+      });
     });
   });
 
@@ -82,11 +130,33 @@ describe('getNextNavigating()', () => {
 
     it('쿼리가 여러 개 붙은 주소를 로그인 페이지로 보내도 로그인 뒤 돌아갈 주소에 쿼리가 모두 남아야 한다', () => {
       const pathWithSearch = `${PRIVATE_PATH}?a=1&b=2`;
-      const navigating = getNextNavigating({pathWithSearch, isLoggedIn: false});
+      const navigating = getNextNavigating({pathWithSearch, loginState: 'logged-out'});
 
       history.replaceState(null, '', navigating.nextUrl);
 
       expect(getRedirectUrlWhenLoginSuccess()).toBe(pathWithSearch);
+    });
+  });
+});
+
+describe('getLoginState()', () => {
+  describe('General cases', () => {
+    it('로그인하지 않았으면 로그아웃 상태로 봐야 한다', () => {
+      expect(getLoginState(null)).toBe('logged-out');
+    });
+
+    it('로그인 없이 시작한 사용자는 로그인 없이 이용 중인 상태로 봐야 한다', () => {
+      expect(getLoginState({userId: '1', isGuest: true})).toBe('guest');
+    });
+
+    it('구글로 로그인한 사용자는 구글 로그인 상태로 봐야 한다', () => {
+      expect(getLoginState({userId: '1', isGuest: false})).toBe('google');
+    });
+  });
+
+  describe('Edge cases', () => {
+    it('로그인 정보에 사용자 식별 값이 없으면 로그아웃 상태로 봐야 한다', () => {
+      expect(getLoginState({userId: '', isGuest: false})).toBe('logged-out');
     });
   });
 });

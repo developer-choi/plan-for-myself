@@ -1,8 +1,11 @@
+import type {Session} from 'next-auth';
 import {DEFAULT_HOME_URL} from '@/auth/redirect';
+
+export type LoginState = 'logged-out' | 'guest' | 'google';
 
 interface NextNavigatingParam {
   pathWithSearch: string;
-  isLoggedIn: boolean;
+  loginState: LoginState;
 }
 
 export type NextNavigatingResult =
@@ -19,18 +22,26 @@ export type NextNavigatingResult =
       nextUrl: string;
     };
 
-export function getNextNavigating({pathWithSearch, isLoggedIn}: NextNavigatingParam): NextNavigatingResult {
+export function getLoginState(session: Pick<Session, 'userId' | 'isGuest'> | null): LoginState {
+  if (!session?.userId) {
+    return 'logged-out';
+  }
+
+  return session.isGuest ? 'guest' : 'google';
+}
+
+export function getNextNavigating({pathWithSearch, loginState}: NextNavigatingParam): NextNavigatingResult {
   const nextUrlObject = new URL(`http://some.domain.com${pathWithSearch}`);
   const nextPathname = nextUrlObject.pathname;
   const isPrivate = PRIVATE_PATHNAMES.some((pathname) => isUnderPathname(nextPathname, pathname));
   const isNotPrivate = NOT_PRIVATE_PATHNAME.some((pathname) => isUnderPathname(nextPathname, pathname));
 
-  if (isPrivate && !isLoggedIn) {
+  if (isPrivate && loginState === 'logged-out') {
     return {
       type: 'not-authenticated',
       nextUrl: `/login?redirect=${encodeURIComponent(pathWithSearch)}`,
     };
-  } else if (isNotPrivate && isLoggedIn) {
+  } else if (isNotPrivate && loginState === 'google') {
     return {
       type: 'already-authenticated',
       nextUrl: DEFAULT_HOME_URL,

@@ -27,6 +27,13 @@
   text-align: center;
 }
 
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  width: 100%;
+}
+
 .text {
   display: flex;
   flex-direction: column;
