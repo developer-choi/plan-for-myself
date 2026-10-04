@@ -1,5 +1,8 @@
 import {Suspense} from 'react';
+import Link from 'next/link';
 import {notFound} from 'next/navigation';
+import classNames from 'classnames';
+import typography from '@developer-choi/design-system/styles/typography';
 import {getKoreanToday} from '@plan-for-myself/shared';
 import {auth} from '@/auth/next-auth';
 import {getLoginState} from '@/auth/path';
@@ -24,15 +27,22 @@ export default async function Page({params}: PageProps) {
     notFound();
   }
 
-  const loginState = getLoginState(await auth());
+  const isGuest = getLoginState(await auth()) === 'guest';
   const today = getKoreanToday();
 
   return (
     <PageShell>
       <CalendarHeader
-        menu={loginState === 'guest' ? <GuestCalendarMenu /> : <CalendarMenu viewPath={monthPath(viewMonth)} />}
+        menu={isGuest ? <GuestCalendarMenu /> : <CalendarMenu viewPath={monthPath(viewMonth)} />}
         nextHref={monthPath(shiftMonth(viewMonth, 1))}
         previousHref={monthPath(shiftMonth(viewMonth, -1))}
+        right={
+          isGuest && (
+            <Link className={classNames(typography.body2, typography.bold, styles.loginLink)} href="/login">
+              로그인
+            </Link>
+          )
+        }
         title={`${viewMonth.year}년 ${viewMonth.month}월`}
       />
       <main className={styles.body}>

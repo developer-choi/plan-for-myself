@@ -11,9 +11,10 @@ interface CalendarHeaderProps {
   previousHref: string;
   nextHref: string;
   menu: ReactNode;
+  right?: ReactNode;
 }
 
-export default function CalendarHeader({title, previousHref, nextHref, menu}: CalendarHeaderProps) {
+export default function CalendarHeader({title, previousHref, nextHref, menu, right}: CalendarHeaderProps) {
   return (
     <header className={styles.calendarHeader}>
       <div className={styles.menuSlot}>{menu}</div>
@@ -26,6 +27,7 @@ export default function CalendarHeader({title, previousHref, nextHref, menu}: Ca
           <Link href={nextHref} />
         </IconButton>
       </div>
+      <div className={styles.right}>{right}</div>
     </header>
   );
 }
