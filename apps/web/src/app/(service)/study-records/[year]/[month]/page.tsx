@@ -24,7 +24,14 @@ export default async function Page({params}: PageProps) {
   return (
     <PageShell>
       <CalendarHeader
-        menu={<HeaderMenu items={[{label: '로그아웃', href: logoutHref}]} />}
+        menu={
+          <HeaderMenu
+            items={[
+              {label: '개인정보 처리방침', href: '/privacy'},
+              {label: '로그아웃', href: logoutHref},
+            ]}
+          />
+        }
         nextHref={monthPath(shiftMonth(viewMonth, 1))}
         previousHref={monthPath(shiftMonth(viewMonth, -1))}
         title={`${viewMonth.year}년 ${viewMonth.month}월`}
