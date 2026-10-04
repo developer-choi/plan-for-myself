@@ -24,7 +24,7 @@ export function validateStudyRecordUpdate(body: unknown): Validation<StudyRecord
   return validate(studyRecordUpdateSchema, body);
 }
 
-export function validateMonth(month: string): Validation<{from: string; until: string}> {
+export function validateMonth(month: string | null): Validation<{from: string; until: string}> {
   const result = monthSchema.safeParse(month);
   return result.success
     ? {ok: true, value: result.data}
