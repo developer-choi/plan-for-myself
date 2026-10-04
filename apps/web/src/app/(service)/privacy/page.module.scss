@@ -1,0 +1,16 @@
+.body {
+  padding: 0 var(--spacing-page-x-mobile) var(--spacing-2xl);
+}
+
+.section + .section {
+  margin-top: var(--spacing-md);
+}
+
+.content {
+  margin-top: var(--spacing-xs);
+  color: var(--color-fg-secondary);
+
+  a {
+    text-decoration: underline;
+  }
+}
