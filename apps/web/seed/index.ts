@@ -19,11 +19,21 @@ if (!connectionString) {
 }
 
 const {year, month, date} = getKoreanDate();
-const rows = SCENARIOS[scenarioName]({year, month: month + 1, date}).map(({day, ...record}) => ({
+const base = {year, month: month + 1, date};
+const rows = SCENARIOS[scenarioName](base).map(({day, ...record}) => ({
   ...record,
   timestamp: toRecordTimestamp(day),
   recordDate: toRecordDate(day),
 }));
+
+/* 시나리오는 현재 날짜를 아직 기록하지 않은 상태를 만든다. 하한 날짜를 잘못 잡으면 현재 날짜 기록이 조용히 생겨 막는다 */
+const baseDate = toRecordDate(base);
+const notPastRow = rows.find((row) => row.recordDate >= baseDate);
+if (notPastRow) {
+  throw new Error(
+    `${scenarioName} 시나리오가 현재 날짜(${baseDate}) 이후 기록(${notPastRow.recordDate})을 만들어 시드를 넣지 않는다`,
+  );
+}
 
 replaceUserRecords(connectionString, googleSub, rows)
   .then(({userId, deletedCount, insertedCount}) => {
