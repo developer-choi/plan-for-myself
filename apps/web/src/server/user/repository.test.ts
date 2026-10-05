@@ -1,14 +1,19 @@
 // @vitest-environment node
 import type {PGlite} from '@electric-sql/pglite';
 import {beforeEach, describe, expect, it} from 'vitest';
-import {countGuests, createTestDb} from '@/server/db/test-db';
+import {countGuests, countStudyRecords, createTestDb, findUser, insertStudyRecord} from '@/server/db/test-db';
 import {
   createGuestUserId,
   createGuestUserIdWithinLimit,
+  deleteGuestUser,
   deleteUser,
+  findGoogleLoginRows,
   findOrCreateUserId,
   GuestLimitError,
+  linkGuestToGoogle,
 } from './repository';
+
+const recordDate = '2026-10-01';
 
 describe('findOrCreateUserId', () => {
   let db: PGlite;
@@ -38,6 +43,124 @@ describe('findOrCreateUserId', () => {
     const idB = await findOrCreateUserId('sub-b', db);
 
     expect(idB).not.toBe(idA);
+  });
+});
+
+describe('findGoogleLoginRows()', () => {
+  let db: PGlite;
+
+  beforeEach(async () => {
+    db = await createTestDb();
+  });
+
+  describe('General cases', () => {
+    it('게스트의 기록 유무와, 그 구글 계정으로 가입된 사용자 ID를 함께 돌려준다', async () => {
+      const googleSub = 'sub-a';
+      const guestUserId = await createGuestUserId(db);
+      await insertStudyRecord(db, guestUserId, recordDate);
+      await findOrCreateUserId('sub-b', db);
+      const registeredUserId = await findOrCreateUserId(googleSub, db);
+
+      const rows = await findGoogleLoginRows(guestUserId, googleSub, db);
+
+      expect(rows).toEqual({guestHasRecords: true, registeredUserId});
+    });
+  });
+
+  describe('Edge cases', () => {
+    it('그 구글 계정으로 가입된 사용자가 없으면 사용자 ID가 비고, 다른 사용자의 기록은 이 게스트의 기록으로 세지 않는다', async () => {
+      const guestUserId = await createGuestUserId(db);
+      const otherUserId = await findOrCreateUserId('sub-b', db);
+      await insertStudyRecord(db, otherUserId, recordDate);
+
+      const rows = await findGoogleLoginRows(guestUserId, 'sub-a', db);
+
+      expect(rows).toEqual({guestHasRecords: false, registeredUserId: null});
+    });
+  });
+});
+
+describe('linkGuestToGoogle()', () => {
+  let db: PGlite;
+
+  beforeEach(async () => {
+    db = await createTestDb();
+  });
+
+  describe('General cases', () => {
+    it('게스트를 구글 계정에 이으면 같은 사용자 ID 그대로 게스트가 아닌 사용자가 된다', async () => {
+      const googleSub = 'sub-a';
+      const guestUserId = await createGuestUserId(db);
+
+      await linkGuestToGoogle(guestUserId, googleSub, db);
+
+      expect(await findUser(db, guestUserId)).toEqual({isGuest: false, googleSub});
+    });
+  });
+
+  describe('Edge cases', () => {
+    it('이미 가입한 사용자에게 다른 구글 계정을 이으려 하면 기존 계정을 바꾸지 않고 실패한다', async () => {
+      const googleSub = 'sub-a';
+      const userId = await findOrCreateUserId(googleSub, db);
+
+      await expect(linkGuestToGoogle(userId, 'sub-b', db)).rejects.toThrow(
+        '게스트가 아닌 사용자에 구글 계정을 이으려 했다',
+      );
+      expect(await findUser(db, userId)).toEqual({isGuest: false, googleSub});
+    });
+  });
+});
+
+describe('deleteGuestUser()', () => {
+  const deleteFailure = '지울 게스트가 없거나, 남기기로 한 기록이 있다';
+  let db: PGlite;
+
+  beforeEach(async () => {
+    db = await createTestDb();
+  });
+
+  describe('General cases', () => {
+    it('기록 없는 게스트를 지운다', async () => {
+      const guestUserId = await createGuestUserId(db);
+
+      await deleteGuestUser(guestUserId, {withRecords: false}, db);
+
+      expect(await findUser(db, guestUserId)).toBeUndefined();
+    });
+
+    it('기록까지 지우기로 하면 게스트와 그 기록을 지우고 다른 사용자의 기록은 그대로 둔다', async () => {
+      const guestUserId = await createGuestUserId(db);
+      await insertStudyRecord(db, guestUserId, recordDate);
+      const otherUserId = await findOrCreateUserId('sub-a', db);
+      await insertStudyRecord(db, otherUserId, recordDate);
+
+      await deleteGuestUser(guestUserId, {withRecords: true}, db);
+
+      expect(await findUser(db, guestUserId)).toBeUndefined();
+      expect(await countStudyRecords(db, guestUserId)).toBe(0);
+      expect(await countStudyRecords(db, otherUserId)).toBe(1);
+    });
+  });
+
+  describe('Edge cases', () => {
+    it('기록을 지우지 않기로 했는데 게스트에게 기록이 있으면 아무것도 지우지 않고 실패한다', async () => {
+      const guestUserId = await createGuestUserId(db);
+      await insertStudyRecord(db, guestUserId, recordDate);
+
+      await expect(deleteGuestUser(guestUserId, {withRecords: false}, db)).rejects.toThrow(deleteFailure);
+      expect(await findUser(db, guestUserId)).toEqual({isGuest: true, googleSub: null});
+      expect(await countStudyRecords(db, guestUserId)).toBe(1);
+    });
+
+    it('게스트가 아닌 사용자는 기록까지 지우기로 해도 기록과 사용자를 남기고 실패한다', async () => {
+      const googleSub = 'sub-a';
+      const userId = await findOrCreateUserId(googleSub, db);
+      await insertStudyRecord(db, userId, recordDate);
+
+      await expect(deleteGuestUser(userId, {withRecords: true}, db)).rejects.toThrow(deleteFailure);
+      expect(await findUser(db, userId)).toEqual({isGuest: false, googleSub});
+      expect(await countStudyRecords(db, userId)).toBe(1);
+    });
   });
 });
 
@@ -173,14 +296,13 @@ describe('deleteUser()', () => {
 
   beforeEach(async () => {
     db = await createTestDb();
-    await db.exec('CREATE TABLE study_records (pk serial PRIMARY KEY, user_id bigint NOT NULL REFERENCES users (id))');
   });
 
   describe('General cases', () => {
     it('사용자를 지우면 그 사용자의 기록만 함께 지워진다', async () => {
       const target = await findOrCreateUserId('sub-a', db);
       const other = await findOrCreateUserId('sub-b', db);
-      await db.query('INSERT INTO study_records (user_id) VALUES ($1), ($1), ($2)', [target, other]);
+      await db.query('INSERT INTO study_records (user_id, record_date) VALUES ($1, $3), ($1, $3), ($2, $3)', [target, other, recordDate]);
 
       await deleteUser(target, db);
 
@@ -195,7 +317,7 @@ describe('deleteUser()', () => {
   describe('Edge cases', () => {
     it('이미 없는 사용자를 지우면 아무것도 지우지 않고 끝난다', async () => {
       const other = await findOrCreateUserId('sub-b', db);
-      await db.query('INSERT INTO study_records (user_id) VALUES ($1)', [other]);
+      await db.query('INSERT INTO study_records (user_id, record_date) VALUES ($1, $2)', [other, recordDate]);
       const missingUserId = '999';
 
       await expect(deleteUser(missingUserId, db)).resolves.toBeUndefined();
@@ -206,7 +328,7 @@ describe('deleteUser()', () => {
 
     it('사용자를 지우다 실패하면 기록도 남는다', async () => {
       const target = await findOrCreateUserId('sub-a', db);
-      await db.query('INSERT INTO study_records (user_id) VALUES ($1), ($1)', [target]);
+      await db.query('INSERT INTO study_records (user_id, record_date) VALUES ($1, $2), ($1, $2)', [target, recordDate]);
       await db.exec(`
         CREATE FUNCTION reject_user_delete() RETURNS trigger AS $$
         BEGIN
