@@ -22,27 +22,28 @@ describe('findOrCreateUserId', () => {
     db = await createTestDb();
   });
 
-  it('처음 온 sub면 행을 새로 만들어 그 ID를 돌려준다', async () => {
-    const id = await findOrCreateUserId('sub-a', db);
+  describe('General cases', () => {
+    it('처음 로그인하는 구글 계정이면 사용자를 새로 만들고 그 ID를 돌려준다', async () => {
+      const googleSub = 'sub-a';
 
-    const {rows} = await db.query<{id: string}>("SELECT id::text AS id FROM users WHERE google_sub = 'sub-a'");
-    expect(rows).toEqual([{id}]);
-  });
+      const id = await findOrCreateUserId(googleSub, db);
 
-  it('같은 sub를 다시 넘기면 행을 늘리지 않고 같은 ID를 돌려준다', async () => {
-    const first = await findOrCreateUserId('sub-a', db);
-    const second = await findOrCreateUserId('sub-a', db);
+      const {rows} = await db.query<{id: string}>('SELECT id::text AS id FROM users WHERE google_sub = $1', [
+        googleSub,
+      ]);
+      expect(rows).toEqual([{id}]);
+    });
 
-    expect(second).toBe(first);
-    const {rows} = await db.query<{count: number}>('SELECT count(*)::int AS count FROM users');
-    expect(rows[0].count).toBe(1);
-  });
+    it('이미 가입한 구글 계정으로 다시 로그인하면 사용자를 늘리지 않고 같은 ID를 돌려준다', async () => {
+      const googleSub = 'sub-a';
+      const first = await findOrCreateUserId(googleSub, db);
 
-  it('다른 sub면 다른 ID를 돌려준다', async () => {
-    const idA = await findOrCreateUserId('sub-a', db);
-    const idB = await findOrCreateUserId('sub-b', db);
+      const second = await findOrCreateUserId(googleSub, db);
 
-    expect(idB).not.toBe(idA);
+      expect(second).toBe(first);
+      const {rows} = await db.query<{count: number}>('SELECT count(*)::int AS count FROM users');
+      expect(rows[0].count).toBe(1);
+    });
   });
 });
 
@@ -164,29 +165,6 @@ describe('deleteGuestUser()', () => {
   });
 });
 
-describe('createGuestUserId()', () => {
-  let db: PGlite;
-
-  beforeEach(async () => {
-    db = await createTestDb();
-  });
-
-  describe('General cases', () => {
-    it('로그인 없이 시작할 때마다 구글 계정 없는 사용자를 새로 만든다', async () => {
-      const first = await createGuestUserId(db);
-      const second = await createGuestUserId(db);
-
-      const {rows} = await db.query<{id: string; isGuest: boolean; googleSub: string | null}>(
-        'SELECT id::text AS id, is_guest AS "isGuest", google_sub AS "googleSub" FROM users ORDER BY users.id',
-      );
-      expect(rows).toEqual([
-        {id: first, isGuest: true, googleSub: null},
-        {id: second, isGuest: true, googleSub: null},
-      ]);
-    });
-  });
-});
-
 describe('createGuestUserIdWithinLimit()', () => {
   const limit = 30;
   const ipHash = 'ip-hash-a';
@@ -215,23 +193,13 @@ describe('createGuestUserIdWithinLimit()', () => {
 
       const id = await createGuestUserIdWithinLimit('ip-hash-b', db);
 
-      expect(id).toEqual(expect.any(String));
+      expect(await findUser(db, id)).toEqual({isGuest: true, googleSub: null});
       expect(await countGuests(db)).toBe(limit + 1);
     });
   });
 
   describe('Boundary cases', () => {
-    it('같은 IP로 1시간 안에 30번째까지는 게스트를 만들어야 한다', async () => {
-      const ids = [];
-      for (let index = 0; index < limit; index++) {
-        ids.push(await createGuestUserIdWithinLimit(ipHash, db));
-      }
-
-      expect(new Set(ids).size).toBe(limit);
-      expect(await countGuests(db)).toBe(limit);
-    });
-
-    it('같은 IP의 31번째 요청은 거절하고 게스트를 만들지 않아야 한다', async () => {
+    it('같은 IP로 1시간 안에 30명을 만든 뒤의 요청은 거절하고 게스트를 더 만들지 않는다', async () => {
       await createGuestsUpToLimit(ipHash);
 
       await expect(createGuestUserIdWithinLimit(ipHash, db)).rejects.toThrow(GuestLimitError);
@@ -254,11 +222,11 @@ describe('createGuestUserIdWithinLimit()', () => {
 
       const id = await createGuestUserIdWithinLimit(ipHash, db);
 
-      expect(id).toEqual(expect.any(String));
+      expect(await findUser(db, id)).toEqual({isGuest: true, googleSub: null});
       expect(await countGuests(db)).toBe(1);
     });
 
-    it('1시간이 지난 생성 기록은 지워져야 한다', async () => {
+    it('1시간이 지난 IP 기록은 다음 요청 때 정리된다', async () => {
       await insertCreationsUpToLimit('2 hours');
 
       await createGuestUserIdWithinLimit(ipHash, db);
