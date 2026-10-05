@@ -24,7 +24,14 @@ export function validateStudyRecordUpdate(body: unknown): Validation<StudyRecord
   return validate(studyRecordUpdateSchema, body);
 }
 
-export function validateMonth(month: string): Validation<{from: string; until: string}> {
+export function validateDate(date: string | null): Validation<string> {
+  const result = dateSchema.safeParse(date);
+  return result.success
+    ? {ok: true, value: result.data}
+    : {ok: false, rejection: {code: 'INVALID_DATE', message: result.error.issues[0].message}};
+}
+
+export function validateMonth(month: string | null): Validation<{from: string; until: string}> {
   const result = monthSchema.safeParse(month);
   return result.success
     ? {ok: true, value: result.data}
@@ -73,12 +80,14 @@ const failTagSchema = z
   .min(1, {error: '빈 실패 태그는 넣을 수 없어요'})
   .regex(/^\S+$/, {error: '실패 태그에는 공백을 넣을 수 없어요'});
 
+const dateSchema = z.iso
+  .date({error: DATE_MESSAGE})
+  .refine((date) => date >= STUDY_RECORD_LIMITS.date.min && date <= STUDY_RECORD_LIMITS.date.max, {
+    error: DATE_MESSAGE,
+  });
+
 const studyRecordOriginalSchema = z.object({
-  date: z.iso
-    .date({error: DATE_MESSAGE})
-    .refine((date) => date >= STUDY_RECORD_LIMITS.date.min && date <= STUDY_RECORD_LIMITS.date.max, {
-      error: DATE_MESSAGE,
-    }),
+  date: dateSchema,
   dateType: z.enum(['weekday', 'holiday'], {error: '평일·휴일 중 하나를 골라 주세요'}),
   studiedMinutes: z.tuple([minutesSchema, minutesSchema, minutesSchema], {error: STUDIED_MINUTES_MESSAGE}),
   failTags: z

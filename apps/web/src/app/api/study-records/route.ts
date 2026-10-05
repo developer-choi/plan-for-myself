@@ -15,12 +15,7 @@ export async function GET(request: NextRequest) {
     return unauthorizedResponse();
   }
 
-  const month = request.nextUrl.searchParams.get('month');
-  if (month === null) {
-    return NextResponse.json(await listStudyRecords(userId, null));
-  }
-
-  const range = validateMonth(month);
+  const range = validateMonth(request.nextUrl.searchParams.get('month'));
   if (!range.ok) {
     return badRequestResponse(range.rejection);
   }

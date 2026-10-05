@@ -20,6 +20,42 @@ export function monthPath({year, month}: CalendarMonth) {
   return `/study-records/${year}/${month}`;
 }
 
+export interface CalendarCell {
+  date: string;
+  day: number;
+  inMonth: boolean;
+}
+
+export function getCalendarCells({year, month}: CalendarMonth): CalendarCell[] {
+  const leadingDays = (new Date(year, month - 1, 1).getDay() + DAYS_PER_WEEK - 1) % DAYS_PER_WEEK;
+  const daysInMonth = new Date(year, month, 0).getDate();
+  const weeks = Math.ceil((leadingDays + daysInMonth) / DAYS_PER_WEEK);
+
+  return Array.from({length: weeks * DAYS_PER_WEEK}, (_cell, index) => {
+    const cellDate = new Date(year, month - 1, 1 - leadingDays + index);
+    const cellMonth = cellDate.getMonth() + 1;
+
+    return {
+      date: `${cellDate.getFullYear()}-${pad(cellMonth)}-${pad(cellDate.getDate())}`,
+      day: cellDate.getDate(),
+      inMonth: cellMonth === month,
+    };
+  });
+}
+
+export function isSameMonth(date: string, month: CalendarMonth): boolean {
+  return date.startsWith(toMonthParam(month));
+}
+
+export function toMonthParam({year, month}: CalendarMonth): string {
+  return `${year}-${pad(month)}`;
+}
+
+const DAYS_PER_WEEK = 7;
 const YEAR_PATTERN = /^[1-9]\d{3}$/;
 const MAX_YEAR = 9998;
 const MONTH_PATTERN = /^(?:[1-9]|1[0-2])$/;
+
+function pad(value: number) {
+  return String(value).padStart(2, '0');
+}

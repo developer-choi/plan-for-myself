@@ -76,10 +76,10 @@ export async function deleteStudyRecord(userId: string, pk: number, db: Queryabl
 
 /*
  * 따옴표가 없으면 Postgres가 별칭을 소문자로 바꾼다
- * bigint는 pg가 문자열로 돌려줘서 숫자로 받으려고 float8로 바꾼다. 밀리초 epoch는 float8에 정확히 담긴다
+ * date 칸은 pg가 로컬 시간대의 Date로 바꿔 날짜가 밀릴 수 있어 문자열로 꺼낸다
  */
 const COLUMNS =
-  'pk, date_type AS "dateType", studied_minutes AS "studiedMinutes", fail_tags AS "failTags", timestamp::float8 AS timestamp';
+  'pk, to_char(record_date, \'YYYY-MM-DD\') AS date, date_type AS "dateType", studied_minutes AS "studiedMinutes", fail_tags AS "failTags"';
 const UNIQUE_VIOLATION = '23505';
 const DUPLICATE_DATE_CONSTRAINT = 'study_records_user_id_record_date_key';
 

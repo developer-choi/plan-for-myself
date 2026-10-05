@@ -1,7 +1,7 @@
 import {isHolidayDate, type DateType, type SimpleDate, type StudyRecord} from '@plan-for-myself/shared';
 import {addDays, getMonthDay, listDays} from './date';
 
-export type SeedRecord = Omit<StudyRecord, 'pk' | 'timestamp'> & {day: SimpleDate};
+export type SeedRecord = Omit<StudyRecord, 'pk' | 'date'> & {day: SimpleDate};
 
 export type ScenarioName = keyof typeof SCENARIOS;
 

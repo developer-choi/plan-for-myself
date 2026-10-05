@@ -1,6 +1,7 @@
 'use client';
 
 import {type PropsWithChildren} from 'react';
+import {QueryErrorResetBoundary} from '@tanstack/react-query';
 import classNames from 'classnames';
 import {ErrorBoundary, type FallbackProps} from 'react-error-boundary';
 import ErrorNotice from '@/shared/components/ErrorNotice';
@@ -18,12 +19,19 @@ export default function HandledErrorBoundary({
   children,
 }: PropsWithChildren<HandledErrorBoundaryProps>) {
   return (
-    <ErrorBoundary
-      fallbackRender={({resetErrorBoundary}) => <Fallback resetErrorBoundary={resetErrorBoundary} size={size} />}
-      onReset={onReset}
-    >
-      {children}
-    </ErrorBoundary>
+    <QueryErrorResetBoundary>
+      {({reset: resetQueryError}) => (
+        <ErrorBoundary
+          fallbackRender={({resetErrorBoundary}) => <Fallback resetErrorBoundary={resetErrorBoundary} size={size} />}
+          onReset={() => {
+            resetQueryError();
+            onReset?.();
+          }}
+        >
+          {children}
+        </ErrorBoundary>
+      )}
+    </QueryErrorResetBoundary>
   );
 }
 

@@ -4,7 +4,8 @@ import {toRecordDate, toRecordTimestamp} from './date';
 import {assertDevBranch} from './guard';
 import {isScenarioName, SCENARIOS} from './scenario';
 
-type SeedRow = Omit<StudyRecord, 'pk'> & {recordDate: string};
+/* DB에는 timestamp 칸이 남아 있어 시드가 기록 추가 API와 같은 값으로 채운다 */
+type SeedRow = Omit<StudyRecord, 'pk' | 'date'> & {timestamp: number; recordDate: string};
 
 const [scenarioName = '', googleSub] = process.argv.slice(2);
 if (!isScenarioName(scenarioName) || !googleSub) {
