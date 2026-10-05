@@ -4,7 +4,6 @@
   z-index: z-index.zIndex(dropdown);
   display: flex;
   flex-direction: column;
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- 목업 드롭다운 최소 폭 180px, 폭 토큰이 없다 */
   min-width: 180px;
   padding: var(--spacing-xs);
   background: var(--color-bg-default);
