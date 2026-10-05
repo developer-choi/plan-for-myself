@@ -1,0 +1,86 @@
+.calendar {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.weekdays,
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--spacing-xs);
+}
+
+.weekday {
+  padding-bottom: var(--spacing-xs);
+  color: var(--color-fg-muted);
+  text-align: center;
+}
+
+.grid {
+  flex: 1;
+  grid-auto-rows: minmax(64px, 1fr);
+}
+
+.day {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  align-items: center;
+  min-width: 0;
+  padding: var(--spacing-xs);
+  overflow: hidden;
+  color: var(--color-fg-default);
+  cursor: pointer;
+  appearance: none;
+  background: var(--color-bg-default);
+  border: 0;
+  border-radius: var(--radius-sm);
+  -webkit-tap-highlight-color: transparent;
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-focus);
+  }
+
+  /* 터치 기기는 탭한 칸을 hover로 남겨 두므로 마우스가 있는 기기에서만 칠한다 */
+  @media (hover: hover) {
+    &:hover {
+      background: var(--color-bg-neutral-soft);
+    }
+  }
+
+  &[aria-current='date'] .dayNumber {
+    color: var(--color-on-primary);
+    background: var(--color-primary);
+  }
+}
+
+.outsideDay {
+  justify-self: center;
+  margin-top: var(--spacing-xs);
+  color: var(--color-fg-subtle);
+}
+
+.dayNumber {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: var(--control-height-sm);
+  height: var(--control-height-sm);
+  border-radius: 50%;
+}
+
+.chip {
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+}
+
+.chipText {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
