@@ -1,7 +1,8 @@
 import {NextRequest, NextResponse} from 'next/server';
 import {getRequestUserId} from '@/auth/request-user';
 import {listStudyRecords} from '@/server/study-record/repository';
-import {badRequestResponse, unauthorizedResponse} from '@/server/study-record/response';
+import {unauthorizedResponse} from '@/server/response';
+import {badRequestResponse} from '@/server/study-record/response';
 import {validateDate} from '@/server/study-record/validate';
 import {calculateOverview} from '@/server/study-record-stats/overview';
 
