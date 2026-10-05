@@ -26,3 +26,8 @@ export async function createTestDb() {
   await db.exec(CREATE_GUEST_CREATIONS_TABLE);
   return db;
 }
+
+export async function countGuests(db: PGlite) {
+  const {rows} = await db.query<{count: number}>('SELECT count(*)::int AS count FROM users WHERE is_guest');
+  return rows[0].count;
+}
