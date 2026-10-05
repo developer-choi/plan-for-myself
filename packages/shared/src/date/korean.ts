@@ -23,6 +23,11 @@ export function getKoreanDate(date = new Date()): DestructedDate {
   return convertUTCDateProperty(koreaDate);
 }
 
+export function getKoreanToday(now = new Date()): string {
+  const {year, month, date} = getKoreanDate(now);
+  return `${year}-${String(month + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
+}
+
 export const KST = 9;
 
 function convertUTCDateProperty(date: Date): DestructedDate {
