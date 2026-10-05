@@ -1,9 +1,10 @@
 import NextAuth from 'next-auth';
 import {NextResponse} from 'next/server';
+import {authorizeGuest} from '@/auth/guest-login';
 import {getLoginState, getNextNavigating} from '@/auth/path';
 import Credentials from 'next-auth/providers/credentials';
 import Google, {type GoogleProfile} from 'next-auth/providers/google';
-import {createGuestUserId, findOrCreateUserId} from '@/server/user/repository';
+import {findOrCreateUserId} from '@/server/user/repository';
 
 const SECONDS_PER_DAY = 86_400;
 const SESSION_MAX_AGE_DAYS = 30;
@@ -26,7 +27,7 @@ export const {handlers, signOut, auth} = NextAuth({
     Credentials({
       id: GUEST_PROVIDER_ID,
       credentials: {},
-      authorize: async () => ({id: await createGuestUserId()}),
+      authorize: (_credentials, request) => authorizeGuest(request),
     }),
   ],
   callbacks: {
