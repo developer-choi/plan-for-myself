@@ -3,6 +3,7 @@ import {getLoginState, getNextNavigating, type LoginState, type NextNavigatingRe
 import {DEFAULT_HOME_URL, getRedirectUrlWhenLoginSuccess} from './redirect';
 
 const PRIVATE_PATH = '/study-records';
+const ACCOUNT_PATH = '/account';
 const LOGIN_PATH = '/login';
 const PUBLIC_PATH = '/privacy';
 
@@ -31,6 +32,18 @@ describe('getNextNavigating()', () => {
         pathWithSearch: PRIVATE_PATH,
         loginState: 'google',
         expected: {type: 'correct', nextUrl: PRIVATE_PATH},
+      },
+      {
+        name: '로그아웃 상태로 계정 페이지를 열면 보던 주소를 기억한 채 로그인 페이지로 보내야 한다',
+        pathWithSearch: ACCOUNT_PATH,
+        loginState: 'logged-out',
+        expected: {type: 'not-authenticated', nextUrl: `/login?redirect=${encodeURIComponent(ACCOUNT_PATH)}`},
+      },
+      {
+        name: '로그인 없이 이용 중이면 계정 페이지를 열어 줘야 한다',
+        pathWithSearch: ACCOUNT_PATH,
+        loginState: 'guest',
+        expected: {type: 'correct', nextUrl: ACCOUNT_PATH},
       },
       {
         name: '로그아웃 상태면 로그인 페이지를 열어 줘야 한다',

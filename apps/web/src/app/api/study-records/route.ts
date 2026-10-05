@@ -1,12 +1,8 @@
 import {NextRequest, NextResponse} from 'next/server';
 import {getRequestUserId} from '@/auth/request-user';
 import {createStudyRecord, listStudyRecords} from '@/server/study-record/repository';
-import {
-  badRequestResponse,
-  createdResponse,
-  duplicateDateResponse,
-  unauthorizedResponse,
-} from '@/server/study-record/response';
+import {createdResponse, unauthorizedResponse} from '@/server/response';
+import {badRequestResponse, duplicateDateResponse} from '@/server/study-record/response';
 import {readJsonBody, validateMonth, validateNewStudyRecord} from '@/server/study-record/validate';
 
 export async function GET(request: NextRequest) {

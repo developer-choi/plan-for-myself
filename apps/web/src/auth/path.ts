@@ -54,7 +54,7 @@ export function getNextNavigating({pathWithSearch, loginState}: NextNavigatingPa
   }
 }
 
-const PRIVATE_PATHNAMES = ['/study-records'];
+const PRIVATE_PATHNAMES = ['/study-records', '/account'];
 
 const NOT_PRIVATE_PATHNAME = ['/login'];
 
