@@ -14106,6 +14106,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"overlay-kit@npm:^1.9.0":
+  version: 1.9.0
+  resolution: "overlay-kit@npm:1.9.0"
+  peerDependencies:
+    react: ^16.8 || ^17 || ^18 || ^19
+  checksum: 10c0/b32a6f8648a075598ee215775b541d3e144c075a233ecc6b1630bee33d72fa39e12d1204919a7f1ea575daf5c1e467d41cfbd8eb3369a5734d141d0f07d5ca2b
+  languageName: node
+  linkType: hard
+
 "own-keys@npm:^1.0.1":
   version: 1.0.2
   resolution: "own-keys@npm:1.0.2"
@@ -18028,6 +18037,7 @@ __metadata:
     next: "npm:16.1.1"
     next-auth: "npm:5.0.0-beta.30"
     node-pg-migrate: "npm:^9.0.0"
+    overlay-kit: "npm:^1.9.0"
     pg: "npm:^8.23.1"
     radix-ui: "npm:^1.4.3"
     react: "npm:19.2.3"
