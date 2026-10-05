@@ -1,3 +1,4 @@
+import {getKoreanToday} from '@plan-for-myself/shared';
 import {NextRequest, NextResponse} from 'next/server';
 import {getRequestUserId} from '@/auth/request-user';
 import {createStudyRecord, listStudyRecords} from '@/server/study-record/repository';
@@ -25,7 +26,7 @@ export async function POST(request: NextRequest) {
     return unauthorizedResponse();
   }
 
-  const record = validateNewStudyRecord(await readJsonBody(request));
+  const record = validateNewStudyRecord(await readJsonBody(request), getKoreanToday());
   if (!record.ok) {
     return badRequestResponse(record.rejection);
   }
