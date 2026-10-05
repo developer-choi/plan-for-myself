@@ -15,6 +15,7 @@ export default function CalendarMenu({viewPath}: CalendarMenuProps) {
   return (
     <HeaderMenu
       items={[
+        {label: '계정', href: '/account'},
         {label: '개인정보 처리방침', href: '/privacy'},
         {label: '로그아웃', onClick: logout},
       ]}
