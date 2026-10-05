@@ -1,0 +1,30 @@
+.item {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: baseline;
+  justify-content: space-between;
+  padding: var(--spacing-sm) 0;
+
+  & + & {
+    border-top: 1px solid var(--color-bg-neutral-soft);
+  }
+}
+
+.label {
+  color: var(--color-fg-secondary);
+  white-space: nowrap;
+}
+
+.values {
+  white-space: nowrap;
+}
+
+.number {
+  font-variant-numeric: tabular-nums;
+}
+
+.note {
+  margin-left: var(--spacing-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-fg-muted);
+}
