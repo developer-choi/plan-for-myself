@@ -20,6 +20,15 @@ export function listMonths(from: string, to: string) {
   return months;
 }
 
+export function getDaysInMonth(month: string) {
+  const [year, monthNumber] = month.split('-').map(Number);
+  return new Date(Date.UTC(year, monthNumber, 0)).getUTCDate();
+}
+
+export function getDayOfMonth(date: string) {
+  return Number(date.slice(MONTH_LENGTH + 1));
+}
+
 const DATE_LENGTH = 'YYYY-MM-DD'.length;
 const MONTH_LENGTH = 'YYYY-MM'.length;
 
