@@ -1,34 +1,14 @@
 // @vitest-environment node
-import {readFileSync} from 'node:fs';
-import {PGlite} from '@electric-sql/pglite';
+import type {PGlite} from '@electric-sql/pglite';
 import {beforeEach, describe, expect, it} from 'vitest';
+import {createTestDb} from '@/server/db/test-db';
 import {createGuestUserId, findOrCreateUserId} from './repository';
-
-const CREATE_USERS_TABLE = readFileSync(
-  new URL('../../../migrations/1790924675472_create-users-and-link-study-records.sql', import.meta.url),
-  'utf8',
-).match(/CREATE TABLE users \([^;]*\);/)?.[0];
-
-const ADD_GUEST_CHECK = readFileSync(
-  new URL('../../../migrations/1791100597559_add-guest-check-to-users.sql', import.meta.url),
-  'utf8',
-).match(/-- Up Migration([^]*?)-- Down Migration/)?.[1];
-
-async function createUsersDb() {
-  if (!CREATE_USERS_TABLE || !ADD_GUEST_CHECK) {
-    throw new Error('마이그레이션에서 users 테이블 정의나 제약을 찾지 못했다');
-  }
-  const db = new PGlite();
-  await db.exec(CREATE_USERS_TABLE);
-  await db.exec(ADD_GUEST_CHECK);
-  return db;
-}
 
 describe('findOrCreateUserId', () => {
   let db: PGlite;
 
   beforeEach(async () => {
-    db = await createUsersDb();
+    db = await createTestDb();
   });
 
   it('처음 온 sub면 행을 새로 만들어 그 ID를 돌려준다', async () => {
@@ -59,7 +39,7 @@ describe('createGuestUserId()', () => {
   let db: PGlite;
 
   beforeEach(async () => {
-    db = await createUsersDb();
+    db = await createTestDb();
   });
 
   describe('General cases', () => {
@@ -82,7 +62,7 @@ describe('사용자 저장 규칙', () => {
   let db: PGlite;
 
   beforeEach(async () => {
-    db = await createUsersDb();
+    db = await createTestDb();
   });
 
   describe('Edge cases', () => {
