@@ -9,5 +9,6 @@ export default defineConfig({
     include: ['src/**/*.test.{ts,tsx}', 'seed/**/*.test.ts'],
     setupFiles: ['./vitest.setup.ts'],
     restoreMocks: true,
+    server: {deps: {inline: ['next-auth']}},
   },
 });

@@ -1,34 +1,14 @@
 // @vitest-environment node
-import {readFileSync} from 'node:fs';
-import {PGlite} from '@electric-sql/pglite';
+import type {PGlite} from '@electric-sql/pglite';
 import {beforeEach, describe, expect, it} from 'vitest';
-import {createGuestUserId, findOrCreateUserId} from './repository';
-
-const CREATE_USERS_TABLE = readFileSync(
-  new URL('../../../migrations/1790924675472_create-users-and-link-study-records.sql', import.meta.url),
-  'utf8',
-).match(/CREATE TABLE users \([^;]*\);/)?.[0];
-
-const ADD_GUEST_CHECK = readFileSync(
-  new URL('../../../migrations/1791100597559_add-guest-check-to-users.sql', import.meta.url),
-  'utf8',
-).match(/-- Up Migration([^]*?)-- Down Migration/)?.[1];
-
-async function createUsersDb() {
-  if (!CREATE_USERS_TABLE || !ADD_GUEST_CHECK) {
-    throw new Error('마이그레이션에서 users 테이블 정의나 제약을 찾지 못했다');
-  }
-  const db = new PGlite();
-  await db.exec(CREATE_USERS_TABLE);
-  await db.exec(ADD_GUEST_CHECK);
-  return db;
-}
+import {countGuests, createTestDb} from '@/server/db/test-db';
+import {createGuestUserId, createGuestUserIdWithinLimit, findOrCreateUserId, GuestLimitError} from './repository';
 
 describe('findOrCreateUserId', () => {
   let db: PGlite;
 
   beforeEach(async () => {
-    db = await createUsersDb();
+    db = await createTestDb();
   });
 
   it('처음 온 sub면 행을 새로 만들어 그 ID를 돌려준다', async () => {
@@ -59,7 +39,7 @@ describe('createGuestUserId()', () => {
   let db: PGlite;
 
   beforeEach(async () => {
-    db = await createUsersDb();
+    db = await createTestDb();
   });
 
   describe('General cases', () => {
@@ -78,11 +58,95 @@ describe('createGuestUserId()', () => {
   });
 });
 
+describe('createGuestUserIdWithinLimit()', () => {
+  const limit = 30;
+  const ipHash = 'ip-hash-a';
+  let db: PGlite;
+
+  beforeEach(async () => {
+    db = await createTestDb();
+  });
+
+  async function createGuestsUpToLimit(targetIpHash: string) {
+    for (let index = 0; index < limit; index++) {
+      await createGuestUserIdWithinLimit(targetIpHash, db);
+    }
+  }
+
+  async function insertCreationsUpToLimit(ago: string) {
+    await db.query(
+      'INSERT INTO guest_creations (ip_hash, created_at) SELECT $1, now() - $2::interval FROM generate_series(1, $3::int)',
+      [ipHash, ago, limit],
+    );
+  }
+
+  describe('General cases', () => {
+    it('한 IP가 한도에 닿아도 다른 IP는 게스트를 만들 수 있어야 한다', async () => {
+      await createGuestsUpToLimit(ipHash);
+
+      const id = await createGuestUserIdWithinLimit('ip-hash-b', db);
+
+      expect(id).toEqual(expect.any(String));
+      expect(await countGuests(db)).toBe(limit + 1);
+    });
+  });
+
+  describe('Boundary cases', () => {
+    it('같은 IP로 1시간 안에 30번째까지는 게스트를 만들어야 한다', async () => {
+      const ids = [];
+      for (let index = 0; index < limit; index++) {
+        ids.push(await createGuestUserIdWithinLimit(ipHash, db));
+      }
+
+      expect(new Set(ids).size).toBe(limit);
+      expect(await countGuests(db)).toBe(limit);
+    });
+
+    it('같은 IP의 31번째 요청은 거절하고 게스트를 만들지 않아야 한다', async () => {
+      await createGuestsUpToLimit(ipHash);
+
+      await expect(createGuestUserIdWithinLimit(ipHash, db)).rejects.toThrow(GuestLimitError);
+      expect(await countGuests(db)).toBe(limit);
+      const {rows} = await db.query<{count: number}>('SELECT count(*)::int AS count FROM guest_creations');
+      expect(rows[0].count).toBe(limit);
+    });
+  });
+
+  describe('Edge cases', () => {
+    it('59분 전에 30명을 만든 IP의 요청은 거절해야 한다', async () => {
+      await insertCreationsUpToLimit('59 minutes');
+
+      await expect(createGuestUserIdWithinLimit(ipHash, db)).rejects.toThrow(GuestLimitError);
+      expect(await countGuests(db)).toBe(0);
+    });
+
+    it('2시간 전에 30명을 만든 IP는 다시 게스트를 만들 수 있어야 한다', async () => {
+      await insertCreationsUpToLimit('2 hours');
+
+      const id = await createGuestUserIdWithinLimit(ipHash, db);
+
+      expect(id).toEqual(expect.any(String));
+      expect(await countGuests(db)).toBe(1);
+    });
+
+    it('1시간이 지난 생성 기록은 지워져야 한다', async () => {
+      await insertCreationsUpToLimit('2 hours');
+
+      await createGuestUserIdWithinLimit(ipHash, db);
+
+      const {rows} = await db.query<{count: number}>(
+        "SELECT count(*)::int AS count FROM guest_creations WHERE created_at <= now() - interval '1 hour'",
+      );
+      expect(rows[0].count).toBe(0);
+    });
+  });
+});
+
 describe('사용자 저장 규칙', () => {
   let db: PGlite;
 
   beforeEach(async () => {
-    db = await createUsersDb();
+    db = await createTestDb();
   });
 
   describe('Edge cases', () => {
