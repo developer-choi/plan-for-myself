@@ -3,3 +3,19 @@
   background: var(--color-bg-default);
   border-radius: var(--radius-lg);
 }
+
+.header {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: var(--spacing-sm);
+}
+
+.title {
+  color: var(--color-fg-default);
+}
+
+.aside {
+  margin-left: auto;
+  font-size: var(--font-size-base);
+  color: var(--color-fg-secondary);
+}
