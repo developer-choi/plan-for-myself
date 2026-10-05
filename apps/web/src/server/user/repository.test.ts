@@ -2,7 +2,13 @@
 import type {PGlite} from '@electric-sql/pglite';
 import {beforeEach, describe, expect, it} from 'vitest';
 import {countGuests, createTestDb} from '@/server/db/test-db';
-import {createGuestUserId, createGuestUserIdWithinLimit, findOrCreateUserId, GuestLimitError} from './repository';
+import {
+  createGuestUserId,
+  createGuestUserIdWithinLimit,
+  deleteUser,
+  findOrCreateUserId,
+  GuestLimitError,
+} from './repository';
 
 describe('findOrCreateUserId', () => {
   let db: PGlite;
@@ -158,6 +164,65 @@ describe('사용자 저장 규칙', () => {
       await expect(db.query("INSERT INTO users (google_sub, is_guest) VALUES ('sub-a', true)")).rejects.toThrow(
         'users_is_guest_matches_google_sub',
       );
+    });
+  });
+});
+
+describe('deleteUser()', () => {
+  let db: PGlite;
+
+  beforeEach(async () => {
+    db = await createTestDb();
+    await db.exec('CREATE TABLE study_records (pk serial PRIMARY KEY, user_id bigint NOT NULL REFERENCES users (id))');
+  });
+
+  describe('General cases', () => {
+    it('사용자를 지우면 그 사용자의 기록만 함께 지워진다', async () => {
+      const target = await findOrCreateUserId('sub-a', db);
+      const other = await findOrCreateUserId('sub-b', db);
+      await db.query('INSERT INTO study_records (user_id) VALUES ($1), ($1), ($2)', [target, other]);
+
+      await deleteUser(target, db);
+
+      const {rows} = await db.query<{users: string[]; owners: string[]}>(
+        `SELECT (SELECT array_agg(id::text) FROM users) AS users,
+                (SELECT array_agg(user_id::text) FROM study_records) AS owners`,
+      );
+      expect(rows[0]).toEqual({users: [other], owners: [other]});
+    });
+  });
+
+  describe('Edge cases', () => {
+    it('이미 없는 사용자를 지우면 아무것도 지우지 않고 끝난다', async () => {
+      const other = await findOrCreateUserId('sub-b', db);
+      await db.query('INSERT INTO study_records (user_id) VALUES ($1)', [other]);
+      const missingUserId = '999';
+
+      await expect(deleteUser(missingUserId, db)).resolves.toBeUndefined();
+
+      const {rows} = await db.query<{count: number}>('SELECT count(*)::int AS count FROM study_records');
+      expect(rows[0].count).toBe(1);
+    });
+
+    it('사용자를 지우다 실패하면 기록도 남는다', async () => {
+      const target = await findOrCreateUserId('sub-a', db);
+      await db.query('INSERT INTO study_records (user_id) VALUES ($1), ($1)', [target]);
+      await db.exec(`
+        CREATE FUNCTION reject_user_delete() RETURNS trigger AS $$
+        BEGIN
+          RAISE EXCEPTION 'users 삭제 거부';
+        END;
+        $$ LANGUAGE plpgsql;
+        CREATE TRIGGER reject_user_delete AFTER DELETE ON users FOR EACH ROW EXECUTE FUNCTION reject_user_delete();
+      `);
+
+      await expect(deleteUser(target, db)).rejects.toThrow('users 삭제 거부');
+
+      const {rows} = await db.query<{users: string[]; owners: string[]}>(
+        `SELECT (SELECT array_agg(id::text) FROM users) AS users,
+                (SELECT array_agg(user_id::text) FROM study_records) AS owners`,
+      );
+      expect(rows[0]).toEqual({users: [target], owners: [target, target]});
     });
   });
 });

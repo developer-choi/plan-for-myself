@@ -58,3 +58,11 @@ export async function createGuestUserIdWithinLimit(ipHash: string, db: Queryable
 
   return createGuestUserId(db);
 }
+
+export async function deleteUser(userId: string, db: Queryable = pool): Promise<void> {
+  await db.query(
+    `WITH deleted_records AS (DELETE FROM study_records WHERE user_id = $1)
+     DELETE FROM users WHERE id = $1`,
+    [userId],
+  );
+}
