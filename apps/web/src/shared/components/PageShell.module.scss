@@ -1,7 +1,6 @@
 .shell {
   display: flex;
   flex-direction: column;
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- 화면 높이를 채우는 값이라 토큰이 없다 */
   min-height: 100dvh;
   color: var(--color-fg-default);
   background: var(--color-bg-subtle);

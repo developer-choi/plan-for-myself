@@ -4,3 +4,9 @@
   flex-direction: column;
   padding: 0 var(--spacing-page-x-mobile) var(--spacing-md);
 }
+
+.loginLink {
+  padding: 0 var(--spacing-xs);
+  color: var(--color-primary);
+  text-decoration: none;
+}

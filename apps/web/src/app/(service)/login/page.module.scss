@@ -3,7 +3,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- 화면 높이를 채우는 값이라 토큰이 없다 */
   min-height: 100dvh;
   padding: 0 var(--spacing-page-x-mobile);
   color: var(--color-fg-default);
@@ -22,7 +21,6 @@
   gap: var(--spacing-xl);
   align-items: center;
   width: 100%;
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- 태블릿·PC에서 버튼이 끝없이 늘지 않게 모바일 한 화면 폭으로 묶는다. 폭 토큰은 688px부터라 없다 */
   max-width: 400px;
   text-align: center;
 }
