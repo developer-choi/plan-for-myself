@@ -1,29 +1,28 @@
 'use client';
 
-import {useCallback, useState} from 'react';
+import {useActionState} from 'react';
 import {useSearchParams} from 'next/navigation';
-import {signIn} from 'next-auth/react';
 import {Button, Callout} from '@developer-choi/design-system';
-import {getRedirectUrlWhenLoginSuccess} from '@/auth/redirect';
+import {continueWithGoogle} from '@/auth/actions';
 import styles from './GoogleLoginActions.module.scss';
 
 export default function GoogleLoginActions() {
-  const hasError = useSearchParams().has('error');
-  const [loading, setLoading] = useState(false);
-
-  const onClick = useCallback(() => {
-    setLoading(true);
-    signIn('google', {callbackUrl: getRedirectUrlWhenLoginSuccess()});
-  }, []);
+  const searchParams = useSearchParams();
+  const hasError = searchParams.has('error');
+  const [, submitAction, isPending] = useActionState(
+    (_state: void, formData: FormData) => continueWithGoogle(formData),
+    undefined,
+  );
 
   return (
-    <div className={styles.actions}>
+    <form action={submitAction} className={styles.actions}>
       {hasError && <Callout color="danger">로그인하지 못했어요. 잠시 뒤 다시 시도해 주세요.</Callout>}
-      <Button color="secondary" loading={loading} size="xLarge" onClick={onClick}>
+      <input name="redirect" type="hidden" value={searchParams.get('redirect') ?? ''} />
+      <Button color="secondary" loading={isPending} size="xLarge" type="submit">
         <GoogleIcon />
         Google로 계속하기
       </Button>
-    </div>
+    </form>
   );
 }
 
