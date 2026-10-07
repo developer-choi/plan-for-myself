@@ -1,10 +1,11 @@
 'use client';
 
 import {type PropsWithChildren} from 'react';
-import {QueryErrorResetBoundary} from '@tanstack/react-query';
+import {QueryErrorResetBoundary, useQueryErrorResetBoundary} from '@tanstack/react-query';
 import classNames from 'classnames';
-import {ErrorBoundary, type FallbackProps} from 'react-error-boundary';
+import {catchError} from 'next/error';
 import ErrorNotice from '@/shared/components/ErrorNotice';
+import {getErrorInfo} from '@/shared/error/info';
 import {type FallbackSize} from '@/shared/types/fallback';
 import styles from './FallbackSlot.module.scss';
 
@@ -13,44 +14,33 @@ interface HandledErrorBoundaryProps {
   size?: FallbackSize;
 }
 
-export default function HandledErrorBoundary({
-  onReset,
-  size = 'page',
-  children,
-}: PropsWithChildren<HandledErrorBoundaryProps>) {
+export default function HandledErrorBoundary({children, ...props}: PropsWithChildren<HandledErrorBoundaryProps>) {
   return (
     <QueryErrorResetBoundary>
-      {({reset: resetQueryError}) => (
-        <ErrorBoundary
-          fallbackRender={({resetErrorBoundary}) => <Fallback resetErrorBoundary={resetErrorBoundary} size={size} />}
-          onReset={() => {
-            resetQueryError();
-            onReset?.();
-          }}
-        >
-          {children}
-        </ErrorBoundary>
-      )}
+      <RetryableErrorBoundary {...props}>{children}</RetryableErrorBoundary>
     </QueryErrorResetBoundary>
   );
 }
 
-const FALLBACK_TITLE = '불러오지 못했어요';
-const FALLBACK_CONTENT = '잠시 뒤 다시 시도해 주세요';
+const RetryableErrorBoundary = catchError(({onReset, size = 'page'}: HandledErrorBoundaryProps, {error, retry}) => {
+  const {reset: resetQueryError} = useQueryErrorResetBoundary();
+  const {title, content} = getErrorInfo(error);
 
-interface FallbackComponentProps extends Pick<FallbackProps, 'resetErrorBoundary'> {
-  size: FallbackSize;
-}
-
-function Fallback({resetErrorBoundary, size}: FallbackComponentProps) {
   return (
     <div className={classNames(styles.slot, {[styles.card]: size === 'card'})}>
       <ErrorNotice
-        action={{children: '다시 시도', onClick: resetErrorBoundary}}
-        content={FALLBACK_CONTENT}
+        action={{
+          children: '다시 시도',
+          onClick: () => {
+            resetQueryError();
+            onReset?.();
+            retry();
+          },
+        }}
+        content={content}
         size={size === 'card' ? 'small' : 'large'}
-        title={FALLBACK_TITLE}
+        title={title}
       />
     </div>
   );
-}
+});
