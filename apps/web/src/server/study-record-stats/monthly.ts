@@ -1,6 +1,7 @@
-import type {DateType, StudyRecord, StudyRecordMonthly} from '@plan-for-myself/shared';
+import type {DateType, FailureTag, FailureTagStatus, StudyRecord, StudyRecordMonthly} from '@plan-for-myself/shared';
 import {addMonths, getDayOfMonth, getDaysInMonth, toMonth} from './date';
 import {sumMinutes} from './minutes';
+import {countTagsByMonth, getTagCount, isReduced, type TagCountByMonth} from './tag-count';
 
 export function calculateMonthly(records: StudyRecord[], month: string, date: string): StudyRecordMonthly {
   const recordsUntilDate = records.filter((record) => record.date <= date);
@@ -30,8 +31,11 @@ export function calculateMonthly(records: StudyRecord[], month: string, date: st
       prevWeekdayAvg: averageMinutes(previousRecords, 'weekday'),
       prevHolidayAvg: averageMinutes(previousRecords, 'holiday'),
     },
+    failureTags: listFailureTags(countTagsByMonth(recordsUntilDate), month),
   };
 }
+
+const STATUS_ORDER: Record<FailureTagStatus, number> = {repeated: 0, appeared: 1, reduced: 2};
 
 function filterMonth(records: StudyRecord[], month: string) {
   return records.filter((record) => toMonth(record.date) === month);
@@ -51,4 +55,43 @@ function averageMinutes(records: StudyRecord[], dateType: DateType) {
     return null;
   }
   return Math.round(matched.reduce((sum, record) => sum + sumMinutes(record), 0) / matched.length);
+}
+
+/* 그 달 0번이 된 태그도 「줄어듦」으로 보여야 해서 전달 태그까지 넣는다 */
+function listFailureTags(counts: TagCountByMonth, month: string): FailureTag[] {
+  const previousMonth = addMonths(month, -1);
+  const tags = new Set([...(counts.get(month)?.keys() ?? []), ...(counts.get(previousMonth)?.keys() ?? [])]);
+
+  return [...tags]
+    .map((tag) => {
+      const count = getTagCount(counts, month, tag);
+      const previousCount = getTagCount(counts, previousMonth, tag);
+      return {tag, count, previousCount, status: judgeStatus(count, previousCount)};
+    })
+    .sort(compareFailureTags);
+}
+
+function judgeStatus(count: number, previousCount: number): FailureTagStatus {
+  if (previousCount === 0) {
+    return 'appeared';
+  }
+  return isReduced(count, previousCount) ? 'reduced' : 'repeated';
+}
+
+function compareFailureTags(left: FailureTag, right: FailureTag) {
+  return STATUS_ORDER[left.status] - STATUS_ORDER[right.status] || compareWithinStatus(left, right);
+}
+
+function compareWithinStatus(left: FailureTag, right: FailureTag) {
+  return left.status === 'reduced' ? compareReduced(left, right) : 0;
+}
+
+function compareReduced(left: FailureTag, right: FailureTag) {
+  const isLeftZero = left.count === 0;
+  const isRightZero = right.count === 0;
+  return Number(isRightZero) - Number(isLeftZero) || countReduction(right) - countReduction(left);
+}
+
+function countReduction({count, previousCount}: FailureTag) {
+  return previousCount - count;
 }

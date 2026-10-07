@@ -33,6 +33,16 @@ export interface StudyRecordMonthly {
     /* 전달에 휴일 기록이 없으면 null (전달이 첫 기록 달보다 앞인 경우 포함) */
     prevHolidayAvg: number | null;
   };
+  failureTags: FailureTag[];
+}
+
+export type FailureTagStatus = 'repeated' | 'appeared' | 'reduced';
+
+export interface FailureTag {
+  tag: string;
+  count: number;
+  previousCount: number;
+  status: FailureTagStatus;
 }
 
 export interface RecordedDays {

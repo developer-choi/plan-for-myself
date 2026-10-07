@@ -1,9 +1,10 @@
+import {getKoreanToday} from '@plan-for-myself/shared';
 import {NextRequest, NextResponse} from 'next/server';
 import {getRequestUserId} from '@/auth/request-user';
 import {listStudyRecords} from '@/server/study-record/repository';
 import {unauthorizedResponse} from '@/server/response';
 import {badRequestResponse} from '@/server/study-record/response';
-import {validateDate, validateMonth} from '@/server/study-record/validate';
+import {validateDate, validateMonth, validateNotFutureMonth} from '@/server/study-record/validate';
 import {toMonth} from '@/server/study-record-stats/date';
 import {calculateMonthly} from '@/server/study-record-stats/monthly';
 
@@ -19,9 +20,14 @@ export async function GET(request: NextRequest) {
     return badRequestResponse(month.rejection);
   }
 
-  const date = validateDate(request.nextUrl.searchParams.get('date'));
+  const date = validateDate(request.nextUrl.searchParams.get('date'), getKoreanToday());
   if (!date.ok) {
     return badRequestResponse(date.rejection);
+  }
+
+  const notFutureMonth = validateNotFutureMonth(month.value, date.value);
+  if (!notFutureMonth.ok) {
+    return badRequestResponse(notFutureMonth.rejection);
   }
 
   const records = await listStudyRecords(userId, null);

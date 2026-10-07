@@ -5,4 +5,11 @@ export {convertLunarDateToSolar, type SimpleDate} from './date/lunar';
 export {listToDateTypeRecord} from './date-type/record';
 export type {DateType} from './date-type/type';
 export {minutesFormat, studiedTimeFormat} from './study-record/format';
-export type {RecordedDays, StudyRecord, StudyRecordMonthly, StudyRecordOverview} from './study-record/type';
+export type {
+  FailureTag,
+  FailureTagStatus,
+  RecordedDays,
+  StudyRecord,
+  StudyRecordMonthly,
+  StudyRecordOverview,
+} from './study-record/type';

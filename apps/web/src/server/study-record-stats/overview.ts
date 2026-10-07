@@ -1,7 +1,7 @@
 import type {StudyRecord, StudyRecordOverview} from '@plan-for-myself/shared';
 import {addDays, addMonths, listMonths, toMonth} from './date';
 import {sumMinutes} from './minutes';
-import {countTagsByMonth, getTagCount} from './tag-count';
+import {countTagsByMonth, getTagCount, isReduced} from './tag-count';
 
 export function calculateOverview(records: StudyRecord[], date: string): StudyRecordOverview {
   const recordsUntilDate = records.filter((record) => record.date <= date);
@@ -50,7 +50,7 @@ function countImprovedFailures(records: StudyRecord[], firstMonth: string, date:
   for (const month of listMonths(addMonths(firstMonth, 1), addMonths(toMonth(date), -1))) {
     const previousMonth = addMonths(month, -1);
     for (const [tag, previousCount] of counts.get(previousMonth) ?? []) {
-      if (getTagCount(counts, month, tag) < previousCount) {
+      if (isReduced(getTagCount(counts, month, tag), previousCount)) {
         improved++;
       }
     }

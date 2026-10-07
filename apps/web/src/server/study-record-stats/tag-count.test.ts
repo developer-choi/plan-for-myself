@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {countTagsByMonth, getTagCount} from './tag-count';
+import {countTagsByMonth, getTagCount, isReduced} from './tag-count';
 import {createTestRecord} from './test-record';
 
 describe('countTagsByMonth()', () => {
@@ -27,6 +27,18 @@ describe('getTagCount()', () => {
       const counts = countTagsByMonth([createTestRecord('2026-08-31', {failTags: ['늦잠']})]);
 
       expect(getTagCount(counts, '2026-07', '늦잠')).toBe(0);
+    });
+  });
+});
+
+describe('isReduced()', () => {
+  describe('Boundary cases', () => {
+    it('지난달과 횟수가 같으면 false를 반환해야 한다', () => {
+      expect(isReduced(1, 1)).toBe(false);
+    });
+
+    it('이번 달 횟수가 0이면 true를 반환해야 한다', () => {
+      expect(isReduced(0, 1)).toBe(true);
     });
   });
 });

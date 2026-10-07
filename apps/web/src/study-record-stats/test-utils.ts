@@ -12,6 +12,7 @@ export function createMonthly({study, ...overrides}: MonthlyOverrides = {}): Stu
     inProgress: true,
     recordedDays: {count: 21, total: 23},
     previousRecordedDays: null,
+    failureTags: [],
     ...overrides,
     study: {totalMinutes: 4080, weekdayAvg: 189, holidayAvg: 212, prevWeekdayAvg: 176, prevHolidayAvg: 244, ...study},
   };
