@@ -1,4 +1,4 @@
-import type {StudyRecord} from '@plan-for-myself/shared';
+import {minutesFormat, type StudyRecord} from '@plan-for-myself/shared';
 import {render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {describe, expect, it, vi} from 'vitest';
@@ -11,14 +11,22 @@ const LAST_DATE_OF_MONTH = '2026-10-31';
 interface RenderGridParams {
   records?: StudyRecord[];
   onFutureDateClick?: () => void;
+  onRecordableDateClick?: (date: string, record?: StudyRecord) => void;
 }
 
 function createRecord(overrides: Partial<StudyRecord> = {}): StudyRecord {
   return {pk: 1, date: LAST_DATE_OF_MONTH, dateType: 'weekday', studiedMinutes: [0, 0, 0], failTags: [], ...overrides};
 }
 
-function renderGrid({records = [], onFutureDateClick = vi.fn()}: RenderGridParams) {
-  render(<CalendarGrid handlers={{onFutureDateClick}} month={MONTH} records={records} today={TODAY} />);
+function renderGrid({records = [], onFutureDateClick = vi.fn(), onRecordableDateClick = vi.fn()}: RenderGridParams) {
+  render(
+    <CalendarGrid
+      handlers={{onFutureDateClick, onRecordableDateClick}}
+      month={MONTH}
+      records={records}
+      today={TODAY}
+    />,
+  );
 }
 
 describe('CalendarGrid', () => {
@@ -62,6 +70,32 @@ describe('CalendarGrid', () => {
 
       expect(onFutureDateClick).toHaveBeenCalledTimes(1);
     });
+
+    [
+      {label: '오늘', day: 4},
+      {label: '지난', day: 3},
+    ].forEach(({label, day}) => {
+      it(`${label} 칸을 누르면 그 날짜로 기록 폼 열기가 요청된다`, async () => {
+        const onRecordableDateClick = vi.fn();
+        renderGrid({onRecordableDateClick});
+
+        await userEvent.click(screen.getByRole('button', {name: String(day)}));
+
+        expect(onRecordableDateClick).toHaveBeenCalledWith(`2026-10-0${day}`, undefined);
+      });
+    });
+
+    it('기록이 있는 칸을 누르면 그날 기록과 함께 기록 폼 열기가 요청된다', async () => {
+      const onRecordableDateClick = vi.fn();
+      const day = 2;
+      const record = createRecord({date: `2026-10-0${day}`, failTags: ['영어']});
+      renderGrid({records: [record], onRecordableDateClick});
+
+      /* 날짜 뒤에 총 공부시간이 붙어 20일 칸과 갈린다 */
+      await userEvent.click(screen.getByRole('button', {name: new RegExp(`^${day}${minutesFormat(0)}`)}));
+
+      expect(onRecordableDateClick).toHaveBeenCalledWith(record.date, record);
+    });
   });
 
   describe('Edge cases', () => {
@@ -73,6 +107,15 @@ describe('CalendarGrid', () => {
       await userEvent.click(screen.getByRole('button', {name: '3'}));
 
       expect(onFutureDateClick).not.toHaveBeenCalled();
+    });
+
+    it('오늘보다 뒤인 칸을 누르면 기록 폼 열기가 요청되지 않는다', async () => {
+      const onRecordableDateClick = vi.fn();
+      renderGrid({onRecordableDateClick});
+
+      await userEvent.click(screen.getByRole('button', {name: '5'}));
+
+      expect(onRecordableDateClick).not.toHaveBeenCalled();
     });
 
     it('실패 태그가 셋 이상이어도 앞의 둘만 보인다', () => {

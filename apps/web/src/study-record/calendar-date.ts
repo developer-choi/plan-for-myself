@@ -55,8 +55,14 @@ export function toMonthParam({year, month}: CalendarMonth): string {
   return `${year}-${pad(month)}`;
 }
 
+export function formatDateTitle(date: string): string {
+  const [year, month, day] = date.split('-').map(Number);
+  return `${month}월 ${day}일 (${DAY_NAMES[new Date(year, month - 1, day).getDay()]})`;
+}
+
 const DAYS_PER_WEEK = 7;
 const MONTH_PARAM_LENGTH = 'YYYY-MM'.length;
+const DAY_NAMES = ['일', '월', '화', '수', '목', '금', '토'] as const;
 const YEAR_PATTERN = /^[1-9]\d{3}$/;
 const MAX_YEAR = 9998;
 const MONTH_PATTERN = /^(?:[1-9]|1[0-2])$/;

@@ -1,3 +1,4 @@
+import {STUDY_RECORD_FIELD_LIMITS, STUDY_RECORD_FIELD_MESSAGES} from '@plan-for-myself/shared';
 import {z} from 'zod';
 
 export type NewStudyRecord = z.infer<typeof newStudyRecordSchema>;
@@ -76,8 +77,7 @@ export function parsePk(value: string): number | null {
 }
 
 const STUDY_RECORD_LIMITS = {
-  studiedMinutes: {min: 0, max: 1440},
-  failTags: {maxCount: 2},
+  ...STUDY_RECORD_FIELD_LIMITS,
   /* Postgres int */
   pk: {max: 2147483647},
   /* Postgres date는 0년을 받지 못하고, 9999-12의 다음 달은 해가 다섯 자리라 DB가 날짜로 받지 못한다 */
@@ -89,7 +89,7 @@ const MONTH_MESSAGE = '조회할 달이 올바르지 않아요';
 const FUTURE_DATE_MESSAGE = '오늘과 지난 날짜만 기록할 수 있어요';
 const FUTURE_MONTH_MESSAGE = '미래 달은 조회할 수 없어요';
 const FUTURE_LOOKUP_DATE_MESSAGE = '오늘과 지난 날짜만 조회할 수 있어요';
-const STUDIED_MINUTES_MESSAGE = `공부시간은 ${STUDY_RECORD_LIMITS.studiedMinutes.min}~${STUDY_RECORD_LIMITS.studiedMinutes.max} 사이의 숫자로 적어 주세요`;
+const STUDIED_MINUTES_MESSAGE = STUDY_RECORD_FIELD_MESSAGES.studiedMinutes;
 
 const minutesSchema = z
   .number({error: STUDIED_MINUTES_MESSAGE})
@@ -99,8 +99,8 @@ const minutesSchema = z
 
 const failTagSchema = z
   .string({error: '실패 태그는 글자로 적어 주세요'})
-  .min(1, {error: '빈 실패 태그는 넣을 수 없어요'})
-  .regex(/^\S+$/, {error: '실패 태그에는 공백을 넣을 수 없어요'});
+  .min(1, {error: STUDY_RECORD_FIELD_MESSAGES.failTagEmpty})
+  .regex(/^\S+$/, {error: STUDY_RECORD_FIELD_MESSAGES.failTagSpace});
 
 const dateSchema = z.iso
   .date({error: DATE_MESSAGE})
@@ -114,9 +114,7 @@ const studyRecordOriginalSchema = z.object({
   studiedMinutes: z.tuple([minutesSchema, minutesSchema, minutesSchema], {error: STUDIED_MINUTES_MESSAGE}),
   failTags: z
     .array(failTagSchema, {error: '실패 태그 목록이 올바르지 않아요'})
-    .max(STUDY_RECORD_LIMITS.failTags.maxCount, {
-      error: `실패 태그는 ${STUDY_RECORD_LIMITS.failTags.maxCount}개까지예요`,
-    }),
+    .max(STUDY_RECORD_LIMITS.failTags.maxCount, {error: STUDY_RECORD_FIELD_MESSAGES.failTagCount}),
 });
 
 const newStudyRecordSchema = studyRecordOriginalSchema;
