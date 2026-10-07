@@ -23,3 +23,7 @@ export function countTagsByMonth(records: StudyRecord[]): TagCountByMonth {
 export function getTagCount(counts: TagCountByMonth, month: string, tag: string) {
   return counts.get(month)?.get(tag) ?? 0;
 }
+
+export function isReduced(count: number, previousCount: number) {
+  return count < previousCount;
+}
