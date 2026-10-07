@@ -47,11 +47,16 @@ export function isSameMonth(date: string, month: CalendarMonth): boolean {
   return date.startsWith(toMonthParam(month));
 }
 
+export function isFutureMonth(today: string, month: CalendarMonth): boolean {
+  return toMonthParam(month) > today.slice(0, MONTH_PARAM_LENGTH);
+}
+
 export function toMonthParam({year, month}: CalendarMonth): string {
   return `${year}-${pad(month)}`;
 }
 
 const DAYS_PER_WEEK = 7;
+const MONTH_PARAM_LENGTH = 'YYYY-MM'.length;
 const YEAR_PATTERN = /^[1-9]\d{3}$/;
 const MAX_YEAR = 9998;
 const MONTH_PATTERN = /^(?:[1-9]|1[0-2])$/;

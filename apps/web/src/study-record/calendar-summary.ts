@@ -1,4 +1,4 @@
-import {type CalendarMonth, isSameMonth, toMonthParam} from '@/study-record/calendar-date';
+import {type CalendarMonth, isFutureMonth, isSameMonth} from '@/study-record/calendar-date';
 
 interface CalendarSummaryParams {
   today: string;
@@ -14,9 +14,7 @@ export interface CalendarSummaryContent {
 }
 
 export function getCalendarSummaryContent({today, month, streak}: CalendarSummaryParams): CalendarSummaryContent {
-  const isFutureMonth = toMonthParam(month) > toMonthParamOfDate(today);
-
-  if (isFutureMonth) {
+  if (isFutureMonth(today, month)) {
     return {};
   }
 
@@ -27,12 +25,7 @@ export function getCalendarSummaryContent({today, month, streak}: CalendarSummar
 }
 
 export const MIN_STREAK_DAYS = 2;
-const MONTH_PARAM_LENGTH = 'YYYY-MM'.length;
 
 function statsPath({year, month}: CalendarMonth) {
   return `/study-record-stats/${year}/${month}`;
-}
-
-function toMonthParamOfDate(date: string) {
-  return date.slice(0, MONTH_PARAM_LENGTH);
 }
