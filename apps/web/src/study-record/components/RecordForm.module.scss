@@ -1,0 +1,44 @@
+/* 모달의 본문·버튼 줄을 함께 감싸지만 배치에는 끼지 않는다 */
+.form {
+  display: contents;
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-form-gap);
+  color: var(--color-fg-default);
+}
+
+.sectionLabel {
+  display: block;
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-fg-secondary);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+}
+
+.minutes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--spacing-sm);
+}
+
+.fieldLabel {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  color: var(--color-fg-secondary);
+}
+
+.minutesError {
+  margin-top: var(--spacing-xs);
+}
+
+.rejection {
+  margin-top: var(--spacing-form-gap);
+}
