@@ -33,11 +33,15 @@ export function validateStudyRecordUpdate(body: unknown): Validation<StudyRecord
   return validate(studyRecordUpdateSchema, body);
 }
 
-export function validateDate(date: string | null): Validation<string> {
+export function validateDate(date: string | null, today: string): Validation<string> {
   const result = dateSchema.safeParse(date);
-  return result.success
-    ? {ok: true, value: result.data}
-    : {ok: false, rejection: {code: 'INVALID_DATE', message: result.error.issues[0].message}};
+  if (!result.success) {
+    return {ok: false, rejection: {code: 'INVALID_DATE', message: result.error.issues[0].message}};
+  }
+  if (result.data > today) {
+    return {ok: false, rejection: {code: 'INVALID_DATE', message: FUTURE_LOOKUP_DATE_MESSAGE}};
+  }
+  return {ok: true, value: result.data};
 }
 
 export function validateMonth(month: string | null): Validation<MonthRange> {
@@ -84,6 +88,7 @@ const DATE_MESSAGE = '날짜가 올바르지 않아요';
 const MONTH_MESSAGE = '조회할 달이 올바르지 않아요';
 const FUTURE_DATE_MESSAGE = '오늘과 지난 날짜만 기록할 수 있어요';
 const FUTURE_MONTH_MESSAGE = '미래 달은 조회할 수 없어요';
+const FUTURE_LOOKUP_DATE_MESSAGE = '오늘과 지난 날짜만 조회할 수 있어요';
 const STUDIED_MINUTES_MESSAGE = `공부시간은 ${STUDY_RECORD_LIMITS.studiedMinutes.min}~${STUDY_RECORD_LIMITS.studiedMinutes.max} 사이의 숫자로 적어 주세요`;
 
 const minutesSchema = z

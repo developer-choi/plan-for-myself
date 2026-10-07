@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {validateNewStudyRecord, validateNotFutureMonth} from './validate';
+import {validateDate, validateNewStudyRecord, validateNotFutureMonth} from './validate';
 
 const TODAY = '2026-09-24';
 
@@ -17,6 +17,21 @@ describe('validateNewStudyRecord()', () => {
       expect(validateNewStudyRecord(createBody('2026-09-25'), TODAY)).toEqual({
         ok: false,
         rejection: {code: 'INVALID_DATE', message: '오늘과 지난 날짜만 기록할 수 있어요'},
+      });
+    });
+  });
+});
+
+describe('validateDate()', () => {
+  describe('Boundary cases', () => {
+    it('오늘 날짜는 받아야 한다', () => {
+      expect(validateDate(TODAY, TODAY)).toEqual({ok: true, value: TODAY});
+    });
+
+    it('내일 날짜는 거절해야 한다', () => {
+      expect(validateDate('2026-09-25', TODAY)).toEqual({
+        ok: false,
+        rejection: {code: 'INVALID_DATE', message: '오늘과 지난 날짜만 조회할 수 있어요'},
       });
     });
   });

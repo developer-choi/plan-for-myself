@@ -1,3 +1,4 @@
+import {getKoreanToday} from '@plan-for-myself/shared';
 import {NextRequest, NextResponse} from 'next/server';
 import {getRequestUserId} from '@/auth/request-user';
 import {listStudyRecords} from '@/server/study-record/repository';
@@ -19,7 +20,7 @@ export async function GET(request: NextRequest) {
     return badRequestResponse(month.rejection);
   }
 
-  const date = validateDate(request.nextUrl.searchParams.get('date'));
+  const date = validateDate(request.nextUrl.searchParams.get('date'), getKoreanToday());
   if (!date.ok) {
     return badRequestResponse(date.rejection);
   }
