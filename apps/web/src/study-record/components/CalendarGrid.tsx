@@ -12,6 +12,8 @@ interface CalendarGridProps {
   records: StudyRecord[];
   handlers: {
     onFutureDateClick: () => void;
+    /* 그날 기록이 없으면 record는 undefined */
+    onRecordableDateClick: (date: string, record?: StudyRecord) => void;
   };
 }
 
@@ -50,7 +52,7 @@ export default function CalendarGrid({month, today, records, handlers}: Calendar
               aria-current={date === today ? 'date' : undefined}
               className={styles.day}
               type="button"
-              onClick={isFuture ? handlers.onFutureDateClick : undefined}
+              onClick={isFuture ? handlers.onFutureDateClick : () => handlers.onRecordableDateClick(date, record)}
             >
               <time className={classNames(typography.body3, typography.bold, styles.dayNumber)} dateTime={date}>
                 {day}
