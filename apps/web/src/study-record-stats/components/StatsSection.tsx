@@ -5,6 +5,7 @@ import {useSuspenseQuery} from '@tanstack/react-query';
 import {type CalendarMonth, isSameMonth, toMonthParam} from '@/study-record/calendar-date';
 import {studyRecordStatsQueries} from '@/study-record/queries';
 import CumulativeStrip from '@/study-record-stats/components/CumulativeStrip';
+import FailCard from '@/study-record-stats/components/FailCard';
 import RecordCard from '@/study-record-stats/components/RecordCard';
 import StudyCard from '@/study-record-stats/components/StudyCard';
 
@@ -27,7 +28,10 @@ export default function StatsSection({month, today}: StatsSectionProps) {
       {isCurrentMonth ? (
         <CurrentMonthCards monthly={monthly} today={today} />
       ) : (
-        <RecordCard monthly={monthly} streak={null} />
+        <>
+          <FailCard monthly={monthly} />
+          <RecordCard monthly={monthly} streak={null} />
+        </>
       )}
       <StudyCard monthly={monthly} />
     </>
@@ -40,6 +44,7 @@ function CurrentMonthCards({monthly, today}: CurrentMonthCardsProps) {
   return (
     <>
       <CumulativeStrip monthly={monthly} totals={overview.totals} />
+      <FailCard monthly={monthly} />
       <RecordCard monthly={monthly} streak={overview.streak} />
     </>
   );

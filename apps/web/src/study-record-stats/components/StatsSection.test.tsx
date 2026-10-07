@@ -1,6 +1,6 @@
 import type {StudyRecordOverview} from '@plan-for-myself/shared';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
-import {render} from '@testing-library/react';
+import {render, screen} from '@testing-library/react';
 import {describe, expect, it} from 'vitest';
 import {type CalendarMonth, toMonthParam} from '@/study-record/calendar-date';
 import {studyRecordStatsQueries} from '@/study-record/queries';
@@ -12,6 +12,10 @@ const CURRENT_MONTH: CalendarMonth = {year: 2026, month: 9};
 const PREVIOUS_MONTH: CalendarMonth = {year: 2026, month: 8};
 const CURRENT_MONTH_ONLY_LABELS = ['누적 기록', '연속 기록'];
 const PREVIOUS_MONTH_RECORDED_DAYS_LABEL = '8월 기록한 날';
+const FAIL_CARD_CASES = [
+  {when: '이번 달', month: CURRENT_MONTH, title: '9월 실패'},
+  {when: '지난 달', month: PREVIOUS_MONTH, title: '8월 실패'},
+];
 
 const OVERVIEW: StudyRecordOverview = {
   date: TODAY,
@@ -40,6 +44,14 @@ describe('StatsSection', () => {
       renderStatsSection(PREVIOUS_MONTH);
 
       expect(queryAllTermTexts()).toContain(PREVIOUS_MONTH_RECORDED_DAYS_LABEL);
+    });
+
+    FAIL_CARD_CASES.forEach(({when, month, title}) => {
+      it(`${when}이면 실패 카드가 보인다`, () => {
+        renderStatsSection(month);
+
+        expect(screen.getByRole('heading', {name: title})).toBeInTheDocument();
+      });
     });
   });
 });
