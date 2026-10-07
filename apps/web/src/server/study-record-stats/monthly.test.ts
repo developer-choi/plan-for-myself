@@ -157,4 +157,134 @@ describe('calculateMonthly()', () => {
       });
     });
   });
+
+  describe('실패 태그', () => {
+    describe('General cases', () => {
+      it('지난달보다 많이 나온 태그는 반복하고 있는 태그로 분류해야 한다', () => {
+        const records = [...createTagRecords(LAST_MONTH, {늦잠: 3}), ...createTagRecords(THIS_MONTH, {늦잠: 4})];
+
+        expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toEqual([
+          {tag: '늦잠', count: 4, previousCount: 3, status: 'repeated'},
+        ]);
+      });
+
+      it('지난달에 없던 태그는 새로 생긴 태그로 분류해야 한다', () => {
+        const records = createTagRecords(THIS_MONTH, {휴대폰: 2});
+
+        expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toEqual([
+          {tag: '휴대폰', count: 2, previousCount: 0, status: 'appeared'},
+        ]);
+      });
+
+      it('지난달보다 적게 나온 태그는 줄어든 태그로 분류해야 한다', () => {
+        const records = [...createTagRecords(LAST_MONTH, {늦잠: 5}), ...createTagRecords(THIS_MONTH, {늦잠: 2})];
+
+        expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toEqual([
+          {tag: '늦잠', count: 2, previousCount: 5, status: 'reduced'},
+        ]);
+      });
+
+      it('반복하고 있는 태그, 새로 생긴 태그, 줄어든 태그 순으로 놓여야 한다', () => {
+        const records = [
+          ...createTagRecords(LAST_MONTH, {늦잠: 3, 운동: 3, 휴대폰: 5}),
+          ...createTagRecords(THIS_MONTH, {휴대폰: 2, 지각: 2, 늦잠: 4}),
+        ];
+
+        expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toEqual([
+          {tag: '늦잠', count: 4, previousCount: 3, status: 'repeated'},
+          {tag: '지각', count: 2, previousCount: 0, status: 'appeared'},
+          {tag: '운동', count: 0, previousCount: 3, status: 'reduced'},
+          {tag: '휴대폰', count: 2, previousCount: 5, status: 'reduced'},
+        ]);
+      });
+
+      describe('줄어든 태그의 순서', () => {
+        it('0번이 된 태그는 더 많이 줄어든 태그보다 앞에 놓여야 한다', () => {
+          const records = [
+            ...createTagRecords(LAST_MONTH, {늦잠: 1, 휴대폰: 5}),
+            ...createTagRecords(THIS_MONTH, {휴대폰: 1}),
+          ];
+
+          expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toEqual([
+            {tag: '늦잠', count: 0, previousCount: 1, status: 'reduced'},
+            {tag: '휴대폰', count: 1, previousCount: 5, status: 'reduced'},
+          ]);
+        });
+
+        it('0번이 되지 않은 태그는 많이 줄어든 순이어야 한다', () => {
+          const records = [
+            ...createTagRecords(LAST_MONTH, {늦잠: 2, 휴대폰: 5}),
+            ...createTagRecords(THIS_MONTH, {늦잠: 1, 휴대폰: 2}),
+          ];
+
+          expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toEqual([
+            {tag: '휴대폰', count: 2, previousCount: 5, status: 'reduced'},
+            {tag: '늦잠', count: 1, previousCount: 2, status: 'reduced'},
+          ]);
+        });
+      });
+    });
+
+    describe('Boundary cases', () => {
+      it('지난달과 같은 횟수면 반복하고 있는 태그로 분류해야 한다', () => {
+        const records = [...createTagRecords(LAST_MONTH, {늦잠: 3}), ...createTagRecords(THIS_MONTH, {늦잠: 3})];
+
+        expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toEqual([
+          {tag: '늦잠', count: 3, previousCount: 3, status: 'repeated'},
+        ]);
+      });
+
+      it('이번 달 0번이 된 태그는 줄어든 태그로 분류해야 한다', () => {
+        const records = [...createTagRecords(LAST_MONTH, {늦잠: 3}), createTestRecord(TODAY)];
+
+        expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toEqual([
+          {tag: '늦잠', count: 0, previousCount: 3, status: 'reduced'},
+        ]);
+      });
+    });
+
+    describe('Edge cases', () => {
+      it('이번 달과 지난달에 실패 태그가 없으면 빈 목록이어야 한다', () => {
+        const records = [
+          createTestRecord('2026-07-31', {failTags: ['늦잠']}),
+          createTestRecord('2026-08-31'),
+          createTestRecord(TODAY),
+        ];
+
+        expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toEqual([]);
+      });
+
+      it('지난달에만 실패가 있으면 모든 태그를 줄어든 태그로 분류해야 한다', () => {
+        const records = createTagRecords(LAST_MONTH, {늦잠: 2, 휴대폰: 1});
+        const {failureTags} = calculateMonthly(records, THIS_MONTH, TODAY);
+
+        expect(failureTags).toHaveLength(2);
+        expect(failureTags).toEqual(
+          expect.arrayContaining([
+            {tag: '늦잠', count: 0, previousCount: 2, status: 'reduced'},
+            {tag: '휴대폰', count: 0, previousCount: 1, status: 'reduced'},
+          ]),
+        );
+      });
+
+      it('오늘보다 뒤 날짜의 기록은 실패 태그 횟수에 넣지 않아야 한다', () => {
+        const records = [
+          createTestRecord(TODAY, {failTags: ['늦잠']}),
+          createTestRecord(TOMORROW, {failTags: ['늦잠']}),
+        ];
+
+        expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toEqual([
+          {tag: '늦잠', count: 1, previousCount: 0, status: 'appeared'},
+        ]);
+      });
+    });
+  });
 });
+
+function createTagRecords(month: string, tagCounts: Record<string, number>) {
+  const tags = Object.entries(tagCounts).flatMap(([tag, count]) => Array.from({length: count}, () => tag));
+
+  return tags.map((tag, index) =>
+    createTestRecord(`${month}-${String(index + 1).padStart(2, '0')}`, {failTags: [tag]}),
+  );
+}
