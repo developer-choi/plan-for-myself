@@ -3,89 +3,93 @@ import {getLoginState, getNextNavigating, type LoginState, type NextNavigatingRe
 import {DEFAULT_HOME_URL, getRedirectUrlWhenLoginSuccess, toRedirectPath} from './redirect';
 
 const PRIVATE_PATH = '/study-records';
-const ACCOUNT_PATH = '/account';
 const LOGIN_PATH = '/login';
 const PUBLIC_PATH = '/privacy';
 
 describe('getNextNavigating()', () => {
   describe('General cases', () => {
-    const accessCases: {
-      name: string;
-      pathWithSearch: string;
-      loginState: LoginState;
-      expected: NextNavigatingResult;
+    const pageGroups: {
+      page: string;
+      cases: {name: string; pathWithSearch: string; loginState: LoginState; expected: NextNavigatingResult}[];
     }[] = [
       {
-        name: '로그아웃 상태로 달력을 열면 보던 주소를 기억한 채 로그인 페이지로 보내야 한다',
-        pathWithSearch: PRIVATE_PATH,
-        loginState: 'logged-out',
-        expected: {type: 'not-authenticated', nextUrl: `/login?redirect=${encodeURIComponent(PRIVATE_PATH)}`},
+        page: '로그인이 필요한 페이지를 열 때',
+        cases: [
+          {
+            name: '로그아웃 상태면 로그인 뒤 돌아올 주소를 담아 로그인 페이지로 보내야 한다',
+            pathWithSearch: PRIVATE_PATH,
+            loginState: 'logged-out',
+            expected: {type: 'not-authenticated', nextUrl: `/login?redirect=${encodeURIComponent(PRIVATE_PATH)}`},
+          },
+          {
+            name: '로그인 없이 이용 중이면 열어 줘야 한다',
+            pathWithSearch: PRIVATE_PATH,
+            loginState: 'guest',
+            expected: {type: 'correct', nextUrl: PRIVATE_PATH},
+          },
+          {
+            name: '구글로 로그인했으면 열어 줘야 한다',
+            pathWithSearch: PRIVATE_PATH,
+            loginState: 'google',
+            expected: {type: 'correct', nextUrl: PRIVATE_PATH},
+          },
+        ],
       },
       {
-        name: '로그인 없이 이용 중이면 달력을 열어 줘야 한다',
-        pathWithSearch: PRIVATE_PATH,
-        loginState: 'guest',
-        expected: {type: 'correct', nextUrl: PRIVATE_PATH},
+        page: '로그인 페이지를 열 때',
+        cases: [
+          {
+            name: '로그아웃 상태면 열어 줘야 한다',
+            pathWithSearch: LOGIN_PATH,
+            loginState: 'logged-out',
+            expected: {type: 'correct', nextUrl: LOGIN_PATH},
+          },
+          {
+            name: '로그인 없이 이용 중이어도 구글 계정을 연결할 수 있게 열어 줘야 한다',
+            pathWithSearch: LOGIN_PATH,
+            loginState: 'guest',
+            expected: {type: 'correct', nextUrl: LOGIN_PATH},
+          },
+          {
+            name: '구글로 로그인했으면 홈으로 보내야 한다',
+            pathWithSearch: `${LOGIN_PATH}?redirect=/foo`,
+            loginState: 'google',
+            expected: {type: 'already-authenticated', nextUrl: DEFAULT_HOME_URL},
+          },
+        ],
       },
       {
-        name: '구글로 로그인했으면 달력을 열어 줘야 한다',
-        pathWithSearch: PRIVATE_PATH,
-        loginState: 'google',
-        expected: {type: 'correct', nextUrl: PRIVATE_PATH},
-      },
-      {
-        name: '로그아웃 상태로 계정 페이지를 열면 보던 주소를 기억한 채 로그인 페이지로 보내야 한다',
-        pathWithSearch: ACCOUNT_PATH,
-        loginState: 'logged-out',
-        expected: {type: 'not-authenticated', nextUrl: `/login?redirect=${encodeURIComponent(ACCOUNT_PATH)}`},
-      },
-      {
-        name: '로그인 없이 이용 중이면 계정 페이지를 열어 줘야 한다',
-        pathWithSearch: ACCOUNT_PATH,
-        loginState: 'guest',
-        expected: {type: 'correct', nextUrl: ACCOUNT_PATH},
-      },
-      {
-        name: '로그아웃 상태면 로그인 페이지를 열어 줘야 한다',
-        pathWithSearch: LOGIN_PATH,
-        loginState: 'logged-out',
-        expected: {type: 'correct', nextUrl: LOGIN_PATH},
-      },
-      {
-        name: '로그인 없이 이용 중이어도 구글 계정을 연결할 수 있게 로그인 페이지를 열어 줘야 한다',
-        pathWithSearch: LOGIN_PATH,
-        loginState: 'guest',
-        expected: {type: 'correct', nextUrl: LOGIN_PATH},
-      },
-      {
-        name: '구글로 로그인했으면 로그인 페이지 대신 홈으로 보내야 한다',
-        pathWithSearch: `${LOGIN_PATH}?redirect=/foo`,
-        loginState: 'google',
-        expected: {type: 'already-authenticated', nextUrl: DEFAULT_HOME_URL},
-      },
-      {
-        name: '로그아웃 상태에서도 개인정보 처리방침을 열어 줘야 한다',
-        pathWithSearch: PUBLIC_PATH,
-        loginState: 'logged-out',
-        expected: {type: 'correct', nextUrl: PUBLIC_PATH},
-      },
-      {
-        name: '로그인 없이 이용 중에도 개인정보 처리방침을 열어 줘야 한다',
-        pathWithSearch: PUBLIC_PATH,
-        loginState: 'guest',
-        expected: {type: 'correct', nextUrl: PUBLIC_PATH},
-      },
-      {
-        name: '구글로 로그인했어도 개인정보 처리방침을 열어 줘야 한다',
-        pathWithSearch: PUBLIC_PATH,
-        loginState: 'google',
-        expected: {type: 'correct', nextUrl: PUBLIC_PATH},
+        page: '개인정보 처리방침을 열 때',
+        cases: [
+          {
+            name: '로그아웃 상태여도 열어 줘야 한다',
+            pathWithSearch: PUBLIC_PATH,
+            loginState: 'logged-out',
+            expected: {type: 'correct', nextUrl: PUBLIC_PATH},
+          },
+          {
+            name: '로그인 없이 이용 중이어도 열어 줘야 한다',
+            pathWithSearch: PUBLIC_PATH,
+            loginState: 'guest',
+            expected: {type: 'correct', nextUrl: PUBLIC_PATH},
+          },
+          {
+            name: '구글로 로그인했어도 열어 줘야 한다',
+            pathWithSearch: PUBLIC_PATH,
+            loginState: 'google',
+            expected: {type: 'correct', nextUrl: PUBLIC_PATH},
+          },
+        ],
       },
     ];
 
-    accessCases.forEach(({name, pathWithSearch, loginState, expected}) => {
-      it(name, () => {
-        expect(getNextNavigating({pathWithSearch, loginState})).toEqual(expected);
+    pageGroups.forEach(({page, cases}) => {
+      describe(page, () => {
+        cases.forEach(({name, pathWithSearch, loginState, expected}) => {
+          it(name, () => {
+            expect(getNextNavigating({pathWithSearch, loginState})).toEqual(expected);
+          });
+        });
       });
     });
   });
