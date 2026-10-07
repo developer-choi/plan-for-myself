@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {addDays, addMonths, listMonths, toMonth} from './date';
+import {addDays, addMonths, getDayOfMonth, getDaysInMonth, listMonths, toMonth} from './date';
 
 describe('addDays()', () => {
   describe('Boundary cases', () => {
@@ -43,6 +43,40 @@ describe('toMonth()', () => {
   describe('General cases', () => {
     it('날짜에서 연·월만 반환해야 한다', () => {
       expect(toMonth('2026-09-24')).toBe('2026-09');
+    });
+  });
+});
+
+describe('getDaysInMonth()', () => {
+  describe('General cases', () => {
+    [
+      {name: '2026년 9월', month: '2026-09', days: 30},
+      {name: '2026년 10월', month: '2026-10', days: 31},
+      {name: '2026년 2월', month: '2026-02', days: 28},
+    ].forEach(({name, month, days}) => {
+      it(`${name}은 ${days}일이어야 한다`, () => {
+        expect(getDaysInMonth(month)).toBe(days);
+      });
+    });
+  });
+
+  describe('Boundary cases', () => {
+    [
+      {name: '윤년 2월', month: '2028-02', days: 29},
+      {name: '해가 넘어가는 12월', month: '2026-12', days: 31},
+    ].forEach(({name, month, days}) => {
+      it(`${name}은 ${days}일이어야 한다`, () => {
+        expect(getDaysInMonth(month)).toBe(days);
+      });
+    });
+  });
+});
+
+describe('getDayOfMonth()', () => {
+  describe('General cases', () => {
+    it('날짜에서 일만 숫자로 반환해야 한다', () => {
+      const day = 4;
+      expect(getDayOfMonth('2026-09-04')).toBe(day);
     });
   });
 });

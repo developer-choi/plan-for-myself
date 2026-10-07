@@ -15,3 +15,27 @@ export interface StudyRecordOverview {
   streak: {current: number; longest: number};
   totals: {recordedDays: number; studiedMinutes: number; improvedFailures: number};
 }
+
+export interface StudyRecordMonthly {
+  month: string;
+  inProgress: boolean;
+  recordedDays: RecordedDays;
+  /* 기록이 하나도 없거나 전달이 첫 기록이 있는 달보다 앞이면 셀 대상이 아니라 null. 첫 기록 뒤 통째로 쉰 달은 count 0이다 */
+  previousRecordedDays: RecordedDays | null;
+  study: {
+    totalMinutes: number;
+    /* 조회하는 달에 평일 기록이 없으면 null */
+    weekdayAvg: number | null;
+    /* 조회하는 달에 휴일 기록이 없으면 null */
+    holidayAvg: number | null;
+    /* 전달에 평일 기록이 없으면 null (전달이 첫 기록 달보다 앞인 경우 포함) */
+    prevWeekdayAvg: number | null;
+    /* 전달에 휴일 기록이 없으면 null (전달이 첫 기록 달보다 앞인 경우 포함) */
+    prevHolidayAvg: number | null;
+  };
+}
+
+export interface RecordedDays {
+  count: number;
+  total: number;
+}

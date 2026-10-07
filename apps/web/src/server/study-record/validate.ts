@@ -16,8 +16,12 @@ export interface Rejection {
 
 export type Validation<T> = {ok: true; value: T} | {ok: false; rejection: Rejection};
 
-export function validateNewStudyRecord(body: unknown): Validation<NewStudyRecord> {
-  return validate(newStudyRecordSchema, body);
+export function validateNewStudyRecord(body: unknown, today: string): Validation<NewStudyRecord> {
+  const result = validate(newStudyRecordSchema, body);
+  if (result.ok && result.value.date > today) {
+    return {ok: false, rejection: {code: 'INVALID_DATE', message: FUTURE_DATE_MESSAGE}};
+  }
+  return result;
 }
 
 export function validateStudyRecordUpdate(body: unknown): Validation<StudyRecordFields> {
@@ -67,6 +71,7 @@ const STUDY_RECORD_LIMITS = {
 
 const DATE_MESSAGE = '날짜가 올바르지 않아요';
 const MONTH_MESSAGE = '조회할 달이 올바르지 않아요';
+const FUTURE_DATE_MESSAGE = '오늘과 지난 날짜만 기록할 수 있어요';
 const STUDIED_MINUTES_MESSAGE = `공부시간은 ${STUDY_RECORD_LIMITS.studiedMinutes.min}~${STUDY_RECORD_LIMITS.studiedMinutes.max} 사이의 숫자로 적어 주세요`;
 
 const minutesSchema = z

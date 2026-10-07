@@ -1,0 +1,21 @@
+.strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--spacing-md);
+}
+
+.label {
+  color: var(--color-fg-secondary);
+}
+
+.value {
+  white-space: nowrap;
+}
+
+.unit {
+  color: var(--color-fg-secondary);
+}
+
+.added {
+  color: var(--color-fg-muted);
+}
