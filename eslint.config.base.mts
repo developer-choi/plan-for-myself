@@ -122,6 +122,12 @@ export const baseRules = {
       message: 'enum 대신 as const 객체를 사용하세요.',
     },
     {
+      selector:
+        "JSXAttribute[name.name!='ref'] > JSXExpressionContainer > :matches(ArrowFunctionExpression[body.type='BlockStatement'], FunctionExpression)",
+      message:
+        'JSX 속성 안에 블록 본문 함수({ } 본문) 금지. return부는 컴포넌트 구조를 한눈에 보는 자리입니다. 컴포넌트 본문에 동작을 드러내는 이름의 함수로 빼고 속성엔 이름만 넘기세요(예: const addTagOnEnter = (event) => {...}; onKeyDown={addTagOnEnter}). 인자를 묶는 식 본문 한 줄(onRemove={() => removeTag(tag)})과 ref 콜백은 허용.',
+    },
+    {
       selector: 'TSTypeReference > TSQualifiedName[left.name="React"]',
       message: 'React.X 대신 import { X } from "react"를 사용하세요.',
     },
