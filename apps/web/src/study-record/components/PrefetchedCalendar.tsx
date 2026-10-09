@@ -1,5 +1,5 @@
-import {dehydrate, HydrationBoundary, noop, QueryClient} from '@tanstack/react-query';
-import {isSameMonth, type CalendarMonth, toMonthParam} from '@/study-record/calendar-date';
+import {dehydrate, HydrationBoundary, QueryClient} from '@tanstack/react-query';
+import {type CalendarMonth, toMonthParam} from '@/study-record/calendar-date';
 import CalendarSection from '@/study-record/components/CalendarSection';
 import {studyRecordQueries, studyRecordStatsQueries} from '@/study-record/queries';
 
@@ -13,9 +13,7 @@ export default async function PrefetchedCalendar({month, today}: PrefetchedCalen
 
   await Promise.all([
     queryClient.query(studyRecordQueries.list.options(toMonthParam(month))),
-    isSameMonth(today, month)
-      ? queryClient.query(studyRecordStatsQueries.overview.options(today)).catch(noop)
-      : undefined,
+    queryClient.query(studyRecordStatsQueries.overview.options(today)),
   ]);
 
   return (

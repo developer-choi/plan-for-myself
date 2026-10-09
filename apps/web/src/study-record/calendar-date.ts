@@ -48,11 +48,19 @@ export function isSameMonth(date: string, month: CalendarMonth): boolean {
 }
 
 export function isFutureMonth(today: string, month: CalendarMonth): boolean {
-  return toMonthParam(month) > today.slice(0, MONTH_PARAM_LENGTH);
+  return toMonthParam(month) > toDateMonthParam(today);
+}
+
+export function isPastMonth(date: string, month: CalendarMonth): boolean {
+  return toMonthParam(month) < toDateMonthParam(date);
 }
 
 export function toMonthParam({year, month}: CalendarMonth): string {
   return `${year}-${pad(month)}`;
+}
+
+export function toDateMonthParam(date: string): string {
+  return date.slice(0, MONTH_PARAM_LENGTH);
 }
 
 export function formatDateTitle(date: string): string {
