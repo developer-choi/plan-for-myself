@@ -1,0 +1,14 @@
+.notice {
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: left;
+  background: var(--color-bg-danger-soft);
+  border-radius: var(--radius-md);
+}
+
+.title {
+  color: var(--color-fg-destructive);
+}
+
+.description {
+  color: var(--color-fg-secondary);
+}
