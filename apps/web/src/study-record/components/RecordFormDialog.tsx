@@ -4,6 +4,7 @@ import {Button, Callout, Dialog, IconButton} from '@developer-choi/design-system
 import typography from '@developer-choi/design-system/styles/typography';
 import type {StudyRecord} from '@plan-for-myself/shared';
 import {Cross2Icon} from '@radix-ui/react-icons';
+import {captureException} from '@sentry/nextjs';
 import classNames from 'classnames';
 import {type BaseSyntheticEvent, useState} from 'react';
 import {FormProvider, useForm, type UseFormReturn} from 'react-hook-form';
@@ -111,6 +112,7 @@ function useRecordForm({date, record, onSave, onDelete, onClose, loading}: UseRe
     const rejection = parseRecordRejection(error);
     if (!rejection) {
       console.error(error);
+      captureException(error);
     }
     setRejectionMessage(rejection?.message ?? unexpectedFailureMessage);
   };
