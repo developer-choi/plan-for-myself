@@ -48,7 +48,7 @@ export function isSameMonth(date: string, month: CalendarMonth): boolean {
 }
 
 export function isFutureMonth(today: string, month: CalendarMonth): boolean {
-  return toMonthParam(month) > today.slice(0, MONTH_PARAM_LENGTH);
+  return toMonthParam(month) > toDateMonthParam(today);
 }
 
 export function toMonthParam({year, month}: CalendarMonth): string {
