@@ -1,21 +1,15 @@
 'use client';
 
 import {useActionState} from 'react';
-import {useSearchParams} from 'next/navigation';
 import {Button} from '@developer-choi/design-system';
 import {continueWithGoogle} from '@/auth/actions';
 import styles from './GoogleLoginActions.module.scss';
 
 export default function GoogleLoginActions() {
-  const searchParams = useSearchParams();
-  const [, submitAction, isPending] = useActionState(
-    (_state: void, formData: FormData) => continueWithGoogle(formData),
-    undefined,
-  );
+  const [, submitAction, isPending] = useActionState(() => continueWithGoogle(), undefined);
 
   return (
     <form action={submitAction} className={styles.actions}>
-      <input name="redirect" type="hidden" value={searchParams.get('redirect') ?? ''} />
       <Button color="secondary" loading={isPending} size="xLarge" type="submit">
         <GoogleIcon />
         Google로 계속하기

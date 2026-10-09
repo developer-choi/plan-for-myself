@@ -1,6 +1,5 @@
 import {describe, expect, it} from 'vitest';
 import {getLoginState, getNextNavigating, type LoginState, type NextNavigatingResult} from './path';
-import {DEFAULT_HOME_URL, toRedirectPath} from './redirect';
 
 const PRIVATE_PATH = '/study-records';
 const LOGIN_PATH = '/login';
@@ -53,7 +52,7 @@ describe('getNextNavigating()', () => {
           },
           {
             name: '구글로 로그인했으면 소개 페이지로 보내야 한다',
-            pathWithSearch: `${LOGIN_PATH}?redirect=/foo`,
+            pathWithSearch: LOGIN_PATH,
             loginState: 'google',
             expected: {type: 'already-authenticated', nextUrl: '/'},
           },
@@ -188,35 +187,6 @@ describe('getNextNavigating()', () => {
           });
         });
       });
-    });
-  });
-});
-
-describe('toRedirectPath()', () => {
-  [null, ''].forEach((redirect) => {
-    it(`돌아갈 주소가 없으면 로그인 뒤 달력으로 간다 (${redirect === null ? '주소 없음' : '빈 문자열'})`, () => {
-      expect(toRedirectPath(redirect)).toBe(DEFAULT_HOME_URL);
-    });
-  });
-
-  it('돌아갈 주소의 경로와 쿼리를 그대로 남긴다', () => {
-    const pathWithSearch = `${PRIVATE_PATH}/2026/10?a=1&b=2`;
-
-    expect(toRedirectPath(pathWithSearch)).toBe(pathWithSearch);
-  });
-
-  it('돌아갈 주소가 주소 모양이 아니면 로그인 뒤 달력으로 간다', () => {
-    expect(toRedirectPath('http://[')).toBe(DEFAULT_HOME_URL);
-  });
-
-  [
-    'https://evil.example/study-records',
-    '//evil.example/study-records',
-    '/\\evil.example/study-records',
-    '/.//evil.example/study-records',
-  ].forEach((redirect) => {
-    it(`다른 사이트 주소가 들어와도 이 사이트 밖으로 보내지 않는다 (${redirect})`, () => {
-      expect(toRedirectPath(redirect)).toBe(DEFAULT_HOME_URL);
     });
   });
 });
