@@ -1,5 +1,6 @@
 'use client';
 
+import {captureException} from '@sentry/nextjs';
 import {useMutation} from '@tanstack/react-query';
 import {overlay} from 'overlay-kit';
 import {Button, Callout, Confirm} from '@developer-choi/design-system';
@@ -43,7 +44,8 @@ function AccountDeleteConfirm({isOpen, text, onClose}: AccountDeleteConfirmProps
   const deleteAccount = async () => {
     try {
       await deleteMutation.mutateAsync();
-    } catch {
+    } catch (error) {
+      captureException(error);
       return;
     }
     window.location.replace(INTRO_URL);
