@@ -140,11 +140,11 @@ function IntroFooter() {
         개인정보 처리방침
       </Link>
       <span>·</span>
-      <a className={styles.footerLink} href={GITHUB_REPOSITORY_URL}>
+      <a className={styles.footerLink} href={GITHUB_REPOSITORY_URL} rel="noopener" target="_blank">
         GitHub
       </a>
       <span>·</span>
-      <a className={styles.footerLink} href={MAKER_URL}>
+      <a className={styles.footerLink} href={MAKER_URL} rel="noopener" target="_blank">
         만든 사람
       </a>
     </footer>
