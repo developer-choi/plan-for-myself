@@ -2,6 +2,7 @@
 
 import ErrorNotice from '@/shared/components/ErrorNotice';
 import {getErrorInfo} from '@/shared/error/info';
+import useReportPageError from '@/shared/error/useReportPageError';
 import styles from './error.module.scss';
 
 interface ErrorPageProps {
@@ -10,6 +11,7 @@ interface ErrorPageProps {
 }
 
 export default function ErrorPage({error, retry}: ErrorPageProps) {
+  useReportPageError(error);
   const {title, content} = getErrorInfo(error);
 
   return (

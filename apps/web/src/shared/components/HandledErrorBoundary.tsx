@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import {catchError} from 'next/error';
 import ErrorNotice from '@/shared/components/ErrorNotice';
 import {getErrorInfo} from '@/shared/error/info';
+import useReportPageError from '@/shared/error/useReportPageError';
 import {type FallbackSize} from '@/shared/types/fallback';
 import styles from './FallbackSlot.module.scss';
 
@@ -24,6 +25,7 @@ export default function HandledErrorBoundary({children, ...props}: PropsWithChil
 
 const RetryableErrorBoundary = catchError(({onReset, size = 'page'}: HandledErrorBoundaryProps, {error, retry}) => {
   const {reset: resetQueryError} = useQueryErrorResetBoundary();
+  useReportPageError(error);
   const {title, content} = getErrorInfo(error);
 
   return (
