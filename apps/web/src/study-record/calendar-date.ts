@@ -69,6 +69,7 @@ export function formatDateTitle(date: string): string {
 }
 
 const DAYS_PER_WEEK = 7;
+export const WEEKDAY_LABELS = ['월', '화', '수', '목', '금', '토', '일'] as const;
 const MONTH_PARAM_LENGTH = 'YYYY-MM'.length;
 const DAY_NAMES = ['일', '월', '화', '수', '목', '금', '토'] as const;
 const YEAR_PATTERN = /^[1-9]\d{3}$/;

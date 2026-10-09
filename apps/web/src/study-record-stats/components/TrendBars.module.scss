@@ -1,0 +1,50 @@
+.bars {
+  display: grid;
+  grid-template-columns: repeat(var(--trend-columns), minmax(0, 1fr));
+  align-items: end;
+  height: 92px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+
+  &[data-status='repeated'] {
+    --trend-bar-color: var(--color-bg-destructive);
+    --trend-bar-light: var(--color-bg-danger-light);
+  }
+
+  &[data-status='reduced'] {
+    --trend-bar-color: var(--color-fg-success);
+    --trend-bar-light: var(--color-bg-success-soft);
+  }
+
+  &[data-in-progress] .bar {
+    background-image: repeating-linear-gradient(45deg, var(--trend-bar-color) 0 3px, var(--trend-bar-light) 3px 6px);
+  }
+}
+
+.value {
+  margin-bottom: var(--spacing-xs);
+  color: var(--color-fg-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.bar {
+  width: 30px;
+  height: calc(var(--trend-bar-ratio) * 56px);
+  background: var(--trend-bar-color);
+  border-radius: var(--radius-xs) var(--radius-xs) 0 0;
+}
+
+.label {
+  width: 100%;
+  height: 20px;
+  padding-top: var(--spacing-xs);
+  color: var(--color-fg-muted);
+  text-align: center;
+  border-top: 1px solid var(--color-fg-subtle);
+}

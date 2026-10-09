@@ -16,9 +16,9 @@ const GROUPS: {status: FailureTagStatus; label: string; title: string}[] = [
   {status: 'reduced', label: '줄어든', title: REDUCED_TITLE_IN_PROGRESS},
 ];
 
-const OVERSLEEP: FailureTag = {tag: '늦잠', count: 4, previousCount: 3, status: 'repeated'};
-const PHONE_GAME: FailureTag = {tag: '폰게임', count: 2, previousCount: 0, status: 'appeared'};
-const SNACK: FailureTag = {tag: '야식', count: 0, previousCount: 3, status: 'reduced'};
+const OVERSLEEP: FailureTag = {tag: '늦잠', count: 4, previousCount: 3, status: 'repeated', trend: []};
+const PHONE_GAME: FailureTag = {tag: '폰게임', count: 2, previousCount: 0, status: 'appeared', trend: []};
+const SNACK: FailureTag = {tag: '야식', count: 0, previousCount: 3, status: 'reduced', trend: []};
 
 describe('FailCard', () => {
   describe('General cases', () => {
@@ -108,9 +108,9 @@ describe('FailCard', () => {
       it(`횟수·줄어든 정도·이름 어느 순서도 아니게 받으면 ${label} 묶음에 받은 순서대로 보인다`, () => {
         const previousCount = {repeated: 1, appeared: 0, reduced: 6}[status];
         const unsortedTags: FailureTag[] = [
-          {tag: '야식', count: 2, previousCount, status},
-          {tag: '늦잠', count: 3, previousCount, status},
-          {tag: '폰게임', count: 1, previousCount, status},
+          {tag: '야식', count: 2, previousCount, status, trend: []},
+          {tag: '늦잠', count: 3, previousCount, status, trend: []},
+          {tag: '폰게임', count: 1, previousCount, status, trend: []},
         ];
         render(<FailCard monthly={createMonthly({failureTags: unsortedTags})} />);
 
@@ -120,10 +120,42 @@ describe('FailCard', () => {
       });
     });
   });
+
+  describe('선택된 태그 줄', () => {
+    GROUPS.forEach(({status, label}) => {
+      it(`${label} 묶음에서 선택된 태그의 줄이 강조돼야 한다`, () => {
+        const tag = createTag(status);
+
+        render(
+          <FailCard monthly={createMonthly({failureTags: [tag]})} selection={{selectedTag: tag.tag, onSelect: noop}} />,
+        );
+
+        expect(getTagRow(tag.tag)).toHaveAttribute('data-selected');
+      });
+    });
+
+    it('선택되지 않은 태그의 줄은 강조되지 않아야 한다', () => {
+      const failureTags = [OVERSLEEP, SNACK];
+
+      render(
+        <FailCard monthly={createMonthly({failureTags})} selection={{selectedTag: OVERSLEEP.tag, onSelect: noop}} />,
+      );
+
+      expect(getTagRow(SNACK.tag)).not.toHaveAttribute('data-selected');
+    });
+
+    it('선택된 태그가 없으면 어느 줄도 강조되지 않아야 한다', () => {
+      const failureTags = [OVERSLEEP, SNACK];
+
+      render(<FailCard monthly={createMonthly({failureTags})} selection={{selectedTag: null, onSelect: noop}} />);
+
+      screen.getAllByRole('button').forEach((row) => expect(row).not.toHaveAttribute('data-selected'));
+    });
+  });
 });
 
 function createTag(status: FailureTagStatus): FailureTag {
-  return {tag: `${status}-태그`, count: 1, previousCount: 1, status};
+  return {tag: `${status}-태그`, count: 1, previousCount: 1, status, trend: []};
 }
 
 function getGroupByTitle(title: string): HTMLElement {
@@ -135,3 +167,15 @@ function getGroupByTitle(title: string): HTMLElement {
 
   return group;
 }
+
+function getTagRow(tag: string): HTMLElement {
+  const row = screen.getAllByRole('button').find((button) => button.textContent.includes(tag));
+
+  if (!row) {
+    throw new Error(`「${tag}」 줄이 없다`);
+  }
+
+  return row;
+}
+
+function noop() {}

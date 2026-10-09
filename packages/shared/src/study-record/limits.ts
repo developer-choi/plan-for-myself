@@ -9,3 +9,5 @@ export const STUDY_RECORD_FIELD_MESSAGES = {
   failTagEmpty: '빈 실패 태그는 넣을 수 없어요',
   failTagSpace: '실패 태그에는 공백을 넣을 수 없어요',
 };
+
+export const FAILURE_TAG_TREND_MONTH_LIMIT = 6;

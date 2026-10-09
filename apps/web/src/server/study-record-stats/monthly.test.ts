@@ -187,7 +187,7 @@ describe('calculateMonthly()', () => {
       it('지난달보다 많이 나온 태그는 반복하고 있는 태그로 분류해야 한다', () => {
         const records = [...createTagRecords(LAST_MONTH, {늦잠: 3}), ...createTagRecords(THIS_MONTH, {늦잠: 4})];
 
-        expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toEqual([
+        expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toMatchObject([
           {tag: '늦잠', count: 4, previousCount: 3, status: 'repeated'},
         ]);
       });
@@ -195,7 +195,7 @@ describe('calculateMonthly()', () => {
       it('지난달에 없던 태그는 새로 생긴 태그로 분류해야 한다', () => {
         const records = createTagRecords(THIS_MONTH, {휴대폰: 2});
 
-        expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toEqual([
+        expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toMatchObject([
           {tag: '휴대폰', count: 2, previousCount: 0, status: 'appeared'},
         ]);
       });
@@ -203,7 +203,7 @@ describe('calculateMonthly()', () => {
       it('지난달보다 적게 나온 태그는 줄어든 태그로 분류해야 한다', () => {
         const records = [...createTagRecords(LAST_MONTH, {늦잠: 5}), ...createTagRecords(THIS_MONTH, {늦잠: 2})];
 
-        expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toEqual([
+        expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toMatchObject([
           {tag: '늦잠', count: 2, previousCount: 5, status: 'reduced'},
         ]);
       });
@@ -214,7 +214,7 @@ describe('calculateMonthly()', () => {
           ...createTagRecords(THIS_MONTH, {휴대폰: 2, 지각: 2, 늦잠: 4}),
         ];
 
-        expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toEqual([
+        expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toMatchObject([
           {tag: '늦잠', count: 4, previousCount: 3, status: 'repeated'},
           {tag: '지각', count: 2, previousCount: 0, status: 'appeared'},
           {tag: '운동', count: 0, previousCount: 3, status: 'reduced'},
@@ -229,7 +229,7 @@ describe('calculateMonthly()', () => {
             ...createTagRecords(THIS_MONTH, {휴대폰: 1}),
           ];
 
-          expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toEqual([
+          expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toMatchObject([
             {tag: '늦잠', count: 0, previousCount: 1, status: 'reduced'},
             {tag: '휴대폰', count: 1, previousCount: 5, status: 'reduced'},
           ]);
@@ -241,7 +241,7 @@ describe('calculateMonthly()', () => {
             ...createTagRecords(THIS_MONTH, {늦잠: 1, 휴대폰: 2}),
           ];
 
-          expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toEqual([
+          expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toMatchObject([
             {tag: '휴대폰', count: 2, previousCount: 5, status: 'reduced'},
             {tag: '늦잠', count: 1, previousCount: 2, status: 'reduced'},
           ]);
@@ -253,7 +253,7 @@ describe('calculateMonthly()', () => {
       it('지난달과 같은 횟수면 반복하고 있는 태그로 분류해야 한다', () => {
         const records = [...createTagRecords(LAST_MONTH, {늦잠: 3}), ...createTagRecords(THIS_MONTH, {늦잠: 3})];
 
-        expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toEqual([
+        expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toMatchObject([
           {tag: '늦잠', count: 3, previousCount: 3, status: 'repeated'},
         ]);
       });
@@ -261,7 +261,7 @@ describe('calculateMonthly()', () => {
       it('이번 달 0번이 된 태그는 줄어든 태그로 분류해야 한다', () => {
         const records = [...createTagRecords(LAST_MONTH, {늦잠: 3}), createTestRecord(TODAY)];
 
-        expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toEqual([
+        expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toMatchObject([
           {tag: '늦잠', count: 0, previousCount: 3, status: 'reduced'},
         ]);
       });
@@ -285,8 +285,8 @@ describe('calculateMonthly()', () => {
         expect(failureTags).toHaveLength(2);
         expect(failureTags).toEqual(
           expect.arrayContaining([
-            {tag: '늦잠', count: 0, previousCount: 2, status: 'reduced'},
-            {tag: '휴대폰', count: 0, previousCount: 1, status: 'reduced'},
+            expect.objectContaining({tag: '늦잠', count: 0, previousCount: 2, status: 'reduced'}),
+            expect.objectContaining({tag: '휴대폰', count: 0, previousCount: 1, status: 'reduced'}),
           ]),
         );
       });
@@ -297,9 +297,52 @@ describe('calculateMonthly()', () => {
           createTestRecord(TOMORROW, {failTags: ['늦잠']}),
         ];
 
-        expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toEqual([
+        expect(calculateMonthly(records, THIS_MONTH, TODAY).failureTags).toMatchObject([
           {tag: '늦잠', count: 1, previousCount: 0, status: 'appeared'},
         ]);
+      });
+    });
+  });
+
+  describe('실패 태그 추이', () => {
+    describe('General cases', () => {
+      it('실패 태그의 추이에 달별 횟수가 들어 있어야 한다', () => {
+        const records = [
+          ...createTagRecords('2026-07', {늦잠: 1}),
+          ...createTagRecords(LAST_MONTH, {늦잠: 2}),
+          ...createTagRecords(THIS_MONTH, {늦잠: 3}),
+        ];
+        const [oversleep] = calculateMonthly(records, THIS_MONTH, TODAY).failureTags;
+
+        expect(oversleep.trend.map(({month, count}) => ({month, count}))).toEqual([
+          {month: '2026-07', count: 1},
+          {month: LAST_MONTH, count: 2},
+          {month: THIS_MONTH, count: 3},
+        ]);
+      });
+
+      it('실패 태그의 추이에 달별 지난달 횟수가 들어 있어야 한다', () => {
+        const records = [
+          ...createTagRecords('2026-07', {늦잠: 1}),
+          ...createTagRecords(LAST_MONTH, {늦잠: 2}),
+          ...createTagRecords(THIS_MONTH, {늦잠: 3}),
+        ];
+        const [oversleep] = calculateMonthly(records, THIS_MONTH, TODAY).failureTags;
+
+        expect(oversleep.trend.map(({previousCount}) => previousCount)).toEqual([0, 1, 2]);
+      });
+    });
+
+    describe('Edge cases', () => {
+      it('오늘보다 뒤 날짜의 기록은 추이의 이번 달 횟수에 넣지 않아야 한다', () => {
+        const records = [
+          createTestRecord('2026-09-10', {failTags: ['늦잠']}),
+          createTestRecord(TOMORROW, {failTags: ['늦잠']}),
+        ];
+
+        const [oversleep] = calculateMonthly(records, THIS_MONTH, TODAY).failureTags;
+
+        expect(oversleep.trend.map(({month, count}) => ({month, count}))).toEqual([{month: THIS_MONTH, count: 1}]);
       });
     });
   });

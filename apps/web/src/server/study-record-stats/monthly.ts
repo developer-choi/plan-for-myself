@@ -2,6 +2,7 @@ import type {DateType, FailureTag, FailureTagStatus, StudyRecord, StudyRecordMon
 import {addMonths, getDayOfMonth, getDaysInMonth, toMonth} from './date';
 import {sumMinutes} from './minutes';
 import {countTagsByMonth, getTagCount, isReduced, type TagCountByMonth} from './tag-count';
+import {listTrend} from './trend';
 
 export function calculateMonthly(records: StudyRecord[], month: string, date: string): StudyRecordMonthly {
   const recordsUntilDate = records.filter((record) => record.date <= date);
@@ -79,7 +80,13 @@ function listFailureTags(counts: TagCountByMonth, month: string): FailureTag[] {
     .map((tag) => {
       const count = getTagCount(counts, month, tag);
       const previousCount = getTagCount(counts, previousMonth, tag);
-      return {tag, count, previousCount, status: judgeStatus(count, previousCount)};
+      return {
+        tag,
+        count,
+        previousCount,
+        status: judgeStatus(count, previousCount),
+        trend: listTrend(counts, month, tag),
+      };
     })
     .sort(compareFailureTags);
 }
