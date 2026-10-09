@@ -8,14 +8,13 @@ import {
   shouldShowRegisteredNotice,
 } from '@/auth/login-cookies';
 import {auth, signIn} from '@/auth/next-auth';
-import {DEFAULT_HOME_URL, toRedirectPath} from '@/auth/redirect';
+import {DEFAULT_HOME_URL} from '@/auth/redirect';
 
-export async function continueWithGoogle(formData: FormData): Promise<void> {
+export async function continueWithGoogle(): Promise<void> {
   /* 기록 삭제 버튼을 누르고 구글 화면에서 취소하면 의도 쿠키가 남는다. 지우지 않으면 이 일반 로그인에서 기록이 지워진다 */
   await clearDiscardIntent();
 
-  const redirectValue = formData.get('redirect');
-  await signIn('google', {redirectTo: toRedirectPath(typeof redirectValue === 'string' ? redirectValue : null)});
+  await signIn('google', {redirectTo: DEFAULT_HOME_URL});
 }
 
 export async function discardGuestAndContinueWithGoogle(): Promise<void> {

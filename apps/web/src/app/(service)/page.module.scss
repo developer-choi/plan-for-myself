@@ -1,0 +1,48 @@
+.page {
+  color: var(--color-fg-default);
+  background: var(--color-bg-default);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  max-width: 440px;
+  padding: var(--spacing-3xl) var(--spacing-page-x-mobile);
+  margin: 0 auto;
+}
+
+.outro {
+  background: var(--color-bg-subtle);
+}
+
+.brand {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+
+.brandName {
+  font-weight: 800;
+}
+
+.heading,
+.description {
+  word-break: keep-all;
+}
+
+.description {
+  color: var(--color-fg-secondary);
+}
+
+.footer {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: center;
+  padding: var(--spacing-lg) var(--spacing-page-x-mobile) var(--spacing-xl);
+  color: var(--color-fg-muted);
+}
+
+.footerLink {
+  color: inherit;
+}

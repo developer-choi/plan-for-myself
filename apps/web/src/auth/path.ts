@@ -1,5 +1,5 @@
 import type {Session} from 'next-auth';
-import {DEFAULT_HOME_URL} from '@/auth/redirect';
+import {INTRO_URL} from '@/auth/redirect';
 
 export type LoginState = 'logged-out' | 'guest' | 'google';
 
@@ -11,11 +11,11 @@ interface NextNavigatingParam {
 export type NextNavigatingResult =
   | {
       type: 'not-authenticated';
-      nextUrl: `/login?redirect=${string}`;
+      nextUrl: typeof INTRO_URL;
     }
   | {
       type: 'already-authenticated';
-      nextUrl: typeof DEFAULT_HOME_URL;
+      nextUrl: typeof INTRO_URL;
     }
   | {
       type: 'correct';
@@ -39,12 +39,12 @@ export function getNextNavigating({pathWithSearch, loginState}: NextNavigatingPa
   if (isPrivate && loginState === 'logged-out') {
     return {
       type: 'not-authenticated',
-      nextUrl: `/login?redirect=${encodeURIComponent(pathWithSearch)}`,
+      nextUrl: INTRO_URL,
     };
   } else if (isNotPrivate && loginState === 'google') {
     return {
       type: 'already-authenticated',
-      nextUrl: DEFAULT_HOME_URL,
+      nextUrl: INTRO_URL,
     };
   } else {
     return {

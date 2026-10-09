@@ -34,7 +34,7 @@ export default async function Page({params}: PageProps) {
   return (
     <PageShell>
       <CalendarHeader
-        menu={isGuest ? <GuestCalendarMenu /> : <CalendarMenu viewPath={monthPath(viewMonth)} />}
+        menu={isGuest ? <GuestCalendarMenu /> : <CalendarMenu />}
         nextHref={monthPath(shiftMonth(viewMonth, 1))}
         previousHref={monthPath(shiftMonth(viewMonth, -1))}
         right={
