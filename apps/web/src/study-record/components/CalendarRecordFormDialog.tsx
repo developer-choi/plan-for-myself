@@ -37,8 +37,8 @@ export default function CalendarRecordFormDialog({
       ]),
     onError: (error: Error) => {
       if (parseRecordRejection(error)?.isStale) {
-        void queryClient.invalidateQueries({queryKey: studyRecordQueries.list.key(month)});
-        void queryClient.invalidateQueries({queryKey: studyRecordStatsQueries.all.key()});
+        queryClient.invalidateQueries({queryKey: studyRecordQueries.list.key(month)});
+        queryClient.invalidateQueries({queryKey: studyRecordStatsQueries.all.key()});
       }
     },
   };
