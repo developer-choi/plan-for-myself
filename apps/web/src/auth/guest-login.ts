@@ -1,12 +1,13 @@
 import {createHmac} from 'node:crypto';
 import {CredentialsSignin} from 'next-auth';
+import {GUEST_LIMIT_CODE} from '@/auth/login-error';
 import {pool} from '@/server/db/pool';
 import {createGuestUserIdWithinLimit, GuestLimitError, type Queryable} from '@/server/user/repository';
 
 const IP_WITHOUT_HEADER = 'local';
 
 class GuestLimitSignin extends CredentialsSignin {
-  code = 'guest_limit';
+  code = GUEST_LIMIT_CODE;
 }
 
 function hashIp(ip: string) {
