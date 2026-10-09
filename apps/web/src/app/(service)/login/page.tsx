@@ -3,20 +3,17 @@ import {Callout} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
 import GoogleLoginActions from '@/auth/components/GoogleLoginActions';
 import GuestLimitNotice from '@/auth/components/GuestLimitNotice';
-import GuestLoginButton from '@/auth/components/GuestLoginButton';
 import LoginBackButton from '@/auth/components/LoginBackButton';
 import RegisteredAccountNotice from '@/auth/components/RegisteredAccountNotice';
 import {readRegisteredRejection, shouldShowRegisteredNotice} from '@/auth/login-cookies';
 import {getLoginErrorKind} from '@/auth/login-error';
 import {auth} from '@/auth/next-auth';
-import {getLoginState} from '@/auth/path';
 import Logo from '@/shared/components/Logo';
 import type {SearchParamsPageProps} from '@/shared/types/page';
 import styles from './page.module.scss';
 
 export default async function Page({searchParams}: SearchParamsPageProps) {
   const [session, rejection, query] = await Promise.all([auth(), readRegisteredRejection(), searchParams]);
-  const loginState = getLoginState(session);
   const errorKind = getLoginErrorKind(query);
 
   return (
@@ -35,8 +32,6 @@ export default async function Page({searchParams}: SearchParamsPageProps) {
           {errorKind === 'guest-limit' && <GuestLimitNotice />}
           {errorKind === 'failed' && <Callout color="danger">로그인하지 못했어요. 잠시 뒤 다시 시도해 주세요.</Callout>}
           <GoogleLoginActions />
-          {/* 로그인 없이 이용 중인 사람이 누르면 새 사용자가 또 생기므로, 로그아웃 상태에서만 보인다 */}
-          {loginState === 'logged-out' && <GuestLoginButton />}
         </div>
       </main>
     </div>

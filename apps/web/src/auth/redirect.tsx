@@ -18,8 +18,4 @@ export function toRedirectPath(redirect: string | null): string {
   return pathname + search;
 }
 
-export function getRedirectUrlWhenLoginSuccess() {
-  return toRedirectPath(new URLSearchParams(location.search).get('redirect'));
-}
-
 const PLACEHOLDER_ORIGIN = 'http://redirect.invalid';
