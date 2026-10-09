@@ -2,13 +2,12 @@
 
 import {useActionState} from 'react';
 import {useSearchParams} from 'next/navigation';
-import {Button, Callout} from '@developer-choi/design-system';
+import {Button} from '@developer-choi/design-system';
 import {continueWithGoogle} from '@/auth/actions';
 import styles from './GoogleLoginActions.module.scss';
 
 export default function GoogleLoginActions() {
   const searchParams = useSearchParams();
-  const hasError = searchParams.has('error');
   const [, submitAction, isPending] = useActionState(
     (_state: void, formData: FormData) => continueWithGoogle(formData),
     undefined,
@@ -16,7 +15,6 @@ export default function GoogleLoginActions() {
 
   return (
     <form action={submitAction} className={styles.actions}>
-      {hasError && <Callout color="danger">로그인하지 못했어요. 잠시 뒤 다시 시도해 주세요.</Callout>}
       <input name="redirect" type="hidden" value={searchParams.get('redirect') ?? ''} />
       <Button color="secondary" loading={isPending} size="xLarge" type="submit">
         <GoogleIcon />
