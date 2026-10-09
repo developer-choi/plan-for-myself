@@ -55,6 +55,10 @@ export function toMonthParam({year, month}: CalendarMonth): string {
   return `${year}-${pad(month)}`;
 }
 
+export function toDateMonthParam(date: string): string {
+  return date.slice(0, MONTH_PARAM_LENGTH);
+}
+
 export function formatDateTitle(date: string): string {
   const [year, month, day] = date.split('-').map(Number);
   return `${month}월 ${day}일 (${DAY_NAMES[new Date(year, month - 1, day).getDay()]})`;
