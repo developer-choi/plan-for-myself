@@ -3,7 +3,7 @@ import {minutesFormat} from '@plan-for-myself/shared';
 import {Badge} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
 import classNames from 'classnames';
-import {type CalendarMonth, getCalendarCells} from '@/study-record/calendar-date';
+import {type CalendarMonth, getCalendarCells, WEEKDAY_LABELS} from '@/study-record/calendar-date';
 import styles from './CalendarGrid.module.scss';
 
 interface CalendarGridProps {
@@ -75,5 +75,4 @@ export default function CalendarGrid({month, today, records, handlers}: Calendar
   );
 }
 
-const WEEKDAY_LABELS = ['월', '화', '수', '목', '금', '토', '일'] as const;
 const MAX_FAIL_TAGS = 2;
