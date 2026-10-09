@@ -43,6 +43,14 @@ export interface FailureTag {
   count: number;
   previousCount: number;
   status: FailureTagStatus;
+  trend: FailureTagTrend[];
+}
+
+export interface FailureTagTrend {
+  month: string;
+  count: number;
+  previousCount: number;
+  status: Extract<FailureTagStatus, 'repeated' | 'reduced'>;
 }
 
 export interface RecordedDays {

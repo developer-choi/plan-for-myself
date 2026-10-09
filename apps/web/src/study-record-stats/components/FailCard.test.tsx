@@ -16,9 +16,9 @@ const GROUPS: {status: FailureTagStatus; label: string; title: string}[] = [
   {status: 'reduced', label: '줄어든', title: REDUCED_TITLE_IN_PROGRESS},
 ];
 
-const OVERSLEEP: FailureTag = {tag: '늦잠', count: 4, previousCount: 3, status: 'repeated'};
-const PHONE_GAME: FailureTag = {tag: '폰게임', count: 2, previousCount: 0, status: 'appeared'};
-const SNACK: FailureTag = {tag: '야식', count: 0, previousCount: 3, status: 'reduced'};
+const OVERSLEEP: FailureTag = {tag: '늦잠', count: 4, previousCount: 3, status: 'repeated', trend: []};
+const PHONE_GAME: FailureTag = {tag: '폰게임', count: 2, previousCount: 0, status: 'appeared', trend: []};
+const SNACK: FailureTag = {tag: '야식', count: 0, previousCount: 3, status: 'reduced', trend: []};
 
 describe('FailCard', () => {
   describe('General cases', () => {
@@ -108,9 +108,9 @@ describe('FailCard', () => {
       it(`횟수·줄어든 정도·이름 어느 순서도 아니게 받으면 ${label} 묶음에 받은 순서대로 보인다`, () => {
         const previousCount = {repeated: 1, appeared: 0, reduced: 6}[status];
         const unsortedTags: FailureTag[] = [
-          {tag: '야식', count: 2, previousCount, status},
-          {tag: '늦잠', count: 3, previousCount, status},
-          {tag: '폰게임', count: 1, previousCount, status},
+          {tag: '야식', count: 2, previousCount, status, trend: []},
+          {tag: '늦잠', count: 3, previousCount, status, trend: []},
+          {tag: '폰게임', count: 1, previousCount, status, trend: []},
         ];
         render(<FailCard monthly={createMonthly({failureTags: unsortedTags})} />);
 
@@ -123,7 +123,7 @@ describe('FailCard', () => {
 });
 
 function createTag(status: FailureTagStatus): FailureTag {
-  return {tag: `${status}-태그`, count: 1, previousCount: 1, status};
+  return {tag: `${status}-태그`, count: 1, previousCount: 1, status, trend: []};
 }
 
 function getGroupByTitle(title: string): HTMLElement {
