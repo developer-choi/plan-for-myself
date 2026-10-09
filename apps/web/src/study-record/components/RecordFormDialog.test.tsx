@@ -22,6 +22,7 @@ interface RenderFormParams {
   onSave?: (fields: unknown) => Promise<unknown>;
   onDelete?: () => Promise<unknown>;
   onClose?: () => void;
+  loading?: boolean;
 }
 
 function renderForm({
@@ -30,8 +31,19 @@ function renderForm({
   onSave = vi.fn().mockResolvedValue(undefined),
   onDelete,
   onClose = vi.fn(),
+  loading = false,
 }: RenderFormParams = {}) {
-  render(<RecordFormDialog isOpen date={date} record={record} onClose={onClose} onDelete={onDelete} onSave={onSave} />);
+  render(
+    <RecordFormDialog
+      isOpen
+      date={date}
+      loading={loading}
+      record={record}
+      onClose={onClose}
+      onDelete={onDelete}
+      onSave={onSave}
+    />,
+  );
 }
 
 function createRecord(overrides: Partial<StudyRecord> = {}): StudyRecord {
@@ -567,25 +579,32 @@ describe('RecordFormDialog', () => {
       });
     });
 
-    describe('저장 중일 때', () => {
-      it('[저장]을 다시 눌러도 저장은 한 번만 된다', async () => {
-        const onSave = vi.fn().mockReturnValue(pending());
-        renderForm({onSave});
-        await clickSave();
+    describe('저장·삭제 중일 때', () => {
+      it('[저장]을 눌러도 저장되지 않는다', async () => {
+        const onSave = vi.fn().mockResolvedValue(undefined);
+        renderForm({onSave, loading: true});
 
         await clickSave();
 
-        expect(onSave).toHaveBeenCalledTimes(1);
+        expect(onSave).not.toHaveBeenCalled();
       });
 
-      it('공부시간 칸에서 Enter를 눌러도 저장은 한 번만 된다', async () => {
-        const onSave = vi.fn().mockReturnValue(pending());
-        renderForm({onSave});
-        await clickSave();
+      it('공부시간 칸에서 Enter를 눌러도 저장되지 않는다', async () => {
+        const onSave = vi.fn().mockResolvedValue(undefined);
+        renderForm({onSave, loading: true});
 
         await userEvent.type(getMinuteInput('아침'), '{Enter}');
 
-        expect(onSave).toHaveBeenCalledTimes(1);
+        expect(onSave).not.toHaveBeenCalled();
+      });
+
+      it('[삭제]를 눌러도 삭제되지 않는다', async () => {
+        const onDelete = vi.fn().mockResolvedValue(undefined);
+        renderForm({record: createRecord(), onDelete, loading: true});
+
+        await clickDelete();
+
+        expect(onDelete).not.toHaveBeenCalled();
       });
     });
   });

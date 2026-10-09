@@ -30,10 +30,19 @@ interface RecordFormDialogProps {
   /* 그날 기록이 없으면 undefined */
   onDelete?: () => Promise<unknown>;
   onClose: () => void;
+  loading: boolean;
 }
 
-export default function RecordFormDialog({isOpen, date, record, onSave, onDelete, onClose}: RecordFormDialogProps) {
-  const {methods, form} = useRecordForm({date, record, onSave, onDelete, onClose});
+export default function RecordFormDialog({
+  isOpen,
+  date,
+  record,
+  onSave,
+  onDelete,
+  onClose,
+  loading,
+}: RecordFormDialogProps) {
+  const {methods, form} = useRecordForm({date, record, onSave, onDelete, onClose, loading});
 
   return (
     <Dialog.Root open={isOpen} onClose={onClose}>
@@ -56,11 +65,11 @@ export default function RecordFormDialog({isOpen, date, record, onSave, onDelete
           </Dialog.Content>
           <Dialog.Footer>
             {form.onDelete && (
-              <Button color="destructive" loading={form.loading} size="large" onClick={form.onDelete}>
+              <Button color="destructive" loading={loading} size="large" onClick={form.onDelete}>
                 삭제
               </Button>
             )}
-            <Button loading={form.loading} size="large" type="submit">
+            <Button loading={loading} size="large" type="submit">
               저장
             </Button>
           </Dialog.Footer>
@@ -78,6 +87,7 @@ interface UseRecordFormParams {
   /* 그날 기록이 없으면 undefined */
   onDelete?: RecordFormDialogProps['onDelete'];
   onClose: () => void;
+  loading: boolean;
 }
 
 interface UseRecordFormResult {
@@ -86,17 +96,15 @@ interface UseRecordFormResult {
     onSubmit: (event?: BaseSyntheticEvent) => Promise<void>;
     /* 그날 기록이 없어 지울 것이 없으면 undefined */
     onDelete: (() => Promise<void>) | undefined;
-    loading: boolean;
     /* 거절되지 않았거나, 다시 저장·삭제를 시작해 비웠으면 undefined */
     rejectionMessage: string | undefined;
   };
 }
 
-function useRecordForm({date, record, onSave, onDelete, onClose}: UseRecordFormParams): UseRecordFormResult {
+function useRecordForm({date, record, onSave, onDelete, onClose, loading}: UseRecordFormParams): UseRecordFormResult {
   const methods = useForm<RecordFormValues>({
     defaultValues: getRecordFormDefaultValues(date, record),
   });
-  const [loading, setLoading] = useState(false);
   const [rejectionMessage, setRejectionMessage] = useState<string>();
 
   const showRejection = (error: unknown, unexpectedFailureMessage: string) => {
@@ -105,7 +113,6 @@ function useRecordForm({date, record, onSave, onDelete, onClose}: UseRecordFormP
       console.error(error);
     }
     setRejectionMessage(rejection?.message ?? unexpectedFailureMessage);
-    setLoading(false);
   };
 
   /* handleSubmit의 검증이 규칙 없는 칸의 오류를 지우므로, 태그 칸은 검증이 끝난 뒤의 두 콜백에서 판정한다 */
@@ -123,10 +130,8 @@ function useRecordForm({date, record, onSave, onDelete, onClose}: UseRecordFormP
       }
 
       setRejectionMessage(undefined);
-      setLoading(true);
       try {
         await onSave(toStudyRecordFields(values));
-        // 닫혀 사라질 때까지 loading을 풀지 않아 그 사이 재클릭을 막는다
         onClose();
       } catch (error) {
         showRejection(error, UNEXPECTED_FAILURE_MESSAGE);
@@ -144,10 +149,8 @@ function useRecordForm({date, record, onSave, onDelete, onClose}: UseRecordFormP
     onDelete &&
     (async () => {
       setRejectionMessage(undefined);
-      setLoading(true);
       try {
         await onDelete();
-        // 닫혀 사라질 때까지 loading을 풀지 않아 그 사이 재클릭을 막는다
         onClose();
       } catch (error) {
         showRejection(error, UNEXPECTED_DELETE_FAILURE_MESSAGE);
@@ -159,7 +162,6 @@ function useRecordForm({date, record, onSave, onDelete, onClose}: UseRecordFormP
     form: {
       onSubmit,
       onDelete: remove,
-      loading,
       rejectionMessage,
     },
   };
