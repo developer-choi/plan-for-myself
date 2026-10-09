@@ -6106,6 +6106,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@vercel/firewall@npm:^1.2.6":
+  version: 1.2.6
+  resolution: "@vercel/firewall@npm:1.2.6"
+  checksum: 10c0/d8f92b2917ff435e45f7844eeec0c6eb2a8d3b66a942730d38d65ff0945c903206b8051693d63c80715d2109abe154ad6f88d9a9093c45d948561a41610454df
+  languageName: node
+  linkType: hard
+
 "@vercel/functions@npm:^3.9.9":
   version: 3.9.9
   resolution: "@vercel/functions@npm:3.9.9"
@@ -18166,6 +18173,7 @@ __metadata:
     "@types/pg": "npm:^8.23.1"
     "@types/react": "npm:^19"
     "@types/react-dom": "npm:^19"
+    "@vercel/firewall": "npm:^1.2.6"
     "@vercel/functions": "npm:^3.9.9"
     "@vitejs/plugin-react": "npm:^5.1.1"
     classnames: "npm:^2.5.1"

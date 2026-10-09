@@ -1,15 +1,13 @@
 // @vitest-environment node
 import type {PGlite} from '@electric-sql/pglite';
 import {beforeEach, describe, expect, it} from 'vitest';
-import {countGuests, countStudyRecords, createTestDb, findUser, insertStudyRecord} from '@/server/db/test-db';
+import {countStudyRecords, createTestDb, findUser, insertStudyRecord} from '@/server/db/test-db';
 import {
   createGuestUserId,
-  createGuestUserIdWithinLimit,
   deleteGuestUser,
   deleteUser,
   findGoogleLoginRows,
   findOrCreateUserId,
-  GuestLimitError,
   linkGuestToGoogle,
 } from './repository';
 
@@ -165,80 +163,6 @@ describe('deleteGuestUser()', () => {
   });
 });
 
-describe('createGuestUserIdWithinLimit()', () => {
-  const limit = 30;
-  const ipHash = 'ip-hash-a';
-  let db: PGlite;
-
-  beforeEach(async () => {
-    db = await createTestDb();
-  });
-
-  async function createGuestsUpToLimit(targetIpHash: string) {
-    for (let index = 0; index < limit; index++) {
-      await createGuestUserIdWithinLimit(targetIpHash, db);
-    }
-  }
-
-  async function insertCreationsUpToLimit(ago: string) {
-    await db.query(
-      'INSERT INTO guest_creations (ip_hash, created_at) SELECT $1, now() - $2::interval FROM generate_series(1, $3::int)',
-      [ipHash, ago, limit],
-    );
-  }
-
-  describe('General cases', () => {
-    it('한 IP가 한도에 닿아도 다른 IP는 게스트를 만들 수 있어야 한다', async () => {
-      await createGuestsUpToLimit(ipHash);
-
-      const id = await createGuestUserIdWithinLimit('ip-hash-b', db);
-
-      expect(await findUser(db, id)).toEqual({isGuest: true, googleSub: null});
-      expect(await countGuests(db)).toBe(limit + 1);
-    });
-  });
-
-  describe('Boundary cases', () => {
-    it('같은 IP로 1시간 안에 30명을 만든 뒤의 요청은 거절하고 게스트를 더 만들지 않는다', async () => {
-      await createGuestsUpToLimit(ipHash);
-
-      await expect(createGuestUserIdWithinLimit(ipHash, db)).rejects.toThrow(GuestLimitError);
-      expect(await countGuests(db)).toBe(limit);
-      const {rows} = await db.query<{count: number}>('SELECT count(*)::int AS count FROM guest_creations');
-      expect(rows[0].count).toBe(limit);
-    });
-  });
-
-  describe('Edge cases', () => {
-    it('59분 전에 30명을 만든 IP의 요청은 거절해야 한다', async () => {
-      await insertCreationsUpToLimit('59 minutes');
-
-      await expect(createGuestUserIdWithinLimit(ipHash, db)).rejects.toThrow(GuestLimitError);
-      expect(await countGuests(db)).toBe(0);
-    });
-
-    it('2시간 전에 30명을 만든 IP는 다시 게스트를 만들 수 있어야 한다', async () => {
-      await insertCreationsUpToLimit('2 hours');
-
-      const id = await createGuestUserIdWithinLimit(ipHash, db);
-
-      expect(await findUser(db, id)).toEqual({isGuest: true, googleSub: null});
-      expect(await countGuests(db)).toBe(1);
-    });
-
-    it('1시간이 지난 IP 기록은 다음 요청 때 정리된다', async () => {
-      await insertCreationsUpToLimit('2 hours');
-
-      await createGuestUserIdWithinLimit(ipHash, db);
-
-      const {rows} = await db.query<{count: number}>(
-        "SELECT count(*)::int AS count FROM guest_creations WHERE created_at <= now() - interval '1 hour'",
-      );
-      expect(rows[0].count).toBe(0);
-    });
-  });
-});
-
 describe('사용자 저장 규칙', () => {
   let db: PGlite;
 
@@ -270,7 +194,11 @@ describe('deleteUser()', () => {
     it('사용자를 지우면 그 사용자의 기록만 함께 지워진다', async () => {
       const target = await findOrCreateUserId('sub-a', db);
       const other = await findOrCreateUserId('sub-b', db);
-      await db.query('INSERT INTO study_records (user_id, record_date) VALUES ($1, $3), ($1, $3), ($2, $3)', [target, other, recordDate]);
+      await db.query('INSERT INTO study_records (user_id, record_date) VALUES ($1, $3), ($1, $3), ($2, $3)', [
+        target,
+        other,
+        recordDate,
+      ]);
 
       await deleteUser(target, db);
 
@@ -296,7 +224,10 @@ describe('deleteUser()', () => {
 
     it('사용자를 지우다 실패하면 기록도 남는다', async () => {
       const target = await findOrCreateUserId('sub-a', db);
-      await db.query('INSERT INTO study_records (user_id, record_date) VALUES ($1, $2), ($1, $2)', [target, recordDate]);
+      await db.query('INSERT INTO study_records (user_id, record_date) VALUES ($1, $2), ($1, $2)', [
+        target,
+        recordDate,
+      ]);
       await db.exec(`
         CREATE FUNCTION reject_user_delete() RETURNS trigger AS $$
         BEGIN

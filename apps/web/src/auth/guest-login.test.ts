@@ -1,31 +1,18 @@
 // @vitest-environment node
 import type {PGlite} from '@electric-sql/pglite';
 import {CredentialsSignin} from 'next-auth';
-import {beforeEach, describe, expect, it} from 'vitest';
+import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {countGuests, createTestDb} from '@/server/db/test-db';
-import {GuestLimitError} from '@/server/user/repository';
-import {authorizeGuest} from './guest-login';
+import {authorizeGuest, isGuestCreationRateLimited, type RateLimitCheck} from './guest-login';
 
 const LOGIN_URL = 'http://localhost/api/auth/callback/guest';
-const limit = 30;
 
-function createRequest(ip?: string) {
-  return new Request(LOGIN_URL, {method: 'POST', headers: ip ? {'x-forwarded-for': ip} : {}});
+function createRequest() {
+  return new Request(LOGIN_URL, {method: 'POST'});
 }
 
-async function loginUpToLimit(db: PGlite, ip?: string) {
-  for (let index = 0; index < limit; index++) {
-    await authorizeGuest(createRequest(ip), db);
-  }
-}
-
-async function expectGuestLimitError(login: Promise<unknown>) {
-  const error = await login.catch((caught: unknown) => caught);
-
-  expect(error).toBeInstanceOf(CredentialsSignin);
-  expect(error).toMatchObject({code: 'guest_limit'});
-  expect(error).toHaveProperty('cause.err', expect.any(GuestLimitError));
-}
+const notRateLimited: RateLimitCheck = () => Promise.resolve(false);
+const rateLimited: RateLimitCheck = () => Promise.resolve(true);
 
 describe('authorizeGuest()', () => {
   let db: PGlite;
@@ -35,36 +22,38 @@ describe('authorizeGuest()', () => {
   });
 
   describe('General cases', () => {
-    it('한도 안의 로그인은 게스트 id를 돌려줘야 한다', async () => {
-      const {id} = await authorizeGuest(createRequest('203.0.113.1'), db);
+    it('한도에 걸리지 않은 로그인은 새로 만든 게스트 id를 반환해야 한다', async () => {
+      const {id} = await authorizeGuest(createRequest(), db, notRateLimited);
 
       expect(id).toEqual(expect.any(String));
       expect(await countGuests(db)).toBe(1);
     });
-  });
 
-  describe('Boundary cases', () => {
-    it('같은 IP의 31번째 로그인은 guest_limit 코드로 실패해야 한다', async () => {
-      const ip = '203.0.113.1';
-      await loginUpToLimit(db, ip);
+    it('한도에 걸린 로그인은 guest_limit 코드로 실패해야 한다', async () => {
+      const error = await authorizeGuest(createRequest(), db, rateLimited).catch((caught: unknown) => caught);
 
-      await expectGuestLimitError(authorizeGuest(createRequest(ip), db));
-      expect(await countGuests(db)).toBe(limit);
+      expect(error).toBeInstanceOf(CredentialsSignin);
+      expect(error).toMatchObject({code: 'guest_limit'});
     });
+
+    it('한도에 걸린 로그인은 게스트를 만들지 않아야 한다', async () => {
+      await expect(authorizeGuest(createRequest(), db, rateLimited)).rejects.toThrow(CredentialsSignin);
+
+      expect(await countGuests(db)).toBe(0);
+    });
+  });
+});
+
+describe('isGuestCreationRateLimited()', () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
   });
 
   describe('Edge cases', () => {
-    it('IP 헤더 없는 요청이 30번 쌓이면 다음 요청은 guest_limit으로 실패해야 한다', async () => {
-      await loginUpToLimit(db);
+    it('게스트 생성 한도를 확인하지 못하면 false를 반환해야 한다', async () => {
+      vi.stubEnv('NODE_ENV', 'production');
 
-      await expectGuestLimitError(authorizeGuest(createRequest(), db));
-    });
-
-    it('IP 헤더 없는 요청이 한도에 닿아도 IP가 있는 요청은 게스트로 로그인돼야 한다', async () => {
-      await loginUpToLimit(db);
-
-      const {id} = await authorizeGuest(createRequest('203.0.113.2'), db);
-      expect(id).toEqual(expect.any(String));
+      expect(await isGuestCreationRateLimited(createRequest())).toBe(false);
     });
   });
 });
