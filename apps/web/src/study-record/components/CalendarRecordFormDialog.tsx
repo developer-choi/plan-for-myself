@@ -2,6 +2,7 @@
 
 import type {StudyRecord} from '@plan-for-myself/shared';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
+import {isMutationSettling} from '@/shared/query/mutation';
 import {
   deleteStudyRecordApi,
   patchStudyRecordApi,
@@ -53,6 +54,7 @@ export default function CalendarRecordFormDialog({
     <RecordFormDialog
       date={date}
       isOpen={isOpen}
+      loading={isMutationSettling(postMutation, patchMutation, deleteMutation)}
       record={record}
       onClose={onClose}
       onDelete={record && (() => deleteMutation.mutateAsync({pk: record.pk}))}

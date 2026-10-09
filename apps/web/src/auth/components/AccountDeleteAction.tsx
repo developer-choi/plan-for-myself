@@ -1,10 +1,11 @@
 'use client';
 
-import {useState} from 'react';
+import {useMutation} from '@tanstack/react-query';
 import {overlay} from 'overlay-kit';
 import {Button, Callout, Confirm} from '@developer-choi/design-system';
 import {deleteAccountApi} from '@/auth/api';
 import {INTRO_URL} from '@/auth/redirect';
+import {isMutationSettling} from '@/shared/query/mutation';
 import styles from './AccountDeleteAction.module.scss';
 
 export interface AccountDeleteText {
@@ -37,17 +38,12 @@ export default function AccountDeleteAction({text}: AccountDeleteActionProps) {
 }
 
 function AccountDeleteConfirm({isOpen, text, onClose}: AccountDeleteConfirmProps) {
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [isFailed, setIsFailed] = useState(false);
+  const deleteMutation = useMutation({mutationFn: deleteAccountApi});
 
   const deleteAccount = async () => {
-    setIsFailed(false);
-    setIsDeleting(true);
     try {
-      await deleteAccountApi();
+      await deleteMutation.mutateAsync();
     } catch {
-      setIsFailed(true);
-      setIsDeleting(false);
       return;
     }
     window.location.replace(INTRO_URL);
@@ -55,11 +51,11 @@ function AccountDeleteConfirm({isOpen, text, onClose}: AccountDeleteConfirmProps
 
   return (
     <Confirm
-      confirmProps={{children: text.confirm, color: 'destructive', loading: isDeleting}}
+      confirmProps={{children: text.confirm, color: 'destructive', loading: isMutationSettling(deleteMutation)}}
       content={
         <>
           <p>{text.content}</p>
-          {isFailed && (
+          {deleteMutation.isError && (
             <Callout className={styles.failure} color="danger">
               {text.failure}
             </Callout>
