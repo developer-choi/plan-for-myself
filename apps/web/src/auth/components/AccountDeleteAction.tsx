@@ -4,6 +4,7 @@ import {useState} from 'react';
 import {overlay} from 'overlay-kit';
 import {Button, Callout, Confirm} from '@developer-choi/design-system';
 import {deleteAccountApi} from '@/auth/api';
+import {INTRO_URL} from '@/auth/redirect';
 import styles from './AccountDeleteAction.module.scss';
 
 export interface AccountDeleteText {
@@ -49,7 +50,7 @@ function AccountDeleteConfirm({isOpen, text, onClose}: AccountDeleteConfirmProps
       setIsDeleting(false);
       return;
     }
-    window.location.replace('/login');
+    window.location.replace(INTRO_URL);
   };
 
   return (

@@ -1,15 +1,12 @@
 'use client';
 
 import {signOut} from 'next-auth/react';
+import {INTRO_URL} from '@/auth/redirect';
 import HeaderMenu from '@/shared/components/HeaderMenu';
 
-interface CalendarMenuProps {
-  viewPath: string;
-}
-
-export default function CalendarMenu({viewPath}: CalendarMenuProps) {
+export default function CalendarMenu() {
   const logout = () => {
-    signOut({redirectTo: `/login?redirect=${encodeURIComponent(viewPath)}`});
+    signOut({redirectTo: INTRO_URL});
   };
 
   return (
