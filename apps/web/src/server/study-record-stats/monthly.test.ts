@@ -23,10 +23,22 @@ describe('calculateMonthly()', () => {
   describe('기록한 날', () => {
     describe('General cases', () => {
       describe('이번 달', () => {
-        it('오늘을 아직 기록하지 않았으면 기록한 날의 전체 날 수는 어제까지여야 한다', () => {
-          const records = [createTestRecord('2026-09-01'), createTestRecord('2026-09-23')];
+        describe('오늘을 아직 기록하지 않았으면', () => {
+          it('오늘을 아직 기록하지 않았으면 기록한 날의 전체 날 수는 어제까지여야 한다', () => {
+            const records = [createTestRecord('2026-09-01'), createTestRecord('2026-09-23')];
 
-          expect(calculateMonthly(records, THIS_MONTH, TODAY).recordedDays).toEqual({count: 2, total: 23});
+            expect(calculateMonthly(records, THIS_MONTH, TODAY).recordedDays).toEqual({count: 2, total: 23});
+          });
+
+          it('첫 기록이 1일이 아니면 기록한 날의 전체 날 수는 첫 기록일부터 어제까지여야 한다', () => {
+            const records = [
+              createTestRecord('2026-09-21'),
+              createTestRecord('2026-09-22'),
+              createTestRecord('2026-09-23'),
+            ];
+
+            expect(calculateMonthly(records, THIS_MONTH, TODAY).recordedDays).toEqual({count: 3, total: 3});
+          });
         });
 
         it('오늘을 기록했으면 기록한 날의 전체 날 수에 오늘도 들어가야 한다', () => {
@@ -37,9 +49,9 @@ describe('calculateMonthly()', () => {
       });
 
       it('끝난 달은 기록한 날의 전체 날 수가 그 달 마지막 날까지여야 한다', () => {
-        const records = [createTestRecord('2026-08-31')];
+        const records = [createTestRecord('2026-08-01'), createTestRecord('2026-08-31')];
 
-        expect(calculateMonthly(records, LAST_MONTH, TODAY).recordedDays).toEqual({count: 1, total: 31});
+        expect(calculateMonthly(records, LAST_MONTH, TODAY).recordedDays).toEqual({count: 2, total: 31});
       });
 
       it('이번 달을 조회하면 지난달 기록한 날도 함께 보여줘야 한다', () => {
@@ -60,10 +72,22 @@ describe('calculateMonthly()', () => {
         expect(calculateMonthly(records, THIS_MONTH, TODAY).previousRecordedDays).toBeNull();
       });
 
-      it('첫 기록 뒤 지난달을 통째로 쉬었으면 지난달 기록한 날은 0일이어야 한다', () => {
+      it('첫 기록 뒤 지난달을 통째로 쉬었으면 지난달 기록한 날은 보여주지 않아야 한다', () => {
         const records = [createTestRecord('2026-07-31'), createTestRecord('2026-09-01')];
 
-        expect(calculateMonthly(records, THIS_MONTH, TODAY).previousRecordedDays).toEqual({count: 0, total: 31});
+        expect(calculateMonthly(records, THIS_MONTH, TODAY).previousRecordedDays).toBeNull();
+      });
+
+      it('지난달에 첫 기록을 했으면 지난달 기록한 날의 전체 날 수는 첫 기록일부터 말일까지여야 한다', () => {
+        const records = [createTestRecord('2026-08-30'), createTestRecord('2026-09-01')];
+
+        expect(calculateMonthly(records, THIS_MONTH, TODAY).previousRecordedDays).toEqual({count: 1, total: 2});
+      });
+
+      it('끝난 달에 첫 기록을 했으면 기록한 날의 전체 날 수는 첫 기록일부터 말일까지여야 한다', () => {
+        const records = [createTestRecord('2026-08-30')];
+
+        expect(calculateMonthly(records, LAST_MONTH, TODAY).recordedDays).toEqual({count: 1, total: 2});
       });
 
       describe('이번 달 1일', () => {
@@ -77,7 +101,7 @@ describe('calculateMonthly()', () => {
 
     describe('Edge cases', () => {
       it('오늘보다 뒤 날짜의 기록은 기록한 날로 세지 않아야 한다', () => {
-        const records = [createTestRecord('2026-09-23'), createTestRecord(TODAY), createTestRecord(TOMORROW)];
+        const records = [createTestRecord('2026-09-01'), createTestRecord(TODAY), createTestRecord(TOMORROW)];
 
         expect(calculateMonthly(records, THIS_MONTH, TODAY).recordedDays).toEqual({count: 2, total: 24});
       });

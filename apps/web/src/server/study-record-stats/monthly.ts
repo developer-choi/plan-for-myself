@@ -12,18 +12,17 @@ export function calculateMonthly(records: StudyRecord[], month: string, date: st
     .map((record) => record.date)
     .sort()
     .at(0);
-  const isPreviousMonthUncounted = firstRecordDate === undefined || previousMonth < toMonth(firstRecordDate);
   const hasDateRecord = recordsUntilDate.some((record) => record.date === date);
   const countDays = (target: string, targetRecords: StudyRecord[]) => ({
     count: targetRecords.length,
-    total: countTotalDays(target, date, hasDateRecord),
+    total: countTotalDays({month: target, date, hasDateRecord, firstRecordDate}),
   });
 
   return {
     month,
     inProgress: month === toMonth(date),
     recordedDays: countDays(month, monthRecords),
-    previousRecordedDays: isPreviousMonthUncounted ? null : countDays(previousMonth, previousRecords),
+    previousRecordedDays: previousRecords.length === 0 ? null : countDays(previousMonth, previousRecords),
     study: {
       totalMinutes: monthRecords.reduce((sum, record) => sum + sumMinutes(record), 0),
       weekdayAvg: averageMinutes(monthRecords, 'weekday'),
@@ -41,12 +40,26 @@ function filterMonth(records: StudyRecord[], month: string) {
   return records.filter((record) => toMonth(record.date) === month);
 }
 
-function countTotalDays(month: string, date: string, hasDateRecord: boolean) {
+interface CountTotalDaysParams {
+  month: string;
+  date: string;
+  hasDateRecord: boolean;
+  /* 요청한 날짜까지 기록이 하나도 없으면 undefined */
+  firstRecordDate: string | undefined;
+}
+
+function countTotalDays({month, date, hasDateRecord, firstRecordDate}: CountTotalDaysParams) {
+  const isFirstRecordMonth = firstRecordDate !== undefined && toMonth(firstRecordDate) === month;
+  const startDay = isFirstRecordMonth ? getDayOfMonth(firstRecordDate) : 1;
+  return getLastCountedDay(month, date, hasDateRecord) - startDay + 1;
+}
+
+function getLastCountedDay(month: string, date: string, hasDateRecord: boolean) {
   if (month !== toMonth(date)) {
     return getDaysInMonth(month);
   }
-  const untilYesterday = getDayOfMonth(date) - 1;
-  return hasDateRecord ? untilYesterday + 1 : untilYesterday;
+  const yesterday = getDayOfMonth(date) - 1;
+  return hasDateRecord ? yesterday + 1 : yesterday;
 }
 
 function averageMinutes(records: StudyRecord[], dateType: DateType) {

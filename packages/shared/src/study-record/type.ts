@@ -20,7 +20,7 @@ export interface StudyRecordMonthly {
   month: string;
   inProgress: boolean;
   recordedDays: RecordedDays;
-  /* 기록이 하나도 없거나 전달이 첫 기록이 있는 달보다 앞이면 셀 대상이 아니라 null. 첫 기록 뒤 통째로 쉰 달은 count 0이다 */
+  /* 전달 기록이 하나도 없으면 셀 대상이 아니라 null */
   previousRecordedDays: RecordedDays | null;
   study: {
     totalMinutes: number;
