@@ -26,7 +26,12 @@ export default function CalendarSection({month, today}: CalendarSectionProps) {
     return <FirstRecord today={today} />;
   }
 
-  const summary = getCalendarSummaryContent({today, month, streak: overview.streak.current});
+  const summary = getCalendarSummaryContent({
+    today,
+    month,
+    streak: overview.streak.current,
+    firstRecordDate: overview.firstRecordDate,
+  });
 
   const openRecordForm = (date: string, record?: StudyRecord) => {
     overlay.open(({isOpen, unmount}) => (

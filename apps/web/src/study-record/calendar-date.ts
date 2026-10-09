@@ -51,6 +51,10 @@ export function isFutureMonth(today: string, month: CalendarMonth): boolean {
   return toMonthParam(month) > toDateMonthParam(today);
 }
 
+export function isPastMonth(date: string, month: CalendarMonth): boolean {
+  return toMonthParam(month) < toDateMonthParam(date);
+}
+
 export function toMonthParam({year, month}: CalendarMonth): string {
   return `${year}-${pad(month)}`;
 }
