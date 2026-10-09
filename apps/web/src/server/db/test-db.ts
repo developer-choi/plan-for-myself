@@ -11,11 +11,6 @@ const ADD_GUEST_CHECK = readFileSync(
   'utf8',
 ).match(/-- Up Migration([^]*?)-- Down Migration/)?.[1];
 
-const CREATE_GUEST_CREATIONS_TABLE = readFileSync(
-  new URL('../../../migrations/1791156539207_create-guest-creations.sql', import.meta.url),
-  'utf8',
-).match(/-- Up Migration([^]*?)-- Down Migration/)?.[1];
-
 /* study_records는 마이그레이션 도구를 들이기 전에 만든 테이블이라 CREATE가 어느 마이그레이션에도 없다. 사용자 FK(CASCADE 없음)만 손으로 재현한다 */
 const CREATE_STUDY_RECORDS_TABLE = `
   CREATE TABLE study_records (
@@ -26,13 +21,12 @@ const CREATE_STUDY_RECORDS_TABLE = `
 `;
 
 export async function createTestDb() {
-  if (!CREATE_USERS_TABLE || !ADD_GUEST_CHECK || !CREATE_GUEST_CREATIONS_TABLE) {
-    throw new Error('마이그레이션에서 users·guest_creations 테이블 정의나 제약을 찾지 못했다');
+  if (!CREATE_USERS_TABLE || !ADD_GUEST_CHECK) {
+    throw new Error('마이그레이션에서 users 테이블 정의나 제약을 찾지 못했다');
   }
   const db = new PGlite();
   await db.exec(CREATE_USERS_TABLE);
   await db.exec(ADD_GUEST_CHECK);
-  await db.exec(CREATE_GUEST_CREATIONS_TABLE);
   await db.exec(CREATE_STUDY_RECORDS_TABLE);
   return db;
 }
