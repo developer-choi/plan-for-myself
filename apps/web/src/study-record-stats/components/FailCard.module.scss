@@ -82,6 +82,16 @@
       background: var(--color-bg-neutral-soft);
     }
   }
+
+  &[data-selected],
+  &[data-selected]:hover {
+    font-weight: bold;
+    background: var(--color-bg-danger-soft);
+  }
+
+  &[data-selected] .more {
+    color: var(--color-fg-destructive);
+  }
 }
 
 .tagRowInner {

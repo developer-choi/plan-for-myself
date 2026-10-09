@@ -9,6 +9,14 @@ import styles from './FailCard.module.scss';
 
 interface FailCardProps {
   monthly: StudyRecordMonthly;
+  /* 태그 줄을 눌러 고르지 않는 화면(소개)이면 비운다 */
+  selection?: FailCardTagSelection;
+}
+
+interface FailCardTagSelection {
+  /* 아무 태그도 선택하지 않았으면 null */
+  selectedTag: string | null;
+  onSelect: (tag: string) => void;
 }
 
 interface GroupProps {
@@ -23,10 +31,12 @@ interface GroupProps {
 
 interface TagRowProps {
   name: string;
+  /* FailCard가 selection을 받지 않으면 undefined */
+  selection: FailCardTagSelection | undefined;
   children: ReactNode;
 }
 
-export default function FailCard({monthly}: FailCardProps) {
+export default function FailCard({monthly, selection}: FailCardProps) {
   const {failureTags, inProgress} = monthly;
   const monthLabel = formatMonthLabel(monthly.month);
   const hasNoFailure = failureTags.length === 0;
@@ -48,7 +58,7 @@ export default function FailCard({monthly}: FailCardProps) {
             tone="fail"
           >
             {(tag) => (
-              <TagRow name={tag.tag}>
+              <TagRow name={tag.tag} selection={selection}>
                 지난달 {tag.previousCount}번 → {inProgress && '벌써 '}
                 <span className={styles.count}>{tag.count}번</span>
               </TagRow>
@@ -56,7 +66,7 @@ export default function FailCard({monthly}: FailCardProps) {
           </Group>
           <Group icon={<Cross2Icon />} tags={filterByStatus(failureTags, 'appeared')} title="새로 생겼어요" tone="fail">
             {(tag) => (
-              <TagRow name={tag.tag}>
+              <TagRow name={tag.tag} selection={selection}>
                 {inProgress ? '이번 달' : monthLabel} 처음 · <span className={styles.count}>{tag.count}번</span>
               </TagRow>
             )}
@@ -69,7 +79,7 @@ export default function FailCard({monthly}: FailCardProps) {
             tone="success"
           >
             {(tag) => (
-              <TagRow name={tag.tag}>
+              <TagRow name={tag.tag} selection={selection}>
                 지난달 {tag.previousCount}번 → <span className={styles.count}>{tag.count}번</span>
               </TagRow>
             )}
@@ -103,9 +113,16 @@ function Group({title, icon, tone, tags, aside, children}: GroupProps) {
   );
 }
 
-function TagRow({name, children}: TagRowProps) {
+function TagRow({name, selection, children}: TagRowProps) {
+  const isSelected = selection?.selectedTag === name;
+
   return (
-    <button className={classNames(typography.body2, styles.tagRow)} type="button">
+    <button
+      className={classNames(typography.body2, styles.tagRow)}
+      data-selected={isSelected || undefined}
+      type="button"
+      onClick={() => selection?.onSelect(name)}
+    >
       <span className={styles.tagRowInner}>
         <span className={styles.tagName}>{name}</span>
         <span className={styles.tagText}>{children}</span>

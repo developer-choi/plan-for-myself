@@ -120,6 +120,38 @@ describe('FailCard', () => {
       });
     });
   });
+
+  describe('선택된 태그 줄', () => {
+    GROUPS.forEach(({status, label}) => {
+      it(`${label} 묶음에서 선택된 태그의 줄이 강조돼야 한다`, () => {
+        const tag = createTag(status);
+
+        render(
+          <FailCard monthly={createMonthly({failureTags: [tag]})} selection={{selectedTag: tag.tag, onSelect: noop}} />,
+        );
+
+        expect(getTagRow(tag.tag)).toHaveAttribute('data-selected');
+      });
+    });
+
+    it('선택되지 않은 태그의 줄은 강조되지 않아야 한다', () => {
+      const failureTags = [OVERSLEEP, SNACK];
+
+      render(
+        <FailCard monthly={createMonthly({failureTags})} selection={{selectedTag: OVERSLEEP.tag, onSelect: noop}} />,
+      );
+
+      expect(getTagRow(SNACK.tag)).not.toHaveAttribute('data-selected');
+    });
+
+    it('선택된 태그가 없으면 어느 줄도 강조되지 않아야 한다', () => {
+      const failureTags = [OVERSLEEP, SNACK];
+
+      render(<FailCard monthly={createMonthly({failureTags})} selection={{selectedTag: null, onSelect: noop}} />);
+
+      screen.getAllByRole('button').forEach((row) => expect(row).not.toHaveAttribute('data-selected'));
+    });
+  });
 });
 
 function createTag(status: FailureTagStatus): FailureTag {
@@ -135,3 +167,15 @@ function getGroupByTitle(title: string): HTMLElement {
 
   return group;
 }
+
+function getTagRow(tag: string): HTMLElement {
+  const row = screen.getAllByRole('button').find((button) => button.textContent.includes(tag));
+
+  if (!row) {
+    throw new Error(`「${tag}」 줄이 없다`);
+  }
+
+  return row;
+}
+
+function noop() {}

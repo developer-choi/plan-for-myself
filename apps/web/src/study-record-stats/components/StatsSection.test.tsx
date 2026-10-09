@@ -1,4 +1,4 @@
-import type {StudyRecordOverview} from '@plan-for-myself/shared';
+import type {FailureTag, StudyRecordOverview} from '@plan-for-myself/shared';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {render, screen} from '@testing-library/react';
 import {describe, expect, it} from 'vitest';
@@ -16,6 +16,14 @@ const FAIL_CARD_CASES = [
   {when: '이번 달', month: CURRENT_MONTH, title: '9월 실패'},
   {when: '지난 달', month: PREVIOUS_MONTH, title: '8월 실패'},
 ];
+
+const OVERSLEEP: FailureTag = {
+  tag: '늦잠',
+  count: 4,
+  previousCount: 3,
+  status: 'repeated',
+  trend: [{month: '2026-09', count: 4, previousCount: 3, status: 'repeated'}],
+};
 
 const OVERVIEW: StudyRecordOverview = {
   date: TODAY,
@@ -53,16 +61,22 @@ describe('StatsSection', () => {
         expect(screen.getByRole('heading', {name: title})).toBeInTheDocument();
       });
     });
+
+    it('태그를 누르기 전에는 태그 상세 카드가 보이지 않아야 한다', () => {
+      renderStatsSection(CURRENT_MONTH, [OVERSLEEP]);
+
+      expect(screen.queryByRole('heading', {name: OVERSLEEP.tag})).not.toBeInTheDocument();
+    });
   });
 });
 
-function renderStatsSection(month: CalendarMonth) {
+function renderStatsSection(month: CalendarMonth, failureTags: FailureTag[] = []) {
   const monthParam = toMonthParam(month);
   const queryClient = new QueryClient({defaultOptions: {queries: {staleTime: Infinity, retry: false}}});
 
   queryClient.setQueryData(
     studyRecordStatsQueries.monthly.key(monthParam, TODAY),
-    createMonthly({month: monthParam, inProgress: monthParam === toMonthParam(CURRENT_MONTH)}),
+    createMonthly({month: monthParam, inProgress: monthParam === toMonthParam(CURRENT_MONTH), failureTags}),
   );
   queryClient.setQueryData(studyRecordStatsQueries.overview.key(TODAY), OVERVIEW);
 
