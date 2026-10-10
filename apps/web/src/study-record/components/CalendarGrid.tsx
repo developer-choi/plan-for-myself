@@ -45,6 +45,7 @@ export default function CalendarGrid({month, today, records, handlers}: Calendar
 
           const record = recordByDate.get(date);
           const isFuture = date > today;
+          const totalMinutes = record?.studiedMinutes.reduce((sum, minutes) => sum + minutes, 0) ?? 0;
 
           return (
             <button
@@ -57,9 +58,9 @@ export default function CalendarGrid({month, today, records, handlers}: Calendar
               <time className={classNames(typography.body3, typography.bold, styles.dayNumber)} dateTime={date}>
                 {day}
               </time>
-              {record && (
+              {totalMinutes > 0 && (
                 <Badge className={styles.chip} color="neutral" size="small" variant="soft">
-                  {minutesFormat(record.studiedMinutes.reduce((sum, minutes) => sum + minutes, 0))}
+                  {minutesFormat(totalMinutes)}
                 </Badge>
               )}
               {record?.failTags.slice(0, MAX_FAIL_TAGS).map((tag) => (
