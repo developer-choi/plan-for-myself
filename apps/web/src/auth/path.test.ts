@@ -5,6 +5,8 @@ const PRIVATE_PATH = '/study-records';
 const LOGIN_PATH = '/login';
 const PUBLIC_PATH = '/privacy';
 const INTRO_PATH = '/';
+const DEMO_PATHNAME = '/demo';
+const DEMO_PATH = `${DEMO_PATHNAME}/study-records/2026/9`;
 
 describe('getNextNavigating()', () => {
   describe('General cases', () => {
@@ -104,6 +106,29 @@ describe('getNextNavigating()', () => {
           },
         ],
       },
+      {
+        page: '예시 페이지를 열 때',
+        cases: [
+          {
+            name: '로그아웃 상태면 열어 줘야 한다',
+            pathWithSearch: DEMO_PATH,
+            loginState: 'logged-out',
+            expected: {type: 'correct', nextUrl: DEMO_PATH},
+          },
+          {
+            name: '로그인 없이 이용 중이면 소개 페이지로 보내야 한다',
+            pathWithSearch: DEMO_PATH,
+            loginState: 'guest',
+            expected: {type: 'already-authenticated', nextUrl: '/'},
+          },
+          {
+            name: '구글로 로그인했으면 소개 페이지로 보내야 한다',
+            pathWithSearch: DEMO_PATH,
+            loginState: 'google',
+            expected: {type: 'already-authenticated', nextUrl: '/'},
+          },
+        ],
+      },
     ];
 
     pageGroups.forEach(({page, cases}) => {
@@ -173,6 +198,17 @@ describe('getNextNavigating()', () => {
             name: '구글로 로그인했어도 열어 줘야 한다',
             pathWithSearch: `${LOGIN_PATH}-help`,
             loginState: 'google',
+            expectedType: 'correct',
+          },
+        ],
+      },
+      {
+        path: '예시 경로와 이름만 이어지는 다른 경로',
+        cases: [
+          {
+            name: '로그인 없이 이용 중이어도 열어 줘야 한다',
+            pathWithSearch: `${DEMO_PATHNAME}-old`,
+            loginState: 'guest',
             expectedType: 'correct',
           },
         ],
