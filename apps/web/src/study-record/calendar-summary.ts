@@ -5,6 +5,7 @@ interface CalendarSummaryParams {
   month: CalendarMonth;
   streak: number;
   firstRecordDate: string;
+  statsHref: string;
 }
 
 export interface CalendarSummaryContent {
@@ -19,19 +20,15 @@ export function getCalendarSummaryContent({
   month,
   streak,
   firstRecordDate,
+  statsHref,
 }: CalendarSummaryParams): CalendarSummaryContent {
   if (isFutureMonth(today, month) || isPastMonth(firstRecordDate, month)) {
     return {};
   }
 
-  const statsHref = statsPath(month);
   const showsStreak = isSameMonth(today, month) && streak >= MIN_STREAK_DAYS;
 
   return showsStreak ? {statsHref, streak} : {statsHref};
 }
 
 export const MIN_STREAK_DAYS = 2;
-
-function statsPath({year, month}: CalendarMonth) {
-  return `/study-record-stats/${year}/${month}`;
-}

@@ -1,6 +1,6 @@
 import {dehydrate, HydrationBoundary, QueryClient} from '@tanstack/react-query';
 import {type CalendarMonth, toMonthParam} from '@/study-record/calendar-date';
-import CalendarSection from '@/study-record/components/CalendarSection';
+import FetchedCalendarSection from '@/study-record/components/FetchedCalendarSection';
 import {studyRecordQueries, studyRecordStatsQueries} from '@/study-record/queries';
 
 interface PrefetchedCalendarProps {
@@ -18,7 +18,7 @@ export default async function PrefetchedCalendar({month, today}: PrefetchedCalen
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <CalendarSection month={month} today={today} />
+      <FetchedCalendarSection month={month} today={today} />
     </HydrationBoundary>
   );
 }
