@@ -1,6 +1,12 @@
 import React, {PropsWithChildren} from 'react';
+import DemoTourSeenReset from '@/demo/components/DemoTourSeenReset';
 import AppProvider from '@/shared/components/AppProvider';
 
 export default function ServiceLayout({children}: PropsWithChildren) {
-  return <AppProvider>{children}</AppProvider>;
+  return (
+    <AppProvider>
+      <DemoTourSeenReset />
+      {children}
+    </AppProvider>
+  );
 }

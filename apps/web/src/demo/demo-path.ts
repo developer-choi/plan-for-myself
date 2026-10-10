@@ -7,3 +7,7 @@ export function demoCalendarPath({year, month}: CalendarMonth) {
 export function demoStatsPath({year, month}: CalendarMonth) {
   return `/demo/study-record-stats/${year}/${month}`;
 }
+
+export function isDemoPath(pathname: string) {
+  return pathname.startsWith('/demo/');
+}
