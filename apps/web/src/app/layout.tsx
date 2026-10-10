@@ -1,15 +1,10 @@
 import '@developer-choi/design-system/style.css';
 import React, {PropsWithChildren} from 'react';
 import type {Metadata} from 'next';
-import {Noto_Sans} from 'next/font/google';
 import classNames from 'classnames';
 import {themeClassName} from '@developer-choi/design-system';
+import {font} from '@/shared/styles/font';
 import {themeStyle} from '@/shared/styles/theme';
-
-const font = Noto_Sans({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-});
 
 export const metadata: Metadata = {
   title: 'Plan for myself',
