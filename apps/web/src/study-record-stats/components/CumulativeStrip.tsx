@@ -11,6 +11,8 @@ interface CumulativeStripProps {
 }
 
 interface CellProps {
+  /* 말풍선이 가리키지 않는 칸이면 비운다 */
+  id?: string;
   label: string;
   unit: string;
   value: string;
@@ -27,7 +29,7 @@ export default function CumulativeStrip({totals, monthly}: CumulativeStripProps)
         unit="일"
         value={String(totals.recordedDays)}
       />
-      <Cell label="개선된 실패" unit="개" value={String(totals.improvedFailures)} />
+      <Cell id={IMPROVED_FAILURES_CELL_ID} label="개선된 실패" unit="개" value={String(totals.improvedFailures)} />
       <Cell
         added={formatHours(monthly.study.totalMinutes)}
         label="누적 공부"
@@ -38,9 +40,11 @@ export default function CumulativeStrip({totals, monthly}: CumulativeStripProps)
   );
 }
 
-function Cell({label, unit, value, added}: CellProps) {
+export const IMPROVED_FAILURES_CELL_ID = 'improved-failures-cell';
+
+function Cell({id, label, unit, value, added}: CellProps) {
   return (
-    <Card>
+    <Card id={id}>
       <dt className={classNames(typography.body3, styles.label)}>{label}</dt>
       <dd className={classNames(typography.h3, typography.bold, styles.value)}>
         {value}

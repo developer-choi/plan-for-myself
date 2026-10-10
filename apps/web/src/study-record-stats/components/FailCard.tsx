@@ -30,6 +30,8 @@ interface GroupProps {
 }
 
 interface TagRowProps {
+  /* 카드에서 화면 맨 위에 그려지는 태그 줄이 아니면 undefined */
+  id: string | undefined;
   name: string;
   /* FailCard가 selection을 받지 않으면 undefined */
   selection: FailCardTagSelection | undefined;
@@ -40,7 +42,11 @@ export default function FailCard({monthly, selection}: FailCardProps) {
   const {failureTags, inProgress} = monthly;
   const monthLabel = formatMonthLabel(monthly.month);
   const hasNoFailure = failureTags.length === 0;
+  const repeatedTags = filterByStatus(failureTags, 'repeated');
+  const appearedTags = filterByStatus(failureTags, 'appeared');
   const reducedTags = filterByStatus(failureTags, 'reduced');
+  const firstTagName = [repeatedTags, appearedTags, reducedTags].find((tags) => tags.length > 0)?.[0].tag;
+  const getTagRowId = (name: string) => (name === firstTagName ? FIRST_TAG_ROW_ID : undefined);
 
   return (
     <Card title={`${monthLabel} 실패`}>
@@ -51,22 +57,17 @@ export default function FailCard({monthly, selection}: FailCardProps) {
         </div>
       ) : (
         <>
-          <Group
-            icon={<Cross2Icon />}
-            tags={filterByStatus(failureTags, 'repeated')}
-            title="반복하고 있어요"
-            tone="fail"
-          >
+          <Group icon={<Cross2Icon />} tags={repeatedTags} title="반복하고 있어요" tone="fail">
             {(tag) => (
-              <TagRow name={tag.tag} selection={selection}>
+              <TagRow id={getTagRowId(tag.tag)} name={tag.tag} selection={selection}>
                 지난달 {tag.previousCount}번 → {inProgress && '벌써 '}
                 <span className={styles.count}>{tag.count}번</span>
               </TagRow>
             )}
           </Group>
-          <Group icon={<Cross2Icon />} tags={filterByStatus(failureTags, 'appeared')} title="새로 생겼어요" tone="fail">
+          <Group icon={<Cross2Icon />} tags={appearedTags} title="새로 생겼어요" tone="fail">
             {(tag) => (
-              <TagRow name={tag.tag} selection={selection}>
+              <TagRow id={getTagRowId(tag.tag)} name={tag.tag} selection={selection}>
                 {inProgress ? '이번 달' : monthLabel} 처음 · <span className={styles.count}>{tag.count}번</span>
               </TagRow>
             )}
@@ -79,7 +80,7 @@ export default function FailCard({monthly, selection}: FailCardProps) {
             tone="success"
           >
             {(tag) => (
-              <TagRow name={tag.tag} selection={selection}>
+              <TagRow id={getTagRowId(tag.tag)} name={tag.tag} selection={selection}>
                 지난달 {tag.previousCount}번 → <span className={styles.count}>{tag.count}번</span>
               </TagRow>
             )}
@@ -89,6 +90,8 @@ export default function FailCard({monthly, selection}: FailCardProps) {
     </Card>
   );
 }
+
+export const FIRST_TAG_ROW_ID = 'fail-card-first-tag-row';
 
 function Group({title, icon, tone, tags, aside, children}: GroupProps) {
   if (tags.length === 0) {
@@ -113,13 +116,14 @@ function Group({title, icon, tone, tags, aside, children}: GroupProps) {
   );
 }
 
-function TagRow({name, selection, children}: TagRowProps) {
+function TagRow({id, name, selection, children}: TagRowProps) {
   const isSelected = selection?.selectedTag === name;
 
   return (
     <button
       className={classNames(typography.body2, styles.tagRow)}
       data-selected={isSelected || undefined}
+      id={id}
       type="button"
       onClick={() => selection?.onSelect(name)}
     >

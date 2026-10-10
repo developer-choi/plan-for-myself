@@ -11,9 +11,11 @@ interface DemoTourTriggerProps {
 export default function DemoTourTrigger({part}: DemoTourTriggerProps) {
   return (
     <ErrorBoundary fallback={null} onError={(error) => captureException(error)}>
-      {part === 'calendar' ? <DemoCalendarTour /> : null}
+      {part === 'calendar' ? <DemoCalendarTour /> : <DemoStatsTour />}
     </ErrorBoundary>
   );
 }
 
 const DemoCalendarTour = dynamic(() => import('@/demo/components/DemoCalendarTour'), {ssr: false});
+
+const DemoStatsTour = dynamic(() => import('@/demo/components/DemoStatsTour'), {ssr: false});
