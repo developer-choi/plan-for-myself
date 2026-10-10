@@ -3,6 +3,7 @@ import type {Metadata} from 'next';
 import classNames from 'classnames';
 import typography from '@developer-choi/design-system/styles/typography';
 import Card from '@/shared/components/Card';
+import PageColumn from '@/shared/components/PageColumn';
 import PageShell from '@/shared/components/PageShell';
 import SubPageHeader from '@/shared/components/SubPageHeader';
 import styles from './page.module.scss';
@@ -28,21 +29,23 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <PageShell>
-      <SubPageHeader title="개인정보 처리방침" />
-      <main className={styles.body}>
-        <Card>
-          <article className={typography.body2}>
-            {POLICY_ITEMS.map(({title, content}) => (
-              <PolicySection key={title} title={title}>
-                <p className={styles.content}>{content}</p>
+      <PageColumn>
+        <SubPageHeader title="개인정보 처리방침" />
+        <main className={styles.body}>
+          <Card>
+            <article className={typography.body2}>
+              {POLICY_ITEMS.map(({title, content}) => (
+                <PolicySection key={title} title={title}>
+                  <p className={styles.content}>{content}</p>
+                </PolicySection>
+              ))}
+              <PolicySection title="개인정보 보호책임자">
+                <PrivacyOfficerContact />
               </PolicySection>
-            ))}
-            <PolicySection title="개인정보 보호책임자">
-              <PrivacyOfficerContact />
-            </PolicySection>
-          </article>
-        </Card>
-      </main>
+            </article>
+          </Card>
+        </main>
+      </PageColumn>
     </PageShell>
   );
 }
