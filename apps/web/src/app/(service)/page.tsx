@@ -44,7 +44,7 @@ function HeroSection({actions}: ActionsSectionProps) {
     <section className={styles.section}>
       <div className={styles.brand}>
         <Logo size="medium" />
-        <span className={classNames(typography.body2, styles.brandName)}>Plan for Myself</span>
+        <span className={classNames(typography.body2, styles.brandName)}>Plan for myself</span>
       </div>
       <h1 className={classNames(typography.h2, typography.bold, styles.heading)}>
         스스로 목표를 세우고 달성하는 것을 돕습니다
