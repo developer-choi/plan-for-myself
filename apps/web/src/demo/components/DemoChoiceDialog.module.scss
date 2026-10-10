@@ -1,0 +1,18 @@
+.close {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+}
+
+.message {
+  padding: 0 var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  color: var(--color-fg-default);
+  text-align: center;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
