@@ -1,21 +1,12 @@
-'use client';
-
-import {useCallback, useState} from 'react';
-import {signIn} from 'next-auth/react';
 import {Button} from '@developer-choi/design-system';
-import {DEFAULT_HOME_URL} from '@/auth/redirect';
+import Link from 'next/link';
+import {DEMO_MONTH} from '@/demo/demo-examples';
+import {demoCalendarPath} from '@/demo/demo-path';
 
 export default function TryWithoutLoginButton() {
-  const [loading, setLoading] = useState(false);
-
-  const onClick = useCallback(() => {
-    setLoading(true);
-    signIn('guest', {callbackUrl: DEFAULT_HOME_URL});
-  }, []);
-
   return (
-    <Button color="secondary" loading={loading} size="large" variant="outlined" onClick={onClick}>
-      로그인 없이 체험하기
+    <Button asChild color="secondary" size="large" variant="outlined">
+      <Link href={demoCalendarPath(DEMO_MONTH)}>로그인 없이 체험하기</Link>
     </Button>
   );
 }
