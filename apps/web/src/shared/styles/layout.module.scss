@@ -1,0 +1,17 @@
+.shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  color: var(--color-fg-default);
+  background: var(--color-bg-subtle);
+}
+
+// .shell(세로 flex) 안에서 auto 마진을 주면 내용 폭으로 줄어들어 width가 필요하고, 본문이 남은 높이를 채우려면 이 묶음도 flex로 이어야 한다.
+.centered {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1024px;
+  margin-inline: auto;
+}

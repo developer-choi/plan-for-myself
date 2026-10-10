@@ -3,9 +3,8 @@ import type {Metadata} from 'next';
 import classNames from 'classnames';
 import typography from '@developer-choi/design-system/styles/typography';
 import Card from '@/shared/components/Card';
-import PageColumn from '@/shared/components/PageColumn';
-import PageShell from '@/shared/components/PageShell';
 import SubPageHeader from '@/shared/components/SubPageHeader';
+import layout from '@/shared/styles/layout.module.scss';
 import styles from './page.module.scss';
 
 interface PolicyItem {
@@ -28,8 +27,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <PageShell>
-      <PageColumn>
+    <div className={layout.shell}>
+      <div className={layout.centered}>
         <SubPageHeader title="개인정보 처리방침" />
         <main className={styles.body}>
           <Card>
@@ -45,8 +44,8 @@ export default function Page() {
             </article>
           </Card>
         </main>
-      </PageColumn>
-    </PageShell>
+      </div>
+    </div>
   );
 }
 

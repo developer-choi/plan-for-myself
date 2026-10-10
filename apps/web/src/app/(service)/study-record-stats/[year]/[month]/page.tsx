@@ -6,9 +6,8 @@ import {getKoreanToday} from '@plan-for-myself/shared';
 import ErrorNotice from '@/shared/components/ErrorNotice';
 import HandledErrorBoundary from '@/shared/components/HandledErrorBoundary';
 import LoadingSpinner from '@/shared/components/LoadingSpinner';
-import PageColumn from '@/shared/components/PageColumn';
-import PageShell from '@/shared/components/PageShell';
 import SubPageHeader from '@/shared/components/SubPageHeader';
+import layout from '@/shared/styles/layout.module.scss';
 import {type CalendarMonth, isFutureMonth, isSameMonth, parseMonth, toMonthParam} from '@/study-record/calendar-date';
 import {studyRecordQueries, studyRecordStatsQueries} from '@/study-record/queries';
 import FetchedStatsSection from '@/study-record-stats/components/FetchedStatsSection';
@@ -40,8 +39,8 @@ export default async function Page({params}: PageProps) {
   const today = getKoreanToday();
 
   return (
-    <PageShell>
-      <PageColumn>
+    <div className={layout.shell}>
+      <div className={layout.centered}>
         <SubPageHeader title={formatStatsTitle(viewMonth)} />
         <main className={styles.body}>
           {isFutureMonth(today, viewMonth) ? (
@@ -56,8 +55,8 @@ export default async function Page({params}: PageProps) {
             </HandledErrorBoundary>
           )}
         </main>
-      </PageColumn>
-    </PageShell>
+      </div>
+    </div>
   );
 }
 

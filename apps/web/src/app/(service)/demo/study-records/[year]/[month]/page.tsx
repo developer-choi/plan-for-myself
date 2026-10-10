@@ -3,7 +3,7 @@ import DemoCalendarMenu from '@/demo/components/DemoCalendarMenu';
 import DemoCalendarSection from '@/demo/components/DemoCalendarSection';
 import {DEMO_OVERVIEW, DEMO_RECORDS, DEMO_TODAY} from '@/demo/demo-examples';
 import {demoCalendarPath} from '@/demo/demo-path';
-import PageShell from '@/shared/components/PageShell';
+import layout from '@/shared/styles/layout.module.scss';
 import {parseMonth, shiftMonth} from '@/study-record/calendar-date';
 import CalendarHeader from '@/study-record/components/CalendarHeader';
 import styles from './page.module.scss';
@@ -20,7 +20,7 @@ export default async function Page({params}: PageProps) {
   }
 
   return (
-    <PageShell>
+    <div className={layout.shell}>
       <CalendarHeader
         menu={<DemoCalendarMenu />}
         nextHref={demoCalendarPath(shiftMonth(viewMonth, 1))}
@@ -30,6 +30,6 @@ export default async function Page({params}: PageProps) {
       <main className={styles.body}>
         <DemoCalendarSection month={viewMonth} overview={DEMO_OVERVIEW} records={DEMO_RECORDS} today={DEMO_TODAY} />
       </main>
-    </PageShell>
+    </div>
   );
 }
