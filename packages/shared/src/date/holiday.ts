@@ -1,6 +1,4 @@
-import {getKoreanDate} from './korean';
 import {convertLunarDateToSolar, type SimpleDate} from './lunar';
-import type {DateType} from '../date-type/type';
 
 interface HolidayDate extends Omit<SimpleDate, 'year'> {
   type: 'solar' | 'lunar';
@@ -10,11 +8,6 @@ interface HolidayDate extends Omit<SimpleDate, 'year'> {
 /* 대체공휴일·선거일처럼 해마다 규칙 없이 정해지는 공휴일은 휴일로 잡지 못한다 */
 export function isHolidayDate({year, month, date}: SimpleDate) {
   return isHoliday(year, month, date);
-}
-
-export function getDefaultDateType(): DateType {
-  const {year, month, date} = getKoreanDate();
-  return isHoliday(year, month + 1, date) ? 'holiday' : 'weekday';
 }
 
 const SUNDAY = 0;
