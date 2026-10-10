@@ -11,7 +11,7 @@ export default function CalendarSummary({statsHref, streak}: CalendarSummaryCont
     <div className={styles.summary}>
       {statsHref !== undefined && (
         <Button asChild color="surface" size="small">
-          <Link href={statsHref}>
+          <Link href={statsHref} id={CALENDAR_STATS_LINK_ID}>
             <BarChartIcon />
             통계
           </Link>
@@ -25,3 +25,5 @@ export default function CalendarSummary({statsHref, streak}: CalendarSummaryCont
     </div>
   );
 }
+
+export const CALENDAR_STATS_LINK_ID = 'calendar-stats-link';
