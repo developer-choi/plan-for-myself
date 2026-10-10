@@ -1,4 +1,5 @@
 import {minutesFormat, type StudyRecordOverview} from '@plan-for-myself/shared';
+import type {CalendarMonth} from '@/study-record/calendar-date';
 import {MIN_STREAK_DAYS} from '@/study-record/calendar-summary';
 
 export function formatMinutesDiff(minutes: number): string {
@@ -22,6 +23,10 @@ export function formatStreakNote({current, longest}: StudyRecordOverview['streak
 export function formatMonthLabel(month: string): string {
   const [, monthNumber] = month.split('-');
   return `${Number(monthNumber)}월`;
+}
+
+export function formatStatsTitle({year, month}: CalendarMonth): string {
+  return `${year}년 ${month}월 통계`;
 }
 
 const MINUS_SIGN = '−';

@@ -10,7 +10,8 @@ import PageShell from '@/shared/components/PageShell';
 import SubPageHeader from '@/shared/components/SubPageHeader';
 import {type CalendarMonth, isFutureMonth, isSameMonth, parseMonth, toMonthParam} from '@/study-record/calendar-date';
 import {studyRecordQueries, studyRecordStatsQueries} from '@/study-record/queries';
-import StatsSection from '@/study-record-stats/components/StatsSection';
+import FetchedStatsSection from '@/study-record-stats/components/FetchedStatsSection';
+import {formatStatsTitle} from '@/study-record-stats/format';
 import styles from './page.module.scss';
 
 interface PageProps {
@@ -25,7 +26,7 @@ interface PrefetchedStatsProps {
 export async function generateMetadata({params}: PageProps): Promise<Metadata> {
   const viewMonth = parseMonth(await params);
 
-  return viewMonth ? {title: statsTitle(viewMonth)} : {};
+  return viewMonth ? {title: formatStatsTitle(viewMonth)} : {};
 }
 
 export default async function Page({params}: PageProps) {
@@ -39,7 +40,7 @@ export default async function Page({params}: PageProps) {
 
   return (
     <PageShell>
-      <SubPageHeader title={statsTitle(viewMonth)} />
+      <SubPageHeader title={formatStatsTitle(viewMonth)} />
       <main className={styles.body}>
         {isFutureMonth(today, viewMonth) ? (
           <div className={styles.notice}>
@@ -68,11 +69,7 @@ async function PrefetchedStats({month, today}: PrefetchedStatsProps) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <StatsSection month={month} today={today} />
+      <FetchedStatsSection month={month} today={today} />
     </HydrationBoundary>
   );
-}
-
-function statsTitle({year, month}: CalendarMonth) {
-  return `${year}년 ${month}월 통계`;
 }
