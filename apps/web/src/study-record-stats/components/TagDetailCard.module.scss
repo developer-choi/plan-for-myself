@@ -1,5 +1,7 @@
+@use '../../shared/styles/sub-page-header';
+
 .anchor {
-  scroll-margin-top: var(--spacing-3xl);
+  scroll-margin-top: calc(#{sub-page-header.$height} + var(--spacing-sm));
 }
 
 .section + .section {
