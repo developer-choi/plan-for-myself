@@ -20,6 +20,10 @@ export function monthPath({year, month}: CalendarMonth) {
   return `/study-records/${year}/${month}`;
 }
 
+export function statsPath({year, month}: CalendarMonth) {
+  return `/study-record-stats/${year}/${month}`;
+}
+
 export interface CalendarCell {
   date: string;
   day: number;

@@ -1,9 +1,7 @@
 import type {FailureTag, StudyRecordOverview} from '@plan-for-myself/shared';
-import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {render, screen} from '@testing-library/react';
 import {describe, expect, it} from 'vitest';
 import {type CalendarMonth, toMonthParam} from '@/study-record/calendar-date';
-import {studyRecordStatsQueries} from '@/study-record/queries';
 import {createMonthly, queryAllTermTexts} from '@/study-record-stats/test-utils';
 import StatsSection from './StatsSection';
 
@@ -72,17 +70,14 @@ describe('StatsSection', () => {
 
 function renderStatsSection(month: CalendarMonth, failureTags: FailureTag[] = []) {
   const monthParam = toMonthParam(month);
-  const queryClient = new QueryClient({defaultOptions: {queries: {staleTime: Infinity, retry: false}}});
-
-  queryClient.setQueryData(
-    studyRecordStatsQueries.monthly.key(monthParam, TODAY),
-    createMonthly({month: monthParam, inProgress: monthParam === toMonthParam(CURRENT_MONTH), failureTags}),
-  );
-  queryClient.setQueryData(studyRecordStatsQueries.overview.key(TODAY), OVERVIEW);
+  const isCurrentMonth = monthParam === toMonthParam(CURRENT_MONTH);
 
   render(
-    <QueryClientProvider client={queryClient}>
-      <StatsSection month={month} today={TODAY} />
-    </QueryClientProvider>,
+    <StatsSection
+      month={month}
+      monthly={createMonthly({month: monthParam, inProgress: isCurrentMonth, failureTags})}
+      overview={isCurrentMonth ? OVERVIEW : null}
+      renderTagCalendar={() => null}
+    />,
   );
 }

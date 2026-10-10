@@ -1,15 +1,10 @@
 'use client';
 
-import type {StudyRecordMonthly} from '@plan-for-myself/shared';
-import {Suspense, useEffect, useRef, useState} from 'react';
-import {useSuspenseQuery} from '@tanstack/react-query';
-import {type CalendarMonth, isSameMonth, toMonthParam} from '@/study-record/calendar-date';
-import {studyRecordStatsQueries} from '@/study-record/queries';
-import HandledErrorBoundary from '@/shared/components/HandledErrorBoundary';
-import LoadingSpinner from '@/shared/components/LoadingSpinner';
+import type {StudyRecordMonthly, StudyRecordOverview} from '@plan-for-myself/shared';
+import {type ReactNode, useEffect, useRef, useState} from 'react';
+import type {CalendarMonth} from '@/study-record/calendar-date';
 import CumulativeStrip from '@/study-record-stats/components/CumulativeStrip';
 import FailCard from '@/study-record-stats/components/FailCard';
-import FetchedTagCalendar from '@/study-record-stats/components/FetchedTagCalendar';
 import RecordCard from '@/study-record-stats/components/RecordCard';
 import StudyCard from '@/study-record-stats/components/StudyCard';
 import TagDetailCard from '@/study-record-stats/components/TagDetailCard';
@@ -17,26 +12,30 @@ import {toTrendBars} from '@/study-record-stats/tag-detail';
 
 interface StatsSectionProps {
   month: CalendarMonth;
-  today: string;
+  monthly: StudyRecordMonthly;
+  /* 누적·연속 기록은 이번 달에만 보여 주므로 지난 달이면 null */
+  overview: StudyRecordOverview | null;
+  renderTagCalendar: (tag: string) => ReactNode;
 }
 
-interface MonthlyCardsProps {
+interface FailSectionProps {
   month: CalendarMonth;
   monthly: StudyRecordMonthly;
-  today: string;
+  renderTagCalendar: (tag: string) => ReactNode;
 }
 
-export default function StatsSection({month, today}: StatsSectionProps) {
-  const isCurrentMonth = isSameMonth(today, month);
-  const {data: monthly} = useSuspenseQuery(studyRecordStatsQueries.monthly.options(toMonthParam(month), today));
-
+export default function StatsSection({month, monthly, overview, renderTagCalendar}: StatsSectionProps) {
   return (
     <>
-      {isCurrentMonth ? (
-        <CurrentMonthCards month={month} monthly={monthly} today={today} />
+      {overview ? (
+        <>
+          <CumulativeStrip monthly={monthly} totals={overview.totals} />
+          <FailSection month={month} monthly={monthly} renderTagCalendar={renderTagCalendar} />
+          <RecordCard monthly={monthly} streak={overview.streak} />
+        </>
       ) : (
         <>
-          <FailSection month={month} monthly={monthly} today={today} />
+          <FailSection month={month} monthly={monthly} renderTagCalendar={renderTagCalendar} />
           <RecordCard monthly={monthly} streak={null} />
         </>
       )}
@@ -45,19 +44,7 @@ export default function StatsSection({month, today}: StatsSectionProps) {
   );
 }
 
-function CurrentMonthCards({month, monthly, today}: MonthlyCardsProps) {
-  const {data: overview} = useSuspenseQuery(studyRecordStatsQueries.overview.options(today));
-
-  return (
-    <>
-      <CumulativeStrip monthly={monthly} totals={overview.totals} />
-      <FailSection month={month} monthly={monthly} today={today} />
-      <RecordCard monthly={monthly} streak={overview.streak} />
-    </>
-  );
-}
-
-function FailSection({month, monthly, today}: MonthlyCardsProps) {
+function FailSection({month, monthly, renderTagCalendar}: FailSectionProps) {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const detailRef = useRef<HTMLDivElement>(null);
 
@@ -80,13 +67,7 @@ function FailSection({month, monthly, today}: MonthlyCardsProps) {
       {selectedFailure && (
         <TagDetailCard
           ref={detailRef}
-          calendar={
-            <HandledErrorBoundary size="card">
-              <Suspense fallback={<LoadingSpinner size="card" />}>
-                <FetchedTagCalendar month={month} tag={selectedFailure.tag} today={today} />
-              </Suspense>
-            </HandledErrorBoundary>
-          }
+          calendar={renderTagCalendar(selectedFailure.tag)}
           month={month.month}
           tag={selectedFailure.tag}
           trend={{bars: toTrendBars(selectedFailure.trend), inProgress: monthly.inProgress}}

@@ -2,48 +2,33 @@
 
 import {toast} from '@developer-choi/design-system';
 import type {StudyRecord} from '@plan-for-myself/shared';
-import {useSuspenseQueries} from '@tanstack/react-query';
-import {overlay} from 'overlay-kit';
-import {type CalendarMonth, toMonthParam} from '@/study-record/calendar-date';
+import type {CalendarMonth} from '@/study-record/calendar-date';
 import {getCalendarSummaryContent} from '@/study-record/calendar-summary';
 import CalendarGrid from '@/study-record/components/CalendarGrid';
-import CalendarRecordFormDialog from '@/study-record/components/CalendarRecordFormDialog';
 import CalendarSummary from '@/study-record/components/CalendarSummary';
-import FirstRecord from '@/study-record/components/FirstRecord';
-import {studyRecordQueries, studyRecordStatsQueries} from '@/study-record/queries';
 
 interface CalendarSectionProps {
   month: CalendarMonth;
   today: string;
+  records: StudyRecord[];
+  streak: number;
+  firstRecordDate: string;
+  statsHref: string;
+  handlers: {
+    onRecordableDateClick: (date: string, record?: StudyRecord) => void;
+  };
 }
 
-export default function CalendarSection({month, today}: CalendarSectionProps) {
-  const [{data: records}, {data: overview}] = useSuspenseQueries({
-    queries: [studyRecordQueries.list.options(toMonthParam(month)), studyRecordStatsQueries.overview.options(today)],
-  });
-
-  if (overview.firstRecordDate === null) {
-    return <FirstRecord today={today} />;
-  }
-
-  const summary = getCalendarSummaryContent({
-    today,
-    month,
-    streak: overview.streak.current,
-    firstRecordDate: overview.firstRecordDate,
-  });
-
-  const openRecordForm = (date: string, record?: StudyRecord) => {
-    overlay.open(({isOpen, unmount}) => (
-      <CalendarRecordFormDialog
-        date={date}
-        isOpen={isOpen}
-        month={toMonthParam(month)}
-        record={record}
-        onClose={unmount}
-      />
-    ));
-  };
+export default function CalendarSection({
+  month,
+  today,
+  records,
+  streak,
+  firstRecordDate,
+  statsHref,
+  handlers,
+}: CalendarSectionProps) {
+  const summary = getCalendarSummaryContent({today, month, streak, firstRecordDate, statsHref});
 
   return (
     <>
@@ -51,7 +36,7 @@ export default function CalendarSection({month, today}: CalendarSectionProps) {
       <CalendarGrid
         handlers={{
           onFutureDateClick: () => toast({title: FUTURE_DATE_MESSAGE}),
-          onRecordableDateClick: openRecordForm,
+          onRecordableDateClick: handlers.onRecordableDateClick,
         }}
         month={month}
         records={records}

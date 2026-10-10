@@ -1,4 +1,5 @@
 import {describe, expect, it} from 'vitest';
+import {statsPath} from './calendar-date';
 import {getCalendarSummaryContent} from './calendar-summary';
 
 describe('getCalendarSummaryContent()', () => {
@@ -8,26 +9,51 @@ describe('getCalendarSummaryContent()', () => {
 
   describe('General cases', () => {
     it('이번 달이면 통계 버튼과 함께 연속 기록도 보여줘야 한다', () => {
-      expect(getCalendarSummaryContent({today, month: {year: 2026, month: 9}, streak, firstRecordDate})).toEqual({
-        statsHref: '/study-record-stats/2026/9',
-        streak,
-      });
+      const month = {year: 2026, month: 9};
+
+      expect(
+        getCalendarSummaryContent({
+          today,
+          month,
+          streak,
+          firstRecordDate,
+          statsHref: statsPath(month),
+        }),
+      ).toEqual({statsHref: '/study-record-stats/2026/9', streak});
     });
 
     it('지난 달이면 통계 버튼만 보여줘야 한다', () => {
-      expect(getCalendarSummaryContent({today, month: {year: 2026, month: 8}, streak, firstRecordDate})).toEqual({
-        statsHref: '/study-record-stats/2026/8',
-      });
+      const month = {year: 2026, month: 8};
+
+      expect(
+        getCalendarSummaryContent({
+          today,
+          month,
+          streak,
+          firstRecordDate,
+          statsHref: statsPath(month),
+        }),
+      ).toEqual({statsHref: '/study-record-stats/2026/8'});
     });
 
     it('미래 달이면 아무것도 보여주지 않아야 한다', () => {
-      expect(getCalendarSummaryContent({today, month: {year: 2026, month: 10}, streak, firstRecordDate})).toEqual({});
+      const month = {year: 2026, month: 10};
+
+      expect(
+        getCalendarSummaryContent({
+          today,
+          month,
+          streak,
+          firstRecordDate,
+          statsHref: statsPath(month),
+        }),
+      ).toEqual({});
     });
   });
 
   describe('Boundary cases', () => {
     const month = {year: 2026, month: 9};
-    const statsHref = '/study-record-stats/2026/9';
+    const statsHref = statsPath(month);
 
     describe('이번 달일 때', () => {
       [
@@ -35,7 +61,9 @@ describe('getCalendarSummaryContent()', () => {
         {streak: 2, expected: {statsHref, streak: 2}, name: '연속 2일부터 연속 기록을 보여줘야 한다'},
       ].forEach(({streak: currentStreak, expected, name}) => {
         it(name, () => {
-          expect(getCalendarSummaryContent({today, month, streak: currentStreak, firstRecordDate})).toEqual(expected);
+          expect(getCalendarSummaryContent({today, month, streak: currentStreak, firstRecordDate, statsHref})).toEqual(
+            expected,
+          );
         });
       });
     });
@@ -44,19 +72,22 @@ describe('getCalendarSummaryContent()', () => {
       const firstRecordDateInSeptember = '2026-09-10';
 
       it('첫 기록보다 앞선 달이면 아무것도 보여주지 않아야 한다', () => {
+        const month = {year: 2026, month: 8};
+
         expect(
           getCalendarSummaryContent({
             today,
-            month: {year: 2026, month: 8},
+            month,
             streak,
             firstRecordDate: firstRecordDateInSeptember,
+            statsHref: statsPath(month),
           }),
         ).toEqual({});
       });
 
       it('첫 기록이 있는 달이면 통계 버튼을 보여줘야 한다', () => {
         expect(
-          getCalendarSummaryContent({today, month, streak, firstRecordDate: firstRecordDateInSeptember}),
+          getCalendarSummaryContent({today, month, streak, firstRecordDate: firstRecordDateInSeptember, statsHref}),
         ).toMatchObject({statsHref});
       });
     });
@@ -65,16 +96,30 @@ describe('getCalendarSummaryContent()', () => {
       const newYearToday = '2026-01-05';
 
       it('전해 12월은 지난 달처럼 통계 버튼만 보여줘야 한다', () => {
+        const month = {year: 2025, month: 12};
+
         expect(
-          getCalendarSummaryContent({today: newYearToday, month: {year: 2025, month: 12}, streak, firstRecordDate}),
-        ).toEqual({
-          statsHref: '/study-record-stats/2025/12',
-        });
+          getCalendarSummaryContent({
+            today: newYearToday,
+            month,
+            streak,
+            firstRecordDate,
+            statsHref: statsPath(month),
+          }),
+        ).toEqual({statsHref: '/study-record-stats/2025/12'});
       });
 
       it('다음 해 1월은 미래 달처럼 아무것도 보여주지 않아야 한다', () => {
+        const month = {year: 2027, month: 1};
+
         expect(
-          getCalendarSummaryContent({today: newYearToday, month: {year: 2027, month: 1}, streak, firstRecordDate}),
+          getCalendarSummaryContent({
+            today: newYearToday,
+            month,
+            streak,
+            firstRecordDate,
+            statsHref: statsPath(month),
+          }),
         ).toEqual({});
       });
     });

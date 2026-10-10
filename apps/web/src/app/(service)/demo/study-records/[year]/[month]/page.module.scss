@@ -1,0 +1,6 @@
+.body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 0 var(--spacing-page-x-mobile) var(--spacing-md);
+}

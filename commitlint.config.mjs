@@ -25,6 +25,7 @@ export default {
         // 기능(도메인)
         'study-record',
         'study-record-stats',
+        'demo',
       ],
     ],
     'scope-empty': [2, 'never'],
