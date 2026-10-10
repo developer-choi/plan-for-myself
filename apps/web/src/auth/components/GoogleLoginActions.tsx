@@ -5,8 +5,13 @@ import {Button} from '@developer-choi/design-system';
 import {continueWithGoogle} from '@/auth/actions';
 import styles from './GoogleLoginActions.module.scss';
 
-export default function GoogleLoginActions() {
-  const [, submitAction, isPending] = useActionState(() => continueWithGoogle(), undefined);
+interface GoogleLoginActionsProps {
+  /* undefined: 로그인 뒤 돌아갈 주소 없이 로그인 페이지에 온 경우 */
+  redirect: string | undefined;
+}
+
+export default function GoogleLoginActions({redirect}: GoogleLoginActionsProps) {
+  const [, submitAction, isPending] = useActionState(() => continueWithGoogle(redirect), undefined);
 
   return (
     <form action={submitAction} className={styles.actions}>

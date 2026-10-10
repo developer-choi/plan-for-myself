@@ -2,6 +2,7 @@ import {describe, expect, it} from 'vitest';
 import {getLoginState, getNextNavigating, type LoginState, type NextNavigatingResult} from './path';
 
 const PRIVATE_PATH = '/study-records';
+const PRIVATE_PATH_WITH_SEARCH = `${PRIVATE_PATH}/2026/10?a=1&b=2`;
 const LOGIN_PATH = '/login';
 const PUBLIC_PATH = '/privacy';
 const INTRO_PATH = '/';
@@ -18,10 +19,19 @@ describe('getNextNavigating()', () => {
         page: '로그인이 필요한 페이지를 열 때',
         cases: [
           {
-            name: '로그아웃 상태면 소개 페이지로 보내야 한다',
+            name: '로그아웃 상태면 로그인 뒤 돌아올 주소를 담아 로그인 페이지로 보내야 한다',
             pathWithSearch: PRIVATE_PATH,
             loginState: 'logged-out',
-            expected: {type: 'not-authenticated', nextUrl: '/'},
+            expected: {type: 'not-authenticated', nextUrl: `/login?redirect=${encodeURIComponent(PRIVATE_PATH)}`},
+          },
+          {
+            name: '로그아웃 상태면 돌아올 주소에 쿼리까지 담아야 한다',
+            pathWithSearch: PRIVATE_PATH_WITH_SEARCH,
+            loginState: 'logged-out',
+            expected: {
+              type: 'not-authenticated',
+              nextUrl: `/login?redirect=${encodeURIComponent(PRIVATE_PATH_WITH_SEARCH)}`,
+            },
           },
           {
             name: '로그인 없이 이용 중이면 열어 줘야 한다',
@@ -156,7 +166,7 @@ describe('getNextNavigating()', () => {
         path: '로그인이 필요한 경로의 하위 경로',
         cases: [
           {
-            name: '로그아웃 상태면 소개 페이지로 보내야 한다',
+            name: '로그아웃 상태면 로그인 페이지로 보내야 한다',
             pathWithSearch: `${PRIVATE_PATH}/2026/10`,
             loginState: 'logged-out',
             expectedType: 'not-authenticated',

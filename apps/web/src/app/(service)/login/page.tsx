@@ -15,6 +15,7 @@ import styles from './page.module.scss';
 export default async function Page({searchParams}: SearchParamsPageProps) {
   const [session, rejection, query] = await Promise.all([auth(), readRegisteredRejection(), searchParams]);
   const errorKind = getLoginErrorKind(query);
+  const redirect = Array.isArray(query.redirect) ? query.redirect[0] : query.redirect;
 
   return (
     <div className={styles.page}>
@@ -31,7 +32,7 @@ export default async function Page({searchParams}: SearchParamsPageProps) {
           {shouldShowRegisteredNotice(rejection, session) && <RegisteredAccountNotice />}
           {errorKind === 'guest-limit' && <GuestLimitNotice />}
           {errorKind === 'failed' && <Callout color="danger">로그인하지 못했어요. 잠시 뒤 다시 시도해 주세요.</Callout>}
-          <GoogleLoginActions />
+          <GoogleLoginActions redirect={redirect} />
         </div>
       </main>
     </div>
