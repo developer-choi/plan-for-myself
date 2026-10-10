@@ -6,6 +6,7 @@ import {getKoreanToday} from '@plan-for-myself/shared';
 import ErrorNotice from '@/shared/components/ErrorNotice';
 import HandledErrorBoundary from '@/shared/components/HandledErrorBoundary';
 import LoadingSpinner from '@/shared/components/LoadingSpinner';
+import PageColumn from '@/shared/components/PageColumn';
 import PageShell from '@/shared/components/PageShell';
 import SubPageHeader from '@/shared/components/SubPageHeader';
 import {type CalendarMonth, isFutureMonth, isSameMonth, parseMonth, toMonthParam} from '@/study-record/calendar-date';
@@ -40,20 +41,22 @@ export default async function Page({params}: PageProps) {
 
   return (
     <PageShell>
-      <SubPageHeader title={formatStatsTitle(viewMonth)} />
-      <main className={styles.body}>
-        {isFutureMonth(today, viewMonth) ? (
-          <div className={styles.notice}>
-            <ErrorNotice content="오늘까지의 달만 통계를 볼 수 있어요" title="미래 달은 조회할 수 없어요" />
-          </div>
-        ) : (
-          <HandledErrorBoundary>
-            <Suspense fallback={<LoadingSpinner />}>
-              <PrefetchedStats month={viewMonth} today={today} />
-            </Suspense>
-          </HandledErrorBoundary>
-        )}
-      </main>
+      <PageColumn>
+        <SubPageHeader title={formatStatsTitle(viewMonth)} />
+        <main className={styles.body}>
+          {isFutureMonth(today, viewMonth) ? (
+            <div className={styles.notice}>
+              <ErrorNotice content="오늘까지의 달만 통계를 볼 수 있어요" title="미래 달은 조회할 수 없어요" />
+            </div>
+          ) : (
+            <HandledErrorBoundary>
+              <Suspense fallback={<LoadingSpinner />}>
+                <PrefetchedStats month={viewMonth} today={today} />
+              </Suspense>
+            </HandledErrorBoundary>
+          )}
+        </main>
+      </PageColumn>
     </PageShell>
   );
 }

@@ -9,6 +9,7 @@ import RecordCard from '@/study-record-stats/components/RecordCard';
 import StudyCard from '@/study-record-stats/components/StudyCard';
 import TagDetailCard from '@/study-record-stats/components/TagDetailCard';
 import {toTrendBars} from '@/study-record-stats/tag-detail';
+import styles from './StatsSection.module.scss';
 
 interface StatsSectionProps {
   month: CalendarMonth;
@@ -27,19 +28,16 @@ interface FailSectionProps {
 export default function StatsSection({month, monthly, overview, renderTagCalendar}: StatsSectionProps) {
   return (
     <>
-      {overview ? (
-        <>
-          <CumulativeStrip monthly={monthly} totals={overview.totals} />
+      {overview && <CumulativeStrip monthly={monthly} totals={overview.totals} />}
+      <div className={styles.columns}>
+        <div className={styles.column}>
           <FailSection month={month} monthly={monthly} renderTagCalendar={renderTagCalendar} />
-          <RecordCard monthly={monthly} streak={overview.streak} />
-        </>
-      ) : (
-        <>
-          <FailSection month={month} monthly={monthly} renderTagCalendar={renderTagCalendar} />
-          <RecordCard monthly={monthly} streak={null} />
-        </>
-      )}
-      <StudyCard monthly={monthly} />
+        </div>
+        <div className={styles.column}>
+          <RecordCard monthly={monthly} streak={overview?.streak ?? null} />
+          <StudyCard monthly={monthly} />
+        </div>
+      </div>
     </>
   );
 }
