@@ -32,5 +32,10 @@ export async function POST(request: NextRequest) {
   }
 
   const created = await createStudyRecord(userId, record.value);
-  return created.ok ? createdResponse(created.record) : duplicateDateResponse();
+  if (created.ok) {
+    return createdResponse(created.record);
+  }
+
+  /* 탈퇴한 사용자의 쿠키가 다른 기기에 남아 있으면 세션은 풀리지만 사용자 행이 없다. 다시 로그인하게 401로 돌려준다 */
+  return created.reason === 'USER_NOT_FOUND' ? unauthorizedResponse() : duplicateDateResponse();
 }

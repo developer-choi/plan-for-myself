@@ -6,7 +6,7 @@ interface Queryable {
   query(text: string, values: unknown[]): Promise<{rows: StudyRecord[]}>;
 }
 
-export type CreateResult = {ok: true; record: StudyRecord} | {ok: false; reason: 'DUPLICATE_DATE'};
+export type CreateResult = {ok: true; record: StudyRecord} | {ok: false; reason: 'DUPLICATE_DATE' | 'USER_NOT_FOUND'};
 
 /* range가 null이면 기간을 가리지 않고 본인 기록 전부를 돌려준다 */
 export async function listStudyRecords(
@@ -47,6 +47,9 @@ export async function createStudyRecord(
     if (isDuplicateDateError(error)) {
       return {ok: false, reason: 'DUPLICATE_DATE'};
     }
+    if (isMissingUserError(error)) {
+      return {ok: false, reason: 'USER_NOT_FOUND'};
+    }
     throw error;
   }
 }
@@ -81,6 +84,7 @@ export async function deleteStudyRecord(userId: string, pk: number, db: Queryabl
 const COLUMNS =
   'pk, to_char(record_date, \'YYYY-MM-DD\') AS date, date_type AS "dateType", studied_minutes AS "studiedMinutes", fail_tags AS "failTags"';
 const UNIQUE_VIOLATION = '23505';
+const FOREIGN_KEY_VIOLATION = '23503';
 const DUPLICATE_DATE_CONSTRAINT = 'study_records_user_id_record_date_key';
 
 /* 같은 UNIQUE 위반이라도 pk 충돌 같은 다른 제약이면 날짜 중복이 아니므로 그대로 던지게 한다 */
@@ -93,4 +97,9 @@ function isDuplicateDateError(error: unknown) {
     'constraint' in error &&
     error.constraint === DUPLICATE_DATE_CONSTRAINT
   );
+}
+
+/* study_records의 외래키는 user_id 하나뿐이라, 기록을 넣다 외래키에 걸리면 그 사용자 행이 없다(탈퇴했다) */
+function isMissingUserError(error: unknown) {
+  return typeof error === 'object' && error !== null && 'code' in error && error.code === FOREIGN_KEY_VIOLATION;
 }

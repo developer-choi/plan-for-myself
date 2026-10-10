@@ -1,5 +1,5 @@
 import type {Session} from 'next-auth';
-import {INTRO_URL} from '@/auth/redirect';
+import {INTRO_URL, type LoginUrl, toLoginUrl} from '@/auth/redirect';
 
 export type LoginState = 'logged-out' | 'guest' | 'google';
 
@@ -11,7 +11,7 @@ interface NextNavigatingParam {
 export type NextNavigatingResult =
   | {
       type: 'not-authenticated';
-      nextUrl: typeof INTRO_URL;
+      nextUrl: LoginUrl;
     }
   | {
       type: 'already-authenticated';
@@ -42,7 +42,7 @@ export function getNextNavigating({pathWithSearch, loginState}: NextNavigatingPa
   if (isPrivate && loginState === 'logged-out') {
     return {
       type: 'not-authenticated',
-      nextUrl: INTRO_URL,
+      nextUrl: toLoginUrl(pathWithSearch),
     };
   } else if (isGoogleOnLoginPage || isLoggedInOnLoggedOutOnlyPage) {
     return {
