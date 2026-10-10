@@ -3,9 +3,8 @@ import {notFound} from 'next/navigation';
 import DemoStatsSection from '@/demo/components/DemoStatsSection';
 import {DEMO_OVERVIEW, DEMO_RECORDS, DEMO_TODAY, getDemoMonthly} from '@/demo/demo-examples';
 import ErrorNotice from '@/shared/components/ErrorNotice';
-import PageColumn from '@/shared/components/PageColumn';
-import PageShell from '@/shared/components/PageShell';
 import SubPageHeader from '@/shared/components/SubPageHeader';
+import layout from '@/shared/styles/layout.module.scss';
 import {isFutureMonth, isSameMonth, parseMonth} from '@/study-record/calendar-date';
 import {formatStatsTitle} from '@/study-record-stats/format';
 import styles from './page.module.scss';
@@ -28,8 +27,8 @@ export default async function Page({params}: PageProps) {
   }
 
   return (
-    <PageShell>
-      <PageColumn>
+    <div className={layout.shell}>
+      <div className={layout.centered}>
         <SubPageHeader title={formatStatsTitle(viewMonth)} />
         <main className={styles.body}>
           {isFutureMonth(DEMO_TODAY, viewMonth) ? (
@@ -46,7 +45,7 @@ export default async function Page({params}: PageProps) {
             />
           )}
         </main>
-      </PageColumn>
-    </PageShell>
+      </div>
+    </div>
   );
 }

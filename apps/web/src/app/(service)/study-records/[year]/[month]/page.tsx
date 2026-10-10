@@ -9,7 +9,7 @@ import {auth} from '@/auth/next-auth';
 import {getLoginState} from '@/auth/path';
 import HandledErrorBoundary from '@/shared/components/HandledErrorBoundary';
 import LoadingSpinner from '@/shared/components/LoadingSpinner';
-import PageShell from '@/shared/components/PageShell';
+import layout from '@/shared/styles/layout.module.scss';
 import {monthPath, parseMonth, shiftMonth} from '@/study-record/calendar-date';
 import CalendarHeader from '@/study-record/components/CalendarHeader';
 import CalendarMenu from '@/study-record/components/CalendarMenu';
@@ -32,7 +32,7 @@ export default async function Page({params}: PageProps) {
   const today = getKoreanToday();
 
   return (
-    <PageShell>
+    <div className={layout.shell}>
       <CalendarHeader
         menu={isGuest ? <GuestCalendarMenu /> : <CalendarMenu />}
         nextHref={monthPath(shiftMonth(viewMonth, 1))}
@@ -60,7 +60,7 @@ export default async function Page({params}: PageProps) {
           </Suspense>
         </HandledErrorBoundary>
       </main>
-    </PageShell>
+    </div>
   );
 }
 
