@@ -1275,9 +1275,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@developer-choi/design-system@npm:^0.7.0":
-  version: 0.7.0
-  resolution: "@developer-choi/design-system@npm:0.7.0"
+"@developer-choi/design-system@npm:^0.8.0":
+  version: 0.8.0
+  resolution: "@developer-choi/design-system@npm:0.8.0"
   dependencies:
     "@radix-ui/react-icons": "npm:^1.3.2"
     clsx: "npm:^2.1.1"
@@ -1285,7 +1285,7 @@ __metadata:
   peerDependencies:
     react: ^19.0.0
     react-dom: ^19.0.0
-  checksum: 10c0/b810d2a15b4761191369f5ba2f5d6f83eeec3165b499f22e62dc15338670f528b975e14a27948dc337e7d86d76d0f110f6ee4d444d1a5eeeda31ad50938ab0f4
+  checksum: 10c0/592be230462cbc1740cf8e78b7dd9801fe5c5fd2dc489cf02b6c8b676a69a3920b3641e1a023d3fa398ba707890180ca1a278487d2e411cf2e130164c7961163
   languageName: node
   linkType: hard
 
@@ -18942,7 +18942,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "web@workspace:apps/web"
   dependencies:
-    "@developer-choi/design-system": "npm:^0.7.0"
+    "@developer-choi/design-system": "npm:^0.8.0"
     "@developer-choi/utils": "npm:^0.1.0"
     "@electric-sql/pglite": "npm:^0.5.8"
     "@plan-for-myself/shared": "workspace:*"
