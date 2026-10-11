@@ -3,7 +3,7 @@ export const colors = {
   primary: '#2f6fed',
   primarySoft: '#eaf1fd',
   onPrimary: '#fff',
-  fail: '#e5484d',
+  fail: '#d13438',
   failSoft: '#fdecec',
   failLight: '#f3a5a7',
   success: '#1f9d55',

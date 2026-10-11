@@ -64,7 +64,7 @@ export default function CalendarGrid({month, today, records, handlers}: Calendar
                 </Badge>
               )}
               {record?.failTags.slice(0, MAX_FAIL_TAGS).map((tag) => (
-                <Badge key={tag} className={styles.chip} color="danger" size="small" variant="soft">
+                <Badge key={tag} className={styles.chip} color="danger" size="small" variant="solid">
                   <span className={styles.chipText}>{tag}</span>
                 </Badge>
               ))}
