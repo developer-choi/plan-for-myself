@@ -4,9 +4,9 @@ import type {StudyRecord} from '@plan-for-myself/shared';
 import {useSuspenseQueries} from '@tanstack/react-query';
 import {overlay} from 'overlay-kit';
 import {type CalendarMonth, statsPath, toMonthParam} from '@/study-record/calendar-date';
-import CalendarRecordFormDialog from '@/study-record/components/CalendarRecordFormDialog';
 import CalendarSection from '@/study-record/components/CalendarSection';
 import FirstRecord from '@/study-record/components/FirstRecord';
+import RecordFormDialog from '@/study-record/components/RecordFormDialog';
 import {studyRecordQueries, studyRecordStatsQueries} from '@/study-record/queries';
 
 interface FetchedCalendarSectionProps {
@@ -26,13 +26,7 @@ export default function FetchedCalendarSection({month, today}: FetchedCalendarSe
 
   const openRecordForm = (date: string, record?: StudyRecord) => {
     overlay.open(({isOpen, unmount}) => (
-      <CalendarRecordFormDialog
-        date={date}
-        isOpen={isOpen}
-        month={toMonthParam(month)}
-        record={record}
-        onClose={unmount}
-      />
+      <RecordFormDialog date={date} isOpen={isOpen} month={toMonthParam(month)} record={record} onClose={unmount} />
     ));
   };
 

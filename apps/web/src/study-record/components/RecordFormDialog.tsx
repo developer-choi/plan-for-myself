@@ -5,12 +5,15 @@ import typography from '@developer-choi/design-system/styles/typography';
 import type {StudyRecord} from '@plan-for-myself/shared';
 import {Cross2Icon} from '@radix-ui/react-icons';
 import {captureException} from '@sentry/nextjs';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
 import classNames from 'classnames';
 import {type BaseSyntheticEvent, useState} from 'react';
 import {FormProvider, useForm, type UseFormReturn} from 'react-hook-form';
-import type {StudyRecordFieldsRequest} from '@/study-record/api';
+import {isMutationSettling} from '@/shared/query/mutation';
+import {deleteStudyRecordApi, patchStudyRecordApi, postStudyRecordApi} from '@/study-record/api';
 import {formatDateTitle} from '@/study-record/calendar-date';
 import RecordFormFields from '@/study-record/components/RecordFormFields';
+import {studyRecordQueries, studyRecordStatsQueries} from '@/study-record/queries';
 import {
   type AddFailTagResult,
   addFailTag,
@@ -26,25 +29,15 @@ import styles from './RecordForm.module.scss';
 interface RecordFormDialogProps {
   isOpen: boolean;
   date: string;
+  /* 저장·삭제 뒤 새로 받을 달력의 달 */
+  month: string;
   /* 그날 기록이 없으면 undefined */
   record?: StudyRecord;
-  onSave: (fields: StudyRecordFieldsRequest) => Promise<unknown>;
-  /* 그날 기록이 없으면 undefined */
-  onDelete?: () => Promise<unknown>;
   onClose: () => void;
-  loading: boolean;
 }
 
-export default function RecordFormDialog({
-  isOpen,
-  date,
-  record,
-  onSave,
-  onDelete,
-  onClose,
-  loading,
-}: RecordFormDialogProps) {
-  const {methods, form} = useRecordForm({date, record, onSave, onDelete, onClose, loading});
+export default function RecordFormDialog({isOpen, date, month, record, onClose}: RecordFormDialogProps) {
+  const {methods, form} = useRecordForm({date, month, record, onClose});
 
   return (
     <Dialog.Root open={isOpen} onClose={onClose}>
@@ -67,11 +60,17 @@ export default function RecordFormDialog({
           </Dialog.Content>
           <Dialog.Footer>
             {form.onDelete && (
-              <Button color="destructive" loading={loading} size="large" onClick={form.onDelete}>
+              <Button
+                color="destructive"
+                disabled={form.saving}
+                loading={form.deleting}
+                size="large"
+                onClick={form.onDelete}
+              >
                 삭제
               </Button>
             )}
-            <Button loading={loading} size="large" type="submit">
+            <Button disabled={form.deleting} loading={form.saving} size="large" type="submit">
               저장
             </Button>
           </Dialog.Footer>
@@ -83,13 +82,10 @@ export default function RecordFormDialog({
 
 interface UseRecordFormParams {
   date: string;
+  month: string;
   /* 그날 기록이 없으면 undefined */
   record?: StudyRecord;
-  onSave: RecordFormDialogProps['onSave'];
-  /* 그날 기록이 없으면 undefined */
-  onDelete?: RecordFormDialogProps['onDelete'];
   onClose: () => void;
-  loading: boolean;
 }
 
 interface UseRecordFormResult {
@@ -100,14 +96,38 @@ interface UseRecordFormResult {
     onDelete: (() => Promise<void>) | undefined;
     /* 거절되지 않았거나, 다시 저장·삭제를 시작해 비웠으면 undefined */
     rejectionMessage: string | undefined;
+    /* 추가·수정 요청이 진행 중이거나 성공해 모달이 닫히기 전이면 true */
+    saving: boolean;
+    /* 삭제 요청이 진행 중이거나 성공해 모달이 닫히기 전이면 true */
+    deleting: boolean;
   };
 }
 
-function useRecordForm({date, record, onSave, onDelete, onClose, loading}: UseRecordFormParams): UseRecordFormResult {
+function useRecordForm({date, month, record, onClose}: UseRecordFormParams): UseRecordFormResult {
   const methods = useForm<RecordFormValues>({
     defaultValues: getRecordFormDefaultValues(date, record),
   });
   const [rejectionMessage, setRejectionMessage] = useState<string>();
+
+  const queryClient = useQueryClient();
+  const cacheHandlers = {
+    onSuccess: () =>
+      Promise.all([
+        queryClient.invalidateQueries({queryKey: studyRecordQueries.list.key(month)}),
+        queryClient.invalidateQueries({queryKey: studyRecordStatsQueries.all.key()}),
+      ]),
+    onError: (error: Error) => {
+      if (parseRecordRejection(error)?.isStale) {
+        queryClient.invalidateQueries({queryKey: studyRecordQueries.list.key(month)});
+        queryClient.invalidateQueries({queryKey: studyRecordStatsQueries.all.key()});
+      }
+    },
+  };
+  const postMutation = useMutation({mutationFn: postStudyRecordApi, ...cacheHandlers});
+  const patchMutation = useMutation({mutationFn: patchStudyRecordApi, ...cacheHandlers});
+  const deleteMutation = useMutation({mutationFn: deleteStudyRecordApi, ...cacheHandlers});
+  const saving = isMutationSettling(postMutation, patchMutation);
+  const deleting = isMutationSettling(deleteMutation);
 
   const showRejection = (error: unknown, unexpectedFailureMessage: string) => {
     const rejection = parseRecordRejection(error);
@@ -121,8 +141,8 @@ function useRecordForm({date, record, onSave, onDelete, onClose, loading}: UseRe
   /* handleSubmit의 검증이 규칙 없는 칸의 오류를 지우므로, 태그 칸은 검증이 끝난 뒤의 두 콜백에서 판정한다 */
   const onSubmit = methods.handleSubmit(
     async (values) => {
-      // Button loading은 submit을 막지 못하므로, [저장] 클릭·Enter 중복 제출 모두 이 가드로 막는다
-      if (loading) {
+      // Button loading은 submit을 막지 못하므로, 저장·삭제 중 [저장] 클릭·Enter 제출을 이 가드로 막는다
+      if (saving || deleting) {
         return;
       }
 
@@ -133,8 +153,11 @@ function useRecordForm({date, record, onSave, onDelete, onClose, loading}: UseRe
       }
 
       setRejectionMessage(undefined);
+      const fields = toStudyRecordFields({...values, failTags: failTagResult.failTags});
       try {
-        await onSave(toStudyRecordFields({...values, failTags: failTagResult.failTags}));
+        await (record
+          ? patchMutation.mutateAsync({pk: record.pk, ...fields})
+          : postMutation.mutateAsync({date, ...fields}));
         onClose();
       } catch (error) {
         showRejection(error, UNEXPECTED_FAILURE_MESSAGE);
@@ -149,11 +172,11 @@ function useRecordForm({date, record, onSave, onDelete, onClose, loading}: UseRe
   );
 
   const remove =
-    onDelete &&
+    record &&
     (async () => {
       setRejectionMessage(undefined);
       try {
-        await onDelete();
+        await deleteMutation.mutateAsync({pk: record.pk});
         onClose();
       } catch (error) {
         showRejection(error, UNEXPECTED_DELETE_FAILURE_MESSAGE);
@@ -166,6 +189,8 @@ function useRecordForm({date, record, onSave, onDelete, onClose, loading}: UseRe
       onSubmit,
       onDelete: remove,
       rejectionMessage,
+      saving,
+      deleting,
     },
   };
 }
