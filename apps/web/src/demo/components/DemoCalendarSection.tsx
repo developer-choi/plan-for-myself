@@ -1,10 +1,9 @@
 'use client';
 
 import type {StudyRecord} from '@plan-for-myself/shared';
-import {overlay} from 'overlay-kit';
-import DemoChoiceDialog from '@/demo/components/DemoChoiceDialog';
 import type {DemoOverview} from '@/demo/demo-examples';
 import {demoStatsPath} from '@/demo/demo-path';
+import {useOpenDemoChoiceDialog} from '@/demo/useOpenDemoChoiceDialog';
 import type {CalendarMonth} from '@/study-record/calendar-date';
 import CalendarSection from '@/study-record/components/CalendarSection';
 
@@ -18,9 +17,7 @@ interface DemoCalendarSectionProps {
 export default function DemoCalendarSection({month, today, records, overview}: DemoCalendarSectionProps) {
   const {firstRecordDate, streak} = overview;
 
-  const openChoiceDialog = () => {
-    overlay.open(({isOpen, unmount}) => <DemoChoiceDialog isOpen={isOpen} onClose={unmount} />);
-  };
+  const openChoiceDialog = useOpenDemoChoiceDialog();
 
   return (
     <CalendarSection

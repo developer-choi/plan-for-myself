@@ -1,5 +1,7 @@
 import {render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import type {Session} from 'next-auth';
+import {SessionProvider} from 'next-auth/react';
 import {OverlayProvider} from 'overlay-kit';
 import {describe, expect, it} from 'vitest';
 import {DEMO_MONTH, DEMO_OVERVIEW, DEMO_RECORDS, DEMO_TODAY} from '@/demo/demo-examples';
@@ -45,6 +47,62 @@ describe('DemoCalendarSection', () => {
         await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
       });
     });
+
+    describe('로그아웃 상태에서 안내 창이 뜨면', () => {
+      it('[로그인해서 이용하기]가 있다', async () => {
+        renderSection(null);
+
+        await userEvent.click(screen.getByRole('button', {name: String(EMPTY_DAY)}));
+
+        expect(await screen.findByRole('link', {name: LOGIN_LABEL})).toBeInTheDocument();
+      });
+
+      it('[내 달력으로 이동]은 없다', async () => {
+        renderSection(null);
+
+        await userEvent.click(screen.getByRole('button', {name: String(EMPTY_DAY)}));
+
+        await screen.findByRole('dialog', {name: CHOICE_MESSAGE});
+        expect(screen.queryByRole('link', {name: MY_CALENDAR_LABEL})).not.toBeInTheDocument();
+      });
+
+      it('[로그인해서 이용하기]를 누르면 안내 창이 닫힌다', async () => {
+        renderSection(null);
+        await userEvent.click(screen.getByRole('button', {name: String(EMPTY_DAY)}));
+
+        await userEvent.click(await screen.findByRole('link', {name: LOGIN_LABEL}));
+
+        await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+      });
+    });
+
+    describe('로그인 상태에서 안내 창이 뜨면', () => {
+      it('[내 달력으로 이동]이 있다', async () => {
+        renderSection(LOGGED_IN_SESSION);
+
+        await userEvent.click(screen.getByRole('button', {name: String(EMPTY_DAY)}));
+
+        expect(await screen.findByRole('link', {name: MY_CALENDAR_LABEL})).toBeInTheDocument();
+      });
+
+      it('[로그인해서 이용하기]는 없다', async () => {
+        renderSection(LOGGED_IN_SESSION);
+
+        await userEvent.click(screen.getByRole('button', {name: String(EMPTY_DAY)}));
+
+        await screen.findByRole('dialog', {name: CHOICE_MESSAGE});
+        expect(screen.queryByRole('link', {name: LOGIN_LABEL})).not.toBeInTheDocument();
+      });
+
+      it('[내 달력으로 이동]을 누르면 안내 창이 닫힌다', async () => {
+        renderSection(LOGGED_IN_SESSION);
+        await userEvent.click(screen.getByRole('button', {name: String(EMPTY_DAY)}));
+
+        await userEvent.click(await screen.findByRole('link', {name: MY_CALENDAR_LABEL}));
+
+        await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+      });
+    });
   });
 });
 
@@ -53,11 +111,16 @@ const RECORDED_DAY = 17;
 const RECORDED_TOTAL_TIME = '2:30';
 const RECORDED_BUTTON_NAME = new RegExp(`^${RECORDED_DAY}${RECORDED_TOTAL_TIME}`);
 const EMPTY_DAY = 2;
+const MY_CALENDAR_LABEL = '내 달력으로 이동';
+const LOGIN_LABEL = '로그인해서 이용하기';
+const LOGGED_IN_SESSION: Session = {userId: 'user-1', isGuest: false, expires: '2099-01-01T00:00:00.000Z'};
 
-function renderSection() {
+function renderSection(session: Session | null = null) {
   render(
-    <OverlayProvider>
-      <DemoCalendarSection month={DEMO_MONTH} overview={DEMO_OVERVIEW} records={DEMO_RECORDS} today={DEMO_TODAY} />
-    </OverlayProvider>,
+    <SessionProvider session={session}>
+      <OverlayProvider>
+        <DemoCalendarSection month={DEMO_MONTH} overview={DEMO_OVERVIEW} records={DEMO_RECORDS} today={DEMO_TODAY} />
+      </OverlayProvider>
+    </SessionProvider>,
   );
 }
