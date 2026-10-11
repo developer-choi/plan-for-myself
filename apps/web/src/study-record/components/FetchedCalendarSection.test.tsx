@@ -1,4 +1,4 @@
-import {minutesFormat, type StudyRecord, type StudyRecordOverview} from '@plan-for-myself/shared';
+import type {StudyRecord, StudyRecordOverview} from '@plan-for-myself/shared';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -43,14 +43,15 @@ const TODAY = '2026-10-04';
 const RECORD_DATE = '2026-10-02';
 const [, , RECORD_DAY_TEXT] = RECORD_DATE.split('-');
 const RECORD_DAY = Number(RECORD_DAY_TEXT);
+const RECORD_FAIL_TAG = '영어';
 const RECORD: StudyRecord = {
   pk: 1,
   date: RECORD_DATE,
   dateType: 'weekday',
   studiedMinutes: [0, 0, 0],
-  failTags: ['영어'],
+  failTags: [RECORD_FAIL_TAG],
 };
-const RECORD_BUTTON_NAME = new RegExp(`^${RECORD_DAY}${minutesFormat(0)}`);
+const RECORD_BUTTON_NAME = new RegExp(`^${RECORD_DAY}${RECORD_FAIL_TAG}`);
 const OVERVIEW: StudyRecordOverview = {
   date: TODAY,
   firstRecordDate: '2026-09-01',

@@ -88,17 +88,36 @@ describe('CalendarGrid', () => {
     it('기록이 있는 칸을 누르면 그날 기록과 함께 기록 폼 열기가 요청된다', async () => {
       const onRecordableDateClick = vi.fn();
       const day = 2;
-      const record = createRecord({date: `2026-10-0${day}`, failTags: ['영어']});
+      const tag = '영어';
+      const record = createRecord({date: `2026-10-0${day}`, failTags: [tag]});
       renderGrid({records: [record], onRecordableDateClick});
 
-      /* 날짜 뒤에 총 공부시간이 붙어 20일 칸과 갈린다 */
-      await userEvent.click(screen.getByRole('button', {name: new RegExp(`^${day}${minutesFormat(0)}`)}));
+      /* 날짜 뒤에 실패 태그가 붙어 20일 칸과 갈린다 */
+      await userEvent.click(screen.getByRole('button', {name: new RegExp(`^${day}${tag}`)}));
 
       expect(onRecordableDateClick).toHaveBeenCalledWith(record.date, record);
     });
   });
 
   describe('Edge cases', () => {
+    it('공부시간 합계가 0인 날은 공부시간 없이 실패 태그만 보인다', () => {
+      const day = 31;
+      const tag = '영어 단어';
+      renderGrid({records: [createRecord({date: `2026-10-${day}`, studiedMinutes: [0, 0, 0], failTags: [tag]})]});
+
+      const button = screen.getByRole('button', {name: new RegExp(`^${day}`)});
+
+      expect(button).toHaveTextContent(new RegExp(`^${day}${tag}$`));
+      expect(button).not.toHaveTextContent(minutesFormat(0));
+    });
+
+    it('공부시간 합계가 0이고 실패 태그도 없는 날은 날짜만 보인다', () => {
+      const day = 31;
+      renderGrid({records: [createRecord({date: `2026-10-${day}`, studiedMinutes: [0, 0, 0], failTags: []})]});
+
+      expect(screen.getByRole('button', {name: new RegExp(`^${day}`)})).toHaveTextContent(new RegExp(`^${day}$`));
+    });
+
     it('오늘이나 지난 칸을 누르면 미래 날짜 핸들러가 불리지 않는다', async () => {
       const onFutureDateClick = vi.fn();
       renderGrid({onFutureDateClick});
