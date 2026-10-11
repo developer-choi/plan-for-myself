@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import {overlay} from 'overlay-kit';
 import Logo from '@/shared/components/Logo';
 import {toDateMonthParam} from '@/study-record/calendar-date';
-import CalendarRecordFormDialog from '@/study-record/components/CalendarRecordFormDialog';
+import RecordFormDialog from '@/study-record/components/RecordFormDialog';
 import styles from './FirstRecord.module.scss';
 
 interface FirstRecordProps {
@@ -17,7 +17,7 @@ interface FirstRecordProps {
 export default function FirstRecord({today}: FirstRecordProps) {
   const openTodayRecordForm = () => {
     overlay.open(({isOpen, unmount}) => (
-      <CalendarRecordFormDialog date={today} isOpen={isOpen} month={toDateMonthParam(today)} onClose={unmount} />
+      <RecordFormDialog date={today} isOpen={isOpen} month={toDateMonthParam(today)} onClose={unmount} />
     ));
   };
 
