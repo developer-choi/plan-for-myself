@@ -1,5 +1,5 @@
 import type {Session} from 'next-auth';
-import {INTRO_URL, type LoginUrl, toLoginUrl} from '@/auth/redirect';
+import {DEFAULT_HOME_URL, ENTRY_URL, INTRO_URL, type LoginUrl, toLoginUrl} from '@/auth/redirect';
 
 export type LoginState = 'logged-out' | 'guest' | 'google';
 
@@ -15,7 +15,11 @@ export type NextNavigatingResult =
     }
   | {
       type: 'already-authenticated';
-      nextUrl: typeof INTRO_URL;
+      nextUrl: typeof ENTRY_URL;
+    }
+  | {
+      type: 'entry';
+      nextUrl: typeof DEFAULT_HOME_URL | typeof INTRO_URL;
     }
   | {
       type: 'correct';
@@ -39,7 +43,12 @@ export function getNextNavigating({pathWithSearch, loginState}: NextNavigatingPa
   const isGoogleOnLoginPage = isNotPrivate && loginState === 'google';
   const isLoggedInOnLoggedOutOnlyPage = isLoggedOutOnly && loginState !== 'logged-out';
 
-  if (isPrivate && loginState === 'logged-out') {
+  if (nextPathname === ENTRY_URL) {
+    return {
+      type: 'entry',
+      nextUrl: loginState === 'logged-out' ? INTRO_URL : DEFAULT_HOME_URL,
+    };
+  } else if (isPrivate && loginState === 'logged-out') {
     return {
       type: 'not-authenticated',
       nextUrl: toLoginUrl(pathWithSearch),
@@ -47,7 +56,7 @@ export function getNextNavigating({pathWithSearch, loginState}: NextNavigatingPa
   } else if (isGoogleOnLoginPage || isLoggedInOnLoggedOutOnlyPage) {
     return {
       type: 'already-authenticated',
-      nextUrl: INTRO_URL,
+      nextUrl: ENTRY_URL,
     };
   } else {
     return {

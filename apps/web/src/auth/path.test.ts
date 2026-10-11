@@ -5,7 +5,9 @@ const PRIVATE_PATH = '/study-records';
 const PRIVATE_PATH_WITH_SEARCH = `${PRIVATE_PATH}/2026/10?a=1&b=2`;
 const LOGIN_PATH = '/login';
 const PUBLIC_PATH = '/privacy';
-const INTRO_PATH = '/';
+const DEFAULT_HOME_PATH = '/study-records';
+const ENTRY_PATH = '/';
+const INTRO_PATH = '/intro';
 const DEMO_PATHNAME = '/demo';
 const DEMO_PATH = `${DEMO_PATHNAME}/study-records/2026/9`;
 
@@ -63,10 +65,39 @@ describe('getNextNavigating()', () => {
             expected: {type: 'correct', nextUrl: LOGIN_PATH},
           },
           {
-            name: '구글로 로그인했으면 소개 페이지로 보내야 한다',
+            name: '구글로 로그인했으면 루트 주소(/)로 보내야 한다',
             pathWithSearch: LOGIN_PATH,
             loginState: 'google',
-            expected: {type: 'already-authenticated', nextUrl: '/'},
+            expected: {type: 'already-authenticated', nextUrl: ENTRY_PATH},
+          },
+        ],
+      },
+      {
+        page: '루트 주소(/)를 열 때',
+        cases: [
+          {
+            name: '로그아웃 상태면 소개 페이지로 보내야 한다',
+            pathWithSearch: ENTRY_PATH,
+            loginState: 'logged-out',
+            expected: {type: 'entry', nextUrl: INTRO_PATH},
+          },
+          {
+            name: '로그인 없이 이용 중이면 달력으로 보내야 한다',
+            pathWithSearch: ENTRY_PATH,
+            loginState: 'guest',
+            expected: {type: 'entry', nextUrl: DEFAULT_HOME_PATH},
+          },
+          {
+            name: '구글로 로그인했으면 달력으로 보내야 한다',
+            pathWithSearch: ENTRY_PATH,
+            loginState: 'google',
+            expected: {type: 'entry', nextUrl: DEFAULT_HOME_PATH},
+          },
+          {
+            name: '쿼리가 붙어 있어도 쿼리 없이 소개 페이지로 보내야 한다',
+            pathWithSearch: `${ENTRY_PATH}?x=1`,
+            loginState: 'logged-out',
+            expected: {type: 'entry', nextUrl: INTRO_PATH},
           },
         ],
       },
@@ -77,19 +108,19 @@ describe('getNextNavigating()', () => {
             name: '로그아웃 상태여도 열어 줘야 한다',
             pathWithSearch: INTRO_PATH,
             loginState: 'logged-out',
-            expected: {type: 'correct', nextUrl: '/'},
+            expected: {type: 'correct', nextUrl: INTRO_PATH},
           },
           {
             name: '로그인 없이 이용 중이어도 열어 줘야 한다',
             pathWithSearch: INTRO_PATH,
             loginState: 'guest',
-            expected: {type: 'correct', nextUrl: '/'},
+            expected: {type: 'correct', nextUrl: INTRO_PATH},
           },
           {
             name: '구글로 로그인했어도 열어 줘야 한다',
             pathWithSearch: INTRO_PATH,
             loginState: 'google',
-            expected: {type: 'correct', nextUrl: '/'},
+            expected: {type: 'correct', nextUrl: INTRO_PATH},
           },
         ],
       },
@@ -126,16 +157,16 @@ describe('getNextNavigating()', () => {
             expected: {type: 'correct', nextUrl: DEMO_PATH},
           },
           {
-            name: '로그인 없이 이용 중이면 소개 페이지로 보내야 한다',
+            name: '로그인 없이 이용 중이면 루트 주소(/)로 보내야 한다',
             pathWithSearch: DEMO_PATH,
             loginState: 'guest',
-            expected: {type: 'already-authenticated', nextUrl: '/'},
+            expected: {type: 'already-authenticated', nextUrl: ENTRY_PATH},
           },
           {
-            name: '구글로 로그인했으면 소개 페이지로 보내야 한다',
+            name: '구글로 로그인했으면 루트 주소(/)로 보내야 한다',
             pathWithSearch: DEMO_PATH,
             loginState: 'google',
-            expected: {type: 'already-authenticated', nextUrl: '/'},
+            expected: {type: 'already-authenticated', nextUrl: ENTRY_PATH},
           },
         ],
       },
@@ -188,7 +219,7 @@ describe('getNextNavigating()', () => {
         path: '로그인 페이지의 하위 경로',
         cases: [
           {
-            name: '구글로 로그인했으면 소개 페이지로 보내야 한다',
+            name: '구글로 로그인했으면 루트 주소(/)로 보내야 한다',
             pathWithSearch: `${LOGIN_PATH}/callback`,
             loginState: 'google',
             expectedType: 'already-authenticated',
