@@ -5,7 +5,7 @@ import {useMutation} from '@tanstack/react-query';
 import {overlay} from 'overlay-kit';
 import {Button, Callout, Confirm} from '@developer-choi/design-system';
 import {deleteAccountApi} from '@/auth/api';
-import {INTRO_URL} from '@/auth/redirect';
+import {ENTRY_URL} from '@/auth/redirect';
 import {isMutationSettling} from '@/shared/query/mutation';
 import styles from './AccountDeleteAction.module.scss';
 
@@ -48,7 +48,7 @@ function AccountDeleteConfirm({isOpen, text, onClose}: AccountDeleteConfirmProps
       captureException(error);
       return;
     }
-    window.location.replace(INTRO_URL);
+    window.location.replace(ENTRY_URL);
   };
 
   return (

@@ -84,6 +84,7 @@ export const {handlers, signIn, signOut, auth} = NextAuth({
       });
 
       switch (nextNavigating.type) {
+        case 'entry':
         case 'already-authenticated':
         case 'not-authenticated':
           return NextResponse.redirect(new URL(nextNavigating.nextUrl, url));

@@ -1,12 +1,12 @@
 'use client';
 
-import {INTRO_URL} from '@/auth/redirect';
+import {ENTRY_URL, INTRO_URL} from '@/auth/redirect';
 import {signOutAndReplace} from '@/auth/sign-out';
 import HeaderMenu from '@/shared/components/HeaderMenu';
 
 export default function CalendarMenu() {
   const logout = () => {
-    signOutAndReplace(INTRO_URL);
+    signOutAndReplace(ENTRY_URL);
   };
 
   return (
