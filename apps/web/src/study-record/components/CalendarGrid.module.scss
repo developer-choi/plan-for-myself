@@ -44,13 +44,6 @@
     box-shadow: var(--shadow-focus);
   }
 
-  /* 터치 기기는 탭한 칸을 hover로 남겨 두므로 마우스가 있는 기기에서만 칠한다 */
-  @media (hover: hover) {
-    &:hover {
-      background: var(--color-bg-neutral-soft);
-    }
-  }
-
   &[aria-current='date'] .dayNumber {
     color: var(--color-on-primary);
     background: var(--color-primary);
