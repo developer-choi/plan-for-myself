@@ -6,7 +6,7 @@ import type {TooltipRenderProps} from 'react-joyride';
 import {Cross2Icon} from '@radix-ui/react-icons';
 import {Button, IconButton} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
-import {DEMO_TOUR_STEP_COUNT_WITH_CHOICE_DIALOG} from '@/demo/demo-tour';
+import {DEMO_TOUR_STEP_COUNT} from '@/demo/demo-tour';
 import styles from './TourBubble.module.scss';
 
 interface TourBubbleProps {
@@ -25,7 +25,7 @@ export default function TourBubble({number, content, buttonProps}: TourBubblePro
       <p className={classNames(typography.body1, typography.bold, styles.text)}>{content}</p>
       <div className={styles.row}>
         <span className={classNames(typography.body3, styles.count)}>
-          {number} / {DEMO_TOUR_STEP_COUNT_WITH_CHOICE_DIALOG}
+          {number} / {DEMO_TOUR_STEP_COUNT}
         </span>
         <Button {...buttonProps.primary} />
       </div>

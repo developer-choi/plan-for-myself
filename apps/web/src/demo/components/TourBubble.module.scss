@@ -19,6 +19,7 @@
 
 .text {
   padding-right: var(--spacing-lg);
+  word-break: keep-all;
 }
 
 .row {

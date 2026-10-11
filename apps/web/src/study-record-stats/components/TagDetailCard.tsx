@@ -25,7 +25,7 @@ export default function TagDetailCard({tag, month, calendar, trend, ref}: TagDet
   return (
     <div ref={ref} className={styles.anchor}>
       <Card title={tag}>
-        <section className={styles.section}>
+        <section className={styles.section} id={TAG_CALENDAR_SECTION_ID}>
           <h3 className={classNames(typography.body3, styles.subTitle)}>{month}월 달력</h3>
           {calendar}
         </section>
@@ -34,6 +34,8 @@ export default function TagDetailCard({tag, month, calendar, trend, ref}: TagDet
     </div>
   );
 }
+
+export const TAG_CALENDAR_SECTION_ID = 'tag-detail-calendar-section';
 
 function TrendSection({bars, inProgress}: TrendSectionProps) {
   return (

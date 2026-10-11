@@ -1,6 +1,6 @@
 import type {FloatingOptions, Locale, Options, Styles} from 'react-joyride';
 
-export const DEMO_TOUR_STEP_COUNT_WITH_CHOICE_DIALOG = 5;
+export const DEMO_TOUR_STEP_COUNT = 5;
 
 export const DEMO_TOUR_OPTIONS = {
   skipBeacon: true,
