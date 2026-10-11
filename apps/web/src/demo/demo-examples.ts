@@ -7,11 +7,10 @@ import {
 } from '@plan-for-myself/shared';
 import {calculateMonthly} from '@/server/study-record-stats/monthly';
 import {calculateOverview} from '@/server/study-record-stats/overview';
+import {DEMO_TODAY} from '@/demo/demo-today';
 import {type CalendarMonth, toMonthParam} from '@/study-record/calendar-date';
 
-export const DEMO_TODAY = '2026-09-30';
-
-export const DEMO_MONTH: CalendarMonth = {year: Number(DEMO_TODAY.slice(0, 4)), month: Number(DEMO_TODAY.slice(5, 7))};
+export {DEMO_MONTH, DEMO_TODAY} from '@/demo/demo-today';
 
 export type DemoOverview = StudyRecordOverview & {firstRecordDate: string};
 

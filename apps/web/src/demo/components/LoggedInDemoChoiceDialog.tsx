@@ -3,36 +3,17 @@
 import {Button, Dialog, IconButton} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
 import {Cross2Icon} from '@radix-ui/react-icons';
-import {captureException} from '@sentry/nextjs';
 import classNames from 'classnames';
 import Link from 'next/link';
-import {signIn} from 'next-auth/react';
-import {useState} from 'react';
 import {DEFAULT_HOME_URL} from '@/auth/redirect';
-import {useHandleClientSideError} from '@/shared/error/useHandleClientSideError';
 import styles from './DemoChoiceDialog.module.scss';
 
-interface DemoChoiceDialogProps {
+interface LoggedInDemoChoiceDialogProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export default function DemoChoiceDialog({isOpen, onClose}: DemoChoiceDialogProps) {
-  const [loading, setLoading] = useState(false);
-
-  const handleClientSideError = useHandleClientSideError();
-
-  const startAsGuest = async () => {
-    setLoading(true);
-    try {
-      await signIn('guest', {callbackUrl: DEFAULT_HOME_URL});
-    } catch (error) {
-      captureException(error);
-      handleClientSideError(error);
-      setLoading(false);
-    }
-  };
-
+export default function LoggedInDemoChoiceDialog({isOpen, onClose}: LoggedInDemoChoiceDialogProps) {
   return (
     <Dialog.Root open={isOpen} onClose={onClose}>
       <Dialog.Close asChild>
@@ -45,11 +26,10 @@ export default function DemoChoiceDialog({isOpen, onClose}: DemoChoiceDialogProp
         <Button color="secondary" size="large" onClick={onClose}>
           계속 체험하기
         </Button>
-        <Button color="secondary" loading={loading} size="large" variant="outlined" onClick={startAsGuest}>
-          로그인 없이 이용하기
-        </Button>
         <Button asChild size="large">
-          <Link href="/login">로그인해서 이용하기</Link>
+          <Link href={DEFAULT_HOME_URL} onClick={onClose}>
+            내 달력으로 이동
+          </Link>
         </Button>
       </div>
     </Dialog.Root>

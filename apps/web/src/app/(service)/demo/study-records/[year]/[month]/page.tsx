@@ -1,4 +1,6 @@
 import {notFound} from 'next/navigation';
+import {auth} from '@/auth/next-auth';
+import {getLoginState} from '@/auth/path';
 import DemoCalendarMenu from '@/demo/components/DemoCalendarMenu';
 import DemoCalendarSection from '@/demo/components/DemoCalendarSection';
 import {DEMO_OVERVIEW, DEMO_RECORDS, DEMO_TODAY} from '@/demo/demo-examples';
@@ -19,10 +21,12 @@ export default async function Page({params}: PageProps) {
     notFound();
   }
 
+  const isLoggedIn = getLoginState(await auth()) !== 'logged-out';
+
   return (
     <div className={layout.shell}>
       <CalendarHeader
-        menu={<DemoCalendarMenu />}
+        menu={<DemoCalendarMenu isLoggedIn={isLoggedIn} />}
         nextHref={demoCalendarPath(shiftMonth(viewMonth, 1))}
         previousHref={demoCalendarPath(shiftMonth(viewMonth, -1))}
         title={`${viewMonth.year}년 ${viewMonth.month}월`}

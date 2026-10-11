@@ -1,5 +1,7 @@
 import {act, fireEvent, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import type {Session} from 'next-auth';
+import {SessionProvider} from 'next-auth/react';
 import {OverlayProvider} from 'overlay-kit';
 import {afterEach, describe, expect, it, vi} from 'vitest';
 import {type DemoOverview, DEMO_OVERVIEW, DEMO_RECORDS, DEMO_TODAY, getDemoMonthly} from '@/demo/demo-examples';
@@ -81,6 +83,17 @@ describe('DemoStatsTour', () => {
         await userEvent.click(screen.getByRole('button', {name: NEXT}));
 
         expect(await screen.findByRole('dialog', {name: CHOICE_MESSAGE})).toBeInTheDocument();
+      });
+    });
+
+    describe('로그인 상태에서 5번 말풍선의 [다음]을 누르면', () => {
+      it('[내 달력으로 이동]이 있는 체험 선택지 창이 뜬다', async () => {
+        renderStatsWithTour(SEPTEMBER, LOGGED_IN_SESSION);
+        await goToFifthBubble();
+
+        await userEvent.click(screen.getByRole('button', {name: NEXT}));
+
+        expect(await screen.findByRole('link', {name: '내 달력으로 이동'})).toBeInTheDocument();
       });
     });
 
@@ -199,22 +212,25 @@ const FOURTH_TEXT = '태그를 누르면 그 실패만 모아 볼 수 있어요'
 const FIFTH_TEXT = '이 실패를 한 날이 달력에 보여요. 아래에서 달마다 추이도 볼 수 있어요';
 const FIRST_TAG_OF_SEPTEMBER = '늦잠';
 const CHOICE_MESSAGE = '체험 중인 상태에서는 기록을 작성할 수 없어요';
+const LOGGED_IN_SESSION: Session = {userId: 'user-1', isGuest: false, expires: '2099-01-01T00:00:00.000Z'};
 const NEXT = '다음';
 const CLOSE = '닫기';
 const ENOUGH_MS_FOR_TOUR_TO_GIVE_UP_ON_MISSING_TARGETS = 30_000;
 
-function renderStatsWithTour({month, overview}: StatsCase) {
+function renderStatsWithTour({month, overview}: StatsCase, session: Session | null = null) {
   render(
-    <OverlayProvider>
-      <DemoStatsSection
-        month={month}
-        monthly={getDemoMonthly(month)}
-        overview={overview}
-        records={DEMO_RECORDS}
-        today={DEMO_TODAY}
-      />
-      <DemoStatsTour />
-    </OverlayProvider>,
+    <SessionProvider session={session}>
+      <OverlayProvider>
+        <DemoStatsSection
+          month={month}
+          monthly={getDemoMonthly(month)}
+          overview={overview}
+          records={DEMO_RECORDS}
+          today={DEMO_TODAY}
+        />
+        <DemoStatsTour />
+      </OverlayProvider>
+    </SessionProvider>,
   );
 }
 

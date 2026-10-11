@@ -1,21 +1,22 @@
 'use client';
 
-import {overlay} from 'overlay-kit';
 import {ACTIONS, type EventData, EVENTS, Joyride, type Step, type TooltipRenderProps} from 'react-joyride';
-import DemoChoiceDialog from '@/demo/components/DemoChoiceDialog';
 import TourBubble from '@/demo/components/TourBubble';
 import {DEMO_TOUR_FLOATING_OPTIONS, DEMO_TOUR_LOCALE, DEMO_TOUR_OPTIONS, DEMO_TOUR_STYLES} from '@/demo/demo-tour';
+import {useOpenDemoChoiceDialog} from '@/demo/useOpenDemoChoiceDialog';
 import {IMPROVED_FAILURES_CELL_ID} from '@/study-record-stats/components/CumulativeStrip';
 import {FIRST_TAG_ROW_ID} from '@/study-record-stats/components/FailCard';
 import {TAG_CALENDAR_SECTION_ID} from '@/study-record-stats/components/TagDetailCard';
 
 export default function DemoStatsTour() {
+  const openChoiceDialog = useOpenDemoChoiceDialog();
+
   const handleEvent = (data: EventData) => {
     const isNextOnLastStep =
       data.type === EVENTS.STEP_AFTER && data.action === ACTIONS.NEXT && data.index === STATS_TOUR_STEPS.length - 1;
 
     if (isNextOnLastStep) {
-      overlay.open(({isOpen, unmount}) => <DemoChoiceDialog isOpen={isOpen} onClose={unmount} />);
+      openChoiceDialog();
     }
   };
 
