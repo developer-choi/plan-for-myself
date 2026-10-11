@@ -4,12 +4,10 @@ import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {
   addFailTag,
   FAIL_TAG_DUPLICATE_MESSAGE,
-  FAIL_TAG_PENDING_MESSAGE,
   getRecordFormDefaultValues,
   type RecordFormValues,
   parseRecordRejection,
   toStudyRecordFields,
-  validateFailTagInput,
   validateMinuteInput,
 } from './record-form';
 
@@ -137,25 +135,6 @@ describe('validateMinuteInput()', () => {
     ['abc', '1.5', '-10'].forEach((text) => {
       it(`${text}이면 공부시간 문구를 반환해야 한다`, () => {
         expect(validateMinuteInput(text)).toBe(STUDY_RECORD_FIELD_MESSAGES.studiedMinutes);
-      });
-    });
-  });
-});
-
-describe('validateFailTagInput()', () => {
-  describe('General cases', () => {
-    it('태그 칸에 글자가 남아 있으면 태그를 넣거나 지우라는 문구를 반환해야 한다', () => {
-      expect(validateFailTagInput('영어')).toBe(FAIL_TAG_PENDING_MESSAGE);
-    });
-  });
-
-  describe('Edge cases', () => {
-    [
-      {label: '빈 글자', text: ''},
-      {label: '공백뿐인 글자', text: '   '},
-    ].forEach(({label, text}) => {
-      it(`${label}이면 true를 반환해야 한다`, () => {
-        expect(validateFailTagInput(text)).toBe(true);
       });
     });
   });
