@@ -8,8 +8,7 @@ const PUBLIC_PATH = '/privacy';
 const DEFAULT_HOME_PATH = '/study-records';
 const ENTRY_PATH = '/';
 const INTRO_PATH = '/intro';
-const DEMO_PATHNAME = '/demo';
-const DEMO_PATH = `${DEMO_PATHNAME}/study-records/2026/9`;
+const DEMO_PATH = '/demo/study-records/2026/9';
 
 describe('getNextNavigating()', () => {
   describe('General cases', () => {
@@ -157,16 +156,16 @@ describe('getNextNavigating()', () => {
             expected: {type: 'correct', nextUrl: DEMO_PATH},
           },
           {
-            name: '로그인 없이 이용 중이면 루트 주소(/)로 보내야 한다',
+            name: '로그인 없이 이용 중이어도 사용법을 볼 수 있게 열어 줘야 한다',
             pathWithSearch: DEMO_PATH,
             loginState: 'guest',
-            expected: {type: 'already-authenticated', nextUrl: ENTRY_PATH},
+            expected: {type: 'correct', nextUrl: DEMO_PATH},
           },
           {
-            name: '구글로 로그인했으면 루트 주소(/)로 보내야 한다',
+            name: '구글로 로그인했어도 사용법을 볼 수 있게 열어 줘야 한다',
             pathWithSearch: DEMO_PATH,
             loginState: 'google',
-            expected: {type: 'already-authenticated', nextUrl: ENTRY_PATH},
+            expected: {type: 'correct', nextUrl: DEMO_PATH},
           },
         ],
       },
@@ -239,17 +238,6 @@ describe('getNextNavigating()', () => {
             name: '구글로 로그인했어도 열어 줘야 한다',
             pathWithSearch: `${LOGIN_PATH}-help`,
             loginState: 'google',
-            expectedType: 'correct',
-          },
-        ],
-      },
-      {
-        path: '예시 경로와 이름만 이어지는 다른 경로',
-        cases: [
-          {
-            name: '로그인 없이 이용 중이어도 열어 줘야 한다',
-            pathWithSearch: `${DEMO_PATHNAME}-old`,
-            loginState: 'guest',
             expectedType: 'correct',
           },
         ],

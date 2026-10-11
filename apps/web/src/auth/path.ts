@@ -39,9 +39,7 @@ export function getNextNavigating({pathWithSearch, loginState}: NextNavigatingPa
   const nextPathname = nextUrlObject.pathname;
   const isPrivate = PRIVATE_PATHNAMES.some((pathname) => isUnderPathname(nextPathname, pathname));
   const isNotPrivate = NOT_PRIVATE_PATHNAME.some((pathname) => isUnderPathname(nextPathname, pathname));
-  const isLoggedOutOnly = LOGGED_OUT_ONLY_PATHNAMES.some((pathname) => isUnderPathname(nextPathname, pathname));
   const isGoogleOnLoginPage = isNotPrivate && loginState === 'google';
-  const isLoggedInOnLoggedOutOnlyPage = isLoggedOutOnly && loginState !== 'logged-out';
 
   if (nextPathname === ENTRY_URL) {
     return {
@@ -53,7 +51,7 @@ export function getNextNavigating({pathWithSearch, loginState}: NextNavigatingPa
       type: 'not-authenticated',
       nextUrl: toLoginUrl(pathWithSearch),
     };
-  } else if (isGoogleOnLoginPage || isLoggedInOnLoggedOutOnlyPage) {
+  } else if (isGoogleOnLoginPage) {
     return {
       type: 'already-authenticated',
       nextUrl: ENTRY_URL,
@@ -69,8 +67,6 @@ export function getNextNavigating({pathWithSearch, loginState}: NextNavigatingPa
 const PRIVATE_PATHNAMES = ['/study-records', '/study-record-stats', '/account'];
 
 const NOT_PRIVATE_PATHNAME = ['/login'];
-
-const LOGGED_OUT_ONLY_PATHNAMES = ['/demo'];
 
 /* startsWith만 쓰면 '/study-records-old'처럼 이름이 이어지는 다른 경로까지 걸린다 */
 function isUnderPathname(target: string, pathname: string) {
