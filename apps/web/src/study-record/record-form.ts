@@ -29,10 +29,6 @@ export function validateMinuteInput(text: string): true | string {
   return isValid || STUDY_RECORD_FIELD_MESSAGES.studiedMinutes;
 }
 
-export function validateFailTagInput(text: string): true | string {
-  return text.trim() === '' || FAIL_TAG_PENDING_MESSAGE;
-}
-
 export function getRecordFormDefaultValues(date: string, record?: StudyRecord): RecordFormValues {
   if (record) {
     const [morning, afternoon, evening] = record.studiedMinutes;
@@ -101,8 +97,6 @@ export const UNEXPECTED_FAILURE_MESSAGE = '저장하지 못했어요. 잠시 뒤
 export const UNEXPECTED_DELETE_FAILURE_MESSAGE = '지우지 못했어요. 잠시 뒤 다시 시도해 주세요';
 
 export const FAIL_TAG_DUPLICATE_MESSAGE = '이미 넣은 실패 태그예요';
-
-export const FAIL_TAG_PENDING_MESSAGE = 'Enter로 태그를 넣거나 글자를 지워 주세요';
 
 export const MINUTE_SLOTS: {slot: MinuteSlot; label: string}[] = [
   {slot: 'morning', label: '아침'},

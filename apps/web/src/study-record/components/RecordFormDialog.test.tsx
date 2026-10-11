@@ -5,7 +5,6 @@ import userEvent from '@testing-library/user-event';
 import {describe, expect, it, vi} from 'vitest';
 import {
   FAIL_TAG_DUPLICATE_MESSAGE,
-  FAIL_TAG_PENDING_MESSAGE,
   UNEXPECTED_DELETE_FAILURE_MESSAGE,
   UNEXPECTED_FAILURE_MESSAGE,
 } from '@/study-record/record-form';
@@ -285,19 +284,6 @@ describe('RecordFormDialog', () => {
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 
-  describe('공부시간 오류로 저장이 막힌 뒤', () => {
-    it('태그 칸에 새로 쳐도 태그 문구가 없다', async () => {
-      renderForm();
-      await userEvent.type(getMinuteInput('아침'), 'abc');
-      await clickSave();
-      await screen.findByRole('alert');
-
-      await userEvent.type(getTagInput(), '영어');
-
-      expect(screen.getByRole('alert')).not.toHaveTextContent(FAIL_TAG_PENDING_MESSAGE);
-    });
-  });
-
   describe('저장이 거절된 뒤', () => {
     it('태그 칸에 새로 쳐도 태그 문구가 없다', async () => {
       renderForm({onSave: vi.fn().mockRejectedValue(createRejection(DUPLICATE_DATE_REJECTION))});
@@ -311,103 +297,142 @@ describe('RecordFormDialog', () => {
   });
 
   describe('Enter로 넣지 않은 태그 글자가 남은 채 저장하면', () => {
-    async function saveWithPendingTag(onSave = vi.fn().mockResolvedValue(undefined)) {
-      renderForm({onSave});
-      await userEvent.type(getTagInput(), '영어');
+    interface SaveWithPendingTagParams {
+      failTags?: string[];
+      pendingTag?: string;
+      onSave?: (fields: unknown) => Promise<unknown>;
+    }
+
+    async function saveWithPendingTag({
+      failTags = [],
+      pendingTag = '영어',
+      onSave = vi.fn().mockResolvedValue(undefined),
+    }: SaveWithPendingTagParams = {}) {
+      renderForm({record: createRecord({failTags}), onSave});
+      await userEvent.type(getTagInput(), pendingTag);
       await clickSave();
     }
 
-    it('저장되지 않는다', async () => {
+    [
+      {label: '태그 없이', failTags: [], pendingTag: '영어', expected: ['영어']},
+      {label: '태그 1개가 있을 때', failTags: ['영어'], pendingTag: '수학', expected: ['영어', '수학']},
+      {label: '앞뒤에 공백이 있어도', failTags: [], pendingTag: ' 영어 ', expected: ['영어']},
+    ].forEach(({label, failTags, pendingTag, expected}) => {
+      it(`${label} 남은 글자도 태그로 함께 저장된다`, async () => {
+        const onSave = vi.fn().mockResolvedValue(undefined);
+
+        await saveWithPendingTag({failTags, pendingTag, onSave});
+
+        await waitFor(() => expect(onSave).toHaveBeenCalledWith(expect.objectContaining({failTags: expected})));
+      });
+    });
+
+    it('이미 있는 태그와 같은 글자면 막지 않고 기존 태그 그대로 저장된다', async () => {
+      const failTags = ['Food'];
       const onSave = vi.fn().mockResolvedValue(undefined);
 
-      await saveWithPendingTag(onSave);
+      await saveWithPendingTag({failTags, pendingTag: 'Food', onSave});
 
-      expect(onSave).not.toHaveBeenCalled();
+      await waitFor(() => expect(onSave).toHaveBeenCalledWith(expect.objectContaining({failTags})));
     });
 
-    it('태그를 넣거나 글자를 지우라는 문구가 보인다', async () => {
-      await saveWithPendingTag();
+    describe('공백이 든 글자면', () => {
+      const pendingTag = '영어 단어';
 
-      expect(await screen.findByRole('alert')).toHaveTextContent(FAIL_TAG_PENDING_MESSAGE);
-    });
+      it('저장되지 않는다', async () => {
+        const onSave = vi.fn().mockResolvedValue(undefined);
 
-    it('태그 칸에 포커스가 간다', async () => {
-      await saveWithPendingTag();
+        await saveWithPendingTag({pendingTag, onSave});
 
-      await waitFor(() => expect(getTagInput()).toHaveFocus());
+        expect(onSave).not.toHaveBeenCalled();
+      });
+
+      it('Enter로 넣을 때와 같은 문구가 보인다', async () => {
+        await saveWithPendingTag({pendingTag});
+
+        expect(await screen.findByRole('alert')).toHaveTextContent(STUDY_RECORD_FIELD_MESSAGES.failTagSpace);
+      });
+
+      it('태그 칸에 포커스가 간다', async () => {
+        await saveWithPendingTag({pendingTag});
+
+        await waitFor(() => expect(getTagInput()).toHaveFocus());
+      });
     });
 
     describe('문구가 보일 때', () => {
       it('그 칸 글자를 고치면 문구가 사라진다', async () => {
-        await saveWithPendingTag();
+        await saveWithPendingTag({pendingTag: '영어 단어'});
         await screen.findByRole('alert');
 
-        await userEvent.type(getTagInput(), '단어');
+        await userEvent.type(getTagInput(), '{Backspace}');
 
         expect(screen.queryByRole('alert')).not.toBeInTheDocument();
       });
 
       it('칩을 지우면 문구가 사라진다', async () => {
         const tag = '수학';
-        renderForm({record: createRecord({failTags: [tag]})});
-        await userEvent.type(getTagInput(), '영어');
-        await clickSave();
+        await saveWithPendingTag({failTags: [tag], pendingTag: '영어 단어'});
         await screen.findByRole('alert');
 
         await userEvent.click(screen.getByRole('button', {name: `${tag} 지우기`}));
 
         expect(screen.queryByRole('alert')).not.toBeInTheDocument();
       });
-
-      it('그 글자를 Enter로 넣으면 문구가 사라진다', async () => {
-        await saveWithPendingTag();
-        await screen.findByRole('alert');
-
-        await userEvent.type(getTagInput(), '{Enter}');
-
-        expect(screen.queryByRole('alert')).not.toBeInTheDocument();
-      });
     });
   });
 
-  it('태그 칸에 공백만 남은 채 저장하면 저장된다', async () => {
+  it('태그 칸에 공백만 남은 채 저장하면 기존 태그로 저장된다', async () => {
+    const failTags = ['영어'];
     const onSave = vi.fn().mockResolvedValue(undefined);
-    renderForm({onSave});
+    renderForm({record: createRecord({failTags}), onSave});
     await userEvent.type(getTagInput(), '   ');
 
     await clickSave();
 
-    await waitFor(() => expect(onSave).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(onSave).toHaveBeenCalledWith(expect.objectContaining({failTags})));
   });
 
   describe('공부시간이 틀리고 태그 글자도 남은 채 저장하면', () => {
-    async function saveWithBothErrors() {
+    async function saveWithMinuteError(pendingTag: string) {
       renderForm();
       await userEvent.type(getMinuteInput('아침'), 'abc');
-      await userEvent.type(getTagInput(), '영어');
+      await userEvent.type(getTagInput(), pendingTag);
       await clickSave();
     }
 
-    it('공부시간 문구가 보인다', async () => {
-      await saveWithBothErrors();
+    describe('넣을 수 있는 글자면', () => {
+      it('공부시간 문구만 보인다', async () => {
+        await saveWithMinuteError('영어');
 
-      expect(await screen.findAllByRole('alert')).toContainEqual(
-        expect.objectContaining({textContent: STUDY_RECORD_FIELD_MESSAGES.studiedMinutes}),
-      );
+        expect(await screen.findByRole('alert')).toHaveTextContent(STUDY_RECORD_FIELD_MESSAGES.studiedMinutes);
+      });
     });
 
-    it('위에 있는 태그 칸에 포커스가 간다', async () => {
-      await saveWithBothErrors();
+    describe('넣을 수 없는 글자면', () => {
+      const pendingTag = '영어 단어';
 
-      await waitFor(() => expect(getTagInput()).toHaveFocus());
-    });
+      it('공부시간 문구가 보인다', async () => {
+        await saveWithMinuteError(pendingTag);
 
-    it('태그 문구가 보인다', async () => {
-      await saveWithBothErrors();
+        expect(await screen.findAllByRole('alert')).toContainEqual(
+          expect.objectContaining({textContent: STUDY_RECORD_FIELD_MESSAGES.studiedMinutes}),
+        );
+      });
 
-      expect(await screen.findAllByRole('alert')).toContainEqual(
-        expect.objectContaining({textContent: FAIL_TAG_PENDING_MESSAGE}),
-      );
+      it('태그 문구가 보인다', async () => {
+        await saveWithMinuteError(pendingTag);
+
+        expect(await screen.findAllByRole('alert')).toContainEqual(
+          expect.objectContaining({textContent: STUDY_RECORD_FIELD_MESSAGES.failTagSpace}),
+        );
+      });
+
+      it('위에 있는 태그 칸에 포커스가 간다', async () => {
+        await saveWithMinuteError(pendingTag);
+
+        await waitFor(() => expect(getTagInput()).toHaveFocus());
+      });
     });
   });
 

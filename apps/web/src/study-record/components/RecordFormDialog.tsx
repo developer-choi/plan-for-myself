@@ -12,13 +12,14 @@ import type {StudyRecordFieldsRequest} from '@/study-record/api';
 import {formatDateTitle} from '@/study-record/calendar-date';
 import RecordFormFields from '@/study-record/components/RecordFormFields';
 import {
+  type AddFailTagResult,
+  addFailTag,
   getRecordFormDefaultValues,
   type RecordFormValues,
   parseRecordRejection,
   toStudyRecordFields,
   UNEXPECTED_DELETE_FAILURE_MESSAGE,
   UNEXPECTED_FAILURE_MESSAGE,
-  validateFailTagInput,
 } from '@/study-record/record-form';
 import styles from './RecordForm.module.scss';
 
@@ -125,24 +126,24 @@ function useRecordForm({date, record, onSave, onDelete, onClose, loading}: UseRe
         return;
       }
 
-      const failTagInputResult = validateFailTagInput(values.failTagInput);
-      if (failTagInputResult !== true) {
-        methods.setError('failTagInput', {message: failTagInputResult}, {shouldFocus: true});
+      const failTagResult = addPendingFailTag(values.failTags, values.failTagInput);
+      if (!failTagResult.ok) {
+        methods.setError('failTagInput', {message: failTagResult.message}, {shouldFocus: true});
         return;
       }
 
       setRejectionMessage(undefined);
       try {
-        await onSave(toStudyRecordFields(values));
+        await onSave(toStudyRecordFields({...values, failTags: failTagResult.failTags}));
         onClose();
       } catch (error) {
         showRejection(error, UNEXPECTED_FAILURE_MESSAGE);
       }
     },
     () => {
-      const failTagInputResult = validateFailTagInput(methods.getValues('failTagInput'));
-      if (failTagInputResult !== true) {
-        methods.setError('failTagInput', {message: failTagInputResult});
+      const failTagResult = addPendingFailTag(methods.getValues('failTags'), methods.getValues('failTagInput'));
+      if (!failTagResult.ok) {
+        methods.setError('failTagInput', {message: failTagResult.message});
       }
     },
   );
@@ -167,4 +168,12 @@ function useRecordForm({date, record, onSave, onDelete, onClose, loading}: UseRe
       rejectionMessage,
     },
   };
+}
+
+function addPendingFailTag(failTags: string[], input: string): AddFailTagResult {
+  if (failTags.includes(input.trim())) {
+    return {ok: true, failTags};
+  }
+
+  return addFailTag(failTags, input);
 }
