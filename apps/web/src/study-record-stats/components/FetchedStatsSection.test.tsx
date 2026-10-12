@@ -12,12 +12,12 @@ interface RenderSectionOptions {
   inProgress: boolean;
 }
 
-const CURRENT_MONTH_ONLY_LABELS = ['누적 기록', '연속 기록'];
+const CURRENT_MONTH_ONLY_LABELS = ['누적 기록', '누적 총 공부', '연속 기록'];
 
 describe('FetchedStatsSection', () => {
   describe('General cases', () => {
     CURRENT_MONTH_ONLY_LABELS.forEach((label) => {
-      it(`이번 달이면 ${label}이 보인다`, () => {
+      it(`이번 달이면 ${label} 줄이 보인다`, () => {
         renderSection(CURRENT_MONTH, {withOverview: true, inProgress: true});
 
         expect(queryAllTermTexts()).toContain(label);
@@ -33,7 +33,7 @@ describe('FetchedStatsSection', () => {
     });
 
     CURRENT_MONTH_ONLY_LABELS.forEach((label) => {
-      it(`지난 달이면 ${label}이 보이지 않는다`, () => {
+      it(`지난 달이면 ${label} 줄이 보이지 않는다`, () => {
         renderSection(PREVIOUS_MONTH, {withOverview: false, inProgress: false});
 
         expect(queryAllTermTexts()).not.toContain(label);
@@ -50,7 +50,7 @@ const OVERVIEW: StudyRecordOverview = {
   date: TODAY,
   firstRecordDate: '2025-01-01',
   streak: {current: 14, longest: 49},
-  totals: {recordedDays: 412, studiedMinutes: 31380, improvedFailures: 7},
+  totals: {recordedDays: 412, studiedMinutes: 31380},
 };
 
 function renderSection(month: CalendarMonth, {withOverview, inProgress}: RenderSectionOptions) {

@@ -207,7 +207,7 @@ interface StatsCase {
 
 const SEPTEMBER: StatsCase = {month: {year: 2026, month: 9}, overview: DEMO_OVERVIEW};
 const JUNE: StatsCase = {month: {year: 2026, month: 6}, overview: null};
-const THIRD_TEXT = '지난달보다 줄어든 실패가 여기 쌓여요';
+const THIRD_TEXT = '통계 화면이에요. 지난달과 비교해 어떤 실패가 반복되고, 새로 생기고, 줄고 있는지 보여요';
 const FOURTH_TEXT = '태그를 누르면 그 실패만 모아 볼 수 있어요';
 const FIFTH_TEXT = '이 실패를 한 날이 달력에 보여요. 아래에서 달마다 추이도 볼 수 있어요';
 const FIRST_TAG_OF_SEPTEMBER = '늦잠';

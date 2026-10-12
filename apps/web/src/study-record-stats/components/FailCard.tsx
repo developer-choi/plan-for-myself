@@ -24,8 +24,6 @@ interface GroupProps {
   icon: ReactNode;
   tone: 'fail' | 'success';
   tags: FailureTag[];
-  /* 제목 오른쪽 글이 없는 묶음(반복·새로 생김)이면 비운다 */
-  aside?: string;
   children: (tag: FailureTag) => ReactNode;
 }
 
@@ -56,7 +54,7 @@ export default function FailCard({monthly, selection}: FailCardProps) {
           <p className={classNames(typography.body3, styles.emptySub)}>실패를 적으면 지난달과 비교해 보여 줘요</p>
         </div>
       ) : (
-        <>
+        <div id={FAIL_GROUPS_ID}>
           <Group icon={<Cross2Icon />} tags={repeatedTags} title="반복하고 있어요" tone="fail">
             {(tag) => (
               <TagRow id={getTagRowId(tag.tag)} name={tag.tag} selection={selection}>
@@ -73,7 +71,6 @@ export default function FailCard({monthly, selection}: FailCardProps) {
             )}
           </Group>
           <Group
-            aside={`개선된 실패 +${reducedTags.length}`}
             icon={<CheckIcon />}
             tags={reducedTags}
             title={inProgress ? '줄어들고 있어요' : '줄었어요'}
@@ -85,15 +82,16 @@ export default function FailCard({monthly, selection}: FailCardProps) {
               </TagRow>
             )}
           </Group>
-        </>
+        </div>
       )}
     </Card>
   );
 }
 
+export const FAIL_GROUPS_ID = 'fail-card-groups';
 export const FIRST_TAG_ROW_ID = 'fail-card-first-tag-row';
 
-function Group({title, icon, tone, tags, aside, children}: GroupProps) {
+function Group({title, icon, tone, tags, children}: GroupProps) {
   if (tags.length === 0) {
     return null;
   }
@@ -103,9 +101,6 @@ function Group({title, icon, tone, tags, aside, children}: GroupProps) {
       <div className={styles.groupHeader}>
         <span className={styles.groupIcon}>{icon}</span>
         <h3 className={classNames(typography.body3, typography.bold)}>{title}</h3>
-        {aside !== undefined && (
-          <span className={classNames(typography.body3, typography.bold, styles.groupAside)}>{aside}</span>
-        )}
       </div>
       <ol>
         {tags.map((tag) => (
