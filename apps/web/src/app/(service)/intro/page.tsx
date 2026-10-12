@@ -4,14 +4,16 @@ import classNames from 'classnames';
 import typography from '@developer-choi/design-system/styles/typography';
 import {auth} from '@/auth/next-auth';
 import {getLoginState} from '@/auth/path';
-import CalendarPreview from '@/intro/components/CalendarPreview';
 import FailurePreview from '@/intro/components/FailurePreview';
 import IntroFrame from '@/intro/components/IntroFrame';
 import LoggedInIntroActions from '@/intro/components/LoggedInIntroActions';
 import LoggedOutIntroActions from '@/intro/components/LoggedOutIntroActions';
 import RecordFormPreview from '@/intro/components/RecordFormPreview';
+import TagCalendarPreview from '@/intro/components/TagCalendarPreview';
 import TrendPreview from '@/intro/components/TrendPreview';
+import {INTRO_MONTHLY, INTRO_STREAK} from '@/intro/intro-examples';
 import Logo from '@/shared/components/Logo';
+import RecordCard from '@/study-record-stats/components/RecordCard';
 import styles from './page.module.scss';
 
 interface ActionsSectionProps {
@@ -20,7 +22,7 @@ interface ActionsSectionProps {
 
 interface FeatureSectionProps extends PropsWithChildren {
   title: ReactNode;
-  description: string;
+  description: ReactNode;
 }
 
 export default async function Page() {
@@ -31,8 +33,9 @@ export default async function Page() {
     <main className={styles.page}>
       <HeroSection actions={actions} />
       <RecordSection />
-      <CalendarSection />
-      <FailureSection />
+      <TagCalendarSection />
+      <TrendSection />
+      <StreakSection />
       <OutroSection actions={actions} />
       <IntroFooter />
     </main>
@@ -41,18 +44,22 @@ export default async function Page() {
 
 function HeroSection({actions}: ActionsSectionProps) {
   return (
-    <section className={styles.section}>
-      <div className={styles.brand}>
-        <Logo size="medium" />
-        <span className={classNames(typography.body2, styles.brandName)}>Plan for myself</span>
+    <section className={styles.band}>
+      <div className={classNames(styles.section, styles.hero)}>
+        <div className={styles.brand}>
+          <Logo size="medium" />
+          <span className={classNames(typography.body2, styles.brandName)}>Plan for myself</span>
+        </div>
+        <h1 className={classNames(typography.h2, typography.bold, styles.heading)}>
+          실패를 기록하고,
+          <br />
+          같은 실패를 줄여 나가요
+        </h1>
+        <IntroFrame>
+          <FailurePreview />
+        </IntroFrame>
+        {actions}
       </div>
-      <h1 className={classNames(typography.h2, typography.bold, styles.heading)}>
-        스스로 목표를 세우고 달성하는 것을 돕습니다
-      </h1>
-      <IntroFrame>
-        <TrendPreview />
-      </IntroFrame>
-      {actions}
     </section>
   );
 }
@@ -74,27 +81,27 @@ function RecordSection() {
   );
 }
 
-function CalendarSection() {
+function TagCalendarSection() {
   return (
     <FeatureSection
-      description="빨간 태그가 이어지면 실패가 이어지고 있다는 뜻이에요. 적지 않은 날은 빈칸으로 남고, 연속 기록이 끊겨요"
+      description="한 가지 실패를 적은 날만 달력에 표시해요"
       title={
         <>
-          실패가 이어지는지
+          실패가 어느 날에
           <br />
-          한눈에 보여요
+          몰리는지 보여 줘요
         </>
       }
     >
-      <CalendarPreview />
+      <TagCalendarPreview />
     </FeatureSection>
   );
 }
 
-function FailureSection() {
+function TrendSection() {
   return (
     <FeatureSection
-      description="지난달과 비교해 반복하는 실패, 새로 생긴 실패, 줄어든 실패를 나눠 보여 줘요. 줄어든 실패는 개선된 실패로 쌓여요"
+      description="한 가지 실패를 달마다 몇 번 적었는지 이어서 보여 줘요"
       title={
         <>
           같은 실패가
@@ -103,29 +110,49 @@ function FailureSection() {
         </>
       }
     >
-      <FailurePreview />
+      <TrendPreview />
+    </FeatureSection>
+  );
+}
+
+function StreakSection() {
+  return (
+    <FeatureSection
+      description={
+        <>
+          <span className={styles.phrase}>실패가 많아도 괜찮아요.</span>{' '}
+          <span className={styles.phrase}>기준을 높게 잡을수록 실패는 많이 적혀요</span>
+        </>
+      }
+      title="꾸준히 적는 게 먼저예요"
+    >
+      <RecordCard monthly={INTRO_MONTHLY} streak={INTRO_STREAK} />
     </FeatureSection>
   );
 }
 
 function FeatureSection({title, description, children}: FeatureSectionProps) {
   return (
-    <section className={styles.section}>
-      <h2 className={classNames(typography.h3, typography.bold, styles.heading)}>{title}</h2>
-      <p className={classNames(typography.body2, styles.description)}>{description}</p>
-      <IntroFrame>{children}</IntroFrame>
+    <section className={styles.band}>
+      <div className={styles.section}>
+        <div className={styles.featureHeader}>
+          <h2 className={classNames(typography.h3, typography.bold, styles.heading)}>{title}</h2>
+          <p className={classNames(typography.body2, styles.description)}>{description}</p>
+        </div>
+        <IntroFrame className={styles.frame}>{children}</IntroFrame>
+      </div>
     </section>
   );
 }
 
 function OutroSection({actions}: ActionsSectionProps) {
   return (
-    <section className={styles.outro}>
+    <section className={styles.band}>
       <div className={styles.section}>
         <h2 className={classNames(typography.h3, typography.bold, styles.heading)}>
-          스스로 세운 목표,
+          같은 실패,
           <br />
-          오늘부터 시작해요
+          오늘부터 줄여 나가요
         </h2>
         {actions}
       </div>
