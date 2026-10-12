@@ -27,10 +27,15 @@ export default function TrendBars({bars, inProgress = false}: TrendBarsProps) {
           >
             <span className={classNames(typography.body3, styles.value)}>{bar.value || ''}</span>
             <span className={styles.bar} style={{'--trend-bar-ratio': bar.value / max}} />
-            <span className={classNames(typography.body3, styles.label)}>{bar.label}</span>
+            <span className={classNames(typography.body3, styles.label)}>
+              {bar.label}
+              {isInProgressBar && <span className={styles.inProgress}>{IN_PROGRESS_LABEL}</span>}
+            </span>
           </li>
         );
       })}
     </ol>
   );
 }
+
+const IN_PROGRESS_LABEL = '진행 중';
