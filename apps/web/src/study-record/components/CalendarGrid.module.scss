@@ -1,3 +1,5 @@
+@use '../../shared/styles/breakpoints';
+
 .calendar {
   display: flex;
   flex: 1;
@@ -76,4 +78,25 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+@include breakpoints.mobile {
+  .weekdays,
+  .grid {
+    column-gap: calc(var(--spacing-xs) / 2);
+  }
+
+  .day {
+    padding-inline: calc(var(--spacing-xs) / 2);
+  }
+
+  /* Badge size 규칙(.badge.styled.small, 클래스 셋)이 클래스 하나보다 우선순위가 높아 !important로 덮는다 */
+  .chip {
+    padding-inline: calc(var(--spacing-xs) / 2) !important;
+    font-size: var(--font-size-2xs) !important;
+  }
+
+  .day .chipText {
+    text-overflow: clip;
+  }
 }

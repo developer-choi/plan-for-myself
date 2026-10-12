@@ -68,6 +68,10 @@ export function addFailTag(failTags: string[], input: string): AddFailTagResult 
     return {ok: false, message: STUDY_RECORD_FIELD_MESSAGES.failTagSpace};
   }
 
+  if ([...tag].length > STUDY_RECORD_FIELD_LIMITS.failTags.maxLength) {
+    return {ok: false, message: STUDY_RECORD_FIELD_MESSAGES.failTagLength};
+  }
+
   if (failTags.includes(tag)) {
     return {ok: false, message: FAIL_TAG_DUPLICATE_MESSAGE};
   }

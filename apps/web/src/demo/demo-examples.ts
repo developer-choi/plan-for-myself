@@ -17,32 +17,32 @@ export type DemoOverview = StudyRecordOverview & {firstRecordDate: string};
 type DemoRecordRow = [date: string, studiedMinutes: StudyRecord['studiedMinutes'], ...failTags: string[]];
 
 const OVERSLEEP = '늦잠';
-const ENGLISH_WORDS = '영어 단어';
-const ALGORITHM = '알고리즘';
-const SMARTPHONE = '스마트폰';
+const GAME = '게임';
+const NAP = '낮잠';
+const LATE_SNACK = '야식';
 
 const DEMO_RECORD_ROWS: DemoRecordRow[] = [
-  ['2026-07-01', [60, 60, 30], ENGLISH_WORDS, OVERSLEEP],
-  ['2026-07-03', [0, 90, 60], ENGLISH_WORDS],
-  ['2026-07-06', [30, 60, 90], ENGLISH_WORDS, SMARTPHONE],
+  ['2026-07-01', [60, 60, 30], GAME, OVERSLEEP],
+  ['2026-07-03', [0, 90, 60], GAME],
+  ['2026-07-06', [30, 60, 90], GAME, LATE_SNACK],
   ['2026-07-08', [60, 0, 60], OVERSLEEP],
-  ['2026-07-11', [0, 120, 60], ENGLISH_WORDS],
-  ['2026-07-15', [30, 90, 30], OVERSLEEP, SMARTPHONE],
+  ['2026-07-11', [0, 120, 60], GAME],
+  ['2026-07-15', [30, 90, 30], OVERSLEEP, LATE_SNACK],
   ['2026-07-20', [60, 60, 0]],
   ['2026-07-25', [0, 120, 90]],
-  ['2026-08-02', [60, 90, 30], OVERSLEEP, ENGLISH_WORDS],
+  ['2026-08-02', [60, 90, 30], OVERSLEEP, GAME],
   ['2026-08-04', [0, 60, 60], OVERSLEEP],
-  ['2026-08-07', [30, 90, 60], OVERSLEEP, SMARTPHONE],
-  ['2026-08-10', [60, 60, 30], ENGLISH_WORDS],
-  ['2026-08-13', [0, 120, 60], OVERSLEEP, ENGLISH_WORDS],
-  ['2026-08-18', [30, 60, 90], OVERSLEEP, SMARTPHONE],
+  ['2026-08-07', [30, 90, 60], OVERSLEEP, LATE_SNACK],
+  ['2026-08-10', [60, 60, 30], GAME],
+  ['2026-08-13', [0, 120, 60], OVERSLEEP, GAME],
+  ['2026-08-18', [30, 60, 90], OVERSLEEP, LATE_SNACK],
   ['2026-08-22', [60, 90, 0]],
   ['2026-08-27', [0, 90, 120]],
   ['2026-09-01', [60, 90, 30], OVERSLEEP],
-  ['2026-09-03', [30, 60, 60], OVERSLEEP, ALGORITHM],
-  ['2026-09-07', [0, 120, 60], ALGORITHM],
+  ['2026-09-03', [30, 60, 60], OVERSLEEP, NAP],
+  ['2026-09-07', [0, 120, 60], NAP],
   ['2026-09-10', [60, 60, 90], OVERSLEEP],
-  ['2026-09-14', [30, 90, 30], ENGLISH_WORDS, OVERSLEEP],
+  ['2026-09-14', [30, 90, 30], GAME, OVERSLEEP],
   ['2026-09-17', [0, 90, 60]],
   ['2026-09-18', [30, 60, 90]],
   ['2026-09-19', [60, 120, 30]],
