@@ -37,5 +37,5 @@ describe('CumulativeStrip', () => {
 });
 
 function createTotals(overrides: Partial<StudyRecordOverview['totals']> = {}): StudyRecordOverview['totals'] {
-  return {recordedDays: 10, studiedMinutes: 600, improvedFailures: 0, ...overrides};
+  return {recordedDays: 10, studiedMinutes: 600, ...overrides};
 }

@@ -50,7 +50,7 @@ const OVERVIEW: StudyRecordOverview = {
   date: TODAY,
   firstRecordDate: '2025-01-01',
   streak: {current: 14, longest: 49},
-  totals: {recordedDays: 412, studiedMinutes: 31380, improvedFailures: 7},
+  totals: {recordedDays: 412, studiedMinutes: 31380},
 };
 
 function renderSection(month: CalendarMonth, {withOverview, inProgress}: RenderSectionOptions) {

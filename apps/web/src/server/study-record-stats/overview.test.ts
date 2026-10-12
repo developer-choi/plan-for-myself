@@ -79,59 +79,6 @@ describe('calculateOverview()', () => {
     });
   });
 
-  describe('개선된 실패', () => {
-    describe('General cases', () => {
-      it('끝난 달에 전달보다 줄어든 태그마다 1을 더해야 한다', () => {
-        const records = [
-          createTestRecord('2026-06-01', {failTags: ['늦잠', '폰']}),
-          createTestRecord('2026-06-02', {failTags: ['늦잠', '폰']}),
-          createTestRecord('2026-06-03', {failTags: ['늦잠']}),
-          createTestRecord('2026-07-01', {failTags: ['늦잠', '폰']}),
-        ];
-
-        expect(calculateOverview(records, '2026-08-10').totals.improvedFailures).toBe(2);
-      });
-
-      it('전달에 있던 태그가 0번이 되어도 줄어든 것으로 세야 한다', () => {
-        const records = [
-          createTestRecord('2026-06-01', {failTags: ['늦잠']}),
-          createTestRecord('2026-07-01', {failTags: ['폰']}),
-        ];
-
-        expect(calculateOverview(records, '2026-08-10').totals.improvedFailures).toBe(1);
-      });
-
-      it('나중에 다시 늘어도 이미 센 개선은 빼지 않아야 한다', () => {
-        const records = [
-          createTestRecord('2026-06-01', {failTags: ['늦잠']}),
-          createTestRecord('2026-06-02', {failTags: ['늦잠']}),
-          createTestRecord('2026-07-01', {failTags: ['늦잠']}),
-          createTestRecord('2026-08-01', {failTags: ['늦잠']}),
-          createTestRecord('2026-08-02', {failTags: ['늦잠']}),
-          createTestRecord('2026-08-03', {failTags: ['늦잠']}),
-        ];
-
-        expect(calculateOverview(records, TODAY).totals.improvedFailures).toBe(1);
-      });
-    });
-
-    describe('Boundary cases', () => {
-      it('진행 중인 이번 달은 줄었어도 세지 않아야 한다', () => {
-        const records = [createTestRecord('2026-08-01', {failTags: ['늦잠']}), createTestRecord('2026-09-01')];
-
-        expect(calculateOverview(records, TODAY).totals.improvedFailures).toBe(0);
-      });
-    });
-
-    describe('Edge cases', () => {
-      it('기록이 하나도 없이 끝난 달은 전달 태그가 모두 줄어든 것으로 세야 한다', () => {
-        const records = [createTestRecord('2026-06-01', {failTags: ['늦잠', '폰']})];
-
-        expect(calculateOverview(records, '2026-08-10').totals.improvedFailures).toBe(2);
-      });
-    });
-  });
-
   describe('Edge cases', () => {
     it('넘긴 날짜보다 뒤의 기록은 최장 연속 기록과 누적에 넣지 않아야 한다', () => {
       const records = [
@@ -157,7 +104,7 @@ describe('calculateOverview()', () => {
         date: TODAY,
         firstRecordDate: null,
         streak: {current: 0, longest: 0},
-        totals: {recordedDays: 0, studiedMinutes: 0, improvedFailures: 0},
+        totals: {recordedDays: 0, studiedMinutes: 0},
       });
     });
   });

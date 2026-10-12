@@ -4,8 +4,7 @@ import {ACTIONS, type EventData, EVENTS, Joyride, type Step, type TooltipRenderP
 import TourBubble from '@/demo/components/TourBubble';
 import {DEMO_TOUR_FLOATING_OPTIONS, DEMO_TOUR_LOCALE, DEMO_TOUR_OPTIONS, DEMO_TOUR_STYLES} from '@/demo/demo-tour';
 import {useOpenDemoChoiceDialog} from '@/demo/useOpenDemoChoiceDialog';
-import {IMPROVED_FAILURES_CELL_ID} from '@/study-record-stats/components/CumulativeStrip';
-import {FIRST_TAG_ROW_ID} from '@/study-record-stats/components/FailCard';
+import {FAIL_GROUPS_ID, FIRST_TAG_ROW_ID} from '@/study-record-stats/components/FailCard';
 import {TAG_CALENDAR_SECTION_ID} from '@/study-record-stats/components/TagDetailCard';
 
 export default function DemoStatsTour() {
@@ -36,7 +35,10 @@ export default function DemoStatsTour() {
 }
 
 const STATS_TOUR_STEPS: Step[] = [
-  {target: `#${IMPROVED_FAILURES_CELL_ID}`, content: '지난달보다 줄어든 실패가 여기 쌓여요'},
+  {
+    target: `#${FAIL_GROUPS_ID}`,
+    content: '통계 화면이에요. 지난달과 비교해 어떤 실패가 반복되고, 새로 생기고, 줄고 있는지 보여요',
+  },
   {target: `#${FIRST_TAG_ROW_ID}`, content: '태그를 누르면 그 실패만 모아 볼 수 있어요'},
   {
     target: `#${TAG_CALENDAR_SECTION_ID}`,

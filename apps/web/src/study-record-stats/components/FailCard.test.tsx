@@ -72,15 +72,6 @@ describe('FailCard', () => {
 
       expect(screen.getByRole('button')).toHaveTextContent(`${FIRST_IN_FINISHED_MONTH} · ${PHONE_GAME.count}번`);
     });
-
-    it('줄어든 묶음 제목 오른쪽에 그 묶음 태그 수만큼 개선된 실패가 보인다', () => {
-      const appearedTags = [PHONE_GAME, {...PHONE_GAME, tag: '유튜브'}];
-      const reducedTags = [SNACK, {...SNACK, tag: '군것질'}, {...SNACK, tag: '지각'}, {...SNACK, tag: '과식'}];
-      render(<FailCard monthly={createMonthly({failureTags: [OVERSLEEP, ...appearedTags, ...reducedTags]})} />);
-
-      const reducedGroup = getGroupByTitle(REDUCED_TITLE_IN_PROGRESS);
-      expect(reducedGroup).toHaveTextContent(`개선된 실패 +${reducedTags.length}`);
-    });
   });
 
   describe('Edge cases', () => {

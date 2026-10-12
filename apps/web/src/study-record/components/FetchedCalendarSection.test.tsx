@@ -56,7 +56,7 @@ const OVERVIEW: StudyRecordOverview = {
   date: TODAY,
   firstRecordDate: '2026-09-01',
   streak: {current: 3, longest: 5},
-  totals: {recordedDays: 10, studiedMinutes: 600, improvedFailures: 1},
+  totals: {recordedDays: 10, studiedMinutes: 600},
 };
 
 function renderSection(overview: StudyRecordOverview) {
