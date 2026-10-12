@@ -2,15 +2,33 @@
   padding: 0 var(--spacing-page-x-mobile) var(--spacing-2xl);
 }
 
+.article,
+.article * {
+  word-break: keep-all;
+}
+
 .section + .section {
-  margin-top: var(--spacing-md);
+  margin-top: var(--spacing-lg);
 }
 
 .content {
-  margin-top: var(--spacing-xs);
-  color: var(--color-fg-secondary);
+  margin-top: var(--spacing-sm);
+  color: var(--color-fg-default);
 
   a {
     text-decoration: underline;
+  }
+}
+
+.basis {
+  margin-top: var(--spacing-sm);
+  color: var(--color-fg-secondary);
+
+  dt {
+    font-weight: bold;
+  }
+
+  dd + dd {
+    margin-top: var(--spacing-xs);
   }
 }

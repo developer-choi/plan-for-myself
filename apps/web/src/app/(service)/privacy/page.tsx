@@ -10,11 +10,16 @@ import styles from './page.module.scss';
 interface PolicyItem {
   title: string;
   content: ReactNode;
+  basis?: string[];
 }
 
 interface PolicySectionProps {
   title: string;
   children: ReactNode;
+}
+
+interface PolicyBasisProps {
+  items: string[];
 }
 
 interface EmailLinkProps {
@@ -32,10 +37,11 @@ export default function Page() {
         <SubPageHeader title="개인정보 처리방침" />
         <main className={styles.body}>
           <Card>
-            <article className={typography.body2}>
-              {POLICY_ITEMS.map(({title, content}) => (
+            <article className={classNames(typography.body1, styles.article)}>
+              {POLICY_ITEMS.map(({title, content, basis}) => (
                 <PolicySection key={title} title={title}>
                   <p className={styles.content}>{content}</p>
+                  {basis && <PolicyBasis items={basis} />}
                 </PolicySection>
               ))}
               <PolicySection title="개인정보 보호책임자">
@@ -61,7 +67,11 @@ const POLICY_ITEMS: PolicyItem[] = [
   {
     title: '쓰는 곳',
     content:
-      '기록을 저장하고 통계를 보여주는 데 써요. 접속 IP는 웹 서버(Vercel)가 요청을 처리하고 공격을 막는 데, 그리고 한 곳에서 게스트를 한꺼번에 많이 만드는 것을 막는 데 써요. 오류 정보는 서비스에서 난 오류를 찾아 고치는 데 써요. 위 정보는 서비스를 제공하는 데 필요해 동의 없이 처리해요(개인정보 보호법 제15조 제1항 제4호 계약 이행. 오류 정보와, 공격·게스트 남발을 막는 데 쓰는 접속 IP는 같은 항 제6호 정당한 이익)',
+      '기록을 저장하고 통계를 보여주는 데 써요. 접속 IP는 웹 서버(Vercel)가 요청을 처리하고 공격을 막는 데, 그리고 한 곳에서 게스트를 한꺼번에 많이 만드는 것을 막는 데 써요. 오류 정보는 서비스에서 난 오류를 찾아 고치는 데 써요. 위 정보는 서비스를 제공하는 데 필요해 동의 없이 처리해요',
+    basis: [
+      '서비스 제공: 개인정보 보호법 제15조 제1항 제4호(계약 이행)',
+      '오류 정보, 공격·게스트 남발을 막는 데 쓰는 접속 IP: 같은 항 제6호(정당한 이익)',
+    ],
   },
   {
     title: '보관 기간',
@@ -93,14 +103,16 @@ const POLICY_ITEMS: PolicyItem[] = [
         다만 접속 IP는 Neon(DB)에는 보내지 않고 Vercel에서만 처리해요. 오류 정보는 오류가 날 때마다 네트워크로
         미국(Sentry를 운영하는 Functional Software, Inc. · <EmailLink email="compliance@sentry.io" />, 오류 수집)에 보내
         보관해요. 이때 Sentry에 닿는 접속 IP는 국가·도시를 추정하는 데만 쓰고 저장하지 않아요. 쓰는 곳과 보관 기간은
-        위와 같아요. 개인정보 보호법 제28조의8 제1항 제3호 가목에 따라 이 방침에 알리고 옮겨요. 옮기는 것을 거부하려면
-        서비스를 쓰지 않거나 탈퇴하면 되고, 거부하면 서비스를 쓸 수 없어요
+        위와 같아요. 이 방침에 알리고 옮겨요. 옮기는 것을 거부하려면 서비스를 쓰지 않거나 탈퇴하면 되고, 거부하면
+        서비스를 쓸 수 없어요
       </>
     ),
+    basis: ['개인정보 보호법 제28조의8 제1항 제3호 가목'],
   },
   {
     title: '내 권리',
-    content: '계정 페이지에서 직접 탈퇴·지우기를 할 수 있어요. 열람·정정·처리정지는 아래 이메일로 요청해요',
+    content:
+      '계정 페이지에서 직접 탈퇴·지우기를 할 수 있어요. 열람·정정·처리정지는 맨 아래 개인정보 보호책임자 이메일로 요청해요',
   },
   {
     title: '쿠키',
@@ -117,9 +129,20 @@ const POLICY_ITEMS: PolicyItem[] = [
 function PolicySection({title, children}: PolicySectionProps) {
   return (
     <section className={styles.section}>
-      <h2 className={classNames(typography.body2, typography.bold)}>{title}</h2>
+      <h2 className={classNames(typography.h4, typography.bold)}>{title}</h2>
       {children}
     </section>
+  );
+}
+
+function PolicyBasis({items}: PolicyBasisProps) {
+  return (
+    <dl className={classNames(typography.body2, styles.basis)}>
+      <dt>근거</dt>
+      {items.map((item) => (
+        <dd key={item}>{item}</dd>
+      ))}
+    </dl>
   );
 }
 
