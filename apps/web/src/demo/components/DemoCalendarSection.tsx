@@ -17,7 +17,7 @@ interface DemoCalendarSectionProps {
 export default function DemoCalendarSection({month, today, records, overview}: DemoCalendarSectionProps) {
   const {firstRecordDate} = overview;
 
-  const openChoiceDialog = useOpenDemoChoiceDialog();
+  const openChoiceDialog = useOpenDemoChoiceDialog('date-click');
 
   return (
     <CalendarSection

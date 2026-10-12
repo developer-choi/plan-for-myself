@@ -1,16 +1,16 @@
-import {render, screen, waitFor} from '@testing-library/react';
+import {render, screen, waitFor, within} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type {Session} from 'next-auth';
 import {SessionProvider} from 'next-auth/react';
 import {OverlayProvider} from 'overlay-kit';
 import {describe, expect, it} from 'vitest';
-import {DEMO_MONTH, DEMO_OVERVIEW, DEMO_RECORDS, DEMO_TODAY} from '@/demo/demo-examples';
+import {getDemoMonth, getDemoOverview, getDemoRecords, getDemoToday} from '@/demo/demo-examples';
 import DemoCalendarSection from './DemoCalendarSection';
 
 describe('DemoCalendarSection', () => {
   describe('General cases', () => {
     describe('지난 날짜 칸을 누르면', () => {
-      it('기록이 있으면 체험 중 안내 창이 뜬다', async () => {
+      it('기록이 있으면 예시 안내 창이 뜬다', async () => {
         renderSection();
 
         await userEvent.click(screen.getByRole('button', {name: RECORDED_BUTTON_NAME}));
@@ -19,21 +19,30 @@ describe('DemoCalendarSection', () => {
         expect(screen.queryByRole('button', {name: '저장'})).not.toBeInTheDocument();
       });
 
-      it('기록이 없어도 체험 중 안내 창이 뜬다', async () => {
+      it('기록이 없어도 예시 안내 창이 뜬다', async () => {
         renderSection();
 
         await userEvent.click(screen.getByRole('button', {name: String(EMPTY_DAY)}));
 
         expect(await screen.findByRole('dialog', {name: CHOICE_MESSAGE})).toBeInTheDocument();
+        expect(screen.getByText('내 달력을 만들면 바로 적을 수 있어요.')).toBeInTheDocument();
+      });
+
+      it('안내 창의 제목에 포커스가 간다', async () => {
+        renderSection();
+
+        await userEvent.click(screen.getByRole('button', {name: String(EMPTY_DAY)}));
+
+        expect(await screen.findByRole('heading', {name: CHOICE_MESSAGE})).toHaveFocus();
       });
     });
 
-    describe('체험 중 안내 창이 떠 있을 때', () => {
-      it('[계속 체험하기]를 누르면 안내 창이 닫힌다', async () => {
+    describe('예시 안내 창이 떠 있을 때', () => {
+      it('[계속 둘러보기]를 누르면 안내 창이 닫힌다', async () => {
         renderSection();
         await userEvent.click(screen.getByRole('button', {name: String(EMPTY_DAY)}));
 
-        await userEvent.click(await screen.findByRole('button', {name: '계속 체험하기'}));
+        await userEvent.click(await screen.findByRole('button', {name: '계속 둘러보기'}));
 
         await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
       });
@@ -42,14 +51,15 @@ describe('DemoCalendarSection', () => {
         renderSection();
         await userEvent.click(screen.getByRole('button', {name: String(EMPTY_DAY)}));
 
-        await userEvent.click(await screen.findByRole('button', {name: '닫기'}));
+        const [closeButton] = within(await screen.findByRole('dialog')).getAllByRole('button');
+        await userEvent.click(closeButton);
 
         await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
       });
     });
 
     describe('로그아웃 상태에서 안내 창이 뜨면', () => {
-      it('[로그인해서 이용하기]가 있다', async () => {
+      it('[시작하기]가 있다', async () => {
         renderSection(null);
 
         await userEvent.click(screen.getByRole('button', {name: String(EMPTY_DAY)}));
@@ -66,7 +76,7 @@ describe('DemoCalendarSection', () => {
         expect(screen.queryByRole('link', {name: MY_CALENDAR_LABEL})).not.toBeInTheDocument();
       });
 
-      it('[로그인해서 이용하기]를 누르면 안내 창이 닫힌다', async () => {
+      it('[시작하기]를 누르면 안내 창이 닫힌다', async () => {
         renderSection(null);
         await userEvent.click(screen.getByRole('button', {name: String(EMPTY_DAY)}));
 
@@ -85,7 +95,7 @@ describe('DemoCalendarSection', () => {
         expect(await screen.findByRole('link', {name: MY_CALENDAR_LABEL})).toBeInTheDocument();
       });
 
-      it('[로그인해서 이용하기]는 없다', async () => {
+      it('[시작하기]는 없다', async () => {
         renderSection(LOGGED_IN_SESSION);
 
         await userEvent.click(screen.getByRole('button', {name: String(EMPTY_DAY)}));
@@ -106,20 +116,26 @@ describe('DemoCalendarSection', () => {
   });
 });
 
-const CHOICE_MESSAGE = '체험 중인 상태에서는 기록을 작성할 수 없어요';
-const RECORDED_DAY = 17;
-const RECORDED_TOTAL_TIME = '2:30';
+const NOW = new Date('2026-10-12T12:00:00+09:00');
+const CHOICE_MESSAGE = '예시 화면에서는 기록할 수 없어요';
+const RECORDED_DAY = 10;
+const RECORDED_TOTAL_TIME = '3:30';
 const RECORDED_BUTTON_NAME = new RegExp(`^${RECORDED_DAY}${RECORDED_TOTAL_TIME}`);
 const EMPTY_DAY = 2;
 const MY_CALENDAR_LABEL = '내 달력으로 이동';
-const LOGIN_LABEL = '로그인해서 이용하기';
+const LOGIN_LABEL = '시작하기';
 const LOGGED_IN_SESSION: Session = {userId: 'user-1', isGuest: false, expires: '2099-01-01T00:00:00.000Z'};
 
 function renderSection(session: Session | null = null) {
   render(
     <SessionProvider session={session}>
       <OverlayProvider>
-        <DemoCalendarSection month={DEMO_MONTH} overview={DEMO_OVERVIEW} records={DEMO_RECORDS} today={DEMO_TODAY} />
+        <DemoCalendarSection
+          month={getDemoMonth(NOW)}
+          overview={getDemoOverview(NOW)}
+          records={getDemoRecords(NOW)}
+          today={getDemoToday(NOW)}
+        />
       </OverlayProvider>
     </SessionProvider>,
   );

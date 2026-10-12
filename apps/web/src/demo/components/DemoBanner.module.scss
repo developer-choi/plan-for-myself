@@ -1,0 +1,12 @@
+.banner {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-primary-soft);
+}
+
+.text {
+  color: var(--color-primary);
+}

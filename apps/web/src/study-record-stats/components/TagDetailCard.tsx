@@ -21,17 +21,15 @@ export default function TagDetailCard({tag, calendar, trend, ref}: TagDetailCard
 
   return (
     <div ref={ref} className={styles.anchor}>
-      <Card title={tag}>
-        <section className={styles.section} id={TAG_CALENDAR_SECTION_ID}>
-          {calendar}
-        </section>
+      <Card id={TAG_DETAIL_CARD_ID} title={tag}>
+        <section className={styles.section}>{calendar}</section>
         {hasTrend && <TrendSection {...trend} />}
       </Card>
     </div>
   );
 }
 
-export const TAG_CALENDAR_SECTION_ID = 'tag-detail-calendar-section';
+export const TAG_DETAIL_CARD_ID = 'tag-detail-card';
 
 function TrendSection({bars, inProgress}: TrendSectionProps) {
   return (

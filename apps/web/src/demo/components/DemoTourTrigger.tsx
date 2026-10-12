@@ -4,13 +4,14 @@ import {useEffect, useState, useSyncExternalStore} from 'react';
 import dynamic from 'next/dynamic';
 import {captureException} from '@sentry/nextjs';
 import {ErrorBoundary} from 'react-error-boundary';
+import type {DemoCalendarTourProps} from '@/demo/components/DemoCalendarTour';
 import {type DemoTourPart, hasSeenDemoTour, markDemoTourSeen} from '@/demo/demo-tour-seen';
 
-interface DemoTourTriggerProps {
-  part: DemoTourPart;
-}
+type DemoTourTriggerProps =
+  ({part: Extract<DemoTourPart, 'calendar'>} & DemoCalendarTourProps) | {part: Extract<DemoTourPart, 'stats'>};
 
-export default function DemoTourTrigger({part}: DemoTourTriggerProps) {
+export default function DemoTourTrigger(props: DemoTourTriggerProps) {
+  const {part} = props;
   const [getVisible] = useState(() => createVisibleSnapshot(part));
   const visible = useSyncExternalStore(subscribeNothing, getVisible, getServerVisible);
 
@@ -26,7 +27,11 @@ export default function DemoTourTrigger({part}: DemoTourTriggerProps) {
 
   return (
     <ErrorBoundary fallback={null} onError={(error) => captureException(error)}>
-      {part === 'calendar' ? <DemoCalendarTour /> : <DemoStatsTour />}
+      {props.part === 'calendar' ? (
+        <DemoCalendarTour demoMonth={props.demoMonth} firstRecordDate={props.firstRecordDate} />
+      ) : (
+        <DemoStatsTour />
+      )}
     </ErrorBoundary>
   );
 }

@@ -5,10 +5,10 @@ import TourBubble from '@/demo/components/TourBubble';
 import {DEMO_TOUR_FLOATING_OPTIONS, DEMO_TOUR_LOCALE, DEMO_TOUR_OPTIONS, DEMO_TOUR_STYLES} from '@/demo/demo-tour';
 import {useOpenDemoChoiceDialog} from '@/demo/useOpenDemoChoiceDialog';
 import {FAIL_GROUPS_ID, FIRST_TAG_ROW_ID} from '@/study-record-stats/components/FailCard';
-import {TAG_CALENDAR_SECTION_ID} from '@/study-record-stats/components/TagDetailCard';
+import {TAG_DETAIL_CARD_ID} from '@/study-record-stats/components/TagDetailCard';
 
 export default function DemoStatsTour() {
-  const openChoiceDialog = useOpenDemoChoiceDialog();
+  const openChoiceDialog = useOpenDemoChoiceDialog('tour-end');
 
   const handleEvent = (data: EventData) => {
     const isNextOnLastStep =
@@ -39,15 +39,20 @@ const STATS_TOUR_STEPS: Step[] = [
     target: `#${FAIL_GROUPS_ID}`,
     content: '통계 화면이에요. 지난달과 비교해 어떤 실패가 반복되고, 새로 생기고, 줄고 있는지 보여요',
   },
-  {target: `#${FIRST_TAG_ROW_ID}`, content: '태그를 누르면 그 실패만 모아 볼 수 있어요'},
   {
-    target: `#${TAG_CALENDAR_SECTION_ID}`,
+    target: `#${FIRST_TAG_ROW_ID}`,
+    content: '태그를 누르면 그 실패만 모아 볼 수 있어요',
+    /* 묶음 제목이 태그 줄 바로 위 4px에 있어, 기본 여백(10px)이면 하이라이트가 제목을 반쯤 자른다 */
+    spotlightPadding: 4,
+  },
+  {
+    target: `#${TAG_DETAIL_CARD_ID}`,
     content: '이 실패를 한 날이 달력에 보여요. 아래에서 달마다 추이도 볼 수 있어요',
     before: async () => {
-      if (!document.getElementById(TAG_CALENDAR_SECTION_ID)) {
+      if (!document.getElementById(TAG_DETAIL_CARD_ID)) {
         document.getElementById(FIRST_TAG_ROW_ID)?.click();
       }
-      await waitForElement(TAG_CALENDAR_SECTION_ID);
+      await waitForElement(TAG_DETAIL_CARD_ID);
     },
     skipScroll: false,
     placement: 'top',
