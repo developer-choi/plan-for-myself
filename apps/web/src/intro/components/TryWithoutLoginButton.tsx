@@ -5,7 +5,7 @@ import {DEMO_HOME_URL} from '@/demo/demo-path';
 export default function TryWithoutLoginButton() {
   return (
     <Button asChild color="secondary" size="large" variant="outlined">
-      <Link href={DEMO_HOME_URL}>로그인 없이 체험하기</Link>
+      <Link href={DEMO_HOME_URL}>예시 둘러보기</Link>
     </Button>
   );
 }

@@ -7,7 +7,7 @@ export default function LoggedOutIntroActions() {
   return (
     <IntroActions>
       <Button asChild size="large">
-        <Link href="/login">구글 로그인으로 시작하기</Link>
+        <Link href="/login">시작하기</Link>
       </Button>
       <TryWithoutLoginButton />
     </IntroActions>

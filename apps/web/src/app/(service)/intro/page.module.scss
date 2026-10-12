@@ -1,19 +1,31 @@
 .page {
+  --intro-section-padding-y: 96px;
+
   color: var(--color-fg-default);
   background: var(--color-bg-default);
+}
+
+.band:nth-of-type(even) {
+  background: var(--color-bg-subtle);
+
+  .frame {
+    padding: 0;
+    background: none;
+  }
 }
 
 .section {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg);
   max-width: 440px;
-  padding: var(--spacing-3xl) var(--spacing-page-x-mobile);
+  padding: var(--intro-section-padding-y) var(--spacing-page-x-mobile);
   margin: 0 auto;
 }
 
-.outro {
-  background: var(--color-bg-subtle);
+.hero {
+  gap: var(--spacing-md);
+  padding-top: var(--spacing-xl);
 }
 
 .brand {
@@ -31,8 +43,18 @@
   word-break: keep-all;
 }
 
+.featureHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
 .description {
   color: var(--color-fg-secondary);
+}
+
+.phrase {
+  display: inline-block;
 }
 
 .footer {
