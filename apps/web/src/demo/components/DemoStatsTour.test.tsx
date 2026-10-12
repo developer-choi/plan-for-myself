@@ -35,12 +35,12 @@ describe('DemoStatsTour', () => {
         expect(screen.queryByText(THIRD_TEXT)).not.toBeInTheDocument();
       });
 
-      it('체험 선택지 창은 아직 뜨지 않는다', async () => {
+      it('투어 끝 창은 아직 뜨지 않는다', async () => {
         renderStatsWithTour(THIS_MONTH);
         await userEvent.click(await screen.findByRole('button', {name: NEXT}));
         await screen.findByText(FOURTH_TEXT);
 
-        expect(screen.queryByRole('dialog', {name: CHOICE_MESSAGE})).not.toBeInTheDocument();
+        expect(screen.queryByRole('dialog', {name: TOUR_END_TITLE})).not.toBeInTheDocument();
       });
     });
 
@@ -67,32 +67,32 @@ describe('DemoStatsTour', () => {
       });
     });
 
-    describe('5번 말풍선에서 [다음]을 누르면', () => {
+    describe('5번 말풍선에서 [마치기]를 누르면', () => {
       it('말풍선이 닫힌다', async () => {
         renderStatsWithTour(THIS_MONTH);
         await goToFifthBubble();
 
-        await userEvent.click(screen.getByRole('button', {name: NEXT}));
+        await userEvent.click(screen.getByRole('button', {name: FINISH}));
 
         await waitFor(() => expect(screen.queryByText(FIFTH_TEXT)).not.toBeInTheDocument());
       });
 
-      it('체험 선택지 창이 뜬다', async () => {
+      it('투어 끝 창이 뜬다', async () => {
         renderStatsWithTour(THIS_MONTH);
         await goToFifthBubble();
 
-        await userEvent.click(screen.getByRole('button', {name: NEXT}));
+        await userEvent.click(screen.getByRole('button', {name: FINISH}));
 
-        expect(await screen.findByRole('dialog', {name: CHOICE_MESSAGE})).toBeInTheDocument();
+        expect(await screen.findByRole('dialog', {name: TOUR_END_TITLE})).toBeInTheDocument();
       });
     });
 
-    describe('로그인 상태에서 5번 말풍선의 [다음]을 누르면', () => {
-      it('[내 달력으로 이동]이 있는 체험 선택지 창이 뜬다', async () => {
+    describe('로그인 상태에서 5번 말풍선의 [마치기]를 누르면', () => {
+      it('[내 달력으로 이동]이 있는 투어 끝 창이 뜬다', async () => {
         renderStatsWithTour(THIS_MONTH, LOGGED_IN_SESSION);
         await goToFifthBubble();
 
-        await userEvent.click(screen.getByRole('button', {name: NEXT}));
+        await userEvent.click(screen.getByRole('button', {name: FINISH}));
 
         expect(await screen.findByRole('link', {name: '내 달력으로 이동'})).toBeInTheDocument();
       });
@@ -107,7 +107,7 @@ describe('DemoStatsTour', () => {
         expect(screen.queryByText(FOURTH_TEXT)).not.toBeInTheDocument();
       });
 
-      it('체험 선택지 창은 뜨지 않는다', async () => {
+      it('투어 끝 창은 뜨지 않는다', async () => {
         renderStatsWithTour(THIS_MONTH);
         await userEvent.click(await screen.findByRole('button', {name: CLOSE}));
         await waitFor(() => expect(screen.queryByText(THIRD_TEXT)).not.toBeInTheDocument());
@@ -117,7 +117,7 @@ describe('DemoStatsTour', () => {
     });
 
     describe('4번 말풍선에서 닫기를 누르면', () => {
-      it('체험 선택지 창은 뜨지 않는다', async () => {
+      it('투어 끝 창은 뜨지 않는다', async () => {
         renderStatsWithTour(THIS_MONTH);
         await goToFourthBubble();
 
@@ -139,7 +139,7 @@ describe('DemoStatsTour', () => {
     });
 
     describe('5번 말풍선에서 닫기를 누르면', () => {
-      it('체험 선택지 창은 뜨지 않는다', async () => {
+      it('투어 끝 창은 뜨지 않는다', async () => {
         renderStatsWithTour(THIS_MONTH);
         await goToFifthBubble();
 
@@ -174,7 +174,7 @@ describe('DemoStatsTour', () => {
         expect(screen.queryByText(FOURTH_TEXT)).not.toBeInTheDocument();
       });
 
-      it('시간이 지나도 체험 선택지 창이 뜨지 않는다', async () => {
+      it('시간이 지나도 투어 끝 창이 뜨지 않는다', async () => {
         vi.useFakeTimers();
         renderStatsWithTour(MONTH_WITHOUT_RECORDS);
 
@@ -195,6 +195,7 @@ describe('DemoStatsTour', () => {
         await userEvent.click(screen.getByRole('button', {name: NEXT}));
 
         expect(await screen.findByText(FIFTH_TEXT)).toBeInTheDocument();
+        expect(screen.getByRole('button', {name: FINISH})).toBeInTheDocument();
         expect(screen.getByRole('heading', {level: 2, name: FIRST_TAG_OF_THIS_MONTH})).toBeInTheDocument();
       });
     });
@@ -216,9 +217,10 @@ const THIRD_TEXT = '통계 화면이에요. 지난달과 비교해 어떤 실패
 const FOURTH_TEXT = '태그를 누르면 그 실패만 모아 볼 수 있어요';
 const FIFTH_TEXT = '이 실패를 한 날이 달력에 보여요. 아래에서 달마다 추이도 볼 수 있어요';
 const FIRST_TAG_OF_THIS_MONTH = '늦잠';
-const CHOICE_MESSAGE = '체험 중인 상태에서는 기록을 작성할 수 없어요';
+const TOUR_END_TITLE = '체험 중인 상태에서는 기록을 작성할 수 없어요';
 const LOGGED_IN_SESSION: Session = {userId: 'user-1', isGuest: false, expires: '2099-01-01T00:00:00.000Z'};
 const NEXT = '다음';
+const FINISH = '마치기';
 const CLOSE = '닫기';
 const ENOUGH_MS_FOR_TOUR_TO_GIVE_UP_ON_MISSING_TARGETS = 30_000;
 

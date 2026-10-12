@@ -4,7 +4,12 @@ import {useRouter} from 'next/navigation';
 import {ACTIONS, type EventData, EVENTS, Joyride, type Step, type TooltipRenderProps} from 'react-joyride';
 import TourBubble from '@/demo/components/TourBubble';
 import {demoStatsPath} from '@/demo/demo-path';
-import {DEMO_TOUR_FLOATING_OPTIONS, DEMO_TOUR_LOCALE, DEMO_TOUR_OPTIONS, DEMO_TOUR_STYLES} from '@/demo/demo-tour';
+import {
+  DEMO_CALENDAR_TOUR_LOCALE,
+  DEMO_TOUR_FLOATING_OPTIONS,
+  DEMO_TOUR_OPTIONS,
+  DEMO_TOUR_STYLES,
+} from '@/demo/demo-tour';
 import type {CalendarMonth} from '@/study-record/calendar-date';
 import {CALENDAR_STATS_LINK_ID} from '@/study-record/components/CalendarSummary';
 
@@ -32,7 +37,7 @@ export default function DemoCalendarTour({demoMonth, firstRecordDate}: DemoCalen
       continuous
       run
       floatingOptions={DEMO_TOUR_FLOATING_OPTIONS}
-      locale={DEMO_TOUR_LOCALE}
+      locale={DEMO_CALENDAR_TOUR_LOCALE}
       options={DEMO_TOUR_OPTIONS}
       steps={steps}
       styles={DEMO_TOUR_STYLES}
@@ -46,9 +51,12 @@ function createCalendarTourSteps(firstRecordDate: string): Step[] {
   return [
     {
       target: `button:has(> time[datetime="${firstRecordDate}"])`,
-      content: '작성한 공부시간과 실패가 여기 보여요',
+      content: '실패와 공부시간이 여기 보여요',
     },
-    {target: `#${CALENDAR_STATS_LINK_ID}`, content: '누르면 통계를 볼 수 있어요'},
+    {
+      target: `#${CALENDAR_STATS_LINK_ID}`,
+      content: '여기서 통계를 볼 수 있어요. 「다음」을 누르면 통계 화면으로 넘어가요',
+    },
   ];
 }
 
