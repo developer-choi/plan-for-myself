@@ -9,6 +9,7 @@ export const STUDY_RECORD_FIELD_MESSAGES = {
   failTagLength: `실패 태그는 ${STUDY_RECORD_FIELD_LIMITS.failTags.maxLength}글자까지 짧게 적어 주세요`,
   failTagEmpty: '빈 실패 태그는 넣을 수 없어요',
   failTagSpace: '실패 태그에는 공백을 넣을 수 없어요',
+  emptyRecord: '공부시간이나 실패 태그 중 하나는 적어 주세요.\n못 했다면 그 이유를 실패 태그로 남겨 보세요',
 };
 
 export const FAILURE_TAG_TREND_MONTH_LIMIT = 6;

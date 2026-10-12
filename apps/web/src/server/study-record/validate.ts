@@ -1,4 +1,4 @@
-import {STUDY_RECORD_FIELD_LIMITS, STUDY_RECORD_FIELD_MESSAGES} from '@plan-for-myself/shared';
+import {isEmptyStudyRecord, STUDY_RECORD_FIELD_LIMITS, STUDY_RECORD_FIELD_MESSAGES} from '@plan-for-myself/shared';
 import {z} from 'zod';
 
 export type NewStudyRecord = z.infer<typeof newStudyRecordSchema>;
@@ -11,7 +11,8 @@ export interface Rejection {
     | 'INVALID_MONTH'
     | 'INVALID_DATE_TYPE'
     | 'INVALID_STUDIED_MINUTES'
-    | 'INVALID_FAIL_TAGS';
+    | 'INVALID_FAIL_TAGS'
+    | 'EMPTY_RECORD';
   message: string;
 }
 
@@ -23,7 +24,7 @@ export interface MonthRange {
 }
 
 export function validateNewStudyRecord(body: unknown, today: string): Validation<NewStudyRecord> {
-  const result = validate(newStudyRecordSchema, body);
+  const result = rejectEmptyRecord(validate(newStudyRecordSchema, body));
   if (result.ok && result.value.date > today) {
     return {ok: false, rejection: {code: 'INVALID_DATE', message: FUTURE_DATE_MESSAGE}};
   }
@@ -31,7 +32,7 @@ export function validateNewStudyRecord(body: unknown, today: string): Validation
 }
 
 export function validateStudyRecordUpdate(body: unknown): Validation<StudyRecordFields> {
-  return validate(studyRecordUpdateSchema, body);
+  return rejectEmptyRecord(validate(studyRecordUpdateSchema, body));
 }
 
 export function validateDate(date: string | null, today: string): Validation<string> {
@@ -170,6 +171,13 @@ function validate<T>(schema: z.ZodType<T>, body: unknown): Validation<T> {
     return {ok: false, rejection: {code: REJECTION_CODES[field], message: issue.message}};
   }
   return {ok: false, rejection: {code: 'INVALID_BODY', message: '요청 형식이 올바르지 않아요'}};
+}
+
+function rejectEmptyRecord<T extends StudyRecordFields>(result: Validation<T>): Validation<T> {
+  if (result.ok && isEmptyStudyRecord(result.value)) {
+    return {ok: false, rejection: {code: 'EMPTY_RECORD', message: STUDY_RECORD_FIELD_MESSAGES.emptyRecord}};
+  }
+  return result;
 }
 
 function isRecordField(field: PropertyKey | undefined): field is keyof typeof REJECTION_CODES {

@@ -23,7 +23,7 @@ export interface RecordRejection {
 export function validateMinuteInput(text: string): true | string {
   const minutes = Number(text);
   const isValid =
-    /^\d*$/.test(text) &&
+    /^\d*$/.test(text.trim()) &&
     minutes >= STUDY_RECORD_FIELD_LIMITS.studiedMinutes.min &&
     minutes <= STUDY_RECORD_FIELD_LIMITS.studiedMinutes.max;
   return isValid || STUDY_RECORD_FIELD_MESSAGES.studiedMinutes;

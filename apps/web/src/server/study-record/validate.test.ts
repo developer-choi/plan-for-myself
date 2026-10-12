@@ -1,14 +1,45 @@
 import {STUDY_RECORD_FIELD_MESSAGES} from '@plan-for-myself/shared';
 import {describe, expect, it} from 'vitest';
-import {validateDate, validateNewStudyRecord, validateNotFutureMonth} from './validate';
+import {validateDate, validateNewStudyRecord, validateNotFutureMonth, validateStudyRecordUpdate} from './validate';
 
 const TODAY = '2026-09-24';
 
+const EMPTY_RECORD_REJECTION = {
+  ok: false,
+  rejection: {code: 'EMPTY_RECORD', message: STUDY_RECORD_FIELD_MESSAGES.emptyRecord},
+};
+
+const MORNING_MINUTES = 30;
+
 function createBody(date: string) {
-  return {date, dateType: 'weekday', studiedMinutes: [0, 0, 0], failTags: []};
+  return {date, dateType: 'weekday', studiedMinutes: [MORNING_MINUTES, 0, 0], failTags: []};
 }
 
 describe('validateNewStudyRecord()', () => {
+  describe('General cases', () => {
+    it('공부시간이 모두 0이고 실패 태그가 없으면 빈 기록으로 거절해야 한다', () => {
+      const body = {...createBody(TODAY), studiedMinutes: [0, 0, 0]};
+
+      expect(validateNewStudyRecord(body, TODAY)).toEqual(EMPTY_RECORD_REJECTION);
+    });
+
+    it('휴일이어도 빈 기록이면 거절해야 한다', () => {
+      const body = {...createBody(TODAY), dateType: 'holiday', studiedMinutes: [0, 0, 0]};
+
+      expect(validateNewStudyRecord(body, TODAY)).toEqual(EMPTY_RECORD_REJECTION);
+    });
+
+    it('공부시간만 있으면 받아야 한다', () => {
+      expect(validateNewStudyRecord(createBody(TODAY), TODAY)).toMatchObject({ok: true});
+    });
+
+    it('실패 태그만 있으면 받아야 한다', () => {
+      const body = {...createBody(TODAY), studiedMinutes: [0, 0, 0], failTags: ['늦잠']};
+
+      expect(validateNewStudyRecord(body, TODAY)).toMatchObject({ok: true});
+    });
+  });
+
   describe('Boundary cases', () => {
     it('오늘 날짜 기록은 받아야 한다', () => {
       expect(validateNewStudyRecord(createBody(TODAY), TODAY)).toMatchObject({ok: true, value: {date: TODAY}});
@@ -40,6 +71,22 @@ describe('validateNewStudyRecord()', () => {
         ok: false,
         rejection: {message: STUDY_RECORD_FIELD_MESSAGES.failTagLength},
       });
+    });
+  });
+});
+
+describe('validateStudyRecordUpdate()', () => {
+  describe('General cases', () => {
+    it('기존 기록을 빈 기록으로 고치면 거절해야 한다', () => {
+      const body = {dateType: 'weekday', studiedMinutes: [0, 0, 0], failTags: []};
+
+      expect(validateStudyRecordUpdate(body)).toEqual(EMPTY_RECORD_REJECTION);
+    });
+
+    it('실패 태그만 남기고 고치면 받아야 한다', () => {
+      const body = {dateType: 'weekday', studiedMinutes: [0, 0, 0], failTags: ['늦잠']};
+
+      expect(validateStudyRecordUpdate(body)).toMatchObject({ok: true});
     });
   });
 });

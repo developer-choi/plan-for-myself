@@ -2,13 +2,13 @@
 
 import {Button, Callout, Dialog, IconButton} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
-import type {StudyRecord} from '@plan-for-myself/shared';
+import {isEmptyStudyRecord, STUDY_RECORD_FIELD_MESSAGES, type StudyRecord} from '@plan-for-myself/shared';
 import {Cross2Icon} from '@radix-ui/react-icons';
 import {captureException} from '@sentry/nextjs';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import classNames from 'classnames';
 import {type BaseSyntheticEvent, useState} from 'react';
-import {FormProvider, useForm, type UseFormReturn} from 'react-hook-form';
+import {FormProvider, useForm, type UseFormReturn, useWatch} from 'react-hook-form';
 import {isMutationSettling} from '@/shared/query/mutation';
 import {deleteStudyRecordApi, patchStudyRecordApi, postStudyRecordApi} from '@/study-record/api';
 import {formatDateTitle} from '@/study-record/calendar-date';
@@ -109,6 +109,16 @@ function useRecordForm({date, month, record, onClose}: UseRecordFormParams): Use
   });
   const [rejectionMessage, setRejectionMessage] = useState<string>();
 
+  const [holiday, failTags, minutes, failTagInput] = useWatch({
+    control: methods.control,
+    name: ['holiday', 'failTags', 'minutes', 'failTagInput'],
+  });
+  const filled =
+    !isEmptyStudyRecord(toStudyRecordFields({holiday, failTags, minutes, failTagInput})) || failTagInput.trim() !== '';
+  if (filled && rejectionMessage === STUDY_RECORD_FIELD_MESSAGES.emptyRecord) {
+    setRejectionMessage(undefined);
+  }
+
   const queryClient = useQueryClient();
   const cacheHandlers = {
     onSuccess: () =>
@@ -152,8 +162,13 @@ function useRecordForm({date, month, record, onClose}: UseRecordFormParams): Use
         return;
       }
 
-      setRejectionMessage(undefined);
       const fields = toStudyRecordFields({...values, failTags: failTagResult.failTags});
+      if (isEmptyStudyRecord(fields)) {
+        setRejectionMessage(STUDY_RECORD_FIELD_MESSAGES.emptyRecord);
+        return;
+      }
+
+      setRejectionMessage(undefined);
       try {
         await (record
           ? patchMutation.mutateAsync({pk: record.pk, ...fields})
