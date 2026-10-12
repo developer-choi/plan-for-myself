@@ -179,6 +179,18 @@ describe('addFailTag()', () => {
         message: STUDY_RECORD_FIELD_MESSAGES.failTagCount,
       });
     });
+
+    it('6글자 태그는 목록에 더해야 한다', () => {
+      expect(addFailTag([], '여섯글자태그')).toEqual({ok: true, failTags: ['여섯글자태그']});
+    });
+
+    it('7글자 태그를 넣으면 글자 수 거절 문구를 반환해야 한다', () => {
+      expect(addFailTag([], '일곱글자의태그')).toEqual({ok: false, message: STUDY_RECORD_FIELD_MESSAGES.failTagLength});
+    });
+
+    it('이모지 6개 태그는 서버처럼 6글자로 세어 목록에 더해야 한다', () => {
+      expect(addFailTag([], '😀😀😀😀😀😀')).toEqual({ok: true, failTags: ['😀😀😀😀😀😀']});
+    });
   });
 });
 

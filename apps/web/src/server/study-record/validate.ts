@@ -100,7 +100,8 @@ const minutesSchema = z
 const failTagSchema = z
   .string({error: '실패 태그는 글자로 적어 주세요'})
   .min(1, {error: STUDY_RECORD_FIELD_MESSAGES.failTagEmpty})
-  .regex(/^\S+$/, {error: STUDY_RECORD_FIELD_MESSAGES.failTagSpace});
+  .regex(/^\S+$/, {error: STUDY_RECORD_FIELD_MESSAGES.failTagSpace})
+  .max(STUDY_RECORD_LIMITS.failTags.maxLength, {error: STUDY_RECORD_FIELD_MESSAGES.failTagLength});
 
 const dateSchema = z.iso
   .date({error: DATE_MESSAGE})

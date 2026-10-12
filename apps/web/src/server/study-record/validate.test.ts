@@ -1,3 +1,4 @@
+import {STUDY_RECORD_FIELD_MESSAGES} from '@plan-for-myself/shared';
 import {describe, expect, it} from 'vitest';
 import {validateDate, validateNewStudyRecord, validateNotFutureMonth} from './validate';
 
@@ -17,6 +18,27 @@ describe('validateNewStudyRecord()', () => {
       expect(validateNewStudyRecord(createBody('2026-09-25'), TODAY)).toEqual({
         ok: false,
         rejection: {code: 'INVALID_DATE', message: '오늘과 지난 날짜만 기록할 수 있어요'},
+      });
+    });
+
+    it('6글자 실패 태그는 받아야 한다', () => {
+      const body = {...createBody(TODAY), failTags: ['여섯글자태그']};
+
+      expect(validateNewStudyRecord(body, TODAY)).toMatchObject({ok: true, value: {failTags: ['여섯글자태그']}});
+    });
+
+    it('이모지 6개 실패 태그는 6글자로 세어 받아야 한다', () => {
+      const body = {...createBody(TODAY), failTags: ['😀😀😀😀😀😀']};
+
+      expect(validateNewStudyRecord(body, TODAY)).toMatchObject({ok: true, value: {failTags: ['😀😀😀😀😀😀']}});
+    });
+
+    it('7글자 실패 태그는 거절해야 한다', () => {
+      const body = {...createBody(TODAY), failTags: ['일곱글자의태그']};
+
+      expect(validateNewStudyRecord(body, TODAY)).toMatchObject({
+        ok: false,
+        rejection: {message: STUDY_RECORD_FIELD_MESSAGES.failTagLength},
       });
     });
   });
