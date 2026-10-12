@@ -1,5 +1,8 @@
 import type {Metadata} from 'next';
 import {notFound} from 'next/navigation';
+import {auth} from '@/auth/next-auth';
+import {getLoginState} from '@/auth/path';
+import DemoBanner from '@/demo/components/DemoBanner';
 import DemoStatsSection from '@/demo/components/DemoStatsSection';
 import DemoTourTrigger from '@/demo/components/DemoTourTrigger';
 import {getDemoMonthly, getDemoOverview, getDemoRecords, getDemoToday} from '@/demo/demo-examples';
@@ -27,12 +30,14 @@ export default async function Page({params}: PageProps) {
     notFound();
   }
 
+  const isLoggedIn = getLoginState(await auth()) !== 'logged-out';
   const now = new Date();
   const today = getDemoToday(now);
   const monthly = isFutureMonth(today, viewMonth) ? null : getDemoMonthly(viewMonth, now);
 
   return (
     <div className={layout.shell}>
+      <DemoBanner isLoggedIn={isLoggedIn} />
       <div className={layout.centered}>
         <SubPageHeader title={formatStatsTitle(viewMonth)} />
         <main className={styles.body}>

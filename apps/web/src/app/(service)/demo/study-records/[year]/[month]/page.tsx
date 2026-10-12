@@ -1,6 +1,7 @@
 import {notFound} from 'next/navigation';
 import {auth} from '@/auth/next-auth';
 import {getLoginState} from '@/auth/path';
+import DemoBanner from '@/demo/components/DemoBanner';
 import DemoCalendarMenu from '@/demo/components/DemoCalendarMenu';
 import DemoCalendarSection from '@/demo/components/DemoCalendarSection';
 import DemoTourTrigger from '@/demo/components/DemoTourTrigger';
@@ -30,6 +31,7 @@ export default async function Page({params}: PageProps) {
 
   return (
     <div className={layout.shell}>
+      <DemoBanner isLoggedIn={isLoggedIn} />
       <CalendarHeader
         menu={<DemoCalendarMenu isLoggedIn={isLoggedIn} />}
         nextHref={demoCalendarPath(shiftMonth(viewMonth, 1))}
