@@ -11,7 +11,6 @@ interface CalendarSectionProps {
   month: CalendarMonth;
   today: string;
   records: StudyRecord[];
-  streak: number;
   firstRecordDate: string;
   statsHref: string;
   handlers: {
@@ -23,12 +22,11 @@ export default function CalendarSection({
   month,
   today,
   records,
-  streak,
   firstRecordDate,
   statsHref,
   handlers,
 }: CalendarSectionProps) {
-  const summary = getCalendarSummaryContent({today, month, streak, firstRecordDate, statsHref});
+  const summary = getCalendarSummaryContent({today, month, firstRecordDate, statsHref});
 
   return (
     <>

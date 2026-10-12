@@ -18,7 +18,7 @@ export default function FetchedCalendarSection({month, today}: FetchedCalendarSe
   const [{data: records}, {data: overview}] = useSuspenseQueries({
     queries: [studyRecordQueries.list.options(toMonthParam(month)), studyRecordStatsQueries.overview.options(today)],
   });
-  const {firstRecordDate, streak} = overview;
+  const {firstRecordDate} = overview;
 
   if (firstRecordDate === null) {
     return <FirstRecord today={today} />;
@@ -37,7 +37,6 @@ export default function FetchedCalendarSection({month, today}: FetchedCalendarSe
       month={month}
       records={records}
       statsHref={statsPath(month)}
-      streak={streak.current}
       today={today}
     />
   );

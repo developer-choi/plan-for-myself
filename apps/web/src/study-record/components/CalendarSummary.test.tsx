@@ -15,17 +15,5 @@ describe('CalendarSummary', () => {
 
       expect(screen.queryByRole('link', {name: '통계'})).not.toBeInTheDocument();
     });
-
-    it('연속 기록이 있으면 연속 기록이 보인다', () => {
-      const {container} = render(<CalendarSummary streak={5} />);
-
-      expect(container).toHaveTextContent('연속 기록');
-    });
-
-    it('연속 기록이 없으면 연속 기록이 보이지 않는다', () => {
-      const {container} = render(<CalendarSummary />);
-
-      expect(container).not.toHaveTextContent('연속 기록');
-    });
   });
 });

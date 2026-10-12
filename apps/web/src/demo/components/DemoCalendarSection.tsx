@@ -15,7 +15,7 @@ interface DemoCalendarSectionProps {
 }
 
 export default function DemoCalendarSection({month, today, records, overview}: DemoCalendarSectionProps) {
-  const {firstRecordDate, streak} = overview;
+  const {firstRecordDate} = overview;
 
   const openChoiceDialog = useOpenDemoChoiceDialog();
 
@@ -26,7 +26,6 @@ export default function DemoCalendarSection({month, today, records, overview}: D
       month={month}
       records={records}
       statsHref={demoStatsPath(month)}
-      streak={streak.current}
       today={today}
     />
   );

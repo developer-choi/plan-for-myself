@@ -1,6 +1,5 @@
 import type {RecordedDays, StudyRecordOverview} from '@plan-for-myself/shared';
 import type {CalendarMonth} from '@/study-record/calendar-date';
-import {MIN_STREAK_DAYS} from '@/study-record/calendar-summary';
 
 export function formatDuration(minutes: number): string {
   const hours = Math.floor(minutes / MINUTES_PER_HOUR);
@@ -39,6 +38,7 @@ export function formatStatsTitle({year, month}: CalendarMonth): string {
   return `${year}년 ${month}월 통계`;
 }
 
+const MIN_STREAK_DAYS = 2;
 const MINUS_SIGN = '−';
 const MINUTES_PER_HOUR = 60;
 const HOURS_WITHOUT_MINUTES = 100;
