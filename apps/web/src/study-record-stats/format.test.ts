@@ -1,5 +1,11 @@
 import {describe, expect, it} from 'vitest';
-import {formatHours, formatMinutesDiff, formatMonthLabel, formatStreakNote, minutesToHours} from './format';
+import {
+  formatHours,
+  formatMinutesDiff,
+  formatMonthLabel,
+  formatStreakNote,
+  minutesToHours,
+} from './format';
 
 describe('formatMinutesDiff()', () => {
   describe('General cases', () => {

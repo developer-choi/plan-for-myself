@@ -74,7 +74,6 @@ function renderStatsSection(month: CalendarMonth, failureTags: FailureTag[] = []
 
   render(
     <StatsSection
-      month={month}
       monthly={createMonthly({month: monthParam, inProgress: isCurrentMonth, failureTags})}
       overview={isCurrentMonth ? OVERVIEW : null}
       renderTagCalendar={() => null}

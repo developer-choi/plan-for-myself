@@ -21,7 +21,6 @@ interface CurrentMonthStatsSectionProps extends FetchedStatsSectionProps {
 
 interface BoundedFetchedTagCalendarProps {
   month: CalendarMonth;
-  today: string;
   tag: string;
 }
 
@@ -34,10 +33,9 @@ export default function FetchedStatsSection({month, today}: FetchedStatsSectionP
 
   return (
     <StatsSection
-      month={month}
       monthly={monthly}
       overview={null}
-      renderTagCalendar={(tag) => <BoundedFetchedTagCalendar month={month} tag={tag} today={today} />}
+      renderTagCalendar={(tag) => <BoundedFetchedTagCalendar month={month} tag={tag} />}
     />
   );
 }
@@ -47,19 +45,18 @@ function CurrentMonthStatsSection({month, today, monthly}: CurrentMonthStatsSect
 
   return (
     <StatsSection
-      month={month}
       monthly={monthly}
       overview={overview}
-      renderTagCalendar={(tag) => <BoundedFetchedTagCalendar month={month} tag={tag} today={today} />}
+      renderTagCalendar={(tag) => <BoundedFetchedTagCalendar month={month} tag={tag} />}
     />
   );
 }
 
-function BoundedFetchedTagCalendar({month, today, tag}: BoundedFetchedTagCalendarProps) {
+function BoundedFetchedTagCalendar({month, tag}: BoundedFetchedTagCalendarProps) {
   return (
     <HandledErrorBoundary size="card">
       <Suspense fallback={<LoadingSpinner size="card" />}>
-        <FetchedTagCalendar month={month} tag={tag} today={today} />
+        <FetchedTagCalendar month={month} tag={tag} />
       </Suspense>
     </HandledErrorBoundary>
   );

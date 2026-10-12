@@ -2,7 +2,6 @@
 
 import type {StudyRecordMonthly, StudyRecordOverview} from '@plan-for-myself/shared';
 import {type ReactNode, useEffect, useRef, useState} from 'react';
-import type {CalendarMonth} from '@/study-record/calendar-date';
 import CumulativeStrip from '@/study-record-stats/components/CumulativeStrip';
 import FailCard from '@/study-record-stats/components/FailCard';
 import RecordCard from '@/study-record-stats/components/RecordCard';
@@ -12,7 +11,6 @@ import {toTrendBars} from '@/study-record-stats/tag-detail';
 import styles from './StatsSection.module.scss';
 
 interface StatsSectionProps {
-  month: CalendarMonth;
   monthly: StudyRecordMonthly;
   /* 누적·연속 기록은 이번 달에만 보여 주므로 지난 달이면 null */
   overview: StudyRecordOverview | null;
@@ -20,18 +18,17 @@ interface StatsSectionProps {
 }
 
 interface FailSectionProps {
-  month: CalendarMonth;
   monthly: StudyRecordMonthly;
   renderTagCalendar: (tag: string) => ReactNode;
 }
 
-export default function StatsSection({month, monthly, overview, renderTagCalendar}: StatsSectionProps) {
+export default function StatsSection({monthly, overview, renderTagCalendar}: StatsSectionProps) {
   return (
     <>
       {overview && <CumulativeStrip monthly={monthly} totals={overview.totals} />}
       <div className={styles.columns}>
         <div className={styles.column}>
-          <FailSection month={month} monthly={monthly} renderTagCalendar={renderTagCalendar} />
+          <FailSection monthly={monthly} renderTagCalendar={renderTagCalendar} />
         </div>
         <div className={styles.column}>
           <RecordCard monthly={monthly} streak={overview?.streak ?? null} />
@@ -42,7 +39,7 @@ export default function StatsSection({month, monthly, overview, renderTagCalenda
   );
 }
 
-function FailSection({month, monthly, renderTagCalendar}: FailSectionProps) {
+function FailSection({monthly, renderTagCalendar}: FailSectionProps) {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const detailRef = useRef<HTMLDivElement>(null);
 
@@ -66,7 +63,6 @@ function FailSection({month, monthly, renderTagCalendar}: FailSectionProps) {
         <TagDetailCard
           ref={detailRef}
           calendar={renderTagCalendar(selectedFailure.tag)}
-          month={month.month}
           tag={selectedFailure.tag}
           trend={{bars: toTrendBars(selectedFailure.trend), inProgress: monthly.inProgress}}
         />
