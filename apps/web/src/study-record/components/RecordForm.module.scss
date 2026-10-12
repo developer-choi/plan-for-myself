@@ -26,6 +26,12 @@
 .chip {
   min-width: 0;
   max-width: 100%;
+
+  /* 칩 글자는 small로 두고 지우기 기호만 키운다 — 디자인 시스템은 기호 크기를 칩 크기에 묶어 둔다 */
+  button svg {
+    width: 14px;
+    height: 14px;
+  }
 }
 
 .minutes {
