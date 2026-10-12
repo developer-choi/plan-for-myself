@@ -126,7 +126,7 @@ function StreakSection() {
       }
       title="꾸준히 적는 게 먼저예요"
     >
-      <RecordCard monthly={INTRO_MONTHLY} streak={INTRO_STREAK} />
+      <RecordCard monthly={INTRO_MONTHLY} streak={INTRO_STREAK} totalRecordedDays={null} />
     </FeatureSection>
   );
 }
