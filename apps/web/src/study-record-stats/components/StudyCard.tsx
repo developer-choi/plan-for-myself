@@ -1,6 +1,6 @@
 import type {StudyRecordMonthly} from '@plan-for-myself/shared';
 import Card from '@/shared/components/Card';
-import StatList, {StatListItem} from '@/study-record-stats/components/StatList';
+import StatList, {StatListItem, StatValue} from '@/study-record-stats/components/StatList';
 import {formatDuration, formatMinutesDiff, formatMonthLabel} from '@/study-record-stats/format';
 
 interface StudyCardProps {
@@ -20,7 +20,10 @@ export default function StudyCard({monthly}: StudyCardProps) {
   return (
     <Card title="공부">
       <StatList>
-        <StatListItem label={`${formatMonthLabel(monthly.month)} 총 공부`} value={formatDuration(totalMinutes)} />
+        <StatListItem
+          label={`${formatMonthLabel(monthly.month)} 총 공부`}
+          value={<StatValue>{formatDuration(totalMinutes)}</StatValue>}
+        />
         {weekdayAvg !== null && <AverageItem label="평일 평균" minutes={weekdayAvg} previousMinutes={prevWeekdayAvg} />}
         {holidayAvg !== null && <AverageItem label="휴일 평균" minutes={holidayAvg} previousMinutes={prevHolidayAvg} />}
       </StatList>
@@ -33,7 +36,7 @@ function AverageItem({label, minutes, previousMinutes}: AverageItemProps) {
     <StatListItem
       label={label}
       note={previousMinutes === null ? undefined : `지난달 ${formatMinutesDiff(minutes - previousMinutes)}`}
-      value={formatDuration(minutes)}
+      value={<StatValue>{formatDuration(minutes)}</StatValue>}
     />
   );
 }

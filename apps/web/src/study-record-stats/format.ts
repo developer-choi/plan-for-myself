@@ -1,4 +1,4 @@
-import type {StudyRecordOverview} from '@plan-for-myself/shared';
+import type {RecordedDays, StudyRecordOverview} from '@plan-for-myself/shared';
 import type {CalendarMonth} from '@/study-record/calendar-date';
 import {MIN_STREAK_DAYS} from '@/study-record/calendar-summary';
 
@@ -18,6 +18,11 @@ export function formatDuration(minutes: number): string {
 export function formatMinutesDiff(minutes: number): string {
   const sign = minutes >= 0 ? '+' : MINUS_SIGN;
   return `${sign}${formatDuration(Math.abs(minutes))}`;
+}
+
+/* 세는 대상 날이 0이면(그달 1일, 그날 기록 전) 셀 것이 없어 null */
+export function countMissedDays({count, total}: RecordedDays): number | null {
+  return total === 0 ? null : total - count;
 }
 
 export function formatStreakNote({current, longest}: StudyRecordOverview['streak']): string {

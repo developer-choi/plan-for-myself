@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {formatDuration, formatMinutesDiff, formatMonthLabel, formatStreakNote} from './format';
+import {countMissedDays, formatDuration, formatMinutesDiff, formatMonthLabel, formatStreakNote} from './format';
 
 const HOUR = 60;
 
@@ -65,6 +65,30 @@ describe('formatMinutesDiff()', () => {
   describe('Boundary cases', () => {
     it('지난달과 같으면 더하기 부호를 붙여야 한다', () => {
       expect(formatMinutesDiff(0)).toBe('+0분');
+    });
+  });
+});
+
+describe('countMissedDays()', () => {
+  describe('General cases', () => {
+    it('세는 대상 날에서 기록한 날을 뺀 수여야 한다', () => {
+      const recordedDays = {count: 27, total: 30};
+
+      expect(countMissedDays(recordedDays)).toBe(recordedDays.total - recordedDays.count);
+    });
+
+    it('세는 대상 날을 모두 남겼으면 0이어야 한다', () => {
+      expect(countMissedDays({count: 30, total: 30})).toBe(0);
+    });
+  });
+
+  describe('Boundary cases', () => {
+    it('세는 대상 날이 하나도 없으면(그달 1일 기록 전) null이어야 한다', () => {
+      expect(countMissedDays({count: 0, total: 0})).toBeNull();
+    });
+
+    it('세는 대상 날이 하루이고 그날을 남겼으면 0이어야 한다', () => {
+      expect(countMissedDays({count: 1, total: 1})).toBe(0);
     });
   });
 });

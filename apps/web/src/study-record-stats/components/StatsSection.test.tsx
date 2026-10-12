@@ -9,7 +9,7 @@ const TODAY = '2026-09-24';
 const CURRENT_MONTH: CalendarMonth = {year: 2026, month: 9};
 const PREVIOUS_MONTH: CalendarMonth = {year: 2026, month: 8};
 const CURRENT_MONTH_ONLY_LABELS = ['누적 기록', '연속 기록'];
-const PREVIOUS_MONTH_RECORDED_DAYS_LABEL = '8월 기록한 날';
+const PREVIOUS_MONTH_RECORDED_DAYS_LABEL = '8월 기록';
 const FAIL_CARD_CASES = [
   {when: '이번 달', month: CURRENT_MONTH, title: '9월 실패'},
   {when: '지난 달', month: PREVIOUS_MONTH, title: '8월 실패'},
@@ -46,7 +46,7 @@ describe('StatsSection', () => {
       });
     });
 
-    it('지난 달이면 그 달 기록한 날이 보인다', () => {
+    it('지난 달이면 그 달 기록 줄이 보인다', () => {
       renderStatsSection(PREVIOUS_MONTH);
 
       expect(queryAllTermTexts()).toContain(PREVIOUS_MONTH_RECORDED_DAYS_LABEL);
