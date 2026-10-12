@@ -96,7 +96,7 @@
 
 .tagRowInner {
   display: grid;
-  grid-template-columns: 52px minmax(0, 1fr) 48px;
+  grid-template-columns: 90px minmax(0, 1fr) 48px;
   gap: var(--spacing-sm);
   place-items: center stretch;
 }
