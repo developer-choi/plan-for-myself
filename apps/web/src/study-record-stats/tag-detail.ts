@@ -8,7 +8,7 @@ export interface TrendBar {
   status: FailureTagTrend['status'];
 }
 
-export type TagCalendarDayState = 'hit' | 'recorded' | 'missing' | 'inactive';
+export type TagCalendarDayState = 'hit' | 'none';
 
 export interface TagCalendarDay {
   date: string;
@@ -23,15 +23,8 @@ export interface TagCalendarData {
 
 interface TagCalendarParams {
   month: CalendarMonth;
-  today: string;
   records: StudyRecord[];
   tag: string;
-}
-
-interface DayStateParams extends Pick<TagCalendarParams, 'today' | 'tag'> {
-  /* 그날 기록이 없으면 undefined */
-  record: StudyRecord | undefined;
-  date: string;
 }
 
 export function toTrendBars(trend: FailureTagTrend[]): TrendBar[] {
@@ -42,7 +35,7 @@ export function toTrendBars(trend: FailureTagTrend[]): TrendBar[] {
   }));
 }
 
-export function getTagCalendar({month, today, records, tag}: TagCalendarParams): TagCalendarData {
+export function getTagCalendar({month, records, tag}: TagCalendarParams): TagCalendarData {
   const cells = getCalendarCells(month);
   const recordByDate = new Map(records.map((record) => [record.date, record]));
 
@@ -50,13 +43,10 @@ export function getTagCalendar({month, today, records, tag}: TagCalendarParams):
     leadingBlanks: cells.findIndex(({inMonth}) => inMonth),
     days: cells
       .filter(({inMonth}) => inMonth)
-      .map(({date, day}) => ({date, day, state: getDayState({record: recordByDate.get(date), date, today, tag})})),
+      .map(({date, day}) => ({date, day, state: getDayState(recordByDate.get(date), tag)})),
   };
 }
 
-function getDayState({record, date, today, tag}: DayStateParams): TagCalendarDayState {
-  if (record) {
-    return record.failTags.includes(tag) ? 'hit' : 'recorded';
-  }
-  return date >= today ? 'inactive' : 'missing';
+function getDayState(record: StudyRecord | undefined, tag: string): TagCalendarDayState {
+  return record?.failTags.includes(tag) ? 'hit' : 'none';
 }

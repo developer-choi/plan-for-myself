@@ -6,8 +6,8 @@ import StudyCard from './StudyCard';
 describe('StudyCard', () => {
   describe('General cases', () => {
     [
-      {label: '평일 평균', study: {weekdayAvg: 189, prevWeekdayAvg: 176}, expected: /^3:09지난달 \+0:13$/},
-      {label: '휴일 평균', study: {holidayAvg: 212, prevHolidayAvg: 244}, expected: /^3:32지난달 −0:32$/},
+      {label: '평일 평균', study: {weekdayAvg: 189, prevWeekdayAvg: 176}, expected: /^3시간 9분지난달 \+13분$/},
+      {label: '휴일 평균', study: {holidayAvg: 212, prevHolidayAvg: 244}, expected: /^3시간 32분지난달 −32분$/},
     ].forEach(({label, study, expected}) => {
       it(`${label} 옆에 지난달 평균과의 차이가 보인다`, () => {
         render(<StudyCard monthly={createMonthly({study})} />);
@@ -28,7 +28,7 @@ describe('StudyCard', () => {
     it('지난달 평일 기록이 없으면 평일 평균 옆에 지난달 차이가 보이지 않는다', () => {
       render(<StudyCard monthly={createMonthly({study: {weekdayAvg: 189, prevWeekdayAvg: null}})} />);
 
-      expect(getDefinitionByTerm('평일 평균')).toHaveTextContent(/^3:09$/);
+      expect(getDefinitionByTerm('평일 평균')).toHaveTextContent(/^3시간 9분$/);
     });
   });
 });

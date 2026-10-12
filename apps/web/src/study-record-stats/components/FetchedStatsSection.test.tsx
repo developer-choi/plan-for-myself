@@ -45,7 +45,7 @@ describe('FetchedStatsSection', () => {
 const TODAY = '2026-09-24';
 const CURRENT_MONTH: CalendarMonth = {year: 2026, month: 9};
 const PREVIOUS_MONTH: CalendarMonth = {year: 2026, month: 8};
-const PREVIOUS_MONTH_RECORDED_DAYS_LABEL = '8월 기록한 날';
+const PREVIOUS_MONTH_RECORDED_DAYS_LABEL = '8월 기록';
 const OVERVIEW: StudyRecordOverview = {
   date: TODAY,
   firstRecordDate: '2025-01-01',

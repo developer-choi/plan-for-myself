@@ -21,6 +21,11 @@
 
 .number {
   font-variant-numeric: tabular-nums;
+  color: var(--color-fg-default);
+}
+
+.sentence {
+  color: var(--color-fg-secondary);
 }
 
 .note {

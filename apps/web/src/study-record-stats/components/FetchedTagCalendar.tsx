@@ -8,12 +8,11 @@ import {getTagCalendar} from '@/study-record-stats/tag-detail';
 
 interface FetchedTagCalendarProps {
   month: CalendarMonth;
-  today: string;
   tag: string;
 }
 
-export default function FetchedTagCalendar({month, today, tag}: FetchedTagCalendarProps) {
+export default function FetchedTagCalendar({month, tag}: FetchedTagCalendarProps) {
   const {data: records} = useSuspenseQuery(studyRecordQueries.list.options(toMonthParam(month)));
 
-  return <TagCalendar calendar={getTagCalendar({month, today, records, tag})} />;
+  return <TagCalendar calendar={getTagCalendar({month, records, tag})} />;
 }

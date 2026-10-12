@@ -4,7 +4,7 @@ import type {Session} from 'next-auth';
 import {SessionProvider} from 'next-auth/react';
 import {OverlayProvider} from 'overlay-kit';
 import {afterEach, describe, expect, it, vi} from 'vitest';
-import {type DemoOverview, DEMO_OVERVIEW, DEMO_RECORDS, DEMO_TODAY, getDemoMonthly} from '@/demo/demo-examples';
+import {type DemoOverview, DEMO_OVERVIEW, DEMO_RECORDS, getDemoMonthly} from '@/demo/demo-examples';
 import type {CalendarMonth} from '@/study-record/calendar-date';
 import {FIRST_TAG_ROW_ID} from '@/study-record-stats/components/FailCard';
 import DemoStatsSection from './DemoStatsSection';
@@ -221,13 +221,7 @@ function renderStatsWithTour({month, overview}: StatsCase, session: Session | nu
   render(
     <SessionProvider session={session}>
       <OverlayProvider>
-        <DemoStatsSection
-          month={month}
-          monthly={getDemoMonthly(month)}
-          overview={overview}
-          records={DEMO_RECORDS}
-          today={DEMO_TODAY}
-        />
+        <DemoStatsSection month={month} monthly={getDemoMonthly(month)} overview={overview} records={DEMO_RECORDS} />
         <DemoStatsTour />
       </OverlayProvider>
     </SessionProvider>,

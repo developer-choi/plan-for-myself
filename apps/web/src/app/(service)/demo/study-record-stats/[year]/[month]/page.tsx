@@ -41,7 +41,6 @@ export default async function Page({params}: PageProps) {
               monthly={getDemoMonthly(viewMonth)}
               overview={isSameMonth(DEMO_TODAY, viewMonth) ? DEMO_OVERVIEW : null}
               records={DEMO_RECORDS}
-              today={DEMO_TODAY}
             />
           )}
         </main>

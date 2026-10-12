@@ -14,16 +14,11 @@ export function calculateMonthly(records: StudyRecord[], month: string, date: st
     .sort()
     .at(0);
   const hasDateRecord = recordsUntilDate.some((record) => record.date === date);
-  const countDays = (target: string, targetRecords: StudyRecord[]) => ({
-    count: targetRecords.length,
-    total: countTotalDays({month: target, date, hasDateRecord, firstRecordDate}),
-  });
 
   return {
     month,
     inProgress: month === toMonth(date),
-    recordedDays: countDays(month, monthRecords),
-    previousRecordedDays: previousRecords.length === 0 ? null : countDays(previousMonth, previousRecords),
+    recordedDays: {count: monthRecords.length, total: countTotalDays({month, date, hasDateRecord, firstRecordDate})},
     study: {
       totalMinutes: monthRecords.reduce((sum, record) => sum + sumMinutes(record), 0),
       weekdayAvg: averageMinutes(monthRecords, 'weekday'),

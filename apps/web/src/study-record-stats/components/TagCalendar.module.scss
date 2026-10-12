@@ -30,15 +30,4 @@
     color: var(--color-on-destructive);
     background: var(--color-bg-destructive);
   }
-
-  &[data-state='missing'] {
-    color: var(--color-fg-muted);
-    background: transparent;
-    border: 1px dashed var(--color-fg-subtle);
-  }
-
-  &[data-state='inactive'] {
-    color: var(--color-fg-subtle);
-    background: transparent;
-  }
 }
