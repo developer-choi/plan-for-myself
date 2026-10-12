@@ -2,6 +2,8 @@ import type {ReactNode} from 'react';
 import type {Metadata} from 'next';
 import classNames from 'classnames';
 import typography from '@developer-choi/design-system/styles/typography';
+import {HomeIcon} from '@radix-ui/react-icons';
+import {ENTRY_URL} from '@/auth/redirect';
 import Card from '@/shared/components/Card';
 import SubPageHeader from '@/shared/components/SubPageHeader';
 import layout from '@/shared/styles/layout.module.scss';
@@ -34,7 +36,7 @@ export default function Page() {
   return (
     <div className={layout.shell}>
       <div className={layout.centered}>
-        <SubPageHeader title="개인정보 처리방침" />
+        <SubPageHeader exit={{href: ENTRY_URL, label: '처음으로', icon: HomeIcon}} title="개인정보 처리방침" />
         <main className={styles.body}>
           <Card>
             <article className={classNames(typography.body1, styles.article)}>
