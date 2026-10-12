@@ -5,6 +5,8 @@ import {formatDuration, formatMinutesDiff, formatMonthLabel} from '@/study-recor
 
 interface StudyCardProps {
   monthly: StudyRecordMonthly;
+  /* 지난 달 통계면 null — 지금까지 공부한 시간은 지금 기준 값이라 이번 달에서만 보인다 */
+  totalStudiedMinutes: number | null;
 }
 
 interface AverageItemProps {
@@ -14,7 +16,7 @@ interface AverageItemProps {
   previousMinutes: number | null;
 }
 
-export default function StudyCard({monthly}: StudyCardProps) {
+export default function StudyCard({monthly, totalStudiedMinutes}: StudyCardProps) {
   const {totalMinutes, weekdayAvg, holidayAvg, prevWeekdayAvg, prevHolidayAvg} = monthly.study;
 
   return (
@@ -26,6 +28,9 @@ export default function StudyCard({monthly}: StudyCardProps) {
         />
         {weekdayAvg !== null && <AverageItem label="평일 평균" minutes={weekdayAvg} previousMinutes={prevWeekdayAvg} />}
         {holidayAvg !== null && <AverageItem label="휴일 평균" minutes={holidayAvg} previousMinutes={prevHolidayAvg} />}
+        {totalStudiedMinutes !== null && (
+          <StatListItem label="누적 총 공부" value={<StatValue>{formatDuration(totalStudiedMinutes)}</StatValue>} />
+        )}
       </StatList>
     </Card>
   );

@@ -3,6 +3,8 @@ import {describe, expect, it} from 'vitest';
 import {createMonthly, getDefinitionByTerm, queryAllTermTexts} from '@/study-record-stats/test-utils';
 import StudyCard from './StudyCard';
 
+const TOTAL_LABEL = '누적 총 공부';
+
 describe('StudyCard', () => {
   describe('General cases', () => {
     [
@@ -10,23 +12,40 @@ describe('StudyCard', () => {
       {label: '휴일 평균', study: {holidayAvg: 212, prevHolidayAvg: 244}, expected: /^3시간 32분지난달 −32분$/},
     ].forEach(({label, study, expected}) => {
       it(`${label} 옆에 지난달 평균과의 차이가 보인다`, () => {
-        render(<StudyCard monthly={createMonthly({study})} />);
+        render(<StudyCard monthly={createMonthly({study})} totalStudiedMinutes={null} />);
 
         expect(getDefinitionByTerm(label)).toHaveTextContent(expected);
       });
+    });
+
+    it('이번 달이면 맨 아래에 누적 총 공부가 보인다', () => {
+      render(<StudyCard monthly={createMonthly()} totalStudiedMinutes={189} />);
+
+      expect(queryAllTermTexts().at(-1)).toBe(TOTAL_LABEL);
+    });
+
+    it('지난 달이면 누적 총 공부가 보이지 않는다', () => {
+      render(<StudyCard monthly={createMonthly({month: '2026-08', inProgress: false})} totalStudiedMinutes={null} />);
+
+      expect(queryAllTermTexts()).not.toContain(TOTAL_LABEL);
     });
   });
 
   describe('Edge cases', () => {
     it('그 달 휴일 기록이 없으면 휴일 평균이 보이지 않는다', () => {
       const monthly = createMonthly({month: '2026-09', study: {weekdayAvg: 189, holidayAvg: null}});
-      render(<StudyCard monthly={monthly} />);
+      render(<StudyCard monthly={monthly} totalStudiedMinutes={null} />);
 
       expect(queryAllTermTexts()).toEqual(['9월 총 공부', '평일 평균']);
     });
 
     it('지난달 평일 기록이 없으면 평일 평균 옆에 지난달 차이가 보이지 않는다', () => {
-      render(<StudyCard monthly={createMonthly({study: {weekdayAvg: 189, prevWeekdayAvg: null}})} />);
+      render(
+        <StudyCard
+          monthly={createMonthly({study: {weekdayAvg: 189, prevWeekdayAvg: null}})}
+          totalStudiedMinutes={null}
+        />,
+      );
 
       expect(getDefinitionByTerm('평일 평균')).toHaveTextContent(/^3시간 9분$/);
     });

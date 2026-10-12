@@ -2,13 +2,13 @@ import type {FailureTag, StudyRecordOverview} from '@plan-for-myself/shared';
 import {render, screen} from '@testing-library/react';
 import {describe, expect, it} from 'vitest';
 import {type CalendarMonth, toMonthParam} from '@/study-record/calendar-date';
-import {createMonthly, queryAllTermTexts} from '@/study-record-stats/test-utils';
+import {createMonthly, getDefinitionByTerm, queryAllTermTexts} from '@/study-record-stats/test-utils';
 import StatsSection from './StatsSection';
 
 const TODAY = '2026-09-24';
 const CURRENT_MONTH: CalendarMonth = {year: 2026, month: 9};
 const PREVIOUS_MONTH: CalendarMonth = {year: 2026, month: 8};
-const CURRENT_MONTH_ONLY_LABELS = ['누적 기록', '연속 기록'];
+const CURRENT_MONTH_ONLY_LABELS = ['누적 기록', '누적 총 공부', '연속 기록'];
 const PREVIOUS_MONTH_RECORDED_DAYS_LABEL = '8월 기록';
 const FAIL_CARD_CASES = [
   {when: '이번 달', month: CURRENT_MONTH, title: '9월 실패'},
@@ -33,17 +33,24 @@ const OVERVIEW: StudyRecordOverview = {
 describe('StatsSection', () => {
   describe('General cases', () => {
     CURRENT_MONTH_ONLY_LABELS.forEach((label) => {
-      it(`이번 달이면 ${label}이 보인다`, () => {
+      it(`이번 달이면 ${label} 줄이 보인다`, () => {
         renderStatsSection(CURRENT_MONTH);
 
         expect(queryAllTermTexts()).toContain(label);
       });
 
-      it(`지난 달이면 ${label}이 보이지 않는다`, () => {
+      it(`지난 달이면 ${label} 줄이 보이지 않는다`, () => {
         renderStatsSection(PREVIOUS_MONTH);
 
         expect(queryAllTermTexts()).not.toContain(label);
       });
+    });
+
+    it('이번 달이면 누적 기록에 기록한 날 수가, 누적 총 공부에 공부 시간이 보인다', () => {
+      renderStatsSection(CURRENT_MONTH);
+
+      expect(getDefinitionByTerm('누적 기록')).toHaveTextContent(/^412일$/);
+      expect(getDefinitionByTerm('누적 총 공부')).toHaveTextContent(/^523시간$/);
     });
 
     it('지난 달이면 그 달 기록 줄이 보인다', () => {

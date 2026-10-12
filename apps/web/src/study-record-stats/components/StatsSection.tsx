@@ -2,7 +2,6 @@
 
 import type {StudyRecordMonthly, StudyRecordOverview} from '@plan-for-myself/shared';
 import {type ReactNode, useEffect, useRef, useState} from 'react';
-import CumulativeStrip from '@/study-record-stats/components/CumulativeStrip';
 import FailCard from '@/study-record-stats/components/FailCard';
 import RecordCard from '@/study-record-stats/components/RecordCard';
 import StudyCard from '@/study-record-stats/components/StudyCard';
@@ -24,18 +23,15 @@ interface FailSectionProps {
 
 export default function StatsSection({monthly, overview, renderTagCalendar}: StatsSectionProps) {
   return (
-    <>
-      {overview && <CumulativeStrip monthly={monthly} totals={overview.totals} />}
-      <div className={styles.columns}>
-        <div className={styles.column}>
-          <FailSection monthly={monthly} renderTagCalendar={renderTagCalendar} />
-        </div>
-        <div className={styles.column}>
-          <RecordCard monthly={monthly} streak={overview?.streak ?? null} />
-          <StudyCard monthly={monthly} />
-        </div>
-      </div>
-    </>
+    <div className={styles.cards}>
+      <FailSection monthly={monthly} renderTagCalendar={renderTagCalendar} />
+      <RecordCard
+        monthly={monthly}
+        streak={overview?.streak ?? null}
+        totalRecordedDays={overview?.totals.recordedDays ?? null}
+      />
+      <StudyCard monthly={monthly} totalStudiedMinutes={overview?.totals.studiedMinutes ?? null} />
+    </div>
   );
 }
 

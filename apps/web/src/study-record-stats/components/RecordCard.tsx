@@ -6,6 +6,8 @@ import {countMissedDays, formatMonthLabel, formatStreakNote} from '@/study-recor
 interface RecordCardProps {
   /* 지난 달 통계면 null — 지금 기준 값(연속 기록·역대 최장)은 이번 달에서만 보인다 */
   streak: StudyRecordOverview['streak'] | null;
+  /* 지난 달 통계면 null — 지금까지 기록한 날 수도 지금 기준 값이다 */
+  totalRecordedDays: number | null;
   monthly: StudyRecordMonthly;
 }
 
@@ -13,7 +15,7 @@ interface RecordedDaysSentenceProps {
   recordedDays: StudyRecordMonthly['recordedDays'];
 }
 
-export default function RecordCard({streak, monthly}: RecordCardProps) {
+export default function RecordCard({streak, totalRecordedDays, monthly}: RecordCardProps) {
   const hasStreak = streak !== null;
 
   return (
@@ -30,6 +32,12 @@ export default function RecordCard({streak, monthly}: RecordCardProps) {
           label={`${formatMonthLabel(monthly.month)} 기록`}
           value={<RecordedDaysSentence recordedDays={monthly.recordedDays} />}
         />
+        {totalRecordedDays !== null && (
+          <StatListItem
+            label="누적 기록"
+            value={<StatValue>{totalRecordedDays.toLocaleString('ko-KR')}일</StatValue>}
+          />
+        )}
       </StatList>
     </Card>
   );
