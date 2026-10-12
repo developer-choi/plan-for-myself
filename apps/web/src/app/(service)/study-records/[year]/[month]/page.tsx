@@ -4,7 +4,7 @@ import {notFound} from 'next/navigation';
 import classNames from 'classnames';
 import typography from '@developer-choi/design-system/styles/typography';
 import {getKoreanToday} from '@plan-for-myself/shared';
-import LoginNudgeTrigger from '@/auth/components/LoginNudgeTrigger';
+import LoginNudgeCard from '@/auth/components/LoginNudgeCard';
 import {auth} from '@/auth/next-auth';
 import {getLoginState} from '@/auth/path';
 import HandledErrorBoundary from '@/shared/components/HandledErrorBoundary';
@@ -39,16 +39,9 @@ export default async function Page({params}: PageProps) {
         previousHref={monthPath(shiftMonth(viewMonth, -1))}
         right={
           isGuest && (
-            <>
-              <Link
-                className={classNames(typography.body2, typography.bold, styles.loginLink)}
-                href="/login"
-                id={LOGIN_LINK_ID}
-              >
-                로그인
-              </Link>
-              <LoginNudgeTrigger targetId={LOGIN_LINK_ID} />
-            </>
+            <Link className={classNames(typography.body2, typography.bold, styles.loginLink)} href="/login">
+              로그인
+            </Link>
           )
         }
         title={`${viewMonth.year}년 ${viewMonth.month}월`}
@@ -60,8 +53,7 @@ export default async function Page({params}: PageProps) {
           </Suspense>
         </HandledErrorBoundary>
       </main>
+      {isGuest && <LoginNudgeCard today={today} />}
     </div>
   );
 }
-
-const LOGIN_LINK_ID = 'calendar-login-link';

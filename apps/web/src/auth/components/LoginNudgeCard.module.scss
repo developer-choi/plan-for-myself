@@ -1,0 +1,40 @@
+@use '../../shared/styles/breakpoints';
+@use '../../shared/styles/z-index';
+
+.card {
+  --close-size: 40px;
+
+  position: fixed;
+  right: var(--spacing-lg);
+  bottom: var(--spacing-lg);
+  z-index: z-index.zIndex(bubble);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  align-items: flex-start;
+  width: 400px;
+  padding: var(--spacing-md) var(--close-size) var(--spacing-md) var(--spacing-md);
+  background: var(--color-bg-default);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-ring-rest), var(--shadow-hover);
+
+  @include breakpoints.mobile {
+    right: var(--spacing-md);
+    bottom: var(--spacing-md);
+    left: var(--spacing-md);
+    width: auto;
+  }
+}
+
+.message {
+  color: var(--color-fg-default);
+  word-break: keep-all;
+}
+
+.close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: var(--close-size);
+  height: var(--close-size);
+}
