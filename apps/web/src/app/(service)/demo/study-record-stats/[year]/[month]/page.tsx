@@ -1,11 +1,14 @@
 import type {Metadata} from 'next';
 import {notFound} from 'next/navigation';
+import {CalendarIcon} from '@radix-ui/react-icons';
 import {auth} from '@/auth/next-auth';
 import {getLoginState} from '@/auth/path';
 import DemoBanner from '@/demo/components/DemoBanner';
 import DemoStatsSection from '@/demo/components/DemoStatsSection';
 import DemoTourTrigger from '@/demo/components/DemoTourTrigger';
 import {getDemoMonthly, getDemoOverview, getDemoRecords, getDemoToday} from '@/demo/demo-examples';
+import {demoCalendarPath, demoStatsPath} from '@/demo/demo-path';
+import {getStatsMonthNavigation} from '@/study-record-stats/month-navigation';
 import ErrorNotice from '@/shared/components/ErrorNotice';
 import SubPageHeader from '@/shared/components/SubPageHeader';
 import layout from '@/shared/styles/layout.module.scss';
@@ -33,13 +36,22 @@ export default async function Page({params}: PageProps) {
   const isLoggedIn = getLoginState(await auth()) !== 'logged-out';
   const now = new Date();
   const today = getDemoToday(now);
+  const overview = getDemoOverview(now);
   const monthly = isFutureMonth(today, viewMonth) ? null : getDemoMonthly(viewMonth, now);
+  const {previous, next} = getStatsMonthNavigation({today, month: viewMonth, firstRecordDate: overview.firstRecordDate});
 
   return (
     <div className={layout.shell}>
       <DemoBanner isLoggedIn={isLoggedIn} />
       <div className={layout.centered}>
-        <SubPageHeader title={formatStatsTitle(viewMonth)} />
+        <SubPageHeader
+          exit={{href: demoCalendarPath(viewMonth), label: '달력', icon: CalendarIcon}}
+          monthNavigation={{
+            previousHref: previous && demoStatsPath(previous),
+            nextHref: next && demoStatsPath(next),
+          }}
+          title={formatStatsTitle(viewMonth)}
+        />
         <main className={styles.body}>
           {monthly === null ? (
             <div className={styles.notice}>
@@ -49,7 +61,7 @@ export default async function Page({params}: PageProps) {
             <DemoStatsSection
               month={viewMonth}
               monthly={monthly}
-              overview={isSameMonth(today, viewMonth) ? getDemoOverview(now) : null}
+              overview={isSameMonth(today, viewMonth) ? overview : null}
               records={getDemoRecords(now)}
             />
           )}

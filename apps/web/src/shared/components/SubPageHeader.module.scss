@@ -1,14 +1,34 @@
 @use '../styles/sub-page-header';
 @use '../styles/z-index';
 
+/* 제목(달 이동)을 가운데에 두려고 양옆을 1fr로 나누되, 왼쪽은 링크 폭 아래로 줄지 않는다 */
 .header {
   position: sticky;
   top: 0;
   z-index: z-index.zIndex(stickyHeader);
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(max-content, 1fr) auto minmax(0, 1fr);
   height: sub-page-header.$height;
+  gap: var(--spacing-md);
+  align-items: center;
+  padding: 0 var(--spacing-page-x-mobile);
+  background: var(--color-bg-subtle);
+}
+
+.exit {
+  justify-self: start;
+}
+
+.monthNavigation {
+  display: flex;
   gap: var(--spacing-xs);
   align-items: center;
-  padding: var(--spacing-md) var(--spacing-page-x-mobile);
-  background: var(--color-bg-subtle);
+}
+
+.title {
+  white-space: nowrap;
+}
+
+.hiddenMonthLink {
+  visibility: hidden;
 }
