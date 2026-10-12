@@ -3,7 +3,6 @@ import type {Metadata} from 'next';
 import {notFound} from 'next/navigation';
 import {dehydrate, HydrationBoundary, noop, QueryClient} from '@tanstack/react-query';
 import {getKoreanToday} from '@plan-for-myself/shared';
-import ErrorNotice from '@/shared/components/ErrorNotice';
 import HandledErrorBoundary from '@/shared/components/HandledErrorBoundary';
 import LoadingSpinner from '@/shared/components/LoadingSpinner';
 import layout from '@/shared/styles/layout.module.scss';
@@ -12,6 +11,7 @@ import {studyRecordQueries, studyRecordStatsQueries} from '@/study-record/querie
 import FetchedStatsSection from '@/study-record-stats/components/FetchedStatsSection';
 import StatsPageHeader from '@/study-record-stats/components/StatsPageHeader';
 import {formatStatsTitle} from '@/study-record-stats/format';
+import {isBeforeFirstRecord} from '@/study-record-stats/month-navigation';
 import styles from './page.module.scss';
 
 interface PageProps {
@@ -32,40 +32,27 @@ export async function generateMetadata({params}: PageProps): Promise<Metadata> {
 export default async function Page({params}: PageProps) {
   const viewMonth = parseMonth(await params);
 
-  if (!viewMonth) {
-    notFound();
-  }
-
   const today = getKoreanToday();
 
-  const headerWithoutNavigation = <StatsPageHeader firstRecordDate={null} month={viewMonth} today={today} />;
+  if (!viewMonth || isFutureMonth(today, viewMonth)) {
+    notFound();
+  }
 
   return (
     <div className={layout.shell}>
       <div className={layout.centered}>
-        {isFutureMonth(today, viewMonth) ? (
-          <>
-            {headerWithoutNavigation}
-            <main className={styles.body}>
-              <div className={styles.notice}>
-                <ErrorNotice content="오늘까지의 달만 통계를 볼 수 있어요" title="미래 달은 조회할 수 없어요" />
-              </div>
-            </main>
-          </>
-        ) : (
-          <Suspense
-            fallback={
-              <>
-                {headerWithoutNavigation}
-                <main className={styles.body}>
-                  <LoadingSpinner />
-                </main>
-              </>
-            }
-          >
-            <PrefetchedStats month={viewMonth} today={today} />
-          </Suspense>
-        )}
+        <Suspense
+          fallback={
+            <>
+              <StatsPageHeader firstRecordDate={null} month={viewMonth} today={today} />
+              <main className={styles.body}>
+                <LoadingSpinner />
+              </main>
+            </>
+          }
+        >
+          <PrefetchedStats month={viewMonth} today={today} />
+        </Suspense>
       </div>
     </div>
   );
@@ -82,7 +69,13 @@ async function PrefetchedStats({month, today}: PrefetchedStatsProps) {
     queryClient.query(studyRecordQueries.list.options(toMonthParam(month))).catch(noop),
   ]);
 
-  const firstRecordDate = queryClient.getQueryData(overviewOptions.queryKey)?.firstRecordDate ?? null;
+  const overview = queryClient.getQueryData(overviewOptions.queryKey);
+
+  if (overview && isBeforeFirstRecord(month, overview.firstRecordDate)) {
+    notFound();
+  }
+
+  const firstRecordDate = overview?.firstRecordDate ?? null;
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
