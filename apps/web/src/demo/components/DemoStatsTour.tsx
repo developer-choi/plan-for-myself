@@ -8,7 +8,7 @@ import {FAIL_GROUPS_ID, FIRST_TAG_ROW_ID} from '@/study-record-stats/components/
 import {TAG_DETAIL_CARD_ID} from '@/study-record-stats/components/TagDetailCard';
 
 export default function DemoStatsTour() {
-  const openChoiceDialog = useOpenDemoChoiceDialog();
+  const openChoiceDialog = useOpenDemoChoiceDialog('tour-end');
 
   const handleEvent = (data: EventData) => {
     const isNextOnLastStep =

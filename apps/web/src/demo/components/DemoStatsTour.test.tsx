@@ -84,6 +84,18 @@ describe('DemoStatsTour', () => {
         await userEvent.click(screen.getByRole('button', {name: FINISH}));
 
         expect(await screen.findByRole('dialog', {name: TOUR_END_TITLE})).toBeInTheDocument();
+        expect(screen.getByText(TOUR_END_DESCRIPTION)).toBeInTheDocument();
+        expect(screen.getByRole('link', {name: '시작하기'})).toHaveAttribute('href', '/login');
+        expect(screen.getByRole('button', {name: '계속 둘러보기'})).toBeInTheDocument();
+      });
+
+      it('투어 끝 창의 닫기 버튼이 아니라 제목에 포커스가 간다', async () => {
+        renderStatsWithTour(THIS_MONTH);
+        await goToFifthBubble();
+
+        await userEvent.click(screen.getByRole('button', {name: FINISH}));
+
+        expect(await screen.findByRole('heading', {name: TOUR_END_TITLE})).toHaveFocus();
       });
     });
 
@@ -94,7 +106,8 @@ describe('DemoStatsTour', () => {
 
         await userEvent.click(screen.getByRole('button', {name: FINISH}));
 
-        expect(await screen.findByRole('link', {name: '내 달력으로 이동'})).toBeInTheDocument();
+        expect(await screen.findByRole('dialog', {name: '이제 내 달력에서 이어서 적어 보세요'})).toBeInTheDocument();
+        expect(screen.getByRole('link', {name: '내 달력으로 이동'})).toBeInTheDocument();
       });
     });
 
@@ -217,7 +230,8 @@ const THIRD_TEXT = '통계 화면이에요. 지난달과 비교해 어떤 실패
 const FOURTH_TEXT = '태그를 누르면 그 실패만 모아 볼 수 있어요';
 const FIFTH_TEXT = '이 실패를 한 날이 달력에 보여요. 아래에서 달마다 추이도 볼 수 있어요';
 const FIRST_TAG_OF_THIS_MONTH = '늦잠';
-const TOUR_END_TITLE = '체험 중인 상태에서는 기록을 작성할 수 없어요';
+const TOUR_END_TITLE = '이제 내 달력에 적어 볼까요?';
+const TOUR_END_DESCRIPTION = '실패를 적으면 내 기록으로 채워져요.';
 const LOGGED_IN_SESSION: Session = {userId: 'user-1', isGuest: false, expires: '2099-01-01T00:00:00.000Z'};
 const NEXT = '다음';
 const FINISH = '마치기';

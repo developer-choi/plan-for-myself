@@ -4,15 +4,38 @@
   right: var(--spacing-sm);
 }
 
-.message {
+.title {
   padding: 0 var(--spacing-lg);
   margin-bottom: var(--spacing-md);
   color: var(--color-fg-default);
   text-align: center;
+  word-break: keep-all;
+
+  /* 열릴 때 포커스를 받는 자리일 뿐 누르는 요소가 아니라 링을 그리지 않는다 */
+  &:focus {
+    outline: none;
+  }
+}
+
+.description {
+  margin-top: calc(-1 * var(--spacing-sm));
+  margin-bottom: var(--spacing-md);
+  color: var(--color-fg-secondary);
+  text-align: center;
+  word-break: keep-all;
 }
 
 .options {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
+}
+
+.textLink {
+  padding: var(--spacing-xs);
+  color: var(--color-fg-secondary);
+  text-decoration: underline;
+  cursor: pointer;
+  background: none;
+  border: none;
 }
