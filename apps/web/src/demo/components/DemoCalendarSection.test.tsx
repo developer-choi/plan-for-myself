@@ -4,7 +4,7 @@ import type {Session} from 'next-auth';
 import {SessionProvider} from 'next-auth/react';
 import {OverlayProvider} from 'overlay-kit';
 import {describe, expect, it} from 'vitest';
-import {DEMO_MONTH, DEMO_OVERVIEW, DEMO_RECORDS, DEMO_TODAY} from '@/demo/demo-examples';
+import {getDemoMonth, getDemoOverview, getDemoRecords, getDemoToday} from '@/demo/demo-examples';
 import DemoCalendarSection from './DemoCalendarSection';
 
 describe('DemoCalendarSection', () => {
@@ -106,9 +106,10 @@ describe('DemoCalendarSection', () => {
   });
 });
 
+const NOW = new Date('2026-10-12T12:00:00+09:00');
 const CHOICE_MESSAGE = '체험 중인 상태에서는 기록을 작성할 수 없어요';
-const RECORDED_DAY = 17;
-const RECORDED_TOTAL_TIME = '2:30';
+const RECORDED_DAY = 10;
+const RECORDED_TOTAL_TIME = '3:30';
 const RECORDED_BUTTON_NAME = new RegExp(`^${RECORDED_DAY}${RECORDED_TOTAL_TIME}`);
 const EMPTY_DAY = 2;
 const MY_CALENDAR_LABEL = '내 달력으로 이동';
@@ -119,7 +120,12 @@ function renderSection(session: Session | null = null) {
   render(
     <SessionProvider session={session}>
       <OverlayProvider>
-        <DemoCalendarSection month={DEMO_MONTH} overview={DEMO_OVERVIEW} records={DEMO_RECORDS} today={DEMO_TODAY} />
+        <DemoCalendarSection
+          month={getDemoMonth(NOW)}
+          overview={getDemoOverview(NOW)}
+          records={getDemoRecords(NOW)}
+          today={getDemoToday(NOW)}
+        />
       </OverlayProvider>
     </SessionProvider>,
   );
