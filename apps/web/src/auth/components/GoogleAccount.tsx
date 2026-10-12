@@ -7,7 +7,7 @@ export default function GoogleAccount() {
   return (
     <>
       <Card>
-        <p className={classNames(typography.body1, typography.bold)}>구글 계정으로 로그인 중</p>
+        <p className={classNames(typography.body1, typography.bold)}>Google 계정으로 로그인 중</p>
       </Card>
       <AccountDeleteAction text={GOOGLE_DELETE_TEXT} />
     </>

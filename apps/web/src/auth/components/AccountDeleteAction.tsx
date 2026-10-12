@@ -3,7 +3,9 @@
 import {captureException} from '@sentry/nextjs';
 import {useMutation} from '@tanstack/react-query';
 import {overlay} from 'overlay-kit';
-import {Button, Callout, Confirm} from '@developer-choi/design-system';
+import classNames from 'classnames';
+import {Callout, Confirm} from '@developer-choi/design-system';
+import typography from '@developer-choi/design-system/styles/typography';
 import {deleteAccountApi} from '@/auth/api';
 import {ENTRY_URL} from '@/auth/redirect';
 import {isMutationSettling} from '@/shared/query/mutation';
@@ -32,9 +34,11 @@ export default function AccountDeleteAction({text}: AccountDeleteActionProps) {
   };
 
   return (
-    <Button className={styles.trigger} color="destructive" size="xLarge" onClick={openConfirm}>
-      {text.trigger}
-    </Button>
+    <div className={styles.section}>
+      <button className={classNames(typography.body2, styles.trigger)} type="button" onClick={openConfirm}>
+        {text.trigger}
+      </button>
+    </div>
   );
 }
 
