@@ -39,8 +39,8 @@ export default async function Page({params}: PageProps) {
         previousHref={monthPath(shiftMonth(viewMonth, -1))}
         right={
           isGuest && (
-            <Link className={classNames(typography.body2, typography.bold, styles.loginLink)} href="/login">
-              로그인
+            <Link className={classNames(typography.body2, typography.bold, styles.connectLink)} href="/login">
+              Google 연결
             </Link>
           )
         }

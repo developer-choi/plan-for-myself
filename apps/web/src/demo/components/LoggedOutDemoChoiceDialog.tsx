@@ -3,15 +3,10 @@
 import {Button, Dialog, IconButton} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
 import {Cross2Icon} from '@radix-ui/react-icons';
-import {captureException} from '@sentry/nextjs';
 import classNames from 'classnames';
 import Link from 'next/link';
-import {signIn} from 'next-auth/react';
-import {useState} from 'react';
-import {DEFAULT_HOME_URL} from '@/auth/redirect';
 import {focusOnMount} from '@/demo/focus-on-mount';
 import type {DemoChoiceReason} from '@/demo/demo-choice-reason';
-import {useHandleClientSideError} from '@/shared/error/useHandleClientSideError';
 import styles from './DemoChoiceDialog.module.scss';
 
 interface LoggedOutDemoChoiceDialogProps {
@@ -21,21 +16,6 @@ interface LoggedOutDemoChoiceDialogProps {
 }
 
 export default function LoggedOutDemoChoiceDialog({isOpen, onClose, reason}: LoggedOutDemoChoiceDialogProps) {
-  const [loading, setLoading] = useState(false);
-
-  const handleClientSideError = useHandleClientSideError();
-
-  const startAsGuest = async () => {
-    setLoading(true);
-    try {
-      await signIn('guest', {callbackUrl: DEFAULT_HOME_URL});
-    } catch (error) {
-      captureException(error);
-      handleClientSideError(error);
-      setLoading(false);
-    }
-  };
-
   const {title, description} = MESSAGES[reason];
 
   return (
@@ -60,9 +40,6 @@ export default function LoggedOutDemoChoiceDialog({isOpen, onClose, reason}: Log
           <Link href="/login" onClick={onClose}>
             시작하기
           </Link>
-        </Button>
-        <Button color="secondary" loading={loading} size="large" variant="outlined" onClick={startAsGuest}>
-          로그인 없이 이용하기
         </Button>
         <button className={classNames(typography.body2, styles.textLink)} type="button" onClick={onClose}>
           계속 둘러보기

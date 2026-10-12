@@ -5,8 +5,10 @@
   padding: 0 var(--spacing-page-x-mobile) var(--spacing-md);
 }
 
-.loginLink {
-  padding: 0 var(--spacing-xs);
+.connectLink {
+  /* 한 줄로 묶으면 폭 345 아래에서 다음 달 화살표를 덮어 누르면 이 링크로 간다 — 띄어쓰기 자리에서만 「Google / 연결」로 꺾는다 */
+  text-align: right;
+  word-break: keep-all;
   color: var(--color-primary);
   text-decoration: none;
 }

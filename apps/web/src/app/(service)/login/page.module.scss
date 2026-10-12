@@ -9,12 +9,6 @@
   background: var(--color-bg-default);
 }
 
-.back {
-  position: absolute;
-  top: var(--spacing-md);
-  left: var(--spacing-page-x-mobile);
-}
-
 .content {
   display: flex;
   flex-direction: column;
@@ -32,6 +26,13 @@
   width: 100%;
 }
 
+.guest {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-sm);
+}
+
 .text {
   display: flex;
   flex-direction: column;
@@ -40,4 +41,15 @@
 
 .sub {
   color: var(--color-fg-secondary);
+}
+
+.guestNote {
+  color: var(--color-fg-secondary);
+  word-break: keep-all;
+}
+
+.exitLink {
+  padding: var(--spacing-xs);
+  color: var(--color-fg-secondary);
+  text-decoration: underline;
 }
