@@ -20,8 +20,6 @@ export interface StudyRecordMonthly {
   month: string;
   inProgress: boolean;
   recordedDays: RecordedDays;
-  /* 전달 기록이 하나도 없으면 셀 대상이 아니라 null */
-  previousRecordedDays: RecordedDays | null;
   study: {
     totalMinutes: number;
     /* 조회하는 달에 평일 기록이 없으면 null */

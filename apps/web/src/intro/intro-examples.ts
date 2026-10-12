@@ -51,7 +51,6 @@ export const INTRO_MONTHLY: StudyRecordMonthly = {
   month: '2026-09',
   inProgress: true,
   recordedDays: {count: 28, total: 30},
-  previousRecordedDays: {count: 30, total: 31},
   study: {totalMinutes: 4800, weekdayAvg: 170, holidayAvg: 180, prevWeekdayAvg: 160, prevHolidayAvg: 170},
   failureTags: [
     {tag: '늦잠', count: 4, previousCount: 3, status: 'repeated', trend: []},
