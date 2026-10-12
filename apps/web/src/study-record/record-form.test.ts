@@ -132,6 +132,10 @@ describe('validateMinuteInput()', () => {
       expect(validateMinuteInput('')).toBe(true);
     });
 
+    it('공백만 넣은 칸은 빈칸처럼 true를 반환해야 한다', () => {
+      expect(validateMinuteInput('   ')).toBe(true);
+    });
+
     ['abc', '1.5', '-10'].forEach((text) => {
       it(`${text}이면 공부시간 문구를 반환해야 한다`, () => {
         expect(validateMinuteInput(text)).toBe(STUDY_RECORD_FIELD_MESSAGES.studiedMinutes);

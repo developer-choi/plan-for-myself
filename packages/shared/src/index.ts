@@ -3,6 +3,7 @@ export {isHolidayDate} from './date/holiday';
 export {getKoreanDate, getKoreanToday, KST} from './date/korean';
 export {convertLunarDateToSolar, type SimpleDate} from './date/lunar';
 export type {DateType} from './date-type/type';
+export {isEmptyStudyRecord} from './study-record/empty';
 export {minutesFormat, studiedTimeFormat} from './study-record/format';
 export {
   FAILURE_TAG_TREND_MONTH_LIMIT,

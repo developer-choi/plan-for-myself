@@ -46,4 +46,6 @@
 
 .rejection {
   margin-top: var(--spacing-form-gap);
+  white-space: pre-line;
+  word-break: keep-all;
 }
