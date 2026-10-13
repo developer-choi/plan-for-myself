@@ -35,7 +35,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div className={layout.shell}>
-      <div className={layout.centered}>
+      <div className={classNames(layout.centered, layout.reading)}>
         <SubPageHeader exit={{href: ENTRY_URL, label: '처음으로', icon: HomeIcon}} title="개인정보 처리방침" />
         <main className={styles.body}>
           <Card>

@@ -1,5 +1,6 @@
 import type {Metadata} from 'next';
 import {notFound} from 'next/navigation';
+import classNames from 'classnames';
 import {CalendarIcon} from '@radix-ui/react-icons';
 import {auth} from '@/auth/next-auth';
 import {getLoginState} from '@/auth/path';
@@ -37,12 +38,16 @@ export default async function Page({params}: PageProps) {
 
   const isLoggedIn = getLoginState(await auth()) !== 'logged-out';
   const monthly = getDemoMonthly(viewMonth, now);
-  const {previous, next} = getStatsMonthNavigation({today, month: viewMonth, firstRecordDate: overview.firstRecordDate});
+  const {previous, next} = getStatsMonthNavigation({
+    today,
+    month: viewMonth,
+    firstRecordDate: overview.firstRecordDate,
+  });
 
   return (
     <div className={layout.shell}>
       <DemoBanner isLoggedIn={isLoggedIn} />
-      <div className={layout.centered}>
+      <div className={classNames(layout.centered, layout.narrow)}>
         <SubPageHeader
           exit={{href: demoCalendarPath(viewMonth), label: '달력', icon: CalendarIcon}}
           monthNavigation={{
