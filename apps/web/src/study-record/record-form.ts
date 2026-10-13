@@ -98,7 +98,7 @@ export function parseRecordRejection(error: unknown): RecordRejection | null {
 
 export const UNEXPECTED_FAILURE_MESSAGE = '저장하지 못했어요. 잠시 뒤 다시 시도해 주세요';
 
-export const UNEXPECTED_DELETE_FAILURE_MESSAGE = '지우지 못했어요. 잠시 뒤 다시 시도해 주세요';
+export const UNEXPECTED_DELETE_FAILURE_MESSAGE = '삭제하지 못했어요. 잠시 뒤 다시 시도해 주세요';
 
 export const FAIL_TAG_DUPLICATE_MESSAGE = '이미 넣은 실패 태그예요';
 

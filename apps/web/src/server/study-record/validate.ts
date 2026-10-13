@@ -126,7 +126,7 @@ const studyRecordFieldsSchema = studyRecordOriginalSchema.pick({
   failTags: true,
 });
 const studyRecordUpdateSchema = studyRecordFieldsSchema.extend({
-  date: z.never({error: '날짜는 바꿀 수 없어요. 지우고 그 날짜에 새로 기록해 주세요'}).optional(),
+  date: z.never({error: '날짜는 바꿀 수 없어요. 삭제하고 그 날짜에 새로 기록해 주세요'}).optional(),
 });
 
 const monthSchema = z
