@@ -49,5 +49,16 @@ describe('StudyCard', () => {
 
       expect(getDefinitionByTerm('평일 평균')).toHaveTextContent(/^3시간 9분$/);
     });
+
+    it('지난달과 평일 평균이 같으면 평일 평균 옆에 지난달 차이가 보이지 않는다', () => {
+      render(
+        <StudyCard
+          monthly={createMonthly({study: {weekdayAvg: 195, prevWeekdayAvg: 195}})}
+          totalStudiedMinutes={null}
+        />,
+      );
+
+      expect(getDefinitionByTerm('평일 평균')).toHaveTextContent(/^3시간 15분$/);
+    });
   });
 });
