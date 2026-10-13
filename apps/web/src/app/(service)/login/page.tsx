@@ -1,10 +1,13 @@
+import type {Metadata} from 'next';
 import classNames from 'classnames';
 import Link from 'next/link';
-import {Callout} from '@developer-choi/design-system';
+import {Button} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
+import DiscardGuestButton from '@/auth/components/DiscardGuestButton';
 import GoogleLoginActions from '@/auth/components/GoogleLoginActions';
 import GuestLimitNotice from '@/auth/components/GuestLimitNotice';
 import GuestStartButton from '@/auth/components/GuestStartButton';
+import LoginNotice from '@/auth/components/LoginNotice';
 import RegisteredAccountNotice from '@/auth/components/RegisteredAccountNotice';
 import {readRegisteredRejection, shouldShowRegisteredNotice} from '@/auth/login-cookies';
 import {getLoginErrorKind} from '@/auth/login-error';
@@ -21,12 +24,18 @@ import {
 import type {SearchParamsPageProps} from '@/shared/types/page';
 import styles from './page.module.scss';
 
+export async function generateMetadata(): Promise<Metadata> {
+  return {title: getLoginPageCopy(getLoginState(await auth()) === 'guest').title};
+}
+
 export default async function Page({searchParams}: SearchParamsPageProps) {
   const [session, rejection, query] = await Promise.all([auth(), readRegisteredRejection(), searchParams]);
   const errorKind = getLoginErrorKind(query);
   const redirect = Array.isArray(query.redirect) ? query.redirect[0] : query.redirect;
   const isGuest = getLoginState(session) === 'guest';
-  const copy = isGuest ? GUEST_COPY : LOGGED_OUT_COPY;
+  const copy = getLoginPageCopy(isGuest);
+  /* 같은 Google 계정이 다시 넘어와 또 거절되므로 Google 버튼 대신 삭제하지 않고 돌아가는 길을 둔다 */
+  const isRejected = shouldShowRegisteredNotice(rejection, session);
 
   return (
     <div className={styles.page}>
@@ -39,10 +48,20 @@ export default async function Page({searchParams}: SearchParamsPageProps) {
           {copy.description && <p className={classNames(typography.body1, styles.sub)}>{copy.description}</p>}
         </header>
         <div className={styles.actions}>
-          {shouldShowRegisteredNotice(rejection, session) && <RegisteredAccountNotice />}
+          {/* 삭제 후 로그인이 실패해 돌아오면 거절 안내 대신 실패 안내 하나만 둔다 */}
+          {isRejected && errorKind === null && <RegisteredAccountNotice />}
           {errorKind === 'guest-limit' && <GuestLimitNotice />}
-          {errorKind === 'failed' && <Callout color="danger">로그인하지 못했어요. 잠시 뒤 다시 시도해 주세요.</Callout>}
-          <GoogleLoginActions label={copy.googleLabel} redirect={redirect} />
+          {errorKind === 'failed' && <LoginNotice title="로그인하지 못했어요">잠시 후 다시 시도해 주세요</LoginNotice>}
+          {isRejected ? (
+            <>
+              <DiscardGuestButton />
+              <Button asChild color="secondary" size="xLarge">
+                <Link href={DEFAULT_HOME_URL}>삭제하지 않고 내 달력으로</Link>
+              </Button>
+            </>
+          ) : (
+            <GoogleLoginActions label={copy.googleLabel} redirect={redirect} />
+          )}
           {!isGuest && (
             <div className={styles.guest}>
               <GuestStartButton />
@@ -54,9 +73,11 @@ export default async function Page({searchParams}: SearchParamsPageProps) {
             </div>
           )}
         </div>
-        <Link className={classNames(typography.body2, styles.exitLink)} href={copy.exitHref}>
-          {copy.exitLabel}
-        </Link>
+        {!isRejected && (
+          <Link className={classNames(typography.body2, styles.exitLink)} href={copy.exitHref}>
+            {copy.exitLabel}
+          </Link>
+        )}
       </main>
     </div>
   );
@@ -86,3 +107,7 @@ const GUEST_COPY: LoginPageCopy = {
   exitHref: DEFAULT_HOME_URL,
   exitLabel: MY_CALENDAR_LABEL,
 };
+
+function getLoginPageCopy(isGuest: boolean): LoginPageCopy {
+  return isGuest ? GUEST_COPY : LOGGED_OUT_COPY;
+}

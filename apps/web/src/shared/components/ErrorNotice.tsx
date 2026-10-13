@@ -14,18 +14,19 @@ interface ErrorNoticeProps {
   title: string;
   content: string;
   action?: ErrorNoticeAction;
-  size?: 'large' | 'small';
+  size?: 'large' | 'medium' | 'small';
 }
 
 export default function ErrorNotice({title, content, action, size = 'large'}: ErrorNoticeProps) {
   const isSmall = size === 'small';
+  const isFullScreen = size === 'large';
 
   return (
     <div className={styles.container}>
       {!isSmall && <Logo size="large" />}
       <div className={styles.text}>
-        <h2 className={classNames(isSmall ? typography.h4 : typography.h2, typography.bold)}>{title}</h2>
-        <p className={classNames(isSmall ? typography.body2 : typography.body1, styles.content)}>{content}</p>
+        <h2 className={classNames(isFullScreen ? typography.h2 : typography.h4, typography.bold)}>{title}</h2>
+        <p className={classNames(isFullScreen ? typography.body1 : typography.body2, styles.content)}>{content}</p>
       </div>
       {action && (
         <Button className={styles.action} size={isSmall ? 'medium' : 'large'} onClick={action.onClick}>

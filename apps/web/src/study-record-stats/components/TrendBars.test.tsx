@@ -80,6 +80,20 @@ describe('TrendBars', () => {
       expect(within(screen.getAllByRole('listitem')[1]).getByText('2')).toBeInTheDocument();
     });
 
+    it('막대가 여섯 개보다 적으면 첫 막대가 마지막 칸(이번 달)에 붙도록 오른쪽부터 채워야 한다', () => {
+      render(<TrendBars bars={createBars([{value: 1}, {value: 2}])} />);
+
+      const [first, second] = screen.getAllByRole('listitem');
+      expect(first).toHaveStyle({gridColumnStart: '5'});
+      expect(second).not.toHaveAttribute('style');
+    });
+
+    it('막대가 여섯 개면 첫 막대가 첫 칸에서 시작해야 한다', () => {
+      render(<TrendBars bars={createBars([{}, {}, {}, {}, {}, {}])} />);
+
+      expect(screen.getAllByRole('listitem')[0]).toHaveStyle({gridColumnStart: '1'});
+    });
+
     it('막대가 없으면 막대가 하나도 보이지 않아야 한다', () => {
       render(<TrendBars bars={[]} />);
 

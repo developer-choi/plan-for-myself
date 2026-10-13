@@ -37,10 +37,12 @@ export default function StudyCard({monthly, totalStudiedMinutes}: StudyCardProps
 }
 
 function AverageItem({label, minutes, previousMinutes}: AverageItemProps) {
+  const diff = previousMinutes === null ? 0 : minutes - previousMinutes;
+
   return (
     <StatListItem
       label={label}
-      note={previousMinutes === null ? undefined : `지난달 ${formatMinutesDiff(minutes - previousMinutes)}`}
+      note={diff === 0 ? undefined : `지난달 ${formatMinutesDiff(diff)}`}
       value={<StatValue>{formatDuration(minutes)}</StatValue>}
     />
   );

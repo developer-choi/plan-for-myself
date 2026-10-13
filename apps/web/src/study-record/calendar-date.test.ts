@@ -1,5 +1,13 @@
 import {describe, expect, it} from 'vitest';
-import {formatDateTitle, getCalendarCells, isSameMonth, parseMonth, shiftMonth, toMonthParam} from './calendar-date';
+import {
+  formatDateTitle,
+  formatMonthTitle,
+  getCalendarCells,
+  isSameMonth,
+  parseMonth,
+  shiftMonth,
+  toMonthParam,
+} from './calendar-date';
 
 describe('getCalendarCells()', () => {
   const daysPerWeek = 7;
@@ -161,6 +169,14 @@ describe('parseMonth()', () => {
       it(`${reason}이면 null을 반환해야 한다`, () => {
         expect(parseMonth({year, month: '9'})).toBeNull();
       });
+    });
+  });
+});
+
+describe('formatMonthTitle()', () => {
+  describe('General cases', () => {
+    it('달을 넘기면 「YYYY년 M월」 제목을 반환해야 한다', () => {
+      expect(formatMonthTitle({year: 2026, month: 10})).toBe('2026년 10월');
     });
   });
 });

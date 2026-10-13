@@ -10,7 +10,17 @@ $viewportHeight: 100dvh;
 }
 
 .frame {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  align-items: center;
   max-width: var(--content-width-narrow);
+}
+
+.link {
+  padding: var(--spacing-xs);
+  color: var(--color-fg-secondary);
+  text-decoration: underline;
 }
 
 // 앱 전역 `*`의 break-word가 자식마다 직접 걸려 있어 상속으로는 덮이지 않는다

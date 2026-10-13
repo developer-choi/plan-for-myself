@@ -7,12 +7,12 @@ import {getLoginState} from '@/auth/path';
 import DemoBanner from '@/demo/components/DemoBanner';
 import DemoStatsSection from '@/demo/components/DemoStatsSection';
 import DemoTourTrigger from '@/demo/components/DemoTourTrigger';
-import {getDemoMonthly, getDemoOverview, getDemoRecords, getDemoToday} from '@/demo/demo-examples';
+import {type DemoOverview, getDemoMonthly, getDemoOverview, getDemoRecords, getDemoToday} from '@/demo/demo-examples';
 import {demoCalendarPath, demoStatsPath} from '@/demo/demo-path';
 import {getStatsMonthNavigation, isBeforeFirstRecord} from '@/study-record-stats/month-navigation';
 import SubPageHeader from '@/shared/components/SubPageHeader';
 import layout from '@/shared/styles/layout.module.scss';
-import {isFutureMonth, isSameMonth, parseMonth} from '@/study-record/calendar-date';
+import {type CalendarMonth, isFutureMonth, isSameMonth, parseMonth} from '@/study-record/calendar-date';
 import {formatStatsTitle} from '@/study-record-stats/format';
 import styles from './page.module.scss';
 
@@ -20,21 +20,27 @@ interface PageProps {
   params: Promise<{year: string; month: string}>;
 }
 
-export async function generateMetadata({params}: PageProps): Promise<Metadata> {
-  const viewMonth = parseMonth(await params);
+interface DemoStatsMonth {
+  viewMonth: CalendarMonth;
+  today: string;
+  overview: DemoOverview;
+}
 
-  return viewMonth ? {title: formatStatsTitle(viewMonth)} : {};
+export async function generateMetadata({params}: PageProps): Promise<Metadata> {
+  const demoMonth = parseDemoStatsMonth(await params, new Date());
+
+  return demoMonth ? {title: formatStatsTitle(demoMonth.viewMonth)} : {};
 }
 
 export default async function Page({params}: PageProps) {
-  const viewMonth = parseMonth(await params);
   const now = new Date();
-  const today = getDemoToday(now);
-  const overview = getDemoOverview(now);
+  const demoMonth = parseDemoStatsMonth(await params, now);
 
-  if (!viewMonth || isFutureMonth(today, viewMonth) || isBeforeFirstRecord(viewMonth, overview.firstRecordDate)) {
+  if (!demoMonth) {
     notFound();
   }
+
+  const {viewMonth, today, overview} = demoMonth;
 
   const isLoggedIn = getLoginState(await auth()) !== 'logged-out';
   const monthly = getDemoMonthly(viewMonth, now);
@@ -69,4 +75,17 @@ export default async function Page({params}: PageProps) {
       {monthly.failureTags.length > 0 && <DemoTourTrigger part="stats" />}
     </div>
   );
+}
+
+/* null: 404가 될 달(주소가 달이 아님·미래 달·첫 기록 전) */
+function parseDemoStatsMonth(params: {year: string; month: string}, now: Date): DemoStatsMonth | null {
+  const viewMonth = parseMonth(params);
+  const today = getDemoToday(now);
+  const overview = getDemoOverview(now);
+
+  if (!viewMonth || isFutureMonth(today, viewMonth) || isBeforeFirstRecord(viewMonth, overview.firstRecordDate)) {
+    return null;
+  }
+
+  return {viewMonth, today, overview};
 }

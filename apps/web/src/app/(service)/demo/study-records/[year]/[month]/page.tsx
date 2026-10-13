@@ -1,3 +1,4 @@
+import type {Metadata} from 'next';
 import {notFound} from 'next/navigation';
 import {auth} from '@/auth/next-auth';
 import {getLoginState} from '@/auth/path';
@@ -8,12 +9,18 @@ import DemoTourTrigger from '@/demo/components/DemoTourTrigger';
 import {getDemoMonth, getDemoOverview, getDemoRecords, getDemoToday} from '@/demo/demo-examples';
 import {demoCalendarPath} from '@/demo/demo-path';
 import layout from '@/shared/styles/layout.module.scss';
-import {isSameMonth, parseMonth, shiftMonth} from '@/study-record/calendar-date';
+import {formatMonthTitle, isSameMonth, parseMonth, shiftMonth} from '@/study-record/calendar-date';
 import CalendarHeader from '@/study-record/components/CalendarHeader';
 import styles from './page.module.scss';
 
 interface PageProps {
   params: Promise<{year: string; month: string}>;
+}
+
+export async function generateMetadata({params}: PageProps): Promise<Metadata> {
+  const viewMonth = parseMonth(await params);
+
+  return viewMonth ? {title: formatMonthTitle(viewMonth)} : {};
 }
 
 export default async function Page({params}: PageProps) {
@@ -36,7 +43,7 @@ export default async function Page({params}: PageProps) {
         menu={<DemoCalendarMenu isLoggedIn={isLoggedIn} />}
         nextHref={demoCalendarPath(shiftMonth(viewMonth, 1))}
         previousHref={demoCalendarPath(shiftMonth(viewMonth, -1))}
-        title={`${viewMonth.year}년 ${viewMonth.month}월`}
+        title={formatMonthTitle(viewMonth)}
       />
       <main className={styles.body}>
         <DemoCalendarSection
