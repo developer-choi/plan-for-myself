@@ -1,7 +1,7 @@
 import type {CSSProperties} from 'react';
 import {colors} from '@plan-for-myself/shared';
 
-type ThemeVariable = `--color-${string}` | '--shadow-focus';
+type ThemeVariable = `--color-${string}` | '--shadow-focus' | `--content-width-${string}`;
 
 export const themeStyle: CSSProperties = {
   '--color-primary': colors.primary,
@@ -22,4 +22,6 @@ export const themeStyle: CSSProperties = {
   '--color-bg-neutral-soft': colors.off,
   '--color-bg-muted': colors.off,
   '--shadow-focus': `0 0 0 3px color-mix(in srgb, ${colors.primary} 25%, transparent)`,
+  '--content-width-narrow': '480px',
+  '--content-width-reading': '600px',
 } satisfies Record<ThemeVariable, string>;

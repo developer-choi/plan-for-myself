@@ -1,6 +1,7 @@
 import {Suspense} from 'react';
 import type {Metadata} from 'next';
 import {notFound} from 'next/navigation';
+import classNames from 'classnames';
 import {dehydrate, HydrationBoundary, noop, QueryClient} from '@tanstack/react-query';
 import {getKoreanToday} from '@plan-for-myself/shared';
 import HandledErrorBoundary from '@/shared/components/HandledErrorBoundary';
@@ -40,7 +41,7 @@ export default async function Page({params}: PageProps) {
 
   return (
     <div className={layout.shell}>
-      <div className={layout.centered}>
+      <div className={classNames(layout.centered, layout.narrow)}>
         <Suspense
           fallback={
             <>

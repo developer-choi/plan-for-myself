@@ -15,7 +15,7 @@
   gap: var(--spacing-xl);
   align-items: center;
   width: 100%;
-  max-width: 400px;
+  max-width: var(--content-width-narrow);
   text-align: center;
 }
 
