@@ -1,3 +1,4 @@
+import type {Metadata} from 'next';
 import classNames from 'classnames';
 import Link from 'next/link';
 import {Callout} from '@developer-choi/design-system';
@@ -21,12 +22,16 @@ import {
 import type {SearchParamsPageProps} from '@/shared/types/page';
 import styles from './page.module.scss';
 
+export async function generateMetadata(): Promise<Metadata> {
+  return {title: getLoginPageCopy(getLoginState(await auth()) === 'guest').title};
+}
+
 export default async function Page({searchParams}: SearchParamsPageProps) {
   const [session, rejection, query] = await Promise.all([auth(), readRegisteredRejection(), searchParams]);
   const errorKind = getLoginErrorKind(query);
   const redirect = Array.isArray(query.redirect) ? query.redirect[0] : query.redirect;
   const isGuest = getLoginState(session) === 'guest';
-  const copy = isGuest ? GUEST_COPY : LOGGED_OUT_COPY;
+  const copy = getLoginPageCopy(isGuest);
 
   return (
     <div className={styles.page}>
@@ -86,3 +91,7 @@ const GUEST_COPY: LoginPageCopy = {
   exitHref: DEFAULT_HOME_URL,
   exitLabel: MY_CALENDAR_LABEL,
 };
+
+function getLoginPageCopy(isGuest: boolean): LoginPageCopy {
+  return isGuest ? GUEST_COPY : LOGGED_OUT_COPY;
+}

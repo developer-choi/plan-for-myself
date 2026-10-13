@@ -27,7 +27,7 @@ interface PrefetchedStatsProps {
 export async function generateMetadata({params}: PageProps): Promise<Metadata> {
   const viewMonth = parseMonth(await params);
 
-  return viewMonth ? {title: formatStatsTitle(viewMonth)} : {};
+  return viewMonth && !isFutureMonth(getKoreanToday(), viewMonth) ? {title: formatStatsTitle(viewMonth)} : {};
 }
 
 export default async function Page({params}: PageProps) {

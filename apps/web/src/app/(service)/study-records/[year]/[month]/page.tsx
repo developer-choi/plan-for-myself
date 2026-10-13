@@ -1,4 +1,5 @@
 import {Suspense} from 'react';
+import type {Metadata} from 'next';
 import Link from 'next/link';
 import {notFound} from 'next/navigation';
 import classNames from 'classnames';
@@ -11,7 +12,7 @@ import HandledErrorBoundary from '@/shared/components/HandledErrorBoundary';
 import LoadingSpinner from '@/shared/components/LoadingSpinner';
 import {GOOGLE_CONNECT_PAGE_LABEL} from '@/shared/labels';
 import layout from '@/shared/styles/layout.module.scss';
-import {monthPath, parseMonth, shiftMonth} from '@/study-record/calendar-date';
+import {formatMonthTitle, monthPath, parseMonth, shiftMonth} from '@/study-record/calendar-date';
 import CalendarHeader from '@/study-record/components/CalendarHeader';
 import CalendarMenu from '@/study-record/components/CalendarMenu';
 import GuestCalendarMenu from '@/study-record/components/GuestCalendarMenu';
@@ -20,6 +21,12 @@ import styles from './page.module.scss';
 
 interface PageProps {
   params: Promise<{year: string; month: string}>;
+}
+
+export async function generateMetadata({params}: PageProps): Promise<Metadata> {
+  const viewMonth = parseMonth(await params);
+
+  return viewMonth ? {title: formatMonthTitle(viewMonth)} : {};
 }
 
 export default async function Page({params}: PageProps) {
@@ -45,7 +52,7 @@ export default async function Page({params}: PageProps) {
             </Link>
           )
         }
-        title={`${viewMonth.year}년 ${viewMonth.month}월`}
+        title={formatMonthTitle(viewMonth)}
       />
       <main className={styles.body}>
         <HandledErrorBoundary>
