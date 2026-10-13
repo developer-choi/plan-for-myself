@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import {Button} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
 import {continueWithGoogle} from '@/auth/actions';
+import GoogleIcon from '@/auth/components/GoogleIcon';
 import {GOOGLE_CONNECT_LABEL} from '@/shared/labels';
 import styles from './GoogleConnectAction.module.scss';
 
@@ -13,7 +14,8 @@ export default function GoogleConnectAction() {
 
   return (
     <form action={connectAction} className={styles.action}>
-      <Button className={styles.button} loading={isPending} size="xLarge" type="submit">
+      <Button className={styles.button} color="secondary" loading={isPending} size="xLarge" type="submit">
+        <GoogleIcon />
         {GOOGLE_CONNECT_LABEL}
       </Button>
       <p className={classNames(typography.body2, styles.hint)}>지금 기록이 그대로 이어져요</p>

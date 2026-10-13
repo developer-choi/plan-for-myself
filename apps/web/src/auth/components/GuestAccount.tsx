@@ -13,8 +13,8 @@ export default function GuestAccount() {
         <p className={classNames(typography.body2, styles.sub)}>
           기기를 바꾸거나 브라우저 데이터를 지울 때 지금 기록을 다시 볼 수 없어요
         </p>
+        <GoogleConnectAction />
       </Card>
-      <GoogleConnectAction />
       <AccountDeleteAction text={GUEST_DELETE_TEXT} />
     </>
   );
