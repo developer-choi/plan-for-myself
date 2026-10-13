@@ -20,11 +20,3 @@ export function markDemoTourSeen(part: DemoTourPart) {
     return;
   }
 }
-
-export function clearDemoTourSeen() {
-  try {
-    Object.values(DEMO_TOUR_SEEN_STORAGE_KEYS).forEach((key) => sessionStorage.removeItem(key));
-  } catch {
-    return;
-  }
-}
