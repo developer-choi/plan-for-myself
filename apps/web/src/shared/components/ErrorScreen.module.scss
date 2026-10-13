@@ -8,3 +8,14 @@ $viewportHeight: 100dvh;
   padding-inline: var(--spacing-lg);
   background-color: var(--color-bg-subtle);
 }
+
+.frame {
+  max-width: var(--content-width-narrow);
+}
+
+// 앱 전역 `*`의 break-word가 자식마다 직접 걸려 있어 상속으로는 덮이지 않는다
+.frame,
+.frame * {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}

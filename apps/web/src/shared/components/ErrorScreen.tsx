@@ -7,7 +7,9 @@ type ErrorScreenProps = Omit<ComponentProps<typeof ErrorNotice>, 'size'>;
 export default function ErrorScreen(props: ErrorScreenProps) {
   return (
     <main className={styles.main}>
-      <ErrorNotice {...props} />
+      <div className={styles.frame}>
+        <ErrorNotice {...props} />
+      </div>
     </main>
   );
 }
