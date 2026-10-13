@@ -6,6 +6,7 @@ import {HomeIcon} from '@radix-ui/react-icons';
 import {ENTRY_URL} from '@/auth/redirect';
 import Card from '@/shared/components/Card';
 import SubPageHeader from '@/shared/components/SubPageHeader';
+import {ENTRY_LABEL} from '@/shared/labels';
 import layout from '@/shared/styles/layout.module.scss';
 import styles from './page.module.scss';
 
@@ -36,7 +37,7 @@ export default function Page() {
   return (
     <div className={layout.shell}>
       <div className={classNames(layout.centered, layout.reading)}>
-        <SubPageHeader exit={{href: ENTRY_URL, label: '처음으로', icon: HomeIcon}} title="개인정보 처리방침" />
+        <SubPageHeader exit={{href: ENTRY_URL, label: ENTRY_LABEL, icon: HomeIcon}} title="개인정보 처리방침" />
         <main className={styles.body}>
           <Card>
             <article className={classNames(typography.body1, styles.article)}>
