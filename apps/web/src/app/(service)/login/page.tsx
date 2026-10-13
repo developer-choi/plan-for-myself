@@ -46,7 +46,7 @@ export default async function Page({searchParams}: SearchParamsPageProps) {
         <div className={styles.actions}>
           {shouldShowRegisteredNotice(rejection, session) && <RegisteredAccountNotice />}
           {errorKind === 'guest-limit' && <GuestLimitNotice />}
-          {errorKind === 'failed' && <LoginNotice title="로그인하지 못했어요">잠시 뒤 다시 시도해 주세요</LoginNotice>}
+          {errorKind === 'failed' && <LoginNotice title="로그인하지 못했어요">잠시 후 다시 시도해 주세요</LoginNotice>}
           <GoogleLoginActions label={copy.googleLabel} redirect={redirect} />
           {!isGuest && (
             <div className={styles.guest}>
