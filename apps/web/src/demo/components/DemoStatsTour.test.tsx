@@ -6,6 +6,7 @@ import {SessionProvider} from 'next-auth/react';
 import {OverlayProvider} from 'overlay-kit';
 import {afterEach, describe, expect, it, vi} from 'vitest';
 import {type DemoOverview, getDemoMonth, getDemoMonthly, getDemoOverview, getDemoRecords} from '@/demo/demo-examples';
+import {MY_CALENDAR_LABEL, START_RECORDING_LABEL} from '@/shared/labels';
 import {type CalendarMonth, shiftMonth} from '@/study-record/calendar-date';
 import {FIRST_TAG_ROW_ID} from '@/study-record-stats/components/FailCard';
 import DemoStatsSection from './DemoStatsSection';
@@ -85,7 +86,7 @@ describe('DemoStatsTour', () => {
 
         expect(await screen.findByRole('dialog', {name: TOUR_END_TITLE})).toBeInTheDocument();
         expect(screen.getByText(TOUR_END_DESCRIPTION)).toBeInTheDocument();
-        expect(screen.getByRole('link', {name: '시작하기'})).toHaveAttribute('href', '/login');
+        expect(screen.getByRole('link', {name: START_RECORDING_LABEL})).toHaveAttribute('href', '/login');
         expect(screen.getByRole('button', {name: '계속 둘러보기'})).toBeInTheDocument();
       });
 
@@ -107,7 +108,7 @@ describe('DemoStatsTour', () => {
         await userEvent.click(screen.getByRole('button', {name: FINISH}));
 
         expect(await screen.findByRole('dialog', {name: '이제 내 달력에서 이어서 적어 보세요'})).toBeInTheDocument();
-        expect(screen.getByRole('link', {name: '내 달력으로 이동'})).toBeInTheDocument();
+        expect(screen.getByRole('link', {name: MY_CALENDAR_LABEL})).toBeInTheDocument();
       });
     });
 

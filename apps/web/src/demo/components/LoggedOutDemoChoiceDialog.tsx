@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import Link from 'next/link';
 import {focusOnMount} from '@/demo/focus-on-mount';
 import type {DemoChoiceReason} from '@/demo/demo-choice-reason';
+import {START_RECORDING_LABEL} from '@/shared/labels';
 import styles from './DemoChoiceDialog.module.scss';
 
 interface LoggedOutDemoChoiceDialogProps {
@@ -38,7 +39,7 @@ export default function LoggedOutDemoChoiceDialog({isOpen, onClose, reason}: Log
       <div className={styles.options}>
         <Button asChild size="large">
           <Link href="/login" onClick={onClose}>
-            시작하기
+            {START_RECORDING_LABEL}
           </Link>
         </Button>
         <button className={classNames(typography.body2, styles.textLink)} type="button" onClick={onClose}>

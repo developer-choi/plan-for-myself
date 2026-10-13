@@ -8,6 +8,7 @@ import Link from 'next/link';
 import {DEFAULT_HOME_URL} from '@/auth/redirect';
 import {focusOnMount} from '@/demo/focus-on-mount';
 import type {DemoChoiceReason} from '@/demo/demo-choice-reason';
+import {MY_CALENDAR_LABEL} from '@/shared/labels';
 import styles from './DemoChoiceDialog.module.scss';
 
 interface LoggedInDemoChoiceDialogProps {
@@ -32,7 +33,7 @@ export default function LoggedInDemoChoiceDialog({isOpen, onClose, reason}: Logg
       <div className={styles.options}>
         <Button asChild size="large">
           <Link href={DEFAULT_HOME_URL} onClick={onClose}>
-            내 달력으로 이동
+            {MY_CALENDAR_LABEL}
           </Link>
         </Button>
         <button className={classNames(typography.body2, styles.textLink)} type="button" onClick={onClose}>
