@@ -1,11 +1,11 @@
 import type {Metadata} from 'next';
 import classNames from 'classnames';
 import Link from 'next/link';
-import {Callout} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
 import GoogleLoginActions from '@/auth/components/GoogleLoginActions';
 import GuestLimitNotice from '@/auth/components/GuestLimitNotice';
 import GuestStartButton from '@/auth/components/GuestStartButton';
+import LoginNotice from '@/auth/components/LoginNotice';
 import RegisteredAccountNotice from '@/auth/components/RegisteredAccountNotice';
 import {readRegisteredRejection, shouldShowRegisteredNotice} from '@/auth/login-cookies';
 import {getLoginErrorKind} from '@/auth/login-error';
@@ -46,7 +46,7 @@ export default async function Page({searchParams}: SearchParamsPageProps) {
         <div className={styles.actions}>
           {shouldShowRegisteredNotice(rejection, session) && <RegisteredAccountNotice />}
           {errorKind === 'guest-limit' && <GuestLimitNotice />}
-          {errorKind === 'failed' && <Callout color="danger">로그인하지 못했어요. 잠시 뒤 다시 시도해 주세요.</Callout>}
+          {errorKind === 'failed' && <LoginNotice title="로그인하지 못했어요">잠시 뒤 다시 시도해 주세요</LoginNotice>}
           <GoogleLoginActions label={copy.googleLabel} redirect={redirect} />
           {!isGuest && (
             <div className={styles.guest}>
