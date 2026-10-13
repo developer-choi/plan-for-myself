@@ -9,6 +9,7 @@ import {Button, IconButton} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
 import {continueWithGoogle} from '@/auth/actions';
 import {useLoginNudge} from '@/auth/useLoginNudge';
+import {GOOGLE_CONNECT_LABEL} from '@/shared/labels';
 import {studyRecordStatsQueries} from '@/study-record/queries';
 import styles from './LoginNudgeCard.module.scss';
 
@@ -33,7 +34,7 @@ export default function LoginNudgeCard({today}: LoginNudgeCardProps) {
       </p>
       <form action={connectAction}>
         <Button loading={isPending} size="small" type="submit" variant="outlined">
-          Google 연결
+          {GOOGLE_CONNECT_LABEL}
         </Button>
       </form>
       <IconButton className={styles.close} icon={<Cross2Icon />} onClick={loginNudge.dismiss} />

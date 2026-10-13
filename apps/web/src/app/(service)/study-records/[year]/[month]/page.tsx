@@ -9,6 +9,7 @@ import {auth} from '@/auth/next-auth';
 import {getLoginState} from '@/auth/path';
 import HandledErrorBoundary from '@/shared/components/HandledErrorBoundary';
 import LoadingSpinner from '@/shared/components/LoadingSpinner';
+import {GOOGLE_CONNECT_PAGE_LABEL} from '@/shared/labels';
 import layout from '@/shared/styles/layout.module.scss';
 import {monthPath, parseMonth, shiftMonth} from '@/study-record/calendar-date';
 import CalendarHeader from '@/study-record/components/CalendarHeader';
@@ -40,7 +41,7 @@ export default async function Page({params}: PageProps) {
         right={
           isGuest && (
             <Link className={classNames(typography.body2, typography.bold, styles.connectLink)} href="/login">
-              Google 연결
+              {GOOGLE_CONNECT_PAGE_LABEL}
             </Link>
           )
         }

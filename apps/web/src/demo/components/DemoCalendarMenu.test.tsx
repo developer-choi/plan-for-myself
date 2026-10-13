@@ -1,3 +1,4 @@
+import {MY_CALENDAR_LABEL} from '@/shared/labels';
 import {render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {describe, expect, it} from 'vitest';
@@ -25,5 +26,3 @@ describe('DemoCalendarMenu', () => {
     });
   });
 });
-
-const MY_CALENDAR_LABEL = '내 달력으로 이동';

@@ -12,6 +12,12 @@ import {auth} from '@/auth/next-auth';
 import {getLoginState} from '@/auth/path';
 import {DEFAULT_HOME_URL, ENTRY_URL, INTRO_URL} from '@/auth/redirect';
 import Logo from '@/shared/components/Logo';
+import {
+  GOOGLE_CONNECT_LABEL,
+  GOOGLE_CONNECT_PAGE_LABEL,
+  MY_CALENDAR_LABEL,
+  START_RECORDING_LABEL,
+} from '@/shared/labels';
 import type {SearchParamsPageProps} from '@/shared/types/page';
 import styles from './page.module.scss';
 
@@ -66,17 +72,17 @@ interface LoginPageCopy {
 }
 
 const LOGGED_OUT_COPY: LoginPageCopy = {
-  title: '로그인',
-  description: 'Google 계정으로 간편하게 시작하세요.',
+  title: START_RECORDING_LABEL,
+  description: '이미 쓰던 계정이 있다면 Google로 로그인하세요.',
   googleLabel: 'Google로 로그인',
   exitHref: INTRO_URL,
   exitLabel: '서비스 소개 보기',
 };
 
 const GUEST_COPY: LoginPageCopy = {
-  title: 'Google 계정 연결',
+  title: GOOGLE_CONNECT_PAGE_LABEL,
   description: undefined,
-  googleLabel: 'Google 계정 연결하기',
+  googleLabel: GOOGLE_CONNECT_LABEL,
   exitHref: DEFAULT_HOME_URL,
-  exitLabel: '내 달력으로 돌아가기',
+  exitLabel: MY_CALENDAR_LABEL,
 };
