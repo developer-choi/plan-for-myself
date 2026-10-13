@@ -1,10 +1,10 @@
 .notice {
   display: flex;
   flex-direction: column;
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding: var(--spacing-grid-gap);
   text-align: left;
   background: var(--color-bg-danger-soft);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
 }
 
 .title {
