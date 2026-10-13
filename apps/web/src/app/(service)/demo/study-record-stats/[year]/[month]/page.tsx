@@ -37,7 +37,11 @@ export default async function Page({params}: PageProps) {
 
   const isLoggedIn = getLoginState(await auth()) !== 'logged-out';
   const monthly = getDemoMonthly(viewMonth, now);
-  const {previous, next} = getStatsMonthNavigation({today, month: viewMonth, firstRecordDate: overview.firstRecordDate});
+  const {previous, next} = getStatsMonthNavigation({
+    today,
+    month: viewMonth,
+    firstRecordDate: overview.firstRecordDate,
+  });
 
   return (
     <div className={layout.shell}>
