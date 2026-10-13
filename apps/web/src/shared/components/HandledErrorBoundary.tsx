@@ -40,7 +40,7 @@ const RetryableErrorBoundary = catchError(({onReset, size = 'page'}: HandledErro
           },
         }}
         content={content}
-        size={size === 'card' ? 'small' : 'large'}
+        size={size === 'card' ? 'small' : 'medium'}
         title={title}
       />
     </div>
