@@ -17,6 +17,7 @@ export default function TrendBars({bars, inProgress = false}: TrendBarsProps) {
     <ol className={styles.bars} style={{'--trend-columns': FAILURE_TAG_TREND_MONTH_LIMIT}}>
       {bars.map((bar, index) => {
         const isInProgressBar = inProgress && index === bars.length - 1;
+        const startStyle = index === 0 ? {gridColumnStart: FAILURE_TAG_TREND_MONTH_LIMIT - bars.length + 1} : undefined;
 
         return (
           <li
@@ -24,6 +25,7 @@ export default function TrendBars({bars, inProgress = false}: TrendBarsProps) {
             className={styles.column}
             data-in-progress={isInProgressBar || undefined}
             data-status={bar.status}
+            style={startStyle}
           >
             <span className={classNames(typography.body3, styles.value)}>{bar.value || ''}</span>
             <span className={styles.bar} style={{'--trend-bar-ratio': bar.value / max}} />
