@@ -12,9 +12,8 @@ AI는 **풍부하게 설명해야** 의도대로 구현해 줍니다.
 
 ### 해결
 
-> 이 기능은 이렇게 구현하는 것이 가장 좋다
-
-라는 것을 [따로 만들어 두고](https://github.com/developer-choi/monorepo-playground) 목차처럼 정리해, AI가 **폴더명과 파일명만 보고 필요한 것을 찾아가게** 했습니다.
+1. "이 기능은 이렇게 구현하는 것이 가장 좋다"는 [베스트 프랙티스](https://blog-sepia-pi-37.vercel.app/posts/infinite-scroll-step3)를 쌓아 두고,
+2. 그것을 [목차로 정리](https://github.com/developer-choi/monorepo-playground/tree/master/docs/best-practices)해, AI가 폴더명과 파일명만 보고 필요한 것을 찾아가게 했습니다.
 
 ### 결과
 
