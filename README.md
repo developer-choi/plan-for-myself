@@ -2,6 +2,8 @@
 
 https://plan-for-myself.vercel.app
 
+![예시 달력 화면](docs/assets/demo-calendar.png)
+
 > 매일 실패한 것을 기록하고, 그 실패를 성공으로 바꿔 나가고 싶었습니다.
 
 ### 제공되는 기능
