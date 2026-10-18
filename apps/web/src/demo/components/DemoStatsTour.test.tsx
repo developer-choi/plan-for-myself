@@ -19,10 +19,10 @@ describe('DemoStatsTour', () => {
 
   describe('General cases', () => {
     describe('예시 통계가 열리면', () => {
-      it('3번 말풍선의 안내 문구가 보인다', async () => {
+      it('3번 말풍선이 뜬다', async () => {
         renderStatsWithTour(THIS_MONTH);
 
-        expect(await screen.findByText(THIRD_TEXT)).toBeInTheDocument();
+        expect(await screen.findByText('3 / 5')).toBeInTheDocument();
       });
     });
 
@@ -31,15 +31,14 @@ describe('DemoStatsTour', () => {
         renderStatsWithTour(THIS_MONTH);
         await userEvent.click(await screen.findByRole('button', {name: NEXT}));
 
-        expect(await screen.findByText(FOURTH_TEXT)).toBeInTheDocument();
-        expect(screen.getByText('4 / 5')).toBeInTheDocument();
-        expect(screen.queryByText(THIRD_TEXT)).not.toBeInTheDocument();
+        expect(await screen.findByText('4 / 5')).toBeInTheDocument();
+        expect(screen.queryByText('3 / 5')).not.toBeInTheDocument();
       });
 
       it('투어 끝 창은 아직 뜨지 않는다', async () => {
         renderStatsWithTour(THIS_MONTH);
         await userEvent.click(await screen.findByRole('button', {name: NEXT}));
-        await screen.findByText(FOURTH_TEXT);
+        await screen.findByText('4 / 5');
 
         expect(screen.queryByRole('dialog', {name: TOUR_END_TITLE})).not.toBeInTheDocument();
       });
@@ -52,9 +51,8 @@ describe('DemoStatsTour', () => {
 
         await userEvent.click(screen.getByRole('button', {name: NEXT}));
 
-        expect(await screen.findByText(FIFTH_TEXT)).toBeInTheDocument();
-        expect(screen.getByText('5 / 5')).toBeInTheDocument();
-        expect(screen.queryByText(FOURTH_TEXT)).not.toBeInTheDocument();
+        expect(await screen.findByText('5 / 5')).toBeInTheDocument();
+        expect(screen.queryByText('4 / 5')).not.toBeInTheDocument();
       });
 
       it('4번이 짚은 태그의 상세가 펼쳐진다', async () => {
@@ -62,7 +60,7 @@ describe('DemoStatsTour', () => {
         await goToFourthBubble();
 
         await userEvent.click(screen.getByRole('button', {name: NEXT}));
-        await screen.findByText(FIFTH_TEXT);
+        await screen.findByText('5 / 5');
 
         expect(screen.getByRole('heading', {level: 2, name: FIRST_TAG_OF_THIS_MONTH})).toBeInTheDocument();
       });
@@ -75,7 +73,7 @@ describe('DemoStatsTour', () => {
 
         await userEvent.click(screen.getByRole('button', {name: FINISH}));
 
-        await waitFor(() => expect(screen.queryByText(FIFTH_TEXT)).not.toBeInTheDocument());
+        await waitFor(() => expect(screen.queryByText('5 / 5')).not.toBeInTheDocument());
       });
 
       it('투어 끝 창이 뜬다', async () => {
@@ -105,8 +103,8 @@ describe('DemoStatsTour', () => {
         renderStatsWithTour(THIS_MONTH);
         await userEvent.click(await screen.findByRole('button', {name: CLOSE}));
 
-        await waitFor(() => expect(screen.queryByText(THIRD_TEXT)).not.toBeInTheDocument());
-        expect(screen.queryByText(FOURTH_TEXT)).not.toBeInTheDocument();
+        await waitFor(() => expect(screen.queryByText('3 / 5')).not.toBeInTheDocument());
+        expect(screen.queryByText('4 / 5')).not.toBeInTheDocument();
       });
     });
 
@@ -116,7 +114,7 @@ describe('DemoStatsTour', () => {
         await goToFourthBubble();
 
         await userEvent.click(screen.getByRole('button', {name: CLOSE}));
-        await waitFor(() => expect(screen.queryByText(FOURTH_TEXT)).not.toBeInTheDocument());
+        await waitFor(() => expect(screen.queryByText('4 / 5')).not.toBeInTheDocument());
 
         expect(screen.queryByRole('heading', {level: 2, name: FIRST_TAG_OF_THIS_MONTH})).not.toBeInTheDocument();
       });
@@ -128,7 +126,7 @@ describe('DemoStatsTour', () => {
         await goToFifthBubble();
 
         await userEvent.click(screen.getByRole('button', {name: CLOSE}));
-        await waitFor(() => expect(screen.queryByText(FIFTH_TEXT)).not.toBeInTheDocument());
+        await waitFor(() => expect(screen.queryByText('5 / 5')).not.toBeInTheDocument());
 
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
       });
@@ -137,11 +135,11 @@ describe('DemoStatsTour', () => {
     describe('3번 말풍선이 떠 있을 때', () => {
       it('ESC를 눌러도 3번 말풍선이 그대로다', async () => {
         renderStatsWithTour(THIS_MONTH);
-        await screen.findByText(THIRD_TEXT);
+        await screen.findByText('3 / 5');
 
         await userEvent.keyboard('{Escape}');
 
-        expect(screen.getByText(THIRD_TEXT)).toBeInTheDocument();
+        expect(screen.getByText('3 / 5')).toBeInTheDocument();
       });
     });
   });
@@ -154,8 +152,8 @@ describe('DemoStatsTour', () => {
 
         await waitUntilTourGivesUp();
 
-        expect(screen.queryByText(THIRD_TEXT)).not.toBeInTheDocument();
-        expect(screen.queryByText(FOURTH_TEXT)).not.toBeInTheDocument();
+        expect(screen.queryByText('3 / 5')).not.toBeInTheDocument();
+        expect(screen.queryByText('4 / 5')).not.toBeInTheDocument();
       });
 
       it('시간이 지나도 투어 끝 창이 뜨지 않는다', async () => {
@@ -171,14 +169,14 @@ describe('DemoStatsTour', () => {
     describe('4번이 짚는 태그의 상세가 이미 펼쳐져 있을 때 4번에서 [다음]을 누르면', () => {
       it('상세가 펼쳐진 채로 5번 말풍선이 뜬다', async () => {
         renderStatsWithTour(THIS_MONTH);
-        await screen.findByText(THIRD_TEXT);
+        await screen.findByText('3 / 5');
         fireEvent.click(document.getElementById(FIRST_TAG_ROW_ID)!);
         await userEvent.click(screen.getByRole('button', {name: NEXT}));
-        await screen.findByText(FOURTH_TEXT);
+        await screen.findByText('4 / 5');
 
         await userEvent.click(screen.getByRole('button', {name: NEXT}));
 
-        expect(await screen.findByText(FIFTH_TEXT)).toBeInTheDocument();
+        expect(await screen.findByText('5 / 5')).toBeInTheDocument();
         expect(screen.getByRole('button', {name: FINISH})).toBeInTheDocument();
         expect(screen.getByRole('heading', {level: 2, name: FIRST_TAG_OF_THIS_MONTH})).toBeInTheDocument();
       });
@@ -197,9 +195,6 @@ const MONTH_WITHOUT_RECORDS: StatsCase = {
   month: shiftMonth(getDemoMonth(NOW), -FAILURE_TAG_TREND_MONTH_LIMIT),
   overview: null,
 };
-const THIRD_TEXT = '통계 화면이에요. 지난달과 비교해 어떤 실패가 반복되고, 새로 생기고, 줄고 있는지 보여요';
-const FOURTH_TEXT = '태그를 누르면 그 실패만 모아 볼 수 있어요';
-const FIFTH_TEXT = '이 실패를 한 날이 달력에 보여요. 아래에서 달마다 추이도 볼 수 있어요';
 const FIRST_TAG_OF_THIS_MONTH = '늦잠';
 const TOUR_END_TITLE = '이제 내 달력에 적어 볼까요?';
 const LOGGED_IN_SESSION: Session = {userId: 'user-1', isGuest: false, expires: '2099-01-01T00:00:00.000Z'};
@@ -226,13 +221,13 @@ function renderStatsWithTour({month, overview}: StatsCase, session: Session | nu
 
 async function goToFourthBubble() {
   await userEvent.click(await screen.findByRole('button', {name: NEXT}));
-  await screen.findByText(FOURTH_TEXT);
+  await screen.findByText('4 / 5');
 }
 
 async function goToFifthBubble() {
   await goToFourthBubble();
   await userEvent.click(screen.getByRole('button', {name: NEXT}));
-  await screen.findByText(FIFTH_TEXT);
+  await screen.findByText('5 / 5');
 }
 
 async function waitUntilTourGivesUp() {
