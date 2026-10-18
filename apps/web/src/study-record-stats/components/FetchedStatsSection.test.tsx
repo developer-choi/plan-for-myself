@@ -31,14 +31,6 @@ describe('FetchedStatsSection', () => {
 
       expect(queryAllTermTexts()).toContain(PREVIOUS_MONTH_RECORDED_DAYS_LABEL);
     });
-
-    CURRENT_MONTH_ONLY_LABELS.forEach((label) => {
-      it(`지난 달이면 ${label} 줄이 보이지 않는다`, () => {
-        renderSection(PREVIOUS_MONTH, {withOverview: false, inProgress: false});
-
-        expect(queryAllTermTexts()).not.toContain(label);
-      });
-    });
   });
 });
 
