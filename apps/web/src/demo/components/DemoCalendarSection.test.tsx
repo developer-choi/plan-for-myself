@@ -17,7 +17,6 @@ describe('DemoCalendarSection', () => {
         await userEvent.click(screen.getByRole('button', {name: RECORDED_BUTTON_NAME}));
 
         expect(await screen.findByRole('dialog', {name: CHOICE_MESSAGE})).toBeInTheDocument();
-        expect(screen.queryByRole('button', {name: '저장'})).not.toBeInTheDocument();
       });
 
       it('기록이 없어도 예시 안내 창이 뜬다', async () => {

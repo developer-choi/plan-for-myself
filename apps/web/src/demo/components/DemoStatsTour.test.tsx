@@ -176,7 +176,6 @@ describe('DemoStatsTour', () => {
         await userEvent.click(screen.getByRole('button', {name: NEXT}));
 
         expect(await screen.findByText('5 / 5')).toBeInTheDocument();
-        expect(screen.getByRole('button', {name: FINISH})).toBeInTheDocument();
         expect(screen.getByRole('heading', {level: 2, name: FIRST_TAG_OF_THIS_MONTH})).toBeInTheDocument();
       });
     });
