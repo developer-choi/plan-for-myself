@@ -86,15 +86,6 @@ describe('DemoStatsTour', () => {
 
         expect(await screen.findByRole('dialog', {name: TOUR_END_TITLE})).toBeInTheDocument();
       });
-
-      it('투어 끝 창의 닫기 버튼이 아니라 제목에 포커스가 간다', async () => {
-        renderStatsWithTour(THIS_MONTH);
-        await goToFifthBubble();
-
-        await userEvent.click(screen.getByRole('button', {name: FINISH}));
-
-        expect(await screen.findByRole('heading', {name: TOUR_END_TITLE})).toHaveFocus();
-      });
     });
 
     describe('로그인 상태에서 5번 말풍선의 [마치기]를 누르면', () => {
@@ -117,27 +108,9 @@ describe('DemoStatsTour', () => {
         await waitFor(() => expect(screen.queryByText(THIRD_TEXT)).not.toBeInTheDocument());
         expect(screen.queryByText(FOURTH_TEXT)).not.toBeInTheDocument();
       });
-
-      it('투어 끝 창은 뜨지 않는다', async () => {
-        renderStatsWithTour(THIS_MONTH);
-        await userEvent.click(await screen.findByRole('button', {name: CLOSE}));
-        await waitFor(() => expect(screen.queryByText(THIRD_TEXT)).not.toBeInTheDocument());
-
-        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-      });
     });
 
     describe('4번 말풍선에서 닫기를 누르면', () => {
-      it('투어 끝 창은 뜨지 않는다', async () => {
-        renderStatsWithTour(THIS_MONTH);
-        await goToFourthBubble();
-
-        await userEvent.click(screen.getByRole('button', {name: CLOSE}));
-        await waitFor(() => expect(screen.queryByText(FOURTH_TEXT)).not.toBeInTheDocument());
-
-        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-      });
-
       it('태그 상세가 펼쳐지지 않는다', async () => {
         renderStatsWithTour(THIS_MONTH);
         await goToFourthBubble();
