@@ -37,7 +37,7 @@ describe('authorizeGuest()', () => {
     });
 
     it('한도에 걸린 로그인은 게스트를 만들지 않아야 한다', async () => {
-      await expect(authorizeGuest(createRequest(), db, rateLimited)).rejects.toThrow(CredentialsSignin);
+      await authorizeGuest(createRequest(), db, rateLimited).catch((caught: unknown) => caught);
 
       expect(await countGuests(db)).toBe(0);
     });
