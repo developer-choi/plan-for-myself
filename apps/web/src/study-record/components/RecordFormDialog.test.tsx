@@ -12,18 +12,20 @@ describe('RecordFormDialog', () => {
       {label: '세 칸이 공백이면', minutes: [' ', ' ', ' ']},
       {label: '세 칸이 0이면', minutes: ['0', '0', '0']},
     ].forEach(({label, minutes}) => {
-      it(`${label} 실패 태그 없이 저장을 누를 때 빈 기록 문구를 띄운다`, async () => {
-        renderDialog();
+      describe(label, () => {
+        it('실패 태그 없이 [저장]을 누르면 빈 기록 문구가 뜬다', async () => {
+          renderDialog();
 
-        await typeMinutes(minutes);
-        await userEvent.click(getSaveButton());
+          await typeMinutes(minutes);
+          await userEvent.click(getSaveButton());
 
-        expect(screen.getByRole('note')).toHaveTextContent(EMPTY_RECORD_TEXT);
+          expect(screen.getByRole('note')).toHaveTextContent(EMPTY_RECORD_TEXT);
+        });
       });
     });
 
     describe('빈 기록 문구가 뜬 뒤', () => {
-      it('실패 태그를 넣으면 문구를 바로 걷는다', async () => {
+      it('실패 태그를 입력하고 Enter를 누르면 문구가 사라진다', async () => {
         renderDialog();
 
         await userEvent.click(getSaveButton());
@@ -32,7 +34,7 @@ describe('RecordFormDialog', () => {
         expect(screen.queryByRole('note')).not.toBeInTheDocument();
       });
 
-      it('실패 태그 칸에 Enter 없이 적기만 해도 문구를 걷는다', async () => {
+      it('실패 태그 칸에 입력만 해도 문구가 사라진다', async () => {
         renderDialog();
 
         await userEvent.click(getSaveButton());
