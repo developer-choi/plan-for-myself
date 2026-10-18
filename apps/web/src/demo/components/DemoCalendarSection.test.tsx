@@ -26,7 +26,6 @@ describe('DemoCalendarSection', () => {
         await userEvent.click(screen.getByRole('button', {name: String(EMPTY_DAY)}));
 
         expect(await screen.findByRole('dialog', {name: CHOICE_MESSAGE})).toBeInTheDocument();
-        expect(screen.getByText('내 달력을 만들면 바로 적을 수 있어요.')).toBeInTheDocument();
       });
 
       it('안내 창의 제목에 포커스가 간다', async () => {

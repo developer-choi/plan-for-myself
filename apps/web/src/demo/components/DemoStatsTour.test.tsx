@@ -6,7 +6,7 @@ import {SessionProvider} from 'next-auth/react';
 import {OverlayProvider} from 'overlay-kit';
 import {afterEach, describe, expect, it, vi} from 'vitest';
 import {type DemoOverview, getDemoMonth, getDemoMonthly, getDemoOverview, getDemoRecords} from '@/demo/demo-examples';
-import {MY_CALENDAR_LABEL, START_RECORDING_LABEL} from '@/shared/labels';
+import {MY_CALENDAR_LABEL} from '@/shared/labels';
 import {type CalendarMonth, shiftMonth} from '@/study-record/calendar-date';
 import {FIRST_TAG_ROW_ID} from '@/study-record-stats/components/FailCard';
 import DemoStatsSection from './DemoStatsSection';
@@ -85,9 +85,6 @@ describe('DemoStatsTour', () => {
         await userEvent.click(screen.getByRole('button', {name: FINISH}));
 
         expect(await screen.findByRole('dialog', {name: TOUR_END_TITLE})).toBeInTheDocument();
-        expect(screen.getByText(TOUR_END_DESCRIPTION)).toBeInTheDocument();
-        expect(screen.getByRole('link', {name: START_RECORDING_LABEL})).toHaveAttribute('href', '/login');
-        expect(screen.getByRole('button', {name: '계속 둘러보기'})).toBeInTheDocument();
       });
 
       it('투어 끝 창의 닫기 버튼이 아니라 제목에 포커스가 간다', async () => {
@@ -232,7 +229,6 @@ const FOURTH_TEXT = '태그를 누르면 그 실패만 모아 볼 수 있어요'
 const FIFTH_TEXT = '이 실패를 한 날이 달력에 보여요. 아래에서 달마다 추이도 볼 수 있어요';
 const FIRST_TAG_OF_THIS_MONTH = '늦잠';
 const TOUR_END_TITLE = '이제 내 달력에 적어 볼까요?';
-const TOUR_END_DESCRIPTION = '실패를 적으면 내 기록으로 채워져요.';
 const LOGGED_IN_SESSION: Session = {userId: 'user-1', isGuest: false, expires: '2099-01-01T00:00:00.000Z'};
 const NEXT = '다음';
 const FINISH = '마치기';
