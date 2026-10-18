@@ -86,7 +86,7 @@ describe('DemoStatsTour', () => {
     });
 
     describe('로그인 상태에서 5번 말풍선의 [마치기]를 누르면', () => {
-      it('[내 달력으로 이동]이 있는 투어 끝 창이 뜬다', async () => {
+      it('[내 달력으로 이동] 버튼이 있는 투어 끝 창이 뜬다', async () => {
         renderStatsWithTour(THIS_MONTH, LOGGED_IN_SESSION);
         await goToFifthBubble();
 
