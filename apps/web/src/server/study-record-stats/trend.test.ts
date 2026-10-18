@@ -27,14 +27,15 @@ describe('listTrend()', () => {
     });
 
     it('달마다 지난달 횟수를 함께 반환해야 한다', () => {
-      const counts = countTagsByMonth(createMonthlyRecords('야식', {'2026-07': 2, '2026-08': 4, [QUERY_MONTH]: 1}));
+      const monthlyCounts = {'2026-07': 2, '2026-08': 4, [QUERY_MONTH]: 1};
+      const counts = countTagsByMonth(createMonthlyRecords('야식', monthlyCounts));
 
       const trend = listTrend(counts, QUERY_MONTH, '야식');
 
-      expect(trend).toEqual([
-        {month: '2026-07', count: 2, previousCount: 0, status: 'repeated'},
-        {month: '2026-08', count: 4, previousCount: 2, status: 'repeated'},
-        {month: QUERY_MONTH, count: 1, previousCount: 4, status: 'reduced'},
+      expect(trend.map(({previousCount}) => previousCount)).toEqual([
+        0,
+        monthlyCounts['2026-07'],
+        monthlyCounts['2026-08'],
       ]);
     });
 

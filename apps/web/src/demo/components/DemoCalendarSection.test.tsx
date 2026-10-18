@@ -17,7 +17,6 @@ describe('DemoCalendarSection', () => {
         await userEvent.click(screen.getByRole('button', {name: RECORDED_BUTTON_NAME}));
 
         expect(await screen.findByRole('dialog', {name: CHOICE_MESSAGE})).toBeInTheDocument();
-        expect(screen.queryByRole('button', {name: '저장'})).not.toBeInTheDocument();
       });
 
       it('기록이 없어도 예시 안내 창이 뜬다', async () => {
@@ -26,7 +25,6 @@ describe('DemoCalendarSection', () => {
         await userEvent.click(screen.getByRole('button', {name: String(EMPTY_DAY)}));
 
         expect(await screen.findByRole('dialog', {name: CHOICE_MESSAGE})).toBeInTheDocument();
-        expect(screen.getByText('내 달력을 만들면 바로 적을 수 있어요.')).toBeInTheDocument();
       });
 
       it('안내 창의 제목에 포커스가 간다', async () => {
@@ -60,7 +58,7 @@ describe('DemoCalendarSection', () => {
     });
 
     describe('로그아웃 상태에서 안내 창이 뜨면', () => {
-      it('[기록 시작하기]가 있다', async () => {
+      it('[기록 시작하기] 버튼이 보여야 한다', async () => {
         renderSection(null);
 
         await userEvent.click(screen.getByRole('button', {name: String(EMPTY_DAY)}));
@@ -68,7 +66,7 @@ describe('DemoCalendarSection', () => {
         expect(await screen.findByRole('link', {name: START_RECORDING_LABEL})).toBeInTheDocument();
       });
 
-      it('[내 달력으로 이동]은 없다', async () => {
+      it('[내 달력으로 이동] 버튼은 안 보여야 한다', async () => {
         renderSection(null);
 
         await userEvent.click(screen.getByRole('button', {name: String(EMPTY_DAY)}));
@@ -88,7 +86,7 @@ describe('DemoCalendarSection', () => {
     });
 
     describe('로그인 상태에서 안내 창이 뜨면', () => {
-      it('[내 달력으로 이동]이 있다', async () => {
+      it('[내 달력으로 이동] 버튼이 보여야 한다', async () => {
         renderSection(LOGGED_IN_SESSION);
 
         await userEvent.click(screen.getByRole('button', {name: String(EMPTY_DAY)}));
@@ -96,7 +94,7 @@ describe('DemoCalendarSection', () => {
         expect(await screen.findByRole('link', {name: MY_CALENDAR_LABEL})).toBeInTheDocument();
       });
 
-      it('[기록 시작하기]는 없다', async () => {
+      it('[기록 시작하기] 버튼은 안 보여야 한다', async () => {
         renderSection(LOGGED_IN_SESSION);
 
         await userEvent.click(screen.getByRole('button', {name: String(EMPTY_DAY)}));

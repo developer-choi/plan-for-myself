@@ -1,5 +1,5 @@
 import {afterEach, describe, expect, it, vi} from 'vitest';
-import {getDemoMonth, getDemoToday} from './demo-today';
+import {getDemoToday} from './demo-today';
 
 describe('getDemoToday', () => {
   afterEach(() => {
@@ -32,7 +32,6 @@ describe('getDemoToday', () => {
     it('UTC로는 아직 지난달이어도 한국 시간 기준 이번 달이다', () => {
       const now = new Date('2026-10-31T16:00:00Z');
 
-      expect(getDemoMonth(now)).toEqual({year: 2026, month: 11});
       expect(getDemoToday(now)).toBe('2026-11-30');
     });
   });

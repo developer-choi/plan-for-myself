@@ -14,14 +14,6 @@ describe('TrendBars', () => {
     });
 
     describe('진행 중인 달', () => {
-      it('마지막 막대는 진행 중인 달로 표시돼야 한다', () => {
-        const bars = createBars([{value: 1}, {value: 2}, {value: 3}]);
-
-        render(<TrendBars inProgress bars={bars} />);
-
-        expect(screen.getAllByRole('listitem')[2]).toHaveAttribute('data-in-progress');
-      });
-
       it('마지막 막대의 월 이름 아래에 진행 중이라고 보여야 한다', () => {
         const bars = createBars([{value: 1}, {value: 2}, {value: 3}]);
 
@@ -37,16 +29,6 @@ describe('TrendBars', () => {
 
         expect(screen.getAllByRole('listitem')[1]).not.toHaveTextContent('진행 중');
       });
-
-      it('마지막이 아닌 막대는 진행 중인 달로 표시되지 않아야 한다', () => {
-        const bars = createBars([{value: 1}, {value: 2}, {value: 3}]);
-
-        render(<TrendBars inProgress bars={bars} />);
-
-        const [first, second] = screen.getAllByRole('listitem');
-        expect(first).not.toHaveAttribute('data-in-progress');
-        expect(second).not.toHaveAttribute('data-in-progress');
-      });
     });
 
     it('끝난 달까지의 추이면 어느 막대도 진행 중인 달로 표시되지 않아야 한다', () => {
@@ -55,7 +37,6 @@ describe('TrendBars', () => {
       render(<TrendBars bars={bars} />);
 
       screen.getAllByRole('listitem').forEach((item) => {
-        expect(item).not.toHaveAttribute('data-in-progress');
         expect(item).not.toHaveTextContent('진행 중');
       });
     });

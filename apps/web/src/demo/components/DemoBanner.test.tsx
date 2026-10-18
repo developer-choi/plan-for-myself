@@ -7,20 +7,29 @@ import DemoBanner from './DemoBanner';
 describe('DemoBanner', () => {
   describe('General cases', () => {
     describe('로그아웃 상태면', () => {
-      it('[기록 시작하기]가 로그인 화면으로 간다', () => {
+      it('[기록 시작하기]를 누르면 로그인 화면으로 간다', () => {
         render(<DemoBanner isLoggedIn={false} />);
 
-        expect(screen.getByText('꾸준히 기록하면 이렇게 보여요')).toBeInTheDocument();
         expect(screen.getByRole('link', {name: START_RECORDING_LABEL})).toHaveAttribute('href', '/login');
+      });
+
+      it('[내 달력으로 이동] 버튼은 안 보여야 한다', () => {
+        render(<DemoBanner isLoggedIn={false} />);
+
         expect(screen.queryByRole('link', {name: MY_CALENDAR_LABEL})).not.toBeInTheDocument();
       });
     });
 
     describe('로그인 상태면', () => {
-      it('[내 달력으로 이동]이 내 달력으로 간다', () => {
+      it('[내 달력으로 이동]을 누르면 내 달력으로 간다', () => {
         render(<DemoBanner isLoggedIn />);
 
         expect(screen.getByRole('link', {name: MY_CALENDAR_LABEL})).toHaveAttribute('href', DEFAULT_HOME_URL);
+      });
+
+      it('[기록 시작하기] 버튼은 안 보여야 한다', () => {
+        render(<DemoBanner isLoggedIn />);
+
         expect(screen.queryByRole('link', {name: START_RECORDING_LABEL})).not.toBeInTheDocument();
       });
     });

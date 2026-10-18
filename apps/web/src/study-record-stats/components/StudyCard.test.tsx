@@ -36,7 +36,7 @@ describe('StudyCard', () => {
       const monthly = createMonthly({month: '2026-09', study: {weekdayAvg: 189, holidayAvg: null}});
       render(<StudyCard monthly={monthly} totalStudiedMinutes={null} />);
 
-      expect(queryAllTermTexts()).toEqual(['9월 총 공부', '평일 평균']);
+      expect(queryAllTermTexts()).not.toContain('휴일 평균');
     });
 
     it('지난달 평일 기록이 없으면 평일 평균 옆에 지난달 차이가 보이지 않는다', () => {

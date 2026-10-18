@@ -26,9 +26,9 @@ describe('Card', () => {
 
   describe('Edge cases', () => {
     it('보조 글이 숫자 0이어도 보인다', () => {
-      const {container} = render(<Card aside={0} />);
+      render(<Card aside={0} />);
 
-      expect(container.firstElementChild).toHaveTextContent(/^0$/);
+      expect(screen.getByText('0')).toBeInTheDocument();
     });
 
     [

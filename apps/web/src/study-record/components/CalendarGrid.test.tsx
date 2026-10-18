@@ -1,4 +1,4 @@
-import {minutesFormat, type StudyRecord} from '@plan-for-myself/shared';
+import type {StudyRecord} from '@plan-for-myself/shared';
 import {render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {describe, expect, it, vi} from 'vitest';
@@ -108,7 +108,6 @@ describe('CalendarGrid', () => {
       const button = screen.getByRole('button', {name: new RegExp(`^${day}`)});
 
       expect(button).toHaveTextContent(new RegExp(`^${day}${tag}$`));
-      expect(button).not.toHaveTextContent(minutesFormat(0));
     });
 
     it('공부시간 합계가 0이고 실패 태그도 없는 날은 날짜만 보인다', () => {

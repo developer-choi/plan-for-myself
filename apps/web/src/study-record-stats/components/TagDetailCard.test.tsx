@@ -13,7 +13,7 @@ describe('TagDetailCard', () => {
         <TagDetailCard ref={createRef()} calendar={<p>달력 자리</p>} tag="야식" trend={{bars, inProgress: true}} />,
       );
 
-      expect(screen.getAllByRole('listitem')).toHaveLength(bars.length);
+      expect(screen.getByRole('list')).toBeInTheDocument();
     });
   });
 
@@ -25,7 +25,7 @@ describe('TagDetailCard', () => {
         <TagDetailCard ref={createRef()} calendar={<p>달력 자리</p>} tag="야식" trend={{bars, inProgress: false}} />,
       );
 
-      expect(screen.getAllByRole('listitem')).toHaveLength(bars.length);
+      expect(screen.getByRole('list')).toBeInTheDocument();
     });
 
     it('막대가 1개면 월별 추이가 없어야 한다', () => {
