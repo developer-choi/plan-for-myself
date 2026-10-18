@@ -11,6 +11,11 @@ describe('DemoBanner', () => {
         render(<DemoBanner isLoggedIn={false} />);
 
         expect(screen.getByRole('link', {name: START_RECORDING_LABEL})).toHaveAttribute('href', '/login');
+      });
+
+      it('[내 달력으로 이동] 버튼은 안 보여야 한다', () => {
+        render(<DemoBanner isLoggedIn={false} />);
+
         expect(screen.queryByRole('link', {name: MY_CALENDAR_LABEL})).not.toBeInTheDocument();
       });
     });
@@ -20,6 +25,11 @@ describe('DemoBanner', () => {
         render(<DemoBanner isLoggedIn />);
 
         expect(screen.getByRole('link', {name: MY_CALENDAR_LABEL})).toHaveAttribute('href', DEFAULT_HOME_URL);
+      });
+
+      it('[기록 시작하기] 버튼은 안 보여야 한다', () => {
+        render(<DemoBanner isLoggedIn />);
+
         expect(screen.queryByRole('link', {name: START_RECORDING_LABEL})).not.toBeInTheDocument();
       });
     });
