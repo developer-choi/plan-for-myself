@@ -1,5 +1,5 @@
 import {FAILURE_TAG_TREND_MONTH_LIMIT} from '@plan-for-myself/shared';
-import {act, fireEvent, render, screen, waitFor} from '@testing-library/react';
+import {act, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type {Session} from 'next-auth';
 import {SessionProvider} from 'next-auth/react';
@@ -8,7 +8,6 @@ import {afterEach, describe, expect, it, vi} from 'vitest';
 import {type DemoOverview, getDemoMonth, getDemoMonthly, getDemoOverview, getDemoRecords} from '@/demo/demo-examples';
 import {MY_CALENDAR_LABEL} from '@/shared/labels';
 import {type CalendarMonth, shiftMonth} from '@/study-record/calendar-date';
-import {FIRST_TAG_ROW_ID} from '@/study-record-stats/components/FailCard';
 import DemoStatsSection from './DemoStatsSection';
 import DemoStatsTour from './DemoStatsTour';
 
@@ -170,7 +169,7 @@ describe('DemoStatsTour', () => {
       it('상세가 펼쳐진 채로 5번 말풍선이 뜬다', async () => {
         renderStatsWithTour(THIS_MONTH);
         await screen.findByText('3 / 5');
-        fireEvent.click(document.getElementById(FIRST_TAG_ROW_ID)!);
+        await userEvent.click(screen.getByRole('button', {name: new RegExp(FIRST_TAG_OF_THIS_MONTH)}));
         await userEvent.click(screen.getByRole('button', {name: NEXT}));
         await screen.findByText('4 / 5');
 
