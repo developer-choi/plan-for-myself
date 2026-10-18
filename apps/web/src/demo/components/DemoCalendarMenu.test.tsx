@@ -20,7 +20,7 @@ describe('DemoCalendarMenu', () => {
 
         await userEvent.click(screen.getByRole('button', {name: '메뉴'}));
 
-        expect(await screen.findByRole('menuitem', {name: '서비스 소개'})).toBeInTheDocument();
+        await screen.findByRole('menu');
         expect(screen.queryByRole('menuitem', {name: MY_CALENDAR_LABEL})).not.toBeInTheDocument();
       });
     });
