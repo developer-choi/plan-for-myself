@@ -43,7 +43,7 @@ https://plan-for-myself.vercel.app
 
 → 실제 작업: [#100 실패 태그 길이를 상한 6글자·일반 길이 한글 4글자로 정하고 표시 칸을 맞춤](https://github.com/developer-choi/plan-for-myself/pull/100)
 
-→ [전체 사례 보러가기](docs/ai/design.md#페이지-내-요소들을-우선순위에-맞게-강조하기)
+→ [전체 사례 보러가기](docs/cases/design.md#페이지-내-요소들을-우선순위에-맞게-강조하기)
 
 ### 개발: 만들어 둔 베스트 프랙티스 기반으로 짧게 지시하기
 
@@ -91,7 +91,7 @@ best-practices/
 
 하지만, AI가 문서를 더 읽는 부담이 **매번 AI에게 설명**하는 시간이나 **설명을 빠뜨려** 다시 작업하는 시간보다는 작다고 판단했습니다.
 
-→ [전체 사례 보러가기](docs/ai/implementation.md#정적-분석-도입)
+→ [전체 사례 보러가기](docs/cases/development.md#정적-분석-도입)
 
 ## 기술 스택
 
