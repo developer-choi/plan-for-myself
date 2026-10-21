@@ -50,66 +50,45 @@ best-practices/
 
 AI가 코드를 많이 쓸수록 제가 리뷰할 코드도 그만큼 늘어납니다.
 
-그런데, 이런 코드도 사람이 리뷰할 가치가 있을까요?
+그런데, 이런 실수까지 제가 매번 눈으로 잡아야 할까요?
 
-```javascript
-function add(a, b) {
-  return a + b;
-}
-
-add({name: '홍길동'});
+```typescript
+ALLOW_ACCOUNT_LIST.includes(params.user.email as any); // 타입 검사를 끔        → no-explicit-any
+const data = JSON.parse(response);                     // any가 조용히 퍼짐      → no-unsafe-assignment
+const count = input || 10;                             // 값이 없을 때만 10을 쓰려 했는데, 0이어도 10이 됨 → prefer-nullish-coalescing
+const msg = `user: ${user.name}`;                      // name이 없으면 "user: undefined" → restrict-template-expressions
 ```
 
 ### 해결
 
-```typescript
-function add(a: number, b: number) {
-  return a + b;
-}
-
-add({name: '홍길동'}); // 에러가 발생하여, 미리 알 수 있습니다.
-```
-
-이런 도구가 TypeScript 말고도 ESLint·stylelint·commitlint 등 더 있습니다.
+이런 실수는 [커밋 시점에 자동으로 막고](https://github.com/developer-choi/plan-for-myself/pull/39), 웹·앱·공통 패키지가 같은 규칙을 쓰게 했습니다.
 
 ### 단점
 
-이런 도구와 설정이 많아지면, 규칙이 정상 코드까지 막는 경우가 생깁니다.
+규칙이 많아지면 정상 코드까지 막습니다.
 
-예를 들어 숫자를 그대로 쓰지 못하게 막는 규칙을 두었습니다.
-
-```typescript
-// eslint
-'no-magic-numbers': ['error', {ignore: [-1, 0, 1, 2]}],
-```
-
-의도는 뜻을 알 수 없는 숫자에 이름을 붙이게 하는 것이었습니다.
-
-```typescript
-// ❌ 6이 무엇인지 알 수 없습니다
-if (tag.length > 6) {}
-
-// ✅ 이름을 보면 실패 태그의 최대 글자 수라는 것을 압니다
-if (tag.length > STUDY_RECORD_FIELD_LIMITS.failTags.maxLength) {}
-```
-
-그런데 소개 페이지 그림에 쓰는 예시 데이터는 날짜 숫자 자체가 내용이라, 파일 전체에서 규칙을 꺼야 했습니다.
+예를 들어 소개 페이지 그림에 쓰는 예시 데이터는 날짜·공부 시간 같은 숫자 자체가 내용이라, 숫자를 그대로 쓰지 못하게 막는 규칙을 파일 전체에서 꺼야 했습니다.
 
 ```typescript
 /* eslint-disable no-magic-numbers -- 소개 페이지 그림에만 쓰는 고정 예시 데이터라 숫자를 그대로 적는다 */
-const FAIL_TAGS = {
-  7: ['늦잠'],   // 7일에 늦잠
-  12: ['게임'],  // 12일에 게임
-};
-const MISSING_DAYS = [9, 17]; // 기록을 안 남긴 날
+const MISSING_DAYS = [9, 17];                        // 기록을 안 남긴 날
+const STUDY_MINUTES = [210, 95, 120, 150, 185, 240]; // 날마다 돌아가며 쓰는 공부 시간(분)
 ```
 
-그래서 규칙을 추가할 때 아래 둘을 비교해서 판단하고 있습니다.
+예외가 예시 데이터 파일 2개뿐이라 이 규칙은 유지했습니다.
+
+그래서 규칙마다 아래 둘을 비교해서 판단하고 있습니다.
 
 - **노이즈**: 규칙을 끄는 예외 주석이 늘어나는 것
 - **이득**: 그 규칙 덕분에 제가 리뷰하지 않아도 되는 코드가 늘어나는 것
 
-폭·높이까지 디자인 토큰만 쓰게 막았을 때는 값마다 예외 주석이 붙어 노이즈가 더 컸고, 그 규칙은 뺐습니다.
+폭·높이까지 디자인 토큰만 쓰게 막았을 때는, 예외 주석 4개가 모두 "토큰이 없다"는 사유여서 [폭·높이만 규칙에서 뺐습니다](https://github.com/developer-choi/plan-for-myself/commit/5d2a189fbef01c5ed7ad58f7e5f998c7be753e0a). 색·여백·글자 크기는 지금도 막습니다.
+
+반대로 기록 폼에서 17줄짜리 함수가 JSX 속성 안에 들어간 것을 리뷰에서 놓쳤을 때는, [같은 실수를 규칙으로 막았습니다](https://github.com/developer-choi/plan-for-myself/commit/d1155c4d304d7eb244e1000f7289946d1e6759f9).
+
+규칙에서 뺀 것은 더 이상 자동으로 막지 못하는 단점이 남아 있습니다.
+
+하지만, 예외 주석을 매번 달고 읽는 비용보다는 작다고 판단했습니다.
 
 ## 테스트 도입
 
