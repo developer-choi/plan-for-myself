@@ -1,48 +1,61 @@
-## 만들어 둔 베스트 프랙티스 기반으로 짧게 지시하기
+## 웹과 앱이 로직을 한 벌로 쓰기
 
 ### 문제
 
-AI는 **풍부하게 설명해야** 의도대로 구현해 줍니다.
+웹과 앱은 화면만 다를 뿐, 기록을 저장하고 실패를 처리하는 로직은 대부분 같습니다.
 
-그 설명을 매번 반복하는 데 사람의 시간이 듭니다.
+이 로직을 두 벌로 두면 웹을 고칠 때마다 앱도 따로 고쳐야 하고, 하나를 빠뜨리면 두 화면이 다르게 동작합니다.
 
 ### 해결
 
-1. "이 기능은 이렇게 구현하는 것이 가장 좋다"는 [베스트 프랙티스](https://blog-sepia-pi-37.vercel.app/posts/infinite-scroll-step3)를 쌓아 두고,
-2. 그것을 [목차로 정리](https://github.com/developer-choi/monorepo-playground/tree/master/docs/best-practices)해, AI가 폴더명과 파일명만 보고 필요한 것을 찾아가게 했습니다.
+그래서 앱을 만들기 전에 레포를 [모노레포로 옮기고](https://github.com/developer-choi/plan-for-myself/pull/35), 웹과 앱이 [같은 공통 패키지를 쓰게 했습니다](https://github.com/developer-choi/plan-for-myself/pull/36).
 
-### 결과
+공통 패키지에는 타입, 입력 한도와 문구, 날짜 계산, API 함수, 훅 같은 것들이 들어 있습니다. 여기서는 그중 **기록 폼 로직** 하나를 예로 듭니다.
 
-1. 구현하는 시간을 아껴, 베스트 프랙티스를 더 만들 수 있게 됐습니다.
-2. 새로 만든 것도 같은 방식으로 정리해, 비슷한 것을 만들 때 다시 참고할 수 있게 됐습니다.
+기록을 저장·삭제하고, 서버가 거절하면 문구를 띄우고, 성공하면 달력과 통계를 새로 받는 로직을 [공통 패키지의 훅 하나로 두었습니다]([PR: 기록 폼 로직을 공통 패키지로]). 웹과 앱은 같은 훅을 부르고, 화면만 각자 그립니다.
 
-결과적으로, 구현은 종류별로 **한 번만** 하는 것을 목표로 하고 있습니다.
+```tsx
+// 웹 (Next.js)
+const {methods, form} = useRecordForm({
+  target: {date, month, record},
+  onClose,
+  dependencies: {
+    api: studyRecordApi, // 쿠키로 인증하는 API 클라이언트
+    reportUnexpectedError: (error) => {
+      console.error(error);
+      captureException(error); // @sentry/nextjs
+    },
+  },
+});
+
+return <Dialog.Root open={isOpen} onClose={onClose}>{/* … */}</Dialog.Root>;
+```
+
+```tsx
+// 앱 (React Native)
+const {methods, form} = useRecordForm({
+  target: {date, month, record},
+  onClose,
+  dependencies: {
+    api: studyRecordApi, // 토큰으로 인증하는 API 클라이언트
+    reportUnexpectedError: captureException, // @sentry/react-native
+  },
+});
+
+return <Modal visible={isOpen} onRequestClose={onClose}>{/* … */}</Modal>;
+```
+
+API 클라이언트와 Sentry SDK처럼 플랫폼마다 다른 것은, 공통 패키지가 직접 가져오지 않고 인자로 받습니다.
+
+화면은 같이 쓰지 않았습니다. 웹이 쓰는 디자인 시스템이 DOM과 Sass로 만들어져 있어 React Native에서는 그릴 수 없기 때문입니다.
 
 ### 단점
 
-이런 식으로 문서를 계속 쌓아 나가면, 결국 AI가 읽어야 하는 컨텍스트 양이 많아지는 문제가 있습니다.
+로직은 한 벌이어도 화면은 여전히 두 벌입니다.
 
-그래서 이것을 완화하기 위해, 문서를 **폴더 구조로 나눠** AI가 전부가 아니라 필요한 것만 읽게 했습니다.
+예를 들어 서버가 거절한 문구를 보여 주는 자리만 해도 웹은 `Callout`, 앱은 `Text`로 각자 그려서, 화면을 바꾸면 두 군데를 고쳐야 합니다.
 
-```
-coding-standards/
-├── rules/                  
-│   └── personal/           
-│       └── typescript/
-│           └── basic.md
-└── principles/             
-    └── personal/
-        └── quality/
-            └── co-location.md
-
-best-practices/             
-├── testing.md
-└── form.md                 
-```
-
-완화가 가능하다 해도 단점이 남아 있긴 합니다.
-
-하지만, AI가 문서를 더 읽는 부담이 **매번 AI에게 설명**하는 시간이나 **설명을 빠뜨려** 다시 작업하는 시간보다는 작다고 판단했습니다.
+하지만, 로직이 두 벌이라 웹과 앱이 다르게 동작하는 비용보다는 작다고 판단했습니다.
 
 ## 정적 분석 도입
 
