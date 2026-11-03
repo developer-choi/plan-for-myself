@@ -98,11 +98,11 @@ API 클라이언트와 Sentry SDK처럼 플랫폼마다 다른 것은, 공통 �
 
 ## 기술적으로 신경 쓴 것
 
-제가 정리해 둔 베스트 프랙티스를 이 프로젝트에 그대로 적용했습니다.
+제가 정리해 둔 방식을 이 프로젝트에 적용했습니다.
 
-- **에러가 난 만큼만 망가지게** — 화면을 영역으로 나눠 에러 경계를 두고, 실패한 영역만 안내와 [다시 시도]로 바꿉니다. ([베스트 프랙티스](https://github.com/developer-choi/monorepo-playground/blob/master/docs/guides/error-handling/step4.md) · 적용: [#56](https://github.com/developer-choi/plan-for-myself/pull/56), [#69](https://github.com/developer-choi/plan-for-myself/pull/69))
-- **예상하지 못한 에러만 Sentry로** — 예상하지 못한 에러는 Sentry로 보내고, 규칙 위반 거절은 화면이 안내하고 보내지 않습니다. ([베스트 프랙티스](https://github.com/developer-choi/monorepo-playground/pull/12) · 적용: [#80](https://github.com/developer-choi/plan-for-myself/pull/80))
-- **사용자 데이터는 TanStack Query로 캐시** — 서버 데이터를 캐시하는 방법은 Next.js App Router의 서버 캐시와 TanStack Query의 브라우저 캐시 두 가지가 있습니다. 기록과 통계는 사용자마다 달라 서버에서 페이지를 미리 만들어 둘 수 없어서, TanStack Query로 캐시했습니다.
+- **에러가 난 만큼만 망가지게** — 화면을 영역으로 나눠 에러 경계를 두고, 실패한 영역만 안내와 [다시 시도]로 바꿉니다. ([에러 처리 가이드](https://github.com/developer-choi/monorepo-playground/blob/master/docs/guides/error-handling/step4.md) · 적용: [#56](https://github.com/developer-choi/plan-for-myself/pull/56), [#69](https://github.com/developer-choi/plan-for-myself/pull/69))
+- **처리하지 않은 에러는 자동으로 Sentry로** — 직접 처리한 에러는 그 자리에서 보낼지 정하고, 서버 거절은 화면이 안내하고 보내지 않습니다. ([Sentry 적용 예제](https://github.com/developer-choi/monorepo-playground/pull/12) · 적용: [#80](https://github.com/developer-choi/plan-for-myself/pull/80))
+- **사용자 데이터는 TanStack Query로 캐시** — 서버 데이터를 Next.js 서버에 저장되는 캐시와 TanStack Query로 브라우저에 저장되는 캐시 중 어디에 둘지 견줬습니다. 기록과 통계는 사용자마다 달라 서버에서 페이지를 미리 만들어 둘 수 없어서, TanStack Query로 캐시했습니다.
 
 ## 기술 스택
 
