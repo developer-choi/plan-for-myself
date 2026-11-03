@@ -117,7 +117,7 @@ const STUDY_MINUTES = [210, 95, 120, 150, 185, 240]; // 날마다 돌아가며 �
 
 그래도 React Native를 익히는 것이 목적이어서, 화면을 React Native로 다시 만들었습니다.
 
-게다가 웹뷰로 만들었어도, Google이 앱 안 웹뷰에서의 Google 로그인을 막기 때문에 로그인은 네이티브로 구현해야 했습니다.
+게다가 웹뷰로 만들었어도, Google이 앱 안 웹뷰에서의 Google 로그인을 [막기 때문에](https://developers.googleblog.com/en/upcoming-security-changes-to-googles-oauth-20-authorization-endpoint-in-embedded-webviews/) 로그인은 네이티브로 구현해야 했습니다.
 
 그렇다면, 웹뷰라면 따로 하지 않아도 되던 일을 React Native 앱에서는 어떻게 메울 수 있을까요?
 
