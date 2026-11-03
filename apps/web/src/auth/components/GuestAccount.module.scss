@@ -1,4 +1,5 @@
 .sub {
   margin-top: var(--spacing-sm);
   color: var(--color-fg-secondary);
+  word-break: keep-all;
 }
