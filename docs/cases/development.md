@@ -133,7 +133,7 @@ const STUDY_MINUTES = [210, 95, 120, 150, 185, 240]; // 날마다 돌아가며 �
 
 또 사용자가 스토어에서 새 버전을 받지 않으면 옛 버전 앱이 남고, 그동안 API를 더하기만 하는 제약도 지켜야 합니다.
 
-하지만, 웹뷰를 골라 React Native를 익힐 기회를 잃는 비용보다는 작다고 판단했습니다.
+하지만, 이 앱은 React Native를 익히려고 만든 것이라 이 대가를 감수했습니다.
 
 ## AI 코드리뷰 도입
 
@@ -187,19 +187,3 @@ AI가 많은 것을 판단하게 하려면, 판단 기준도 많이 줘야 합�
 정적 분석과 AI 코드리뷰는 둘 다, **제가 보기 전에 먼저 잡는다**는 데 가치가 있습니다.
 
 그래서 코드를 합치기 전에는 언제나 제가 직접 화면을 열어 결과물을 다 봤습니다.
-
-## References: [Upcoming security changes to Google's OAuth 2.0 authorization endpoint in embedded webviews](https://developers.googleblog.com/2021/06/upcoming-security-changes-to-googles-oauth-2.0-authorization-endpoint.html)
-
-> All embedded webviews will be blocked starting on September 30, 2021.
-
-## References: [Expo Update](https://docs.expo.dev/eas-update/faq/)
-
-> When to use Expo Update
->
-> - ✓ Fix a bug or crash in JavaScript code and deploy updates in minutes
-> - ✓ Update copy, translations, UI styling, or screen layouts
-> - ✗ Change to native code or native dependencies
-> - ✗ Change to app permissions (camera, location, and others)
-> - ✗ Update the Expo SDK version
->
-> For scenarios marked with ✗, use Expo Build to create and submit a new app binary.
