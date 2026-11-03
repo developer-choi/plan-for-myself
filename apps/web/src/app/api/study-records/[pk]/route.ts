@@ -1,9 +1,10 @@
 import {NextRequest, NextResponse} from 'next/server';
 import {getRequestUserId} from '@/auth/request-user';
 import {deleteStudyRecord, updateStudyRecord} from '@/server/study-record/repository';
+import {readJsonBody} from '@/server/request';
 import {noContentResponse, unauthorizedResponse} from '@/server/response';
 import {badRequestResponse, notFoundResponse} from '@/server/study-record/response';
-import {parsePk, readJsonBody, validateStudyRecordUpdate} from '@/server/study-record/validate';
+import {parsePk, validateStudyRecordUpdate} from '@/server/study-record/validate';
 
 interface Context {
   params: Promise<{pk: string}>;
