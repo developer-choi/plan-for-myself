@@ -5,9 +5,9 @@ import typography from '@developer-choi/design-system/styles/typography';
 import {Cross2Icon} from '@radix-ui/react-icons';
 import classNames from 'classnames';
 import Link from 'next/link';
+import {START_RECORDING_LABEL} from '@plan-for-myself/shared';
 import {focusOnMount} from '@/demo/focus-on-mount';
 import type {DemoChoiceReason} from '@/demo/demo-choice-reason';
-import {START_RECORDING_LABEL} from '@/shared/labels';
 import styles from './DemoChoiceDialog.module.scss';
 
 interface LoggedOutDemoChoiceDialogProps {

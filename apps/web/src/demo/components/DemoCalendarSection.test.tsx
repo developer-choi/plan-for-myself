@@ -3,9 +3,10 @@ import userEvent from '@testing-library/user-event';
 import type {Session} from 'next-auth';
 import {SessionProvider} from 'next-auth/react';
 import {OverlayProvider} from 'overlay-kit';
+import {START_RECORDING_LABEL} from '@plan-for-myself/shared';
 import {describe, expect, it} from 'vitest';
 import {getDemoMonth, getDemoOverview, getDemoRecords, getDemoToday} from '@/demo/demo-examples';
-import {MY_CALENDAR_LABEL, START_RECORDING_LABEL} from '@/shared/labels';
+import {MY_CALENDAR_LABEL} from '@/shared/labels';
 import DemoCalendarSection from './DemoCalendarSection';
 
 describe('DemoCalendarSection', () => {
