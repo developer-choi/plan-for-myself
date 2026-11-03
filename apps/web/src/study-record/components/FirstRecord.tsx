@@ -6,7 +6,7 @@ import {PlusIcon} from '@radix-ui/react-icons';
 import classNames from 'classnames';
 import {openOnce} from '@plan-for-myself/shared/react';
 import Logo from '@/shared/components/Logo';
-import {toDateMonthParam} from '@/study-record/calendar-date';
+import {toDateMonthParam} from '@plan-for-myself/shared';
 import RecordFormDialog from '@/study-record/components/RecordFormDialog';
 import styles from './FirstRecord.module.scss';
 
