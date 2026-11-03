@@ -3495,6 +3495,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@plan-for-myself/shared@workspace:packages/shared"
   dependencies:
+    "@developer-choi/utils": "npm:^0.1.0"
+    "@tanstack/react-query": "npm:^5.90.20"
     "@types/react": "npm:~19.2.2"
     eslint: "npm:^9"
     eslint-plugin-react: "npm:^7.37.5"
@@ -3506,6 +3508,7 @@ __metadata:
     typescript-eslint: "npm:^8.57.2"
     vitest: "npm:^4.0.17"
   peerDependencies:
+    "@tanstack/react-query": ^5.90.20
     overlay-kit: ^1.9.0
     react: 19.2.3
   languageName: unknown
