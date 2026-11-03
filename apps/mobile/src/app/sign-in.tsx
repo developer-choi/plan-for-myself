@@ -1,7 +1,7 @@
 import {useRef, useState} from 'react';
 import {router, useLocalSearchParams} from 'expo-router';
 import {captureException} from '@sentry/react-native';
-import {type LoginFailure, shouldShowRegisteredNotice} from '@plan-for-myself/shared';
+import {INTRO_URL, type LoginFailure, shouldShowRegisteredNotice} from '@plan-for-myself/shared';
 import GuestConnectSection from '@/auth/components/GuestConnectSection';
 import LoginSection, {type PendingAction} from '@/auth/components/LoginSection';
 import {getLoginFailure} from '@/auth/login-failure';
@@ -103,6 +103,7 @@ export default function SignInScreen() {
       handlers={{
         onSignIn: handleSignIn,
         onStartAsGuest: handleStartAsGuest,
+        onExit: () => resetStackTo(INTRO_URL),
       }}
       pendingAction={pendingAction}
     />
