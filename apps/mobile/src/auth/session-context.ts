@@ -2,7 +2,7 @@ import {createContext, useContext} from 'react';
 
 export interface SessionContextValue {
   session: {
-    /** 구글 ID 토큰. null이면 로그인하지 않았다 */
+    /** 앱 토큰. null이면 로그인하지 않았다 */
     token: string | null;
     isLoading: boolean;
   };

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "expo-router/entry",
   "dependencies": {
+    "@developer-choi/utils": "^0.1.0",
     "@expo-google-fonts/noto-sans-kr": "^0.4.4",
     "@plan-for-myself/shared": "workspace:*",
     "@react-native-vector-icons/lucide": "^14.0.0",

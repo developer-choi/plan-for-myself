@@ -16378,6 +16378,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "mobile@workspace:apps/mobile"
   dependencies:
+    "@developer-choi/utils": "npm:^0.1.0"
     "@expo-google-fonts/noto-sans-kr": "npm:^0.4.4"
     "@jest/globals": "npm:~29.7.0"
     "@plan-for-myself/shared": "workspace:*"
