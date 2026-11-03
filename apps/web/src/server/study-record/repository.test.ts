@@ -19,16 +19,10 @@ const CREATE_STUDY_RECORDS_TABLE = `
 `;
 
 describe('listStudyRecords()', () => {
-  let db: PGlite;
-
   beforeEach(async () => {
     db = new PGlite();
     await db.exec(CREATE_STUDY_RECORDS_TABLE);
   });
-
-  async function createRecord(date: string) {
-    await createStudyRecord(USER_ID, {date, dateType: 'weekday', studiedMinutes: [0, 0, 0], failTags: []}, db);
-  }
 
   describe('General cases', () => {
     it('저장한 날짜를 YYYY-MM-DD 문자열 그대로 반환해야 한다', async () => {
@@ -65,22 +59,12 @@ describe('listStudyRecords()', () => {
 });
 
 describe('createStudyRecord()', () => {
-  let db: PGlite;
-
   beforeEach(async () => {
     db = new PGlite();
     await db.exec(CREATE_USERS_TABLE);
     await db.exec(CREATE_STUDY_RECORDS_TABLE_WITH_USER_FK);
     await db.query('INSERT INTO users (id) VALUES ($1)', [USER_ID]);
   });
-
-  function create(userId: string) {
-    return createStudyRecord(
-      userId,
-      {date: '2026-10-01', dateType: 'weekday', studiedMinutes: [0, 0, 0], failTags: []},
-      db,
-    );
-  }
 
   describe('General cases', () => {
     it('있는 사용자의 기록은 저장해야 한다', async () => {
@@ -118,3 +102,17 @@ const CREATE_STUDY_RECORDS_TABLE_WITH_USER_FK = CREATE_STUDY_RECORDS_TABLE.repla
   'user_id bigint NOT NULL,',
   'user_id bigint NOT NULL REFERENCES users (id),',
 );
+
+let db: PGlite;
+
+async function createRecord(date: string) {
+  await createStudyRecord(USER_ID, {date, dateType: 'weekday', studiedMinutes: [0, 0, 0], failTags: []}, db);
+}
+
+function create(userId: string) {
+  return createStudyRecord(
+    userId,
+    {date: '2026-10-01', dateType: 'weekday', studiedMinutes: [0, 0, 0], failTags: []},
+    db,
+  );
+}

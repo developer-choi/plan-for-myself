@@ -1,7 +1,7 @@
 import expoConfig from 'eslint-config-expo/flat.js';
 import {configs as tseslintConfigs} from 'typescript-eslint';
 import {defineConfig, globalIgnores} from 'eslint/config';
-import {baseRules, mockFilesConfig, testFilesConfig} from '../../eslint.config.base.mts';
+import {baseRules, testFilesConfig} from '../../eslint.config.base.mts';
 
 export default defineConfig([
   expoConfig,
@@ -21,5 +21,4 @@ export default defineConfig([
     },
   },
   testFilesConfig,
-  mockFilesConfig,
 ]);
