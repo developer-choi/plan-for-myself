@@ -2,7 +2,7 @@
 
 import {Button, Callout, Dialog, IconButton} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
-import {formatDateTitle, type StudyRecord} from '@plan-for-myself/shared';
+import {formatDateTitle, RECORD_FORM_LABELS, type StudyRecord} from '@plan-for-myself/shared';
 import {useRecordForm} from '@plan-for-myself/shared/react';
 import {Cross2Icon} from '@radix-ui/react-icons';
 import {captureException} from '@sentry/nextjs';
@@ -63,11 +63,11 @@ export default function RecordFormDialog({isOpen, date, month, record, onClose}:
                 size="large"
                 onClick={form.handlers.onDelete}
               >
-                삭제
+                {RECORD_FORM_LABELS.delete}
               </Button>
             )}
             <Button disabled={form.deleting} loading={form.saving} size="large" type="submit">
-              저장
+              {RECORD_FORM_LABELS.save}
             </Button>
           </Dialog.Footer>
         </form>

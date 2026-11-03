@@ -39,13 +39,14 @@ export {
 export {createStudyRecordQueries} from './study-record/queries';
 export {studyRecordQueryKeys} from './study-record/query-keys';
 export {
-  addFailTag,
+  getMinutesError,
   getRecordFormDefaultValues,
   MINUTE_SLOTS,
   type MinuteSlot,
   type RecordFormValues,
   validateMinuteInput,
 } from './study-record/record-form';
+export {RECORD_FORM_LABELS} from './study-record/record-form-labels';
 export type {
   DeleteStudyRecordApiRequest,
   FailureTag,

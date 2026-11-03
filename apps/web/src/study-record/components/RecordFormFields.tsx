@@ -3,16 +3,17 @@
 import {Caption, Chip, Radio, RadioGroup, TextField} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
 import {
-  addFailTag,
+  getMinutesError,
   MINUTE_SLOTS,
   type MinuteSlot,
+  RECORD_FORM_LABELS,
   type RecordFormValues,
-  STUDY_RECORD_FIELD_LIMITS,
   validateMinuteInput,
 } from '@plan-for-myself/shared';
+import {useFailTagInput} from '@plan-for-myself/shared/react';
 import classNames from 'classnames';
 import {type KeyboardEvent, useId} from 'react';
-import {Controller, useController, useFormContext} from 'react-hook-form';
+import {Controller, useFormContext} from 'react-hook-form';
 import calendarStyles from './CalendarGrid.module.scss';
 import styles from './RecordForm.module.scss';
 
@@ -26,12 +27,12 @@ export default function RecordFormFields() {
     control,
     formState: {errors},
   } = useFormContext<RecordFormValues>();
-  const minutesError = MINUTE_SLOTS.map(({slot}) => errors.minutes?.[slot]?.message).find(Boolean);
+  const minutesError = getMinutesError(errors);
 
   return (
     <div className={styles.fields}>
       <fieldset>
-        <legend className={classNames(typography.body2, styles.sectionLabel)}>평일 / 휴일</legend>
+        <legend className={classNames(typography.body2, styles.sectionLabel)}>{RECORD_FORM_LABELS.dateType}</legend>
         <Controller
           control={control}
           name="holiday"
@@ -42,8 +43,8 @@ export default function RecordFormFields() {
               value={field.value ? 'holiday' : 'weekday'}
               onChange={(event) => field.onChange(event.target.value === 'holiday')}
             >
-              <Radio value="weekday">평일</Radio>
-              <Radio value="holiday">휴일</Radio>
+              <Radio value="weekday">{RECORD_FORM_LABELS.weekday}</Radio>
+              <Radio value="holiday">{RECORD_FORM_LABELS.holiday}</Radio>
             </RadioGroup>
           )}
         />
@@ -52,7 +53,7 @@ export default function RecordFormFields() {
       <FailTagInput />
 
       <fieldset>
-        <legend className={classNames(typography.body2, styles.sectionLabel)}>공부시간</legend>
+        <legend className={classNames(typography.body2, styles.sectionLabel)}>{RECORD_FORM_LABELS.minutes}</legend>
         <div className={styles.minutes}>
           {MINUTE_SLOTS.map(({slot, label}) => (
             <MinuteField key={slot} label={label} slot={slot} />
@@ -68,27 +69,16 @@ export default function RecordFormFields() {
   );
 }
 
-const FULL_FAIL_TAGS_PLACEHOLDER = `최대 ${STUDY_RECORD_FIELD_LIMITS.failTags.maxCount}개까지`;
-
 function FailTagInput() {
   const id = useId();
+  const {register} = useFormContext<RecordFormValues>();
   const {
-    control,
-    register,
-    getValues,
-    setValue,
-    setError,
-    clearErrors,
-    formState: {errors},
-  } = useFormContext<RecordFormValues>();
-  const {field: failTagsField} = useController({control, name: 'failTags'});
-  const failTags = failTagsField.value;
-  const isFull = failTags.length >= STUDY_RECORD_FIELD_LIMITS.failTags.maxCount;
-
-  const removeFailTag = (tag: string) => {
-    clearErrors('failTagInput');
-    failTagsField.onChange(failTags.filter((failTag) => failTag !== tag));
-  };
+    failTags,
+    isFull,
+    placeholder,
+    errorMessage,
+    handlers: {clearError, addFailTagInput, removeFailTag},
+  } = useFailTagInput();
 
   const addTagOnEnter = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key !== 'Enter') {
@@ -97,29 +87,21 @@ function FailTagInput() {
 
     /* 이 칸의 Enter는 폼 제출이 아니라 태그 추가다 */
     event.preventDefault();
-    const result = addFailTag(failTags, getValues('failTagInput'));
-    if (!result.ok) {
-      setError('failTagInput', {message: result.message});
-      return;
-    }
-
-    clearErrors('failTagInput');
-    setValue('failTagInput', '');
-    failTagsField.onChange(result.failTags);
+    addFailTagInput();
   };
 
   return (
     <div>
       <label className={classNames(typography.body2, styles.sectionLabel)} htmlFor={id}>
-        실패 태그
+        {RECORD_FORM_LABELS.failTags}
       </label>
       <TextField
-        {...register('failTagInput', {onChange: () => clearErrors('failTagInput')})}
+        {...register('failTagInput', {onChange: clearError})}
         autoComplete="off"
         disabled={isFull}
-        error={errors.failTagInput?.message}
+        error={errorMessage}
         id={id}
-        placeholder={isFull ? FULL_FAIL_TAGS_PLACEHOLDER : '단어 하나 입력 후 Enter'}
+        placeholder={placeholder}
         onKeyDown={addTagOnEnter}
       />
       {failTags.length > 0 && (
@@ -156,8 +138,8 @@ function MinuteField({slot, label}: MinuteFieldProps) {
         {...register(`minutes.${slot}`, {validate: validateMinuteInput})}
         id={id}
         inputMode="numeric"
-        placeholder="0"
-        suffix="분"
+        placeholder={RECORD_FORM_LABELS.minutePlaceholder}
+        suffix={RECORD_FORM_LABELS.minuteSuffix}
       />
     </div>
   );

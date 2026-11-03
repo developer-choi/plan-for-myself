@@ -5,6 +5,7 @@ import {
   addFailTag,
   addPendingFailTag,
   FAIL_TAG_DUPLICATE_MESSAGE,
+  getMinutesError,
   getRecordFormDefaultValues,
   type RecordFormValues,
   parseRecordRejection,
@@ -14,6 +15,8 @@ import {
 import type {StudyRecord} from './type';
 
 const EMPTY_MINUTES = {morning: '', afternoon: '', evening: ''};
+const AFTERNOON_ERROR = '점심 칸 오류';
+const EVENING_ERROR = '저녁 칸 오류';
 
 function createValues(overrides: Partial<RecordFormValues> = {}): RecordFormValues {
   return {holiday: false, failTags: [], minutes: EMPTY_MINUTES, failTagInput: '', ...overrides};
@@ -210,6 +213,27 @@ describe('addPendingFailTag()', () => {
   describe('Edge cases', () => {
     it('칸에 남은 글자가 이미 넣은 태그와 같으면 넘긴 목록을 그대로 반환해야 한다', () => {
       expect(addPendingFailTag(['늦잠'], ' 늦잠 ')).toEqual({ok: true, failTags: ['늦잠']});
+    });
+  });
+});
+
+describe('getMinutesError()', () => {
+  describe('General cases', () => {
+    it('여러 칸에 오류가 있으면 아침·점심·저녁 순으로 앞선 칸의 문구를 반환해야 한다', () => {
+      const errors = {
+        minutes: {
+          afternoon: {type: 'validate', message: AFTERNOON_ERROR},
+          evening: {type: 'validate', message: EVENING_ERROR},
+        },
+      };
+
+      expect(getMinutesError(errors)).toBe(AFTERNOON_ERROR);
+    });
+  });
+
+  describe('Boundary cases', () => {
+    it('공부시간 칸에 오류가 없으면 undefined를 반환해야 한다', () => {
+      expect(getMinutesError({})).toBeUndefined();
     });
   });
 });

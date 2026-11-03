@@ -1,4 +1,5 @@
 import {ApiResponseError} from '@developer-choi/utils/api';
+import type {FieldErrors} from 'react-hook-form';
 import {z} from 'zod';
 import {isHolidayDate} from '../date/holiday';
 import {parseDateParam} from '../date/month-param';
@@ -89,6 +90,11 @@ export function addPendingFailTag(failTags: string[], input: string): AddFailTag
   }
 
   return addFailTag(failTags, input);
+}
+
+/* 공부시간 칸이 모두 올바르면 undefined */
+export function getMinutesError(errors: FieldErrors<RecordFormValues>): string | undefined {
+  return MINUTE_SLOTS.map(({slot}) => errors.minutes?.[slot]?.message).find(Boolean);
 }
 
 export function parseRecordRejection(error: unknown): RecordRejection | null {
