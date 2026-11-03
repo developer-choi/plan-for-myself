@@ -1,26 +1,15 @@
-import type {StudyRecord, StudyRecordMonthly, StudyRecordOverview} from '@plan-for-myself/shared';
+import type {
+  DeleteStudyRecordApiRequest,
+  GetStudyRecordListApiRequest,
+  GetStudyRecordStatsMonthlyApiRequest,
+  GetStudyRecordStatsOverviewApiRequest,
+  PatchStudyRecordApiRequest,
+  PostStudyRecordApiRequest,
+  StudyRecord,
+  StudyRecordMonthly,
+  StudyRecordOverview,
+} from '@plan-for-myself/shared';
 import {api} from '@/shared/api/client';
-
-export interface GetStudyRecordListApiRequest {
-  month: string;
-}
-
-export interface GetStudyRecordStatsOverviewApiRequest {
-  date: string;
-}
-
-export interface GetStudyRecordStatsMonthlyApiRequest {
-  month: string;
-  date: string;
-}
-
-export type StudyRecordFieldsRequest = Pick<StudyRecord, 'dateType' | 'studiedMinutes' | 'failTags'>;
-
-export type PostStudyRecordApiRequest = Omit<StudyRecord, 'pk'>;
-
-export type PatchStudyRecordApiRequest = Omit<StudyRecord, 'date'>;
-
-export type DeleteStudyRecordApiRequest = Pick<StudyRecord, 'pk'>;
 
 export async function postStudyRecordApi(request: PostStudyRecordApiRequest): Promise<StudyRecord> {
   return api.post<StudyRecord>('/api/study-records', {body: request});

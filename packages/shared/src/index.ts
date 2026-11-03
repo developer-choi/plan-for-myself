@@ -11,11 +11,18 @@ export {
   STUDY_RECORD_FIELD_MESSAGES,
 } from './study-record/limits';
 export type {
+  DeleteStudyRecordApiRequest,
   FailureTag,
   FailureTagStatus,
   FailureTagTrend,
+  GetStudyRecordListApiRequest,
+  GetStudyRecordStatsMonthlyApiRequest,
+  GetStudyRecordStatsOverviewApiRequest,
+  PatchStudyRecordApiRequest,
+  PostStudyRecordApiRequest,
   RecordedDays,
   StudyRecord,
+  StudyRecordFieldsRequest,
   StudyRecordMonthly,
   StudyRecordOverview,
 } from './study-record/type';
