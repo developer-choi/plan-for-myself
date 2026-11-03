@@ -13,6 +13,7 @@ export {getKoreanDate, getKoreanToday, KST} from './date/korean';
 export {convertLunarDateToSolar, type SimpleDate} from './date/lunar';
 export {toDateMonthParam} from './date/month-param';
 export type {DateType} from './date-type/type';
+export {isUnauthorizedError} from './error/unauthorized';
 export {LOGOUT_LABEL, START_RECORDING_LABEL} from './label/labels';
 export {isEmptyStudyRecord} from './study-record/empty';
 export {minutesFormat, studiedTimeFormat} from './study-record/format';

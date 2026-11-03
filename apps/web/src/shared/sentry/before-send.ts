@@ -1,10 +1,11 @@
 import type {ErrorEvent, EventHint, SeverityLevel} from '@sentry/nextjs';
-import {ApiResponseError, BaseError} from '@developer-choi/utils/api';
+import {BaseError} from '@developer-choi/utils/api';
+import {isUnauthorizedError} from '@plan-for-myself/shared';
 
 export function beforeSend(event: ErrorEvent, hint: EventHint): ErrorEvent | null {
   const error = hint.originalException;
 
-  if (isIgnoredError(error)) {
+  if (isUnauthorizedError(error)) {
     return null;
   }
 
@@ -25,15 +26,9 @@ export function beforeSend(event: ErrorEvent, hint: EventHint): ErrorEvent | nul
   return event;
 }
 
-const UNAUTHORIZED_STATUS = 401;
-
 const LEVEL_MAP: Record<BaseError['level'], SeverityLevel> = {
   fatal: 'fatal',
   error: 'error',
   warning: 'warning',
   low: 'info',
 };
-
-function isIgnoredError(error: unknown): boolean {
-  return error instanceof ApiResponseError && error.status === UNAUTHORIZED_STATUS;
-}
