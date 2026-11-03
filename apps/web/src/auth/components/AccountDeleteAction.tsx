@@ -1,22 +1,14 @@
 'use client';
 
 import {captureException} from '@sentry/nextjs';
-import {useMutation} from '@tanstack/react-query';
-import {openOnce} from '@plan-for-myself/shared/react';
+import type {AccountDeleteText} from '@plan-for-myself/shared';
+import {openOnce, useAccountDelete} from '@plan-for-myself/shared/react';
 import classNames from 'classnames';
 import {Callout, Confirm} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
-import {isMutationSettling} from '@plan-for-myself/shared';
-import {deleteAccountApi} from '@/auth/api';
+import {accountApi} from '@/auth/api';
 import {ENTRY_URL} from '@/auth/redirect';
 import styles from './AccountDeleteAction.module.scss';
-
-export interface AccountDeleteText {
-  trigger: string;
-  content: string;
-  confirm: string;
-  failure: string;
-}
 
 interface AccountDeleteActionProps {
   text: AccountDeleteText;
@@ -45,25 +37,23 @@ export default function AccountDeleteAction({text}: AccountDeleteActionProps) {
 }
 
 function AccountDeleteConfirm({isOpen, text, onClose}: AccountDeleteConfirmProps) {
-  const deleteMutation = useMutation({mutationFn: deleteAccountApi});
-
-  const deleteAccount = async () => {
-    try {
-      await deleteMutation.mutateAsync();
-    } catch (error) {
-      captureException(error);
-      return;
-    }
-    window.location.replace(ENTRY_URL);
-  };
+  const {
+    isSettling,
+    isFailed,
+    handlers: {deleteAccount},
+  } = useAccountDelete({
+    deleteAccountApi: accountApi.deleteAccountApi,
+    onDeleted: () => window.location.replace(ENTRY_URL),
+    reportError: captureException,
+  });
 
   return (
     <Confirm
-      confirmProps={{children: text.confirm, color: 'destructive', loading: isMutationSettling(deleteMutation)}}
+      confirmProps={{children: text.confirm, color: 'destructive', loading: isSettling}}
       content={
         <>
           <p>{text.content}</p>
-          {deleteMutation.isError && (
+          {isFailed && (
             <Callout className={styles.failure} color="danger">
               {text.failure}
             </Callout>
