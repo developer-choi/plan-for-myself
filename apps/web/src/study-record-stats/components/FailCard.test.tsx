@@ -9,6 +9,7 @@ const REDUCED_TITLE_FINISHED = '줄었어요';
 const ALREADY = '벌써';
 const FIRST_IN_PROGRESS = '이번 달 처음';
 const FIRST_IN_FINISHED_MONTH = '8월 처음';
+const NO_FAILURE_TITLE = /에 적은 실패가 없어요$/;
 
 const GROUPS: {status: FailureTagStatus; label: string; title: string}[] = [
   {status: 'repeated', label: '반복', title: '반복하고 있어요'},
@@ -78,13 +79,13 @@ describe('FailCard', () => {
     it('실패 태그가 없으면 그 달에 적은 실패가 없다는 안내가 보인다', () => {
       render(<FailCard monthly={createMonthly({failureTags: []})} />);
 
-      expect(screen.getByRole('status')).toBeInTheDocument();
+      expect(screen.getByText(NO_FAILURE_TITLE)).toBeInTheDocument();
     });
 
     it('실패 태그가 있으면 실패가 없다는 안내가 보이지 않는다', () => {
       render(<FailCard monthly={createMonthly({failureTags: [OVERSLEEP]})} />);
 
-      expect(screen.queryByRole('status')).not.toBeInTheDocument();
+      expect(screen.queryByText(NO_FAILURE_TITLE)).not.toBeInTheDocument();
     });
 
     it('횟수로는 반복인 태그를 줄어들었다고 받으면 줄어든 묶음에 보인다', () => {

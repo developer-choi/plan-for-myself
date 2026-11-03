@@ -49,7 +49,7 @@ export default function FailCard({monthly, selection}: FailCardProps) {
   return (
     <Card title={`${monthLabel} 실패`}>
       {hasNoFailure ? (
-        <div className={styles.empty} role="status">
+        <div className={styles.empty}>
           <p className={classNames(typography.body2, styles.emptyTitle)}>{monthLabel}에 적은 실패가 없어요</p>
           <p className={classNames(typography.body3, styles.emptySub)}>실패를 적으면 지난달과 비교해 보여 줘요</p>
         </div>
