@@ -1,4 +1,10 @@
-import {formatMonthTitle, isSameMonth, parseMonth, shiftMonth} from '@plan-for-myself/shared';
+import {
+  demoCalendarPath,
+  findFirstRecordDateOfMonth,
+  formatMonthTitle,
+  parseMonth,
+  shiftMonth,
+} from '@plan-for-myself/shared';
 import type {Metadata} from 'next';
 import {notFound} from 'next/navigation';
 import {auth} from '@/auth/next-auth';
@@ -8,7 +14,6 @@ import DemoCalendarMenu from '@/demo/components/DemoCalendarMenu';
 import DemoCalendarSection from '@/demo/components/DemoCalendarSection';
 import DemoTourTrigger from '@/demo/components/DemoTourTrigger';
 import {getDemoMonth, getDemoOverview, getDemoRecords, getDemoToday} from '@/demo/demo-examples';
-import {demoCalendarPath} from '@/demo/demo-path';
 import layout from '@/shared/styles/layout.module.scss';
 import CalendarHeader from '@/study-record/components/CalendarHeader';
 import styles from './page.module.scss';
@@ -34,7 +39,7 @@ export default async function Page({params}: PageProps) {
   const now = new Date();
   const demoMonth = getDemoMonth(now);
   const records = getDemoRecords(now);
-  const firstRecordDateOfDemoMonth = records.filter((record) => isSameMonth(record.date, demoMonth))[0].date;
+  const firstRecordDateOfDemoMonth = findFirstRecordDateOfMonth(records, demoMonth);
 
   return (
     <div className={layout.shell}>
@@ -53,7 +58,9 @@ export default async function Page({params}: PageProps) {
           today={getDemoToday(now)}
         />
       </main>
-      <DemoTourTrigger demoMonth={demoMonth} firstRecordDate={firstRecordDateOfDemoMonth} part="calendar" />
+      {firstRecordDateOfDemoMonth && (
+        <DemoTourTrigger demoMonth={demoMonth} firstRecordDate={firstRecordDateOfDemoMonth} part="calendar" />
+      )}
     </div>
   );
 }

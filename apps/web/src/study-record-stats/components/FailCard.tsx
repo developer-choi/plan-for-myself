@@ -9,6 +9,7 @@ import {
   formatReducedGroupTitle,
   formatReducedNotePrefix,
   formatRepeatedNotePrefix,
+  getFirstFailureTagName,
   STATS_TEXT,
   type StudyRecordMonthly,
 } from '@plan-for-myself/shared';
@@ -47,7 +48,7 @@ export default function FailCard({monthly, selection}: FailCardProps) {
   const repeatedTags = filterByStatus(failureTags, 'repeated');
   const appearedTags = filterByStatus(failureTags, 'appeared');
   const reducedTags = filterByStatus(failureTags, 'reduced');
-  const firstTagName = [repeatedTags, appearedTags, reducedTags].find((tags) => tags.length > 0)?.[0].tag;
+  const firstTagName = getFirstFailureTagName(failureTags);
   const getTagRowId = (name: string) => (name === firstTagName ? FIRST_TAG_ROW_ID : undefined);
 
   return (

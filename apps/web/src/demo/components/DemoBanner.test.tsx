@@ -1,8 +1,7 @@
 import {render, screen} from '@testing-library/react';
-import {START_RECORDING_LABEL} from '@plan-for-myself/shared';
+import {MY_CALENDAR_LABEL, START_RECORDING_LABEL} from '@plan-for-myself/shared';
 import {describe, expect, it} from 'vitest';
 import {DEFAULT_HOME_URL} from '@/auth/redirect';
-import {MY_CALENDAR_LABEL} from '@/shared/labels';
 import DemoBanner from './DemoBanner';
 
 describe('DemoBanner', () => {

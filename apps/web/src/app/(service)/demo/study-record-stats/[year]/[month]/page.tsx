@@ -1,11 +1,13 @@
 import {
   type CalendarMonth,
+  demoCalendarPath,
+  type DemoOverview,
+  demoStatsPath,
   formatStatsTitle,
   getStatsMonthNavigation,
-  isBeforeFirstRecord,
-  isFutureMonth,
   isSameMonth,
   parseMonth,
+  shouldShowDemoStatsTour,
 } from '@plan-for-myself/shared';
 import type {Metadata} from 'next';
 import {notFound} from 'next/navigation';
@@ -16,8 +18,8 @@ import {getLoginState} from '@/auth/path';
 import DemoBanner from '@/demo/components/DemoBanner';
 import DemoStatsSection from '@/demo/components/DemoStatsSection';
 import DemoTourTrigger from '@/demo/components/DemoTourTrigger';
-import {type DemoOverview, getDemoMonthly, getDemoOverview, getDemoRecords, getDemoToday} from '@/demo/demo-examples';
-import {demoCalendarPath, demoStatsPath} from '@/demo/demo-path';
+import {getDemoMonthly, getDemoOverview, getDemoRecords, getDemoToday} from '@/demo/demo-examples';
+import {isDemoStatsMonth} from '@/demo/demo-response';
 import SubPageHeader from '@/shared/components/SubPageHeader';
 import layout from '@/shared/styles/layout.module.scss';
 import styles from './page.module.scss';
@@ -77,8 +79,7 @@ export default async function Page({params}: PageProps) {
           />
         </main>
       </div>
-      {/* 투어가 짚는 실패 카드 묶음이 없는 달에서는 띄우지 않는다 — 말풍선 없이 끝나도 「봤음」으로 찍혀 다시 안 뜬다 */}
-      {monthly.failureTags.length > 0 && <DemoTourTrigger part="stats" />}
+      {shouldShowDemoStatsTour(monthly) && <DemoTourTrigger part="stats" />}
     </div>
   );
 }
@@ -89,7 +90,7 @@ function parseDemoStatsMonth(params: {year: string; month: string}, now: Date): 
   const today = getDemoToday(now);
   const overview = getDemoOverview(now);
 
-  if (!viewMonth || isFutureMonth(today, viewMonth) || isBeforeFirstRecord(viewMonth, overview.firstRecordDate)) {
+  if (!viewMonth || !isDemoStatsMonth(viewMonth, today, overview.firstRecordDate)) {
     return null;
   }
 

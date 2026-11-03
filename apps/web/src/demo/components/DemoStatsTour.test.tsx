@@ -1,12 +1,17 @@
-import {type CalendarMonth, FAILURE_TAG_TREND_MONTH_LIMIT, shiftMonth} from '@plan-for-myself/shared';
+import {
+  type CalendarMonth,
+  type DemoOverview,
+  FAILURE_TAG_TREND_MONTH_LIMIT,
+  MY_CALENDAR_LABEL,
+  shiftMonth,
+} from '@plan-for-myself/shared';
 import {act, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type {Session} from 'next-auth';
 import {SessionProvider} from 'next-auth/react';
 import {OverlayProvider} from 'overlay-kit';
 import {afterEach, describe, expect, it, vi} from 'vitest';
-import {type DemoOverview, getDemoMonth, getDemoMonthly, getDemoOverview, getDemoRecords} from '@/demo/demo-examples';
-import {MY_CALENDAR_LABEL} from '@/shared/labels';
+import {getDemoMonth, getDemoMonthly, getDemoOverview, getDemoRecords} from '@/demo/demo-examples';
 import DemoStatsSection from './DemoStatsSection';
 import DemoStatsTour from './DemoStatsTour';
 
@@ -84,15 +89,25 @@ describe('DemoStatsTour', () => {
       });
     });
 
-    describe('로그인 상태에서 5번 말풍선의 [마치기]를 누르면', () => {
-      it('[내 달력으로 이동] 버튼이 있는 투어 끝 창이 뜬다', async () => {
-        renderStatsWithTour(THIS_MONTH, LOGGED_IN_SESSION);
-        await goToFifthBubble();
+    describe('로그인 상태면', () => {
+      describe('5번 말풍선에서 [마치기]를 누르면', () => {
+        it('투어 끝 창이 뜬다', async () => {
+          renderStatsWithTour(THIS_MONTH, LOGGED_IN_SESSION);
+          await goToFifthBubble();
 
-        await userEvent.click(screen.getByRole('button', {name: FINISH}));
+          await userEvent.click(screen.getByRole('button', {name: FINISH}));
 
-        expect(await screen.findByRole('dialog', {name: '이제 내 달력에서 이어서 적어 보세요'})).toBeInTheDocument();
-        expect(screen.getByRole('link', {name: MY_CALENDAR_LABEL})).toBeInTheDocument();
+          expect(await screen.findByRole('dialog', {name: '이제 내 달력에서 이어서 적어 보세요'})).toBeInTheDocument();
+        });
+
+        it('투어 끝 창에 [내 달력으로 이동] 버튼이 보여야 한다', async () => {
+          renderStatsWithTour(THIS_MONTH, LOGGED_IN_SESSION);
+          await goToFifthBubble();
+
+          await userEvent.click(screen.getByRole('button', {name: FINISH}));
+
+          expect(await screen.findByRole('link', {name: MY_CALENDAR_LABEL})).toBeInTheDocument();
+        });
       });
     });
 
@@ -164,18 +179,32 @@ describe('DemoStatsTour', () => {
       });
     });
 
-    describe('4번이 짚는 태그의 상세가 이미 펼쳐져 있을 때 4번에서 [다음]을 누르면', () => {
-      it('상세가 펼쳐진 채로 5번 말풍선이 뜬다', async () => {
-        renderStatsWithTour(THIS_MONTH);
-        await screen.findByText('3 / 5');
-        await userEvent.click(screen.getByRole('button', {name: new RegExp(FIRST_TAG_OF_THIS_MONTH)}));
-        await userEvent.click(screen.getByRole('button', {name: NEXT}));
-        await screen.findByText('4 / 5');
+    describe('4번이 짚는 태그의 상세가 이미 펼쳐져 있으면', () => {
+      describe('4번 말풍선에서 [다음]을 누르면', () => {
+        it('5번 말풍선이 뜬다', async () => {
+          renderStatsWithTour(THIS_MONTH);
+          await screen.findByText('3 / 5');
+          await userEvent.click(screen.getByRole('button', {name: new RegExp(FIRST_TAG_OF_THIS_MONTH)}));
+          await userEvent.click(screen.getByRole('button', {name: NEXT}));
+          await screen.findByText('4 / 5');
 
-        await userEvent.click(screen.getByRole('button', {name: NEXT}));
+          await userEvent.click(screen.getByRole('button', {name: NEXT}));
 
-        expect(await screen.findByText('5 / 5')).toBeInTheDocument();
-        expect(screen.getByRole('heading', {level: 2, name: FIRST_TAG_OF_THIS_MONTH})).toBeInTheDocument();
+          expect(await screen.findByText('5 / 5')).toBeInTheDocument();
+        });
+
+        it('4번이 짚는 태그의 상세가 펼쳐진 채로 남는다', async () => {
+          renderStatsWithTour(THIS_MONTH);
+          await screen.findByText('3 / 5');
+          await userEvent.click(screen.getByRole('button', {name: new RegExp(FIRST_TAG_OF_THIS_MONTH)}));
+          await userEvent.click(screen.getByRole('button', {name: NEXT}));
+          await screen.findByText('4 / 5');
+
+          await userEvent.click(screen.getByRole('button', {name: NEXT}));
+
+          await screen.findByText('5 / 5');
+          expect(screen.getByRole('heading', {level: 2, name: FIRST_TAG_OF_THIS_MONTH})).toBeInTheDocument();
+        });
       });
     });
   });

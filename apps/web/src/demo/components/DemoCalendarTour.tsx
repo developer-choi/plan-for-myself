@@ -1,10 +1,14 @@
 'use client';
 
-import type {CalendarMonth} from '@plan-for-myself/shared';
+import {
+  type CalendarMonth,
+  DEMO_CALENDAR_TOUR_STEPS,
+  type DemoCalendarTourTarget,
+  demoStatsPath,
+} from '@plan-for-myself/shared';
 import {useRouter} from 'next/navigation';
 import {ACTIONS, type EventData, EVENTS, Joyride, type Step, type TooltipRenderProps} from 'react-joyride';
 import TourBubble from '@/demo/components/TourBubble';
-import {demoStatsPath} from '@/demo/demo-path';
 import {
   DEMO_CALENDAR_TOUR_LOCALE,
   DEMO_TOUR_FLOATING_OPTIONS,
@@ -48,16 +52,12 @@ export default function DemoCalendarTour({demoMonth, firstRecordDate}: DemoCalen
 }
 
 function createCalendarTourSteps(firstRecordDate: string): Step[] {
-  return [
-    {
-      target: `button:has(> time[datetime="${firstRecordDate}"])`,
-      content: '실패와 공부시간이 여기 보여요',
-    },
-    {
-      target: `#${CALENDAR_STATS_LINK_ID}`,
-      content: '여기서 통계를 볼 수 있어요. 「다음」을 누르면 통계 화면으로 넘어가요',
-    },
-  ];
+  const targets: Record<DemoCalendarTourTarget, string> = {
+    firstRecordDate: `button:has(> time[datetime="${firstRecordDate}"])`,
+    statsLink: `#${CALENDAR_STATS_LINK_ID}`,
+  };
+
+  return DEMO_CALENDAR_TOUR_STEPS.map(({target, content}) => ({target: targets[target], content}));
 }
 
 function CalendarTourBubble({index, step, primaryProps, closeProps}: TooltipRenderProps) {

@@ -12,6 +12,7 @@ import {
   KEEP_GUEST_LABEL,
   LOGIN_DESCRIPTION,
   LOGIN_FAILED_NOTICE,
+  MY_CALENDAR_LABEL,
   shouldShowRegisteredNotice,
   START_RECORDING_LABEL,
 } from '@plan-for-myself/shared';
@@ -27,7 +28,6 @@ import {auth} from '@/auth/next-auth';
 import {getLoginState} from '@/auth/path';
 import {DEFAULT_HOME_URL, ENTRY_URL, INTRO_URL} from '@/auth/redirect';
 import Logo from '@/shared/components/Logo';
-import {MY_CALENDAR_LABEL} from '@/shared/labels';
 import type {SearchParamsPageProps} from '@/shared/types/page';
 import styles from './page.module.scss';
 

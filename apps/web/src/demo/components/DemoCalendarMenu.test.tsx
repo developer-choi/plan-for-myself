@@ -1,4 +1,4 @@
-import {MY_CALENDAR_LABEL} from '@/shared/labels';
+import {MY_CALENDAR_LABEL} from '@plan-for-myself/shared';
 import {render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {describe, expect, it} from 'vitest';

@@ -1,5 +1,6 @@
 'use client';
 
+import {DEMO_STATS_TOUR_FIRST_NUMBER, DEMO_STATS_TOUR_STEPS, type DemoStatsTourTarget} from '@plan-for-myself/shared';
 import {ACTIONS, type EventData, EVENTS, Joyride, type Step, type TooltipRenderProps} from 'react-joyride';
 import TourBubble from '@/demo/components/TourBubble';
 import {DEMO_TOUR_FLOATING_OPTIONS, DEMO_TOUR_LOCALE, DEMO_TOUR_OPTIONS, DEMO_TOUR_STYLES} from '@/demo/demo-tour';
@@ -34,20 +35,17 @@ export default function DemoStatsTour() {
   );
 }
 
-const STATS_TOUR_STEPS: Step[] = [
-  {
+const STATS_TOUR_STEP_OPTIONS: Record<DemoStatsTourTarget, Omit<Step, 'content'>> = {
+  failGroups: {
     target: `#${FAIL_GROUPS_ID}`,
-    content: '통계 화면이에요. 지난달과 비교해 어떤 실패가 반복되고, 새로 생기고, 줄고 있는지 보여요',
   },
-  {
+  firstTagRow: {
     target: `#${FIRST_TAG_ROW_ID}`,
-    content: '태그를 누르면 그 실패만 모아 볼 수 있어요',
     /* 묶음 제목이 태그 줄 바로 위 4px에 있어, 기본 여백(10px)이면 하이라이트가 제목을 반쯤 자른다 */
     spotlightPadding: 4,
   },
-  {
+  tagDetailCard: {
     target: `#${TAG_DETAIL_CARD_ID}`,
-    content: '이 실패를 한 날이 달력에 보여요. 아래에서 달마다 추이도 볼 수 있어요',
     before: async () => {
       if (!document.getElementById(TAG_DETAIL_CARD_ID)) {
         document.getElementById(FIRST_TAG_ROW_ID)?.click();
@@ -57,16 +55,19 @@ const STATS_TOUR_STEPS: Step[] = [
     skipScroll: false,
     placement: 'top',
   },
-];
+};
 
-const STATS_TOUR_FIRST_NUMBER = 3;
+const STATS_TOUR_STEPS: Step[] = DEMO_STATS_TOUR_STEPS.map(({target, content}) => ({
+  ...STATS_TOUR_STEP_OPTIONS[target],
+  content,
+}));
 
 function StatsTourBubble({index, step, primaryProps, closeProps}: TooltipRenderProps) {
   return (
     <TourBubble
       buttonProps={{primary: primaryProps, close: closeProps}}
       content={step.content}
-      number={index + STATS_TOUR_FIRST_NUMBER}
+      number={index + DEMO_STATS_TOUR_FIRST_NUMBER}
     />
   );
 }

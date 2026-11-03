@@ -1,12 +1,12 @@
 'use client';
 
 import type {ReactNode} from 'react';
+import {DEMO_TOUR_STEP_COUNT} from '@plan-for-myself/shared';
 import classNames from 'classnames';
 import type {TooltipRenderProps} from 'react-joyride';
 import {Cross2Icon} from '@radix-ui/react-icons';
 import {Button, IconButton} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
-import {DEMO_TOUR_STEP_COUNT} from '@/demo/demo-tour';
 import styles from './TourBubble.module.scss';
 
 interface TourBubbleProps {

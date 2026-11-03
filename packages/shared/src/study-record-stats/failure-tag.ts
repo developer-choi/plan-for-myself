@@ -5,6 +5,12 @@ export function filterByStatus(failureTags: FailureTag[], status: FailureTagStat
   return failureTags.filter((failureTag) => failureTag.status === status);
 }
 
+export function getFirstFailureTagName(failureTags: FailureTag[]): string | undefined {
+  return FAILURE_TAG_GROUP_ORDER.map((status) => filterByStatus(failureTags, status)).find(
+    (tags) => tags.length > 0,
+  )?.[0]?.tag;
+}
+
 export function formatFailCardTitle(month: string): string {
   return `${formatMonthLabel(month)} 실패`;
 }
@@ -28,3 +34,5 @@ export function formatAppearedNotePrefix(month: string, inProgress: boolean): st
 export function formatReducedNotePrefix(previousCount: number): string {
   return `지난달 ${previousCount}번 → `;
 }
+
+const FAILURE_TAG_GROUP_ORDER: FailureTagStatus[] = ['repeated', 'appeared', 'reduced'];

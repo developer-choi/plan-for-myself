@@ -45,10 +45,32 @@ export {getKoreanDate, getKoreanToday, KST} from './date/korean';
 export {convertLunarDateToSolar, type SimpleDate} from './date/lunar';
 export {parseDateParam, toDateMonthParam, toMonthParam} from './date/month-param';
 export type {DateType} from './date-type/type';
+export {DEMO_BANNER_MESSAGE} from './demo/demo-banner';
+export {
+  DEMO_CONTINUE_LABEL,
+  type DemoChoiceReason,
+  LOGGED_IN_DEMO_CHOICE_TITLES,
+  LOGGED_OUT_DEMO_CHOICE_MESSAGES,
+} from './demo/demo-choice';
+export {DEMO_HOME_URL, demoCalendarPath, demoStatsPath} from './demo/demo-path';
+export {
+  DEMO_CALENDAR_TOUR_STEPS,
+  DEMO_STATS_TOUR_FIRST_NUMBER,
+  DEMO_STATS_TOUR_STEPS,
+  DEMO_TOUR_BUTTON_LABELS,
+  DEMO_TOUR_STEP_COUNT,
+  type DemoCalendarTourTarget,
+  type DemoStatsTourTarget,
+  type DemoTourPart,
+  shouldShowDemoStatsTour,
+} from './demo/demo-tour';
+export type {DemoChoiceDialogProps} from './demo/open-demo-choice-dialog';
+export type {DemoOverview, GetDemoApiRequest, GetDemoApiResponse} from './demo/type';
 export {getErrorInfo} from './error/info';
 export {isUnauthorizedError} from './error/unauthorized';
 export {
   ACCOUNT_LABEL,
+  DEMO_TOUR_LABEL,
   ENTRY_LABEL,
   GOOGLE_CONNECT_LABEL,
   GOOGLE_CONNECT_PAGE_LABEL,
@@ -63,7 +85,13 @@ export {isMutationSettling} from './query/mutation';
 export {beforeSend} from './sentry/before-send';
 export {createStudyRecordApi} from './study-record/api';
 export {getCalendarDayCells} from './study-record/calendar-day-cells';
-export {isFutureMonth, isSameMonth, monthPath, statsPath} from './study-record/calendar-date';
+export {
+  findFirstRecordDateOfMonth,
+  isFutureMonth,
+  isSameMonth,
+  monthPath,
+  statsPath,
+} from './study-record/calendar-date';
 export {type CalendarSummaryContent, getCalendarSummaryContent} from './study-record/calendar-summary';
 export {isEmptyStudyRecord} from './study-record/empty';
 export {FIRST_RECORD_TEXT} from './study-record/first-record-text';
@@ -92,6 +120,7 @@ export {
   formatReducedGroupTitle,
   formatReducedNotePrefix,
   formatRepeatedNotePrefix,
+  getFirstFailureTagName,
 } from './study-record-stats/failure-tag';
 export {
   countMissedDays,

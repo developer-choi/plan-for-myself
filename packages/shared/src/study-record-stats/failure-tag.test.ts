@@ -1,5 +1,11 @@
 import {describe, expect, it} from 'vitest';
-import {formatAppearedNotePrefix, formatReducedGroupTitle, formatRepeatedNotePrefix} from './failure-tag';
+import {
+  formatAppearedNotePrefix,
+  formatReducedGroupTitle,
+  formatRepeatedNotePrefix,
+  getFirstFailureTagName,
+} from './failure-tag';
+import type {FailureTag, FailureTagStatus} from '../study-record/type';
 
 describe('formatReducedGroupTitle()', () => {
   describe('General cases', () => {
@@ -36,3 +42,33 @@ describe('formatAppearedNotePrefix()', () => {
     });
   });
 });
+
+describe('getFirstFailureTagName()', () => {
+  describe('General cases', () => {
+    it('줄어든 태그가 배열 앞에 있어도 반복된 태그 이름을 반환해야 한다', () => {
+      const failureTags = [
+        createFailureTag('야식', 'reduced'),
+        createFailureTag('게임', 'appeared'),
+        createFailureTag('늦잠', 'repeated'),
+      ];
+
+      expect(getFirstFailureTagName(failureTags)).toBe('늦잠');
+    });
+
+    it('반복된 태그가 없으면 새로 생긴 태그 이름을 반환해야 한다', () => {
+      const failureTags = [createFailureTag('야식', 'reduced'), createFailureTag('게임', 'appeared')];
+
+      expect(getFirstFailureTagName(failureTags)).toBe('게임');
+    });
+  });
+
+  describe('Edge cases', () => {
+    it('실패 태그가 없으면 undefined를 반환해야 한다', () => {
+      expect(getFirstFailureTagName([])).toBeUndefined();
+    });
+  });
+});
+
+function createFailureTag(tag: string, status: FailureTagStatus): FailureTag {
+  return {tag, status, count: 1, previousCount: 1, trend: []};
+}

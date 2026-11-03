@@ -1,7 +1,6 @@
+import {DEMO_HOME_URL, DEMO_TOUR_LABEL} from '@plan-for-myself/shared';
 import {Button} from '@developer-choi/design-system';
 import Link from 'next/link';
-import {DEMO_HOME_URL} from '@/demo/demo-path';
-import {DEMO_TOUR_LABEL} from '@/shared/labels';
 
 export default function TryWithoutLoginButton() {
   return (
