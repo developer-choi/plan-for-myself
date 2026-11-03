@@ -1,10 +1,15 @@
 import {errors, type JWTPayload, jwtVerify, SignJWT} from 'jose';
+import type {AppTokenClaims} from '@plan-for-myself/shared';
 import {SESSION_MAX_AGE_SECONDS} from '@/auth/session-max-age';
 
 export const APP_TOKEN_AUDIENCE = 'plan-for-myself:app';
 
 export async function issueAppToken(userId: string): Promise<string> {
   return signAppToken({sub: userId});
+}
+
+export async function issueGuestAppToken(userId: string): Promise<string> {
+  return signAppToken({sub: userId, isGuest: true} satisfies AppTokenClaims);
 }
 
 /**
@@ -25,6 +30,18 @@ export async function refreshAppToken(authorization: string | null): Promise<str
 export async function readAuthorizationUserId(authorization: string | null): Promise<string | null> {
   const payload = await readBearerPayload(authorization);
   return payload?.sub ?? null;
+}
+
+/**
+ * null: 유효한 게스트 앱용 토큰이 없다
+ */
+export async function readAppTokenGuestUserId(authorization: string | null): Promise<string | null> {
+  const payload = await readBearerPayload(authorization);
+  if (payload?.isGuest !== true) {
+    return null;
+  }
+
+  return payload.sub ?? null;
 }
 
 /**
@@ -67,9 +84,9 @@ async function signAppToken(claims: JWTPayload): Promise<string> {
 /**
  * null: 토큰이 만료됐거나 exp가 없거나 alg가 HS256이 아니거나 서명·aud가 틀렸거나 형식이 깨졌다
  */
-async function verifyAppToken(token: string): Promise<JWTPayload | null> {
+async function verifyAppToken(token: string): Promise<(JWTPayload & AppTokenClaims) | null> {
   try {
-    const {payload} = await jwtVerify(token, readAppTokenKey(process.env.AUTH_SECRET), {
+    const {payload} = await jwtVerify<AppTokenClaims>(token, readAppTokenKey(process.env.AUTH_SECRET), {
       audience: APP_TOKEN_AUDIENCE,
       algorithms: ['HS256'],
       requiredClaims: ['exp'],
@@ -83,7 +100,7 @@ async function verifyAppToken(token: string): Promise<JWTPayload | null> {
   }
 }
 
-async function readBearerPayload(authorization: string | null): Promise<JWTPayload | null> {
+async function readBearerPayload(authorization: string | null): Promise<(JWTPayload & AppTokenClaims) | null> {
   const token = readBearerToken(authorization);
   return token === null ? null : verifyAppToken(token);
 }

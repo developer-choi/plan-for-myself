@@ -2,6 +2,8 @@ import {Suspense} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Redirect, useLocalSearchParams} from 'expo-router';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import FetchedLoginNudgeCard from '@/auth/components/FetchedLoginNudgeCard';
+import {useSession} from '@/auth/session-context';
 import {colors, formatMonthTitle, monthPath, parseMonth, shiftMonth} from '@plan-for-myself/shared';
 import HandledErrorBoundary from '@/shared/components/HandledErrorBoundary';
 import LoadingSpinner from '@/shared/components/LoadingSpinner';
@@ -10,10 +12,14 @@ import {spacing} from '@/shared/styles/design-tokens';
 import CalendarHeader from '@/study-record/components/CalendarHeader';
 import CalendarMenu from '@/study-record/components/CalendarMenu';
 import FetchedCalendarSection from '@/study-record/components/FetchedCalendarSection';
+import GoogleConnectLink from '@/study-record/components/GoogleConnectLink';
 
 export default function CalendarScreen() {
   const viewMonth = parseMonth(useLocalSearchParams<{year: string; month: string}>());
   const today = useKoreanToday();
+  const {
+    session: {isGuest},
+  } = useSession();
 
   if (!viewMonth) {
     return <Redirect href="/" />;
@@ -22,9 +28,10 @@ export default function CalendarScreen() {
   return (
     <SafeAreaView edges={['top', 'bottom']} style={styles.shell}>
       <CalendarHeader
-        menu={<CalendarMenu />}
+        menu={isGuest ? undefined : <CalendarMenu />}
         nextHref={monthPath(shiftMonth(viewMonth, 1))}
         previousHref={monthPath(shiftMonth(viewMonth, -1))}
+        right={isGuest ? <GoogleConnectLink /> : undefined}
         title={formatMonthTitle(viewMonth)}
       />
       <View style={styles.body}>
@@ -34,6 +41,7 @@ export default function CalendarScreen() {
           </Suspense>
         </HandledErrorBoundary>
       </View>
+      {isGuest && <FetchedLoginNudgeCard today={today} />}
     </SafeAreaView>
   );
 }

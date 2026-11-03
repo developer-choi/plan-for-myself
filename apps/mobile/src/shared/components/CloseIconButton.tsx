@@ -2,7 +2,7 @@ import {type ComponentProps} from 'react';
 import {Lucide} from '@react-native-vector-icons/lucide';
 import IconButton, {ICON_COLOR} from '@/shared/components/IconButton';
 
-type CloseIconButtonProps = Pick<ComponentProps<typeof IconButton>, 'onPress'>;
+type CloseIconButtonProps = Pick<ComponentProps<typeof IconButton>, 'style' | 'onPress'>;
 
 export default function CloseIconButton(props: CloseIconButtonProps) {
   return (

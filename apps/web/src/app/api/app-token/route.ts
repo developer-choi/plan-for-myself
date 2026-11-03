@@ -1,4 +1,8 @@
-import type {PostAppTokenApiRequest, PostAppTokenApiResponse} from '@plan-for-myself/shared';
+import {
+  type PostAppTokenApiRequest,
+  type PostAppTokenApiResponse,
+  registeredAccountRejectionSchema,
+} from '@plan-for-myself/shared';
 import {NextRequest, NextResponse} from 'next/server';
 import {z} from 'zod';
 import {exchangeGoogleIdToken} from '@/auth/app-login';
@@ -11,17 +15,21 @@ export async function POST(request: NextRequest) {
     return rejectResponse(HTTP_STATUS.BAD_REQUEST, {code: 'INVALID_BODY', message: body.error.issues[0].message});
   }
 
-  const token = await exchangeGoogleIdToken(body.data.idToken);
-  if (token === null) {
+  const exchange = await exchangeGoogleIdToken({
+    ...body.data,
+    authorization: request.headers.get('authorization'),
+  });
+  if (exchange === null) {
     return unauthorizedResponse();
   }
 
-  return NextResponse.json({token} satisfies PostAppTokenApiResponse);
+  return NextResponse.json(exchange satisfies PostAppTokenApiResponse);
 }
 
 const exchangeRequestSchema = z.object(
   {
     idToken: z.jwt({error: 'idToken은 JWT 형식으로 보내 주세요'}),
+    discardIntent: registeredAccountRejectionSchema.nullable(),
   },
   {error: '요청 형식이 올바르지 않아요'},
 ) satisfies z.ZodType<PostAppTokenApiRequest>;

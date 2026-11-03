@@ -20,7 +20,13 @@ export {
   type RegisteredAccountRejection,
   registeredAccountRejectionSchema,
 } from './auth/registered-rejection';
-export type {PostAppTokenApiRequest, PostAppTokenApiResponse, PostAppTokenRefreshApiResponse} from './auth/type';
+export type {
+  AppTokenClaims,
+  PostAppTokenApiRequest,
+  PostAppTokenApiResponse,
+  PostAppTokenGuestApiResponse,
+  PostAppTokenRefreshApiResponse,
+} from './auth/type';
 export {colors} from './color/token';
 export {
   type CalendarMonth,
