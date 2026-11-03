@@ -10,12 +10,11 @@ import {
   setRegisteredRejection,
 } from '@/auth/login-cookies';
 import {getLoginState, getNextNavigating} from '@/auth/path';
+import {SESSION_MAX_AGE_SECONDS} from '@/auth/session-max-age';
 import Credentials from 'next-auth/providers/credentials';
 import Google, {type GoogleProfile} from 'next-auth/providers/google';
 import {pool} from '@/server/db/pool';
 
-const SECONDS_PER_DAY = 86_400;
-const SESSION_MAX_AGE_DAYS = 30;
 const GUEST_PROVIDER_ID = 'guest';
 
 export const {handlers, signIn, signOut, auth} = NextAuth({
@@ -25,7 +24,7 @@ export const {handlers, signIn, signOut, auth} = NextAuth({
     error: '/login',
   },
   session: {
-    maxAge: SESSION_MAX_AGE_DAYS * SECONDS_PER_DAY,
+    maxAge: SESSION_MAX_AGE_SECONDS,
   },
   providers: [
     Google({
