@@ -16,7 +16,7 @@ export default function StatsPageHeader({month, today, firstRecordDate}: StatsPa
 
   return (
     <SubPageHeader
-      exit={{href: monthPath(month), label: '달력', icon: CalendarIcon}}
+      exit={{href: monthPath(month), icon: CalendarIcon}}
       monthNavigation={{
         previousHref: previous && statsPath(previous),
         nextHref: next && statsPath(next),

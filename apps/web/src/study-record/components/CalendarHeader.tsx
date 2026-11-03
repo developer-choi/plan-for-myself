@@ -19,11 +19,11 @@ export default function CalendarHeader({title, previousHref, nextHref, menu, rig
     <header className={styles.calendarHeader}>
       <div className={styles.menuSlot}>{menu}</div>
       <div className={styles.monthNavigation}>
-        <IconButton asChild aria-label="이전 달" icon={<ChevronLeftIcon />}>
+        <IconButton asChild icon={<ChevronLeftIcon />}>
           <Link href={previousHref} />
         </IconButton>
         <h1 className={classNames(typography.h3, typography.bold, styles.calendarTitle)}>{title}</h1>
-        <IconButton asChild aria-label="다음 달" icon={<ChevronRightIcon />}>
+        <IconButton asChild icon={<ChevronRightIcon />}>
           <Link href={nextHref} />
         </IconButton>
       </div>

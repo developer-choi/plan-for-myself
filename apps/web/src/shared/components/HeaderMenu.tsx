@@ -18,7 +18,7 @@ export default function HeaderMenu({items}: HeaderMenuProps) {
   return (
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger asChild>
-        <IconButton aria-label="메뉴" icon={<HamburgerMenuIcon height={MENU_ICON_SIZE} width={MENU_ICON_SIZE} />} />
+        <IconButton icon={<HamburgerMenuIcon height={MENU_ICON_SIZE} width={MENU_ICON_SIZE} />} />
       </DropdownMenu.Trigger>
       <DropdownMenu.Portal>
         <DropdownMenu.Content align="start" className={styles.menu} sideOffset={6}>

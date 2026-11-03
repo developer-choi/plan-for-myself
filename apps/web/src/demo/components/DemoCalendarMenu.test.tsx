@@ -10,7 +10,7 @@ describe('DemoCalendarMenu', () => {
       it('로그인 상태면 [내 달력으로 이동] 메뉴가 보여야 한다', async () => {
         render(<DemoCalendarMenu isLoggedIn />);
 
-        await userEvent.click(screen.getByRole('button', {name: '메뉴'}));
+        await userEvent.click(screen.getByRole('button'));
 
         expect(await screen.findByRole('menuitem', {name: MY_CALENDAR_LABEL})).toBeInTheDocument();
       });
@@ -18,7 +18,7 @@ describe('DemoCalendarMenu', () => {
       it('로그아웃 상태면 [내 달력으로 이동] 메뉴는 안 보여야 한다', async () => {
         render(<DemoCalendarMenu isLoggedIn={false} />);
 
-        await userEvent.click(screen.getByRole('button', {name: '메뉴'}));
+        await userEvent.click(screen.getByRole('button'));
 
         await screen.findByRole('menu');
         expect(screen.queryByRole('menuitem', {name: MY_CALENDAR_LABEL})).not.toBeInTheDocument();

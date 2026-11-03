@@ -15,7 +15,6 @@ interface SubPageHeaderProps {
 
 interface SubPageHeaderExit {
   href: string;
-  label: string;
   icon: ComponentType<{width: number; height: number}>;
 }
 
@@ -29,19 +28,13 @@ interface SubPageMonthNavigation {
 interface MonthLinkProps {
   /* 그 쪽으로 갈 수 없으면 undefined */
   href: string | undefined;
-  label: string;
   icon: ReactNode;
 }
 
 export default function SubPageHeader({title, exit, monthNavigation}: SubPageHeaderProps) {
   const ExitIcon = exit.icon;
   const exitLink = (
-    <IconButton
-      asChild
-      aria-label={exit.label}
-      className={styles.exit}
-      icon={<ExitIcon height={EXIT_ICON_SIZE} width={EXIT_ICON_SIZE} />}
-    >
+    <IconButton asChild className={styles.exit} icon={<ExitIcon height={EXIT_ICON_SIZE} width={EXIT_ICON_SIZE} />}>
       <Link href={exit.href} />
     </IconButton>
   );
@@ -53,9 +46,9 @@ export default function SubPageHeader({title, exit, monthNavigation}: SubPageHea
       {exitLink}
       {monthNavigation ? (
         <div className={styles.monthNavigation}>
-          <MonthLink href={monthNavigation.previousHref} icon={<ChevronLeftIcon />} label="이전 달" />
+          <MonthLink href={monthNavigation.previousHref} icon={<ChevronLeftIcon />} />
           {heading}
-          <MonthLink href={monthNavigation.nextHref} icon={<ChevronRightIcon />} label="다음 달" />
+          <MonthLink href={monthNavigation.nextHref} icon={<ChevronRightIcon />} />
         </div>
       ) : (
         heading
@@ -65,13 +58,13 @@ export default function SubPageHeader({title, exit, monthNavigation}: SubPageHea
 }
 
 /* 갈 수 없는 쪽도 같은 크기의 빈 자리를 남겨 제목이 달마다 흔들리지 않게 한다 */
-function MonthLink({href, label, icon}: MonthLinkProps) {
+function MonthLink({href, icon}: MonthLinkProps) {
   if (href === undefined) {
     return <IconButton className={styles.hiddenMonthLink} icon={icon} />;
   }
 
   return (
-    <IconButton asChild aria-label={label} icon={icon}>
+    <IconButton asChild icon={icon}>
       <Link href={href} />
     </IconButton>
   );

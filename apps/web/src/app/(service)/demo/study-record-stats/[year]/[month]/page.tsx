@@ -55,7 +55,7 @@ export default async function Page({params}: PageProps) {
       <DemoBanner isLoggedIn={isLoggedIn} />
       <div className={classNames(layout.centered, layout.narrow)}>
         <SubPageHeader
-          exit={{href: demoCalendarPath(viewMonth), label: '달력', icon: CalendarIcon}}
+          exit={{href: demoCalendarPath(viewMonth), icon: CalendarIcon}}
           monthNavigation={{
             previousHref: previous && demoStatsPath(previous),
             nextHref: next && demoStatsPath(next),
