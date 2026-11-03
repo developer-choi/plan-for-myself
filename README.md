@@ -98,25 +98,11 @@ API 클라이언트와 Sentry SDK처럼 플랫폼마다 다른 것은, 공통 �
 
 ## 기술적으로 신경 쓴 것
 
-### 데이터 조회
+제가 정리해 둔 베스트 프랙티스를 이 프로젝트에 그대로 적용했습니다.
 
-- 첫 화면은 서버에서 데이터를 [미리 받아 채워 보내고](https://github.com/developer-choi/plan-for-myself/commit/3efdacddfcf5d84f0c5fa1f5aaa5c2569bfd0103), 그 뒤의 조회는 클라이언트의 TanStack Query 캐시가 맡습니다.
-- 기록을 저장하면 그 달 기록과 통계의 캐시를 무효화해, 페이지를 새로고침하지 않아도 [새 값으로 바뀝니다](https://github.com/developer-choi/plan-for-myself/pull/71).
-
-### 로그인과 게스트
-
-- Google 계정 없이도 [로그인 없이 이용하기]로 게스트가 되어 [바로 기록할 수 있습니다](https://github.com/developer-choi/plan-for-myself/pull/61).
-- 게스트가 나중에 Google로 로그인하면 [기록을 그 계정으로 잇습니다](https://github.com/developer-choi/plan-for-myself/pull/66). 게스트 기록이 있는데 이미 가입된 계정으로 로그인하면, 두 기록이 섞이지 않게 로그인을 거절합니다.
-- 세션이 깨지면 로그인 뒤 [보던 주소로 돌아옵니다](https://github.com/developer-choi/plan-for-myself/pull/90).
-
-### 에러 처리
-
-에러를 다시 시도해서 풀리는지로 나눠 다르게 처리했습니다.
-
-- **다시 시도할 수 있는 에러** — 화면 영역마다 [에러 경계를 두어](https://github.com/developer-choi/plan-for-myself/pull/56) 실패한 영역만 안내하고, [[다시 시도]로 복구합니다](https://github.com/developer-choi/plan-for-myself/pull/69). 페이지 전체가 실패하면 [에러 페이지](https://github.com/developer-choi/plan-for-myself/pull/44)나 [전역 에러 화면](https://github.com/developer-choi/plan-for-myself/pull/81)을 띄웁니다.
-- **다시 시도해도 소용없는 거절** — 서버가 규칙 위반으로 거절하면, 폼 안에 [사유를 보이고 입력은 그대로 둡니다](https://github.com/developer-choi/plan-for-myself/pull/71).
-
-에러는 [Sentry로 보내고](https://github.com/developer-choi/plan-for-myself/pull/80), 거절은 화면이 안내하므로 보내지 않습니다.
+- **에러가 난 만큼만 망가지게** — 화면을 영역으로 나눠 에러 경계를 두고, 실패한 영역만 안내와 [다시 시도]로 바꿉니다. ([베스트 프랙티스](https://github.com/developer-choi/monorepo-playground/blob/master/docs/guides/error-handling/step4.md) · 적용: [#56](https://github.com/developer-choi/plan-for-myself/pull/56), [#69](https://github.com/developer-choi/plan-for-myself/pull/69))
+- **예상하지 못한 에러만 Sentry로** — 예상하지 못한 에러는 Sentry로 보내고, 규칙 위반 거절은 화면이 안내하고 보내지 않습니다. ([베스트 프랙티스](https://github.com/developer-choi/monorepo-playground/pull/12) · 적용: [#80](https://github.com/developer-choi/plan-for-myself/pull/80))
+- **사용자 데이터는 TanStack Query로 캐시** — 서버 데이터를 캐시하는 방법은 Next.js App Router의 서버 캐시와 TanStack Query의 브라우저 캐시 두 가지가 있습니다. 기록과 통계는 사용자마다 달라 서버에서 페이지를 미리 만들어 둘 수 없어서, TanStack Query로 캐시했습니다.
 
 ## 기술 스택
 
