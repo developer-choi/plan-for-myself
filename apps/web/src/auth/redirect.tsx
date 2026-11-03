@@ -2,8 +2,6 @@ export const DEFAULT_HOME_URL = '/study-records';
 
 export const ENTRY_URL = '/';
 
-export const INTRO_URL = '/intro';
-
 export type LoginUrl = `/login?redirect=${string}`;
 
 export function toLoginUrl(pathWithSearch: string): LoginUrl {

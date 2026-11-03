@@ -9,6 +9,7 @@ import {
   GOOGLE_LOGIN_LABEL,
   GUEST_CONNECT_NOTE,
   INTRO_EXIT_LABEL,
+  INTRO_URL,
   KEEP_GUEST_LABEL,
   LOGIN_DESCRIPTION,
   LOGIN_FAILED_NOTICE,
@@ -26,7 +27,7 @@ import {readRegisteredRejection} from '@/auth/login-cookies';
 import {getLoginErrorKind} from '@/auth/login-error';
 import {auth} from '@/auth/next-auth';
 import {getLoginState} from '@/auth/path';
-import {DEFAULT_HOME_URL, ENTRY_URL, INTRO_URL} from '@/auth/redirect';
+import {DEFAULT_HOME_URL, ENTRY_URL} from '@/auth/redirect';
 import Logo from '@/shared/components/Logo';
 import type {SearchParamsPageProps} from '@/shared/types/page';
 import styles from './page.module.scss';

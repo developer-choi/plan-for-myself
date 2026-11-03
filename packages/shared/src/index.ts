@@ -66,6 +66,18 @@ export {
 } from './demo/demo-tour';
 export type {DemoChoiceDialogProps} from './demo/open-demo-choice-dialog';
 export type {DemoOverview, GetDemoApiRequest, GetDemoApiResponse} from './demo/type';
+export {
+  INTRO_FORM_RECORD,
+  INTRO_MONTH,
+  INTRO_MONTHLY,
+  INTRO_RECORDS,
+  INTRO_STREAK,
+  INTRO_TAG,
+  INTRO_TREND,
+} from './intro/intro-examples';
+export {GITHUB_REPOSITORY_URL, MAKER_URL} from './intro/intro-links';
+export {INTRO_URL} from './intro/intro-path';
+export {INTRO_TEXT} from './intro/intro-text';
 export {getErrorInfo} from './error/info';
 export {isUnauthorizedError} from './error/unauthorized';
 export {
@@ -74,6 +86,7 @@ export {
   ENTRY_LABEL,
   GOOGLE_CONNECT_LABEL,
   GOOGLE_CONNECT_PAGE_LABEL,
+  INTRO_MENU_LABEL,
   LOGOUT_LABEL,
   MY_CALENDAR_LABEL,
   PRIVACY_POLICY_LABEL,
