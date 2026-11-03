@@ -1,7 +1,7 @@
 'use client';
 
 import {useTransition} from 'react';
-import {overlay} from 'overlay-kit';
+import {openOnce} from '@plan-for-myself/shared/react';
 import {Button, Confirm} from '@developer-choi/design-system';
 import {discardGuestAndContinueWithGoogle} from '@/auth/actions';
 
@@ -12,7 +12,7 @@ interface DiscardGuestConfirmProps {
 
 export default function DiscardGuestButton() {
   const openConfirm = () => {
-    overlay.open(({isOpen, unmount}) => <DiscardGuestConfirm isOpen={isOpen} onClose={unmount} />);
+    openOnce('discard-guest-confirm', ({isOpen, unmount}) => <DiscardGuestConfirm isOpen={isOpen} onClose={unmount} />);
   };
 
   return (

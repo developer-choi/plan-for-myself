@@ -3495,13 +3495,19 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@plan-for-myself/shared@workspace:packages/shared"
   dependencies:
+    "@types/react": "npm:^19"
     eslint: "npm:^9"
     eslint-plugin-react: "npm:^7.37.5"
     eslint-plugin-react-hooks: "npm:^7.0.1"
     globals: "npm:^16.5.0"
+    overlay-kit: "npm:^1.9.0"
+    react: "npm:19.2.3"
     typescript: "npm:~6.0.3"
     typescript-eslint: "npm:^8.57.2"
     vitest: "npm:^4.0.17"
+  peerDependencies:
+    overlay-kit: ^1.9.0
+    react: 19.2.3
   languageName: unknown
   linkType: soft
 

@@ -4,18 +4,26 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./react": "./src/react.ts"
   },
   "scripts": {
     "check-types": "tsc --noEmit",
     "lint": "eslint . --max-warnings 0",
     "test": "vitest"
   },
+  "peerDependencies": {
+    "overlay-kit": "^1.9.0",
+    "react": "19.2.3"
+  },
   "devDependencies": {
+    "@types/react": "^19",
     "eslint": "^9",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "globals": "^16.5.0",
+    "overlay-kit": "^1.9.0",
+    "react": "19.2.3",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.57.2",
     "vitest": "^4.0.17"

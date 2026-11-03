@@ -4,7 +4,7 @@ import {Button} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
 import {PlusIcon} from '@radix-ui/react-icons';
 import classNames from 'classnames';
-import {overlay} from 'overlay-kit';
+import {openOnce} from '@plan-for-myself/shared/react';
 import Logo from '@/shared/components/Logo';
 import {toDateMonthParam} from '@/study-record/calendar-date';
 import RecordFormDialog from '@/study-record/components/RecordFormDialog';
@@ -16,7 +16,7 @@ interface FirstRecordProps {
 
 export default function FirstRecord({today}: FirstRecordProps) {
   const openTodayRecordForm = () => {
-    overlay.open(({isOpen, unmount}) => (
+    openOnce('record-form', ({isOpen, unmount}) => (
       <RecordFormDialog date={today} isOpen={isOpen} month={toDateMonthParam(today)} onClose={unmount} />
     ));
   };
