@@ -36,9 +36,7 @@ export function decideGoogleLogin({
   registeredUserId,
   discardIntentValid,
 }: GoogleLoginFacts): GoogleLoginDecision {
-  const alreadyLinked = guestUserId !== null && guestUserId === registeredUserId;
-
-  if (guestUserId === null || alreadyLinked) {
+  if (guestUserId === null) {
     return {type: 'find-or-create'};
   }
 
@@ -62,12 +60,16 @@ export async function findGoogleLoginFacts(
   db: Queryable,
 ): Promise<GoogleLoginFacts> {
   if (guestUserId === null) {
-    return {guestUserId: null, guestHasRecords: false, registeredUserId: null, discardIntentValid: false};
+    return NO_GUEST_FACTS;
   }
 
-  const rows = await findGoogleLoginRows(guestUserId, googleSub, db);
+  const {isStillGuest, guestHasRecords, registeredUserId} = await findGoogleLoginRows(guestUserId, googleSub, db);
 
-  return {guestUserId, ...rows, discardIntentValid};
+  if (!isStillGuest) {
+    return NO_GUEST_FACTS;
+  }
+
+  return {guestUserId, guestHasRecords, registeredUserId, discardIntentValid};
 }
 
 /**
@@ -97,3 +99,10 @@ export async function resolveGoogleLogin(
     }
   });
 }
+
+const NO_GUEST_FACTS: GoogleLoginFacts = {
+  guestUserId: null,
+  guestHasRecords: false,
+  registeredUserId: null,
+  discardIntentValid: false,
+};
