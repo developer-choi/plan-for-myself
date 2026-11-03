@@ -3,7 +3,7 @@ import {colors} from '@plan-for-myself/shared';
 import Button from '@/shared/components/Button';
 import DialogFrame from '@/shared/components/DialogFrame';
 import Text from '@/shared/components/Text';
-import {spacing, typography} from '@/shared/styles/design-tokens';
+import {radius, spacing, typography} from '@/shared/styles/design-tokens';
 
 interface ConfirmProps {
   open: boolean;
@@ -11,13 +11,14 @@ interface ConfirmProps {
   content: string;
   confirmLabel: string;
   loading: boolean;
+  failure?: string;
   handlers: {
     onCancel: () => void;
     onConfirm: () => void | Promise<void>;
   };
 }
 
-export default function Confirm({open, title, content, confirmLabel, loading, handlers}: ConfirmProps) {
+export default function Confirm({open, title, content, confirmLabel, loading, failure, handlers}: ConfirmProps) {
   const cancelUnlessLoading = () => {
     if (!loading) {
       handlers.onCancel();
@@ -26,7 +27,10 @@ export default function Confirm({open, title, content, confirmLabel, loading, ha
 
   return (
     <DialogFrame open={open} title={title} onRequestClose={cancelUnlessLoading}>
-      <Text style={styles.content}>{content}</Text>
+      <View style={styles.body}>
+        <Text style={styles.content}>{content}</Text>
+        {failure !== undefined && <Text style={styles.failure}>{failure}</Text>}
+      </View>
       <View style={styles.actions}>
         <Button
           color="secondary"
@@ -50,10 +54,21 @@ export default function Confirm({open, title, content, confirmLabel, loading, ha
 const CANCEL_LABEL = '취소';
 
 const styles = StyleSheet.create({
+  body: {
+    gap: spacing.md,
+    marginBottom: spacing.lg,
+  },
   content: {
     ...typography.body2,
-    marginBottom: spacing.lg,
     color: colors.textSecondary,
+  },
+  failure: {
+    ...typography.body2,
+    padding: spacing.gridGap,
+    borderRadius: radius.sm,
+    overflow: 'hidden',
+    color: colors.fail,
+    backgroundColor: colors.failSoft,
   },
   actions: {
     flexDirection: 'row',

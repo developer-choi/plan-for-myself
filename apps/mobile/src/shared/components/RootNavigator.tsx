@@ -31,6 +31,7 @@ export default function RootNavigator() {
         <Stack.Screen name="index" />
         <Stack.Screen name="study-records/[year]/[month]" />
         <Stack.Screen name="study-record-stats/[year]/[month]" />
+        <Stack.Screen name="account" />
       </Stack.Protected>
       <Stack.Protected guard={token === null || isGuest}>
         <Stack.Screen name="sign-in" />
