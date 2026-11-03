@@ -105,36 +105,35 @@ const STUDY_MINUTES = [210, 95, 120, 150, 185, 240]; // 날마다 돌아가며 �
 
 하지만, 예외 주석을 매번 달고 읽는 비용보다는 작다고 판단했습니다.
 
-## 테스트 도입
+## 웹뷰 없이 앱을 배포하고 운영하기
 
 ### 문제
 
-AI가 작성한 모든 코드를 정적 분석만으로는 다 검증할 수 없습니다.
+웹이 이미 있어서, 비용만 보면 앱은 웹을 웹뷰로 띄우는 것이 합리적이었습니다.
 
-그렇다면, 무엇을 어떻게 테스트해야 할까요?
+- 웹을 배포하면 앱에도 바로 반영되어, 스토어 심사를 기다리지 않습니다.
+- 사용자 폰에 옛 버전 화면·로직이 남지 않습니다.
+- 앱에서 난 에러도 웹의 에러 수집에 그대로 쌓입니다.
+
+그래도 React Native를 익히는 것이 목적이어서, 화면을 React Native로 다시 만들었습니다.
+
+게다가 웹뷰로 만들었어도, Google이 앱 안 웹뷰에서의 Google 로그인을 막기 때문에 로그인은 네이티브로 구현해야 했습니다.
+
+그렇다면, 웹뷰라면 따로 하지 않아도 되던 일을 React Native 앱에서는 어떻게 메울 수 있을까요?
 
 ### 해결
 
-> 테스트는 사용자가 이용할 때 문제없다는 **확신**을 위해 씁니다
+- **심사 없이 고치기** — 네이티브 코드가 바뀌지 않은 수정은 [EAS Update로 스토어 심사 없이 내보내고]([PR: EAS Update 설정과 되돌림]), 잘못 내보낸 업데이트는 이전 업데이트로 되돌립니다.
+- **옛 버전 앱과 함께 쓰기** — 출시 뒤에는 API를 지우거나 뜻을 바꾸지 않고 더하기만 합니다(예: [웹의 쿠키 인증은 두고 앱의 토큰 인증을 더함]([PR: 앱용 로그인 API])). 통계 지표는 서버가 계산해, 앱 버전이 달라도 같은 값을 받습니다.
+- **앱에서 난 에러 보기** — 앱의 에러도 [Sentry로 모으고]([PR: 앱 에러 보고]), 어느 앱 버전·어느 업데이트에서 난 에러인지 나눠 봐서, EAS Update로 내보낸 수정이 낸 에러를 가려냅니다.
 
-그래서 사용자가 보지 않는 내부 상태가 아니라, **사용자가 보는 행동**을 테스트했습니다. ([왜 테스트를 쓰는가](https://blog-sepia-pi-37.vercel.app/posts/why-to-test), [무엇을 테스트하는가](https://blog-sepia-pi-37.vercel.app/posts/how-to-test))
+### 단점
 
-```tsx
-// 사용자가 보지 않는 내부 상태를 확인하는 테스트
-expect(result.current.isOpen).toBe(true);
+네이티브 코드·앱 권한·Expo SDK를 바꾸는 수정은 여전히 새 빌드와 스토어 심사를 거쳐야 합니다.
 
-// 사용자가 보는 행동을 확인하는 테스트
-await user.click(screen.getByRole('button', {name: '기록하기'}));
-expect(screen.getByRole('dialog')).toBeInTheDocument();
-```
+또 사용자가 스토어에서 새 버전을 받지 않으면 옛 버전 앱이 남고, 그동안 API를 더하기만 하는 제약도 지켜야 합니다.
 
-내부 상태가 맞아도 화면에 창이 안 뜨면 사용자에게는 고장입니다. 위 테스트는 통과하고, 아래 테스트는 실패해서 알려 줍니다.
-
-정적 분석이 이미 잡는 것은 테스트로 다시 쓰지 않았습니다.
-
-### 결과
-
-기능을 리팩토링했을 때 AI·사람 코드리뷰보다 저렴한 비용으로 검증이 가능했습니다.
+하지만, 웹뷰를 골라 React Native를 익힐 기회를 잃는 비용보다는 작다고 판단했습니다.
 
 ## AI 코드리뷰 도입
 
@@ -188,3 +187,19 @@ AI가 많은 것을 판단하게 하려면, 판단 기준도 많이 줘야 합�
 위의 정적 분석·테스트·AI 코드리뷰는 모두, **제가 보기 전에 먼저 잡는다**는 데 가치가 있습니다.
 
 그래서 모든 결과물은 코드를 합치기 전에 제가 직접 화면을 열어 다 봤습니다.
+
+## References: [Upcoming security changes to Google's OAuth 2.0 authorization endpoint in embedded webviews](https://developers.googleblog.com/2021/06/upcoming-security-changes-to-googles-oauth-2.0-authorization-endpoint.html)
+
+> All embedded webviews will be blocked starting on September 30, 2021.
+
+## References: [Expo Update](https://docs.expo.dev/eas-update/faq/)
+
+> When to use Expo Update
+>
+> - ✓ Fix a bug or crash in JavaScript code and deploy updates in minutes
+> - ✓ Update copy, translations, UI styling, or screen layouts
+> - ✗ Change to native code or native dependencies
+> - ✗ Change to app permissions (camera, location, and others)
+> - ✗ Update the Expo SDK version
+>
+> For scenarios marked with ✗, use Expo Build to create and submit a new app binary.
