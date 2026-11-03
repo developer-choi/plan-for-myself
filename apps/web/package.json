@@ -13,7 +13,7 @@
     "migrate:down": "yarn migrate down",
     "migrate:create": "yarn migrate create",
     "db:seed": "tsx --env-file-if-exists=.env.local seed/index.ts",
-    "test": "vitest"
+    "test": "vitest run"
   },
   "dependencies": {
     "@developer-choi/design-system": "^0.8.0",
