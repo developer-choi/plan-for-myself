@@ -1,8 +1,7 @@
 import {describe, expect, it} from '@jest/globals';
 import {render, screen} from '@testing-library/react-native';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
-import {readIsGuest} from '@/auth/read-app-token';
-import {SessionContext} from '@/auth/session-context';
+import {TestSessionProvider} from '@/auth/test-utils';
 import AccountSection from './AccountSection';
 
 describe('AccountSection', () => {
@@ -59,26 +58,12 @@ function createToken(payload: object) {
   return `header.${Buffer.from(JSON.stringify(payload)).toString('base64url')}.signature`;
 }
 
-const failUnused = () => {
-  throw new Error('이 테스트는 세션 핸들러를 부르지 않는다');
-};
-
-const UNUSED_HANDLERS = {
-  signIn: failUnused,
-  startAsGuest: failUnused,
-  connectGoogle: failUnused,
-  discardGuestAndConnect: failUnused,
-  signOut: failUnused,
-};
-
 function renderSection(token: string) {
   return render(
     <QueryClientProvider client={new QueryClient()}>
-      <SessionContext.Provider
-        value={{session: {token, isLoading: false, isGuest: readIsGuest(token)}, handlers: UNUSED_HANDLERS}}
-      >
+      <TestSessionProvider token={token}>
         <AccountSection />
-      </SessionContext.Provider>
+      </TestSessionProvider>
     </QueryClientProvider>,
   );
 }

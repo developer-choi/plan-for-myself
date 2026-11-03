@@ -21,7 +21,7 @@ export default function TagDetailCard({tag, calendar, trend, ref}: TagDetailCard
   const hasTrend = trend.bars.length > 1;
 
   return (
-    <View ref={ref}>
+    <View ref={ref} collapsable={false}>
       <Card title={tag}>
         <View style={styles.sections}>
           {calendar}

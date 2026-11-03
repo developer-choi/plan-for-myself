@@ -1,4 +1,4 @@
-import type {ReactNode} from 'react';
+import type {ReactNode, RefObject} from 'react';
 import {
   colors,
   type FailureTag,
@@ -10,6 +10,7 @@ import {
   formatReducedGroupTitle,
   formatReducedNotePrefix,
   formatRepeatedNotePrefix,
+  getFirstFailureTagName,
   STATS_TEXT,
   type StudyRecordMonthly,
 } from '@plan-for-myself/shared';
@@ -22,6 +23,12 @@ import {fontSize, opacity, radius, spacing, touchTarget, typography} from '@/sha
 interface FailCardProps {
   monthly: StudyRecordMonthly;
   selection: FailureTagSelection;
+  tourTargets?: FailCardTourTargets;
+}
+
+export interface FailCardTourTargets {
+  failGroupsRef: RefObject<View | null>;
+  firstTagRowRef: RefObject<View | null>;
 }
 
 interface GroupProps {
@@ -37,15 +44,18 @@ interface TagRowProps {
   name: string;
   selection: FailureTagSelection;
   hitSlop: Insets;
+  rowRef: RefObject<View | null> | undefined;
   children: ReactNode;
 }
 
-export default function FailCard({monthly, selection}: FailCardProps) {
+export default function FailCard({monthly, selection, tourTargets}: FailCardProps) {
   const {failureTags, inProgress} = monthly;
   const hasNoFailure = failureTags.length === 0;
   const repeatedTags = filterByStatus(failureTags, 'repeated');
   const appearedTags = filterByStatus(failureTags, 'appeared');
   const reducedTags = filterByStatus(failureTags, 'reduced');
+  const firstTagName = getFirstFailureTagName(failureTags);
+  const getRowRef = (name: string) => (name === firstTagName ? tourTargets?.firstTagRowRef : undefined);
   const hasRepeated = repeatedTags.length > 0;
   const hasRepeatedOrAppeared = hasRepeated || appearedTags.length > 0;
 
@@ -57,7 +67,7 @@ export default function FailCard({monthly, selection}: FailCardProps) {
           <Text style={styles.emptySub}>{STATS_TEXT.failEmptyHint}</Text>
         </View>
       ) : (
-        <View>
+        <View ref={tourTargets?.failGroupsRef} collapsable={false}>
           <Group
             hasDividerAbove={false}
             icon={FAIL_ICON}
@@ -66,7 +76,7 @@ export default function FailCard({monthly, selection}: FailCardProps) {
             tone="fail"
           >
             {(tag, hitSlop) => (
-              <TagRow hitSlop={hitSlop} name={tag.tag} selection={selection}>
+              <TagRow hitSlop={hitSlop} name={tag.tag} rowRef={getRowRef(tag.tag)} selection={selection}>
                 {formatRepeatedNotePrefix(tag.previousCount, inProgress)}
                 <Text style={styles.countFail}>{tag.count}번</Text>
               </TagRow>
@@ -80,7 +90,7 @@ export default function FailCard({monthly, selection}: FailCardProps) {
             tone="fail"
           >
             {(tag, hitSlop) => (
-              <TagRow hitSlop={hitSlop} name={tag.tag} selection={selection}>
+              <TagRow hitSlop={hitSlop} name={tag.tag} rowRef={getRowRef(tag.tag)} selection={selection}>
                 {formatAppearedNotePrefix(monthly.month, inProgress)}
                 <Text style={styles.countFail}>{tag.count}번</Text>
               </TagRow>
@@ -94,7 +104,7 @@ export default function FailCard({monthly, selection}: FailCardProps) {
             tone="success"
           >
             {(tag, hitSlop) => (
-              <TagRow hitSlop={hitSlop} name={tag.tag} selection={selection}>
+              <TagRow hitSlop={hitSlop} name={tag.tag} rowRef={getRowRef(tag.tag)} selection={selection}>
                 {formatReducedNotePrefix(tag.previousCount)}
                 <Text style={styles.countSuccess}>{tag.count}번</Text>
               </TagRow>
@@ -235,11 +245,12 @@ function Group({title, icon, tone, tags, hasDividerAbove, children}: GroupProps)
   );
 }
 
-function TagRow({name, selection, hitSlop, children}: TagRowProps) {
+function TagRow({name, selection, hitSlop, rowRef, children}: TagRowProps) {
   const selected = selection.selectedTag === name;
 
   return (
     <Pressable
+      ref={rowRef}
       hitSlop={hitSlop}
       style={({pressed}) => [styles.tagRow, selected && styles.tagRowSelected, pressed && styles.pressed]}
       testID={`${TAG_ROW_TEST_ID_PREFIX}${name}`}

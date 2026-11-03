@@ -6,7 +6,7 @@ import {contentWidth, radius, shadows, spacing, typography} from '@/shared/style
 
 interface DialogFrameProps extends PropsWithChildren {
   open: boolean;
-  title: string;
+  title?: string;
   onRequestClose: () => void;
 }
 
@@ -23,7 +23,7 @@ export default function DialogFrame({open, title, onRequestClose, children}: Dia
       <Pressable style={[StyleSheet.absoluteFill, styles.backdrop]} onPress={onRequestClose} />
       <View pointerEvents="box-none" style={styles.center}>
         <View style={styles.paper}>
-          <Text style={styles.title}>{title}</Text>
+          {title === undefined ? null : <Text style={styles.title}>{title}</Text>}
           {children}
         </View>
       </View>

@@ -1,3 +1,4 @@
+import type {Ref} from 'react';
 import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
 import type {CalendarMonth, StudyRecord} from '@plan-for-myself/shared';
 import {colors, getCalendarDayCells, WEEKDAY_LABELS} from '@plan-for-myself/shared';
@@ -13,9 +14,10 @@ interface CalendarGridProps {
     /* 그날 기록이 없으면 record는 undefined */
     onRecordableDateClick: (date: string, record?: StudyRecord) => void;
   };
+  highlightedCell?: {date: string; ref: Ref<View>};
 }
 
-export default function CalendarGrid({month, today, records, handlers}: CalendarGridProps) {
+export default function CalendarGrid({month, today, records, handlers, highlightedCell}: CalendarGridProps) {
   return (
     <ScrollView contentContainerStyle={styles.calendar}>
       <View style={styles.weekdays}>
@@ -40,6 +42,7 @@ export default function CalendarGrid({month, today, records, handlers}: Calendar
               return (
                 <Pressable
                   key={date}
+                  ref={date === highlightedCell?.date ? highlightedCell.ref : undefined}
                   style={[styles.cell, styles.day]}
                   onPress={isFuture ? handlers.onFutureDateClick : () => handlers.onRecordableDateClick(date, record)}
                 >
