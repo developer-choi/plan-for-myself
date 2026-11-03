@@ -1,4 +1,4 @@
-import {FAILURE_TAG_TREND_MONTH_LIMIT} from '@plan-for-myself/shared';
+import {type CalendarMonth, FAILURE_TAG_TREND_MONTH_LIMIT, shiftMonth} from '@plan-for-myself/shared';
 import {act, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type {Session} from 'next-auth';
@@ -7,7 +7,6 @@ import {OverlayProvider} from 'overlay-kit';
 import {afterEach, describe, expect, it, vi} from 'vitest';
 import {type DemoOverview, getDemoMonth, getDemoMonthly, getDemoOverview, getDemoRecords} from '@/demo/demo-examples';
 import {MY_CALENDAR_LABEL} from '@/shared/labels';
-import {type CalendarMonth, shiftMonth} from '@/study-record/calendar-date';
 import DemoStatsSection from './DemoStatsSection';
 import DemoStatsTour from './DemoStatsTour';
 

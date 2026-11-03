@@ -1,3 +1,4 @@
+import {type CalendarMonth, parseMonth} from '@plan-for-myself/shared';
 import type {Metadata} from 'next';
 import {notFound} from 'next/navigation';
 import classNames from 'classnames';
@@ -12,7 +13,7 @@ import {demoCalendarPath, demoStatsPath} from '@/demo/demo-path';
 import {getStatsMonthNavigation, isBeforeFirstRecord} from '@/study-record-stats/month-navigation';
 import SubPageHeader from '@/shared/components/SubPageHeader';
 import layout from '@/shared/styles/layout.module.scss';
-import {type CalendarMonth, isFutureMonth, isSameMonth, parseMonth} from '@/study-record/calendar-date';
+import {isFutureMonth, isSameMonth} from '@/study-record/calendar-date';
 import {formatStatsTitle} from '@/study-record-stats/format';
 import styles from './page.module.scss';
 

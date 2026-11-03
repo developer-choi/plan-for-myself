@@ -1,5 +1,6 @@
 'use client';
 
+import type {CalendarMonth} from '@plan-for-myself/shared';
 import {useRouter} from 'next/navigation';
 import {ACTIONS, type EventData, EVENTS, Joyride, type Step, type TooltipRenderProps} from 'react-joyride';
 import TourBubble from '@/demo/components/TourBubble';
@@ -10,7 +11,6 @@ import {
   DEMO_TOUR_OPTIONS,
   DEMO_TOUR_STYLES,
 } from '@/demo/demo-tour';
-import type {CalendarMonth} from '@/study-record/calendar-date';
 import {CALENDAR_STATS_LINK_ID} from '@/study-record/components/CalendarSummary';
 
 /* 서버가 달력을 그린 달을 받는다 — 여기서 다시 계산하면 달 경계에서 서버가 그린 달과 어긋나 1/5 대상이 없다 */

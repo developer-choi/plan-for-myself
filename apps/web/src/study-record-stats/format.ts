@@ -1,5 +1,9 @@
-import type {RecordedDays, StudyRecordOverview} from '@plan-for-myself/shared';
-import {type CalendarMonth, formatMonthTitle} from '@/study-record/calendar-date';
+import {
+  type CalendarMonth,
+  formatMonthTitle,
+  type RecordedDays,
+  type StudyRecordOverview,
+} from '@plan-for-myself/shared';
 
 export function formatDuration(minutes: number): string {
   const hours = Math.floor(minutes / MINUTES_PER_HOUR);

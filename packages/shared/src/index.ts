@@ -1,5 +1,6 @@
 export type {PostAppTokenApiRequest, PostAppTokenApiResponse, PostAppTokenRefreshApiResponse} from './auth/type';
 export {colors} from './color/token';
+export {type CalendarMonth, formatMonthTitle, monthPath, parseMonth, shiftMonth} from './date/calendar-month';
 export {isHolidayDate} from './date/holiday';
 export {getKoreanDate, getKoreanToday, KST} from './date/korean';
 export {convertLunarDateToSolar, type SimpleDate} from './date/lunar';

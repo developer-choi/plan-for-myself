@@ -1,5 +1,6 @@
 /* eslint-disable no-magic-numbers -- 소개 페이지 그림에만 쓰는 고정 예시 데이터라 숫자를 그대로 적는다 */
 import type {
+  CalendarMonth,
   FailureTag,
   FailureTagTrend,
   StudyRecord,
@@ -7,7 +8,6 @@ import type {
   StudyRecordOverview,
 } from '@plan-for-myself/shared';
 import {isReduced} from '@/server/study-record-stats/tag-count';
-import type {CalendarMonth} from '@/study-record/calendar-date';
 
 export const INTRO_MONTH: CalendarMonth = {year: 2026, month: 9};
 export const INTRO_TAG = '늦잠';

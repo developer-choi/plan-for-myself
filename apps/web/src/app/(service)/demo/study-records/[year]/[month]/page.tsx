@@ -1,3 +1,4 @@
+import {formatMonthTitle, parseMonth, shiftMonth} from '@plan-for-myself/shared';
 import type {Metadata} from 'next';
 import {notFound} from 'next/navigation';
 import {auth} from '@/auth/next-auth';
@@ -9,7 +10,7 @@ import DemoTourTrigger from '@/demo/components/DemoTourTrigger';
 import {getDemoMonth, getDemoOverview, getDemoRecords, getDemoToday} from '@/demo/demo-examples';
 import {demoCalendarPath} from '@/demo/demo-path';
 import layout from '@/shared/styles/layout.module.scss';
-import {formatMonthTitle, isSameMonth, parseMonth, shiftMonth} from '@/study-record/calendar-date';
+import {isSameMonth} from '@/study-record/calendar-date';
 import CalendarHeader from '@/study-record/components/CalendarHeader';
 import styles from './page.module.scss';
 

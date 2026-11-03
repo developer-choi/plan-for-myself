@@ -1,9 +1,9 @@
-import type {StudyRecord} from '@plan-for-myself/shared';
+import type {CalendarMonth, StudyRecord} from '@plan-for-myself/shared';
 import {minutesFormat} from '@plan-for-myself/shared';
 import {Badge} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
 import classNames from 'classnames';
-import {type CalendarMonth, getCalendarCells, WEEKDAY_LABELS} from '@/study-record/calendar-date';
+import {getCalendarCells, WEEKDAY_LABELS} from '@/study-record/calendar-date';
 import styles from './CalendarGrid.module.scss';
 
 interface CalendarGridProps {

@@ -1,6 +1,8 @@
 /* eslint-disable no-magic-numbers -- 예시 달력·통계에만 쓰는 고정 예시 데이터라 숫자를 그대로 적는다 */
 import {
+  type CalendarMonth,
   isHolidayDate,
+  shiftMonth,
   type StudyRecord,
   type StudyRecordMonthly,
   type StudyRecordOverview,
@@ -8,7 +10,7 @@ import {
 import {calculateMonthly} from '@/server/study-record-stats/monthly';
 import {calculateOverview} from '@/server/study-record-stats/overview';
 import {getDemoMonth, getDemoToday, getLastDayOfMonth, toDateString} from '@/demo/demo-today';
-import {type CalendarMonth, shiftMonth, toMonthParam} from '@/study-record/calendar-date';
+import {toMonthParam} from '@/study-record/calendar-date';
 
 export {getDemoMonth, getDemoToday} from '@/demo/demo-today';
 

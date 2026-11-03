@@ -1,4 +1,5 @@
-import {type CalendarMonth, isFutureMonth, isPastMonth} from '@/study-record/calendar-date';
+import type {CalendarMonth} from '@plan-for-myself/shared';
+import {isFutureMonth, isPastMonth} from '@/study-record/calendar-date';
 
 interface CalendarSummaryParams {
   today: string;

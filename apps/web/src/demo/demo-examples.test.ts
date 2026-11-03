@@ -1,6 +1,6 @@
-import {FAILURE_TAG_TREND_MONTH_LIMIT} from '@plan-for-myself/shared';
+import {type CalendarMonth, FAILURE_TAG_TREND_MONTH_LIMIT, shiftMonth} from '@plan-for-myself/shared';
 import {describe, expect, it} from 'vitest';
-import {type CalendarMonth, isSameMonth, shiftMonth} from '@/study-record/calendar-date';
+import {isSameMonth} from '@/study-record/calendar-date';
 import {getDemoMonth, getDemoMonthly, getDemoOverview, getDemoRecords, getDemoToday} from './demo-examples';
 
 describe('예시 기록', () => {

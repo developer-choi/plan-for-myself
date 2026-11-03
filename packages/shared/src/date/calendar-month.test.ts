@@ -1,0 +1,75 @@
+import {describe, expect, it} from 'vitest';
+import {formatMonthTitle, parseMonth, shiftMonth} from './calendar-month';
+
+describe('shiftMonth()', () => {
+  describe('General cases', () => {
+    it('9월의 다음 달은 같은 해 10월을 반환해야 한다', () => {
+      expect(shiftMonth({year: 2026, month: 9}, 1)).toEqual({year: 2026, month: 10});
+    });
+  });
+
+  describe('Boundary cases', () => {
+    it('1월의 지난 달은 전해 12월을 반환해야 한다', () => {
+      expect(shiftMonth({year: 2026, month: 1}, -1)).toEqual({year: 2025, month: 12});
+    });
+
+    it('12월의 다음 달은 다음 해 1월을 반환해야 한다', () => {
+      expect(shiftMonth({year: 2025, month: 12}, 1)).toEqual({year: 2026, month: 1});
+    });
+  });
+});
+
+describe('parseMonth()', () => {
+  describe('General cases', () => {
+    it('연·월 문자열이면 숫자 연·월을 반환해야 한다', () => {
+      expect(parseMonth({year: '2026', month: '9'})).toEqual({year: 2026, month: 9});
+    });
+  });
+
+  describe('Boundary cases', () => {
+    it('가장 이른 해 1000년 1월이면 1000년 1월을 반환해야 한다', () => {
+      expect(parseMonth({year: '1000', month: '1'})).toEqual({year: 1000, month: 1});
+    });
+
+    it('가장 늦은 해 9998년 12월이면 9998년 12월을 반환해야 한다', () => {
+      expect(parseMonth({year: '9998', month: '12'})).toEqual({year: 9998, month: 12});
+    });
+  });
+
+  describe('Edge cases', () => {
+    [
+      {month: '0', reason: '0월'},
+      {month: '13', reason: '13월'},
+      {month: 'abc', reason: '숫자가 아닌 달'},
+      {month: '1.5', reason: '정수가 아닌 달'},
+      {month: '09', reason: '앞에 0이 붙은 달'},
+      {month: '1e1', reason: '지수 표기 달'},
+    ].forEach(({month, reason}) => {
+      it(`${reason}이면 null을 반환해야 한다`, () => {
+        expect(parseMonth({year: '2026', month})).toBeNull();
+      });
+    });
+
+    [
+      {year: 'abc', reason: '숫자가 아닌 해'},
+      {year: '50', reason: '두 자리 해'},
+      {year: '0999', reason: '앞에 0이 붙은 해'},
+      {year: '999', reason: '세 자리 해'},
+      {year: '9999', reason: '9998년보다 큰 네 자리 해'},
+      {year: '10000', reason: '다섯 자리 해'},
+      {year: '-2026', reason: '음수 해'},
+    ].forEach(({year, reason}) => {
+      it(`${reason}이면 null을 반환해야 한다`, () => {
+        expect(parseMonth({year, month: '9'})).toBeNull();
+      });
+    });
+  });
+});
+
+describe('formatMonthTitle()', () => {
+  describe('General cases', () => {
+    it('달을 넘기면 「YYYY년 M월」 제목을 반환해야 한다', () => {
+      expect(formatMonthTitle({year: 2026, month: 10})).toBe('2026년 10월');
+    });
+  });
+});
