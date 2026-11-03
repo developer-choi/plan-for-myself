@@ -24,6 +24,13 @@
       "expo-secure-store",
       "expo-router",
       [
+        "@sentry/react-native/expo",
+        {
+          "organization": "choeyujin",
+          "project": "plan-for-myself-mobile"
+        }
+      ],
+      [
         "expo-splash-screen",
         {
           "backgroundColor": "#ffffff",
