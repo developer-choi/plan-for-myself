@@ -1,7 +1,7 @@
 import {useCallback} from 'react';
 import {openOnce} from '@plan-for-myself/shared/react';
 import {Alert} from '@developer-choi/design-system';
-import {getErrorInfo} from '@/shared/error/info';
+import {getErrorInfo} from '@plan-for-myself/shared';
 
 export function useHandleClientSideError(): (error: unknown) => void {
   return useCallback((error: unknown) => {

@@ -1,9 +1,9 @@
 'use client';
 
 import {useRouter} from 'next/navigation';
+import {ENTRY_LABEL} from '@plan-for-myself/shared';
 import {ENTRY_URL} from '@/auth/redirect';
 import ErrorScreen from '@/shared/components/ErrorScreen';
-import {ENTRY_LABEL} from '@/shared/labels';
 
 export default function NotFound() {
   const router = useRouter();

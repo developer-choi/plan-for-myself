@@ -4,8 +4,8 @@ import {type PropsWithChildren} from 'react';
 import {QueryErrorResetBoundary, useQueryErrorResetBoundary} from '@tanstack/react-query';
 import classNames from 'classnames';
 import {catchError} from 'next/error';
+import {getErrorInfo, RETRY_LABEL} from '@plan-for-myself/shared';
 import ErrorNotice from '@/shared/components/ErrorNotice';
-import {getErrorInfo} from '@/shared/error/info';
 import useReportPageError from '@/shared/error/useReportPageError';
 import {type FallbackSize} from '@/shared/types/fallback';
 import styles from './FallbackSlot.module.scss';
@@ -32,7 +32,7 @@ const RetryableErrorBoundary = catchError(({onReset, size = 'page'}: HandledErro
     <div className={classNames(styles.slot, {[styles.card]: size === 'card'})}>
       <ErrorNotice
         action={{
-          children: '다시 시도',
+          children: RETRY_LABEL,
           onClick: () => {
             resetQueryError();
             onReset?.();
