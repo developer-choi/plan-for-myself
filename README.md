@@ -30,7 +30,7 @@ apps/mobile  (React Native) ─┘
 
 - `useRecordForm` — 기록을 저장·삭제하고 서버의 거절을 안내하는 폼 로직
 - `createStudyRecordApi` — 기록 API 함수. 인증 방식이 다른 API 클라이언트를 인자로 받습니다
-- `beforeSend` — 에러 보고(Sentry)에 개인정보가 실리지 않게 거르는 규칙
+- `beforeSend` — 에러 보고(Sentry)로 보내기 전에 로그인 만료(401)를 버리고, 에러마다 심각도를 붙이는 규칙
 
 ## 앱 (React Native)
 
