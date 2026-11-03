@@ -21,22 +21,28 @@ interface ErrorNoticeProps {
   content: string;
   action: ErrorNoticeAction;
   link?: ErrorNoticeLink;
-  size?: 'large' | 'medium';
+  size?: 'large' | 'medium' | 'small';
 }
 
 export default function ErrorNotice({title, content, action, link, size = 'large'}: ErrorNoticeProps) {
   const isFullScreen = size === 'large';
+  const isSmall = size === 'small';
   const textStyles = isFullScreen ? largeTextStyles : mediumTextStyles;
 
   const notice = (
     <View style={styles.frame}>
       <View style={styles.container}>
-        <Logo size="large" />
+        {!isSmall && <Logo size="large" />}
         <View style={styles.text}>
           <Text style={[styles.title, textStyles.title]}>{title}</Text>
           <Text style={[styles.content, textStyles.content]}>{content}</Text>
         </View>
-        <Button label={action.label} style={styles.action} onPress={action.onPress} />
+        <Button
+          label={action.label}
+          size={isSmall ? 'medium' : 'large'}
+          style={styles.action}
+          onPress={action.onPress}
+        />
       </View>
       {link && (
         <Link asChild replace href={link.href}>
