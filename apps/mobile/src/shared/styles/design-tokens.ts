@@ -51,6 +51,8 @@ export const typography = {
 
 export const fontSize = {
   xxs: 10,
+  sm: 12,
+  base: 13,
 } as const;
 
 export const shadows = {
