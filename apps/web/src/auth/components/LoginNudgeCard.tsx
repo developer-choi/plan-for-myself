@@ -4,22 +4,21 @@ import {useActionState} from 'react';
 import {usePathname} from 'next/navigation';
 import classNames from 'classnames';
 import {Cross2Icon} from '@radix-ui/react-icons';
-import {useQuery} from '@tanstack/react-query';
 import {Button, IconButton} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
+import {useLoginNudge} from '@plan-for-myself/shared/react';
 import {continueWithGoogle} from '@/auth/actions';
-import {useLoginNudge} from '@/auth/useLoginNudge';
-import {GOOGLE_CONNECT_LABEL} from '@/shared/labels';
-import {studyRecordStatsQueries} from '@/study-record/queries';
+import {webLoginNudgeStore} from '@/auth/login-nudge-store';
+import {GOOGLE_CONNECT_LABEL} from '@plan-for-myself/shared';
 import styles from './LoginNudgeCard.module.scss';
 
 interface LoginNudgeCardProps {
   today: string;
+  recordedDays: number;
 }
 
-export default function LoginNudgeCard({today}: LoginNudgeCardProps) {
-  const {data: overview} = useQuery(studyRecordStatsQueries.overview.options(today));
-  const loginNudge = useLoginNudge(today, overview?.totals.recordedDays ?? 0);
+export default function LoginNudgeCard({today, recordedDays}: LoginNudgeCardProps) {
+  const loginNudge = useLoginNudge(today, recordedDays, webLoginNudgeStore);
   const pathname = usePathname();
   const [, connectAction, isPending] = useActionState(() => continueWithGoogle(pathname), undefined);
 

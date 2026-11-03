@@ -4,11 +4,15 @@ import Link from 'next/link';
 import {Button} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
 import {
+  GOOGLE_CONNECT_LABEL,
+  GOOGLE_CONNECT_PAGE_LABEL,
   GOOGLE_LOGIN_LABEL,
+  GUEST_CONNECT_NOTE,
   INTRO_EXIT_LABEL,
   KEEP_GUEST_LABEL,
   LOGIN_DESCRIPTION,
   LOGIN_FAILED_NOTICE,
+  shouldShowRegisteredNotice,
   START_RECORDING_LABEL,
 } from '@plan-for-myself/shared';
 import DiscardGuestButton from '@/auth/components/DiscardGuestButton';
@@ -17,13 +21,13 @@ import GuestLimitNotice from '@/auth/components/GuestLimitNotice';
 import GuestStartButton from '@/auth/components/GuestStartButton';
 import LoginNotice from '@/auth/components/LoginNotice';
 import RegisteredAccountNotice from '@/auth/components/RegisteredAccountNotice';
-import {readRegisteredRejection, shouldShowRegisteredNotice} from '@/auth/login-cookies';
+import {readRegisteredRejection} from '@/auth/login-cookies';
 import {getLoginErrorKind} from '@/auth/login-error';
 import {auth} from '@/auth/next-auth';
 import {getLoginState} from '@/auth/path';
 import {DEFAULT_HOME_URL, ENTRY_URL, INTRO_URL} from '@/auth/redirect';
 import Logo from '@/shared/components/Logo';
-import {GOOGLE_CONNECT_LABEL, GOOGLE_CONNECT_PAGE_LABEL, MY_CALENDAR_LABEL} from '@/shared/labels';
+import {MY_CALENDAR_LABEL} from '@/shared/labels';
 import type {SearchParamsPageProps} from '@/shared/types/page';
 import styles from './page.module.scss';
 
@@ -73,7 +77,7 @@ export default async function Page({searchParams}: SearchParamsPageProps) {
               {/* 문장마다 한 줄로 그린다 — 한 단락으로 흘리면 끝줄에 「수 있어요」만 남는다 */}
               <div className={classNames(typography.body2, styles.guestNote)}>
                 <p>이 브라우저에서만 쓸 수 있어요.</p>
-                <p>나중에 Google 계정을 연결할 수 있어요.</p>
+                <p>{GUEST_CONNECT_NOTE}</p>
               </div>
             </div>
           )}

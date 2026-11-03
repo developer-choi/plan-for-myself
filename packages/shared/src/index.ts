@@ -1,10 +1,25 @@
+export {GUEST_DELETE_TEXT} from './auth/delete-text';
+export {GUEST_LIMIT_CODE, hasGuestLimitCode, type LoginFailure} from './auth/guest-limit';
 export {
+  CONNECT_KEEPS_RECORDS_HINT,
+  DISCARD_LABEL,
   GOOGLE_LOGIN_LABEL,
+  GUEST_CONNECT_NOTE,
+  GUEST_LIMIT_NOTICE,
+  GUEST_START_LABEL,
   INTRO_EXIT_LABEL,
   KEEP_GUEST_LABEL,
   LOGIN_DESCRIPTION,
   LOGIN_FAILED_NOTICE,
+  REGISTERED_ACCOUNT_NOTICE,
 } from './auth/login-text';
+export {LOGIN_NUDGE_STORAGE_KEY} from './auth/login-nudge-date';
+export {shouldShowRegisteredNotice} from './auth/registered-notice';
+export {
+  REGISTERED_REJECTION_TTL_SECONDS,
+  type RegisteredAccountRejection,
+  registeredAccountRejectionSchema,
+} from './auth/registered-rejection';
 export type {PostAppTokenApiRequest, PostAppTokenApiResponse, PostAppTokenRefreshApiResponse} from './auth/type';
 export {colors} from './color/token';
 export {
@@ -23,7 +38,18 @@ export {parseDateParam, toDateMonthParam, toMonthParam} from './date/month-param
 export type {DateType} from './date-type/type';
 export {getErrorInfo} from './error/info';
 export {isUnauthorizedError} from './error/unauthorized';
-export {ENTRY_LABEL, LOGOUT_LABEL, RETRY_LABEL, START_RECORDING_LABEL, STATS_LABEL} from './label/labels';
+export {
+  ACCOUNT_LABEL,
+  ENTRY_LABEL,
+  GOOGLE_CONNECT_LABEL,
+  GOOGLE_CONNECT_PAGE_LABEL,
+  LOGOUT_LABEL,
+  MY_CALENDAR_LABEL,
+  PRIVACY_POLICY_LABEL,
+  RETRY_LABEL,
+  START_RECORDING_LABEL,
+  STATS_LABEL,
+} from './label/labels';
 export {isMutationSettling} from './query/mutation';
 export {beforeSend} from './sentry/before-send';
 export {createStudyRecordApi} from './study-record/api';

@@ -1,35 +1,30 @@
 import {createHmac} from 'node:crypto';
-import type {Session} from 'next-auth';
+import {type RegisteredAccountRejection, REGISTERED_REJECTION_TTL_SECONDS} from '@plan-for-myself/shared';
 import {cookies} from 'next/headers';
 
-export interface LoginCookieValue {
-  guestUserId: string;
-  googleSubHash: string;
-}
-
-export function createLoginCookieValue(guestUserId: string, googleSub: string): LoginCookieValue {
+export function createRegisteredRejection(guestUserId: string, googleSub: string): RegisteredAccountRejection {
   return {guestUserId, googleSubHash: hashGoogleSub(googleSub)};
 }
 
 export async function setRegisteredRejection(guestUserId: string, googleSub: string): Promise<void> {
-  (await cookies()).set(REJECTION_COOKIE, serialize(createLoginCookieValue(guestUserId, googleSub)), {
+  (await cookies()).set(REJECTION_COOKIE, serialize(createRegisteredRejection(guestUserId, googleSub)), {
     ...COOKIE_OPTIONS,
-    maxAge: REJECTION_MAX_AGE_SECONDS,
+    maxAge: REGISTERED_REJECTION_TTL_SECONDS,
   });
 }
 
-export async function readRegisteredRejection(): Promise<LoginCookieValue | null> {
+export async function readRegisteredRejection(): Promise<RegisteredAccountRejection | null> {
   return parse((await cookies()).get(REJECTION_COOKIE)?.value);
 }
 
-export async function setDiscardIntent(value: LoginCookieValue): Promise<void> {
+export async function setDiscardIntent(value: RegisteredAccountRejection): Promise<void> {
   (await cookies()).set(DISCARD_INTENT_COOKIE, serialize(value), {
     ...COOKIE_OPTIONS,
     maxAge: DISCARD_INTENT_MAX_AGE_SECONDS,
   });
 }
 
-export async function readDiscardIntent(): Promise<LoginCookieValue | null> {
+export async function readDiscardIntent(): Promise<RegisteredAccountRejection | null> {
   return parse((await cookies()).get(DISCARD_INTENT_COOKIE)?.value);
 }
 
@@ -44,7 +39,7 @@ export async function clearLoginCookies(): Promise<void> {
 }
 
 export function isDiscardIntentValid(
-  intent: LoginCookieValue | null,
+  intent: RegisteredAccountRejection | null,
   current: {guestUserId: string; googleSub: string},
 ): boolean {
   if (!intent) {
@@ -54,20 +49,8 @@ export function isDiscardIntentValid(
   return intent.guestUserId === current.guestUserId && intent.googleSubHash === hashGoogleSub(current.googleSub);
 }
 
-export function shouldShowRegisteredNotice(
-  rejection: LoginCookieValue | null,
-  session: Pick<Session, 'userId' | 'isGuest'> | null,
-): boolean {
-  if (!rejection || !session?.isGuest) {
-    return false;
-  }
-
-  return rejection.guestUserId === session.userId;
-}
-
 const REJECTION_COOKIE = 'registered-account-rejection';
 const DISCARD_INTENT_COOKIE = 'discard-guest-intent';
-const REJECTION_MAX_AGE_SECONDS = 600;
 const DISCARD_INTENT_MAX_AGE_SECONDS = 300;
 const GOOGLE_SUB_HASH_PREFIX = 'google-sub:';
 const COOKIE_VALUE_PATTERN = /^(\d+)\.([0-9a-f]{64})$/;
@@ -84,11 +67,11 @@ function hashGoogleSub(googleSub: string): string {
     .digest('hex');
 }
 
-function serialize({guestUserId, googleSubHash}: LoginCookieValue): string {
+function serialize({guestUserId, googleSubHash}: RegisteredAccountRejection): string {
   return `${guestUserId}.${googleSubHash}`;
 }
 
-function parse(raw: string | undefined): LoginCookieValue | null {
+function parse(raw: string | undefined): RegisteredAccountRejection | null {
   const match = raw?.match(COOKIE_VALUE_PATTERN);
 
   if (!match) {

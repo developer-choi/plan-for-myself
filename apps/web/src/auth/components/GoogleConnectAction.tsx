@@ -6,7 +6,7 @@ import {Button} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
 import {continueWithGoogle} from '@/auth/actions';
 import GoogleIcon from '@/auth/components/GoogleIcon';
-import {GOOGLE_CONNECT_LABEL} from '@/shared/labels';
+import {CONNECT_KEEPS_RECORDS_HINT, GOOGLE_CONNECT_LABEL} from '@plan-for-myself/shared';
 import styles from './GoogleConnectAction.module.scss';
 
 export default function GoogleConnectAction() {
@@ -18,7 +18,7 @@ export default function GoogleConnectAction() {
         <GoogleIcon />
         {GOOGLE_CONNECT_LABEL}
       </Button>
-      <p className={classNames(typography.body2, styles.hint)}>지금 기록이 그대로 이어져요</p>
+      <p className={classNames(typography.body2, styles.hint)}>{CONNECT_KEEPS_RECORDS_HINT}</p>
     </form>
   );
 }

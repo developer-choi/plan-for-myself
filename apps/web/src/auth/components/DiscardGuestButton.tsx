@@ -1,6 +1,7 @@
 'use client';
 
 import {useTransition} from 'react';
+import {DISCARD_LABEL, GUEST_DELETE_TEXT} from '@plan-for-myself/shared';
 import {openOnce} from '@plan-for-myself/shared/react';
 import {Button, Confirm} from '@developer-choi/design-system';
 import {discardGuestAndContinueWithGoogle} from '@/auth/actions';
@@ -31,8 +32,8 @@ function DiscardGuestConfirm({isOpen, onClose}: DiscardGuestConfirmProps) {
 
   return (
     <Confirm
-      confirmProps={{children: '삭제', color: 'destructive', loading: isPending}}
-      content={<p>계정과 기록을 모두 삭제해요. 되돌릴 수 없어요.</p>}
+      confirmProps={{children: GUEST_DELETE_TEXT.confirm, color: 'destructive', loading: isPending}}
+      content={<p>{GUEST_DELETE_TEXT.content}</p>}
       open={isOpen}
       title={DISCARD_LABEL}
       onCancel={onClose}
@@ -40,5 +41,3 @@ function DiscardGuestConfirm({isOpen, onClose}: DiscardGuestConfirmProps) {
     />
   );
 }
-
-const DISCARD_LABEL = '게스트 계정 삭제 후 로그인';
