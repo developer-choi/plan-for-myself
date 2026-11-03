@@ -9,6 +9,7 @@ export const spacing = {
   xxl: 40,
   pageXMobile: 12,
   gridGap: 12,
+  formGap: 24,
 } as const;
 
 export const contentWidth = {
