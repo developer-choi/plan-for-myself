@@ -30,14 +30,14 @@ apps/mobile  (React Native) ─┘
 
 - `useRecordForm` — 기록을 저장·삭제하고 서버의 거절을 안내하는 폼 로직
 - `createStudyRecordApi` — 기록 API 함수. 인증 방식이 다른 API 클라이언트를 인자로 받습니다
-- `beforeSend` — 오류 보고(Sentry)에 개인정보가 실리지 않게 거르는 규칙
+- `beforeSend` — 에러 보고(Sentry)에 개인정보가 실리지 않게 거르는 규칙
 
 ## 앱 (React Native)
 
-- 웹을 웹뷰로 띄우지 않고, 화면을 React Native로 다시 만들었습니다. 웹이 이미 있어 비용만 보면 웹뷰가 합리적이었지만, React Native를 익히는 것이 목적이었습니다. → [웹뷰가 아니라 React Native를 고른 이유](docs/cases/development.md)
+- 웹을 웹뷰로 띄우지 않고, 화면을 React Native로 다시 만들었습니다. 웹이 이미 있어 비용만 보면 웹뷰가 합리적이었지만, React Native를 익히는 것이 목적이었습니다. → [웹뷰 없이 앱을 배포하고 운영하기](docs/cases/development.md#웹뷰-없이-앱을-배포하고-운영하기)
 - [Expo로 만들었습니다](https://github.com/developer-choi/plan-for-myself/pull/36). 카메라 같은 네이티브 기능을 쓰지 않고, 모노레포용 번들러 설정을 Expo가 맡아 주기 때문입니다.
 - 로그인 토큰은 기기의 안전한 저장소(`expo-secure-store`)에 두어, 앱을 껐다 켜도 [로그인이 유지됩니다]([PR: 앱 로그인]).
-- 오류 보고는 웹과 같은 거르는 규칙에 더해, 로그인 요청에 실린 Google ID 토큰과 기기의 앱 권한 목록을 [빼고 보냅니다]([PR: 앱 오류 보고]).
+- 에러 보고는 웹과 같은 거르는 규칙에 더해, 로그인 요청에 실린 Google ID 토큰과 기기의 앱 권한 목록을 [빼고 보냅니다]([PR: 앱 에러 보고]).
 - 네이티브 코드가 바뀌지 않은 수정은 [EAS Update로 스토어 심사 없이 내보내고 되돌립니다]([PR: EAS Update 설정과 되돌림]).
 
 ## 대표 작업 사례
