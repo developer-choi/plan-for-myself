@@ -2,11 +2,11 @@
 
 import {Button} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
+import {FIRST_RECORD_TEXT, toDateMonthParam} from '@plan-for-myself/shared';
+import {openOnce} from '@plan-for-myself/shared/react';
 import {PlusIcon} from '@radix-ui/react-icons';
 import classNames from 'classnames';
-import {openOnce} from '@plan-for-myself/shared/react';
 import Logo from '@/shared/components/Logo';
-import {toDateMonthParam} from '@plan-for-myself/shared';
 import RecordFormDialog from '@/study-record/components/RecordFormDialog';
 import styles from './FirstRecord.module.scss';
 
@@ -25,12 +25,12 @@ export default function FirstRecord({today}: FirstRecordProps) {
     <section className={styles.firstRecord}>
       <Logo size="large" />
       <header className={styles.text}>
-        <h2 className={classNames(typography.h4, typography.bold)}>첫 기록을 남겨 보세요</h2>
-        <p className={classNames(typography.body2, styles.description)}>하루 공부시간과 실패한 일을 적어요</p>
+        <h2 className={classNames(typography.h4, typography.bold)}>{FIRST_RECORD_TEXT.title}</h2>
+        <p className={classNames(typography.body2, styles.description)}>{FIRST_RECORD_TEXT.description}</p>
       </header>
       <Button size="large" onClick={openTodayRecordForm}>
         <PlusIcon />
-        기록하기
+        {FIRST_RECORD_TEXT.action}
       </Button>
     </section>
   );

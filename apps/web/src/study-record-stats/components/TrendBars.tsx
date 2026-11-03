@@ -1,7 +1,6 @@
-import {FAILURE_TAG_TREND_MONTH_LIMIT} from '@plan-for-myself/shared';
+import {FAILURE_TAG_TREND_MONTH_LIMIT, STATS_TEXT, type TrendBar} from '@plan-for-myself/shared';
 import typography from '@developer-choi/design-system/styles/typography';
 import classNames from 'classnames';
-import {type TrendBar} from '@/study-record-stats/tag-detail';
 import styles from './TrendBars.module.scss';
 
 interface TrendBarsProps {
@@ -31,7 +30,7 @@ export default function TrendBars({bars, inProgress = false}: TrendBarsProps) {
             <span className={styles.bar} style={{'--trend-bar-ratio': bar.value / max}} />
             <span className={classNames(typography.body3, styles.label)}>
               {bar.label}
-              {isInProgressBar && <span className={styles.inProgress}>{IN_PROGRESS_LABEL}</span>}
+              {isInProgressBar && <span className={styles.inProgress}>{STATS_TEXT.inProgressLabel}</span>}
             </span>
           </li>
         );
@@ -39,5 +38,3 @@ export default function TrendBars({bars, inProgress = false}: TrendBarsProps) {
     </ol>
   );
 }
-
-const IN_PROGRESS_LABEL = '진행 중';

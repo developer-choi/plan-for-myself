@@ -1,12 +1,12 @@
 'use client';
 
-import type {StudyRecordMonthly, StudyRecordOverview} from '@plan-for-myself/shared';
-import {type ReactNode, useEffect, useRef, useState} from 'react';
+import {type StudyRecordMonthly, type StudyRecordOverview, toTrendBars} from '@plan-for-myself/shared';
+import {useSelectedFailureTag} from '@plan-for-myself/shared/react';
+import {type ReactNode, useRef} from 'react';
 import FailCard from '@/study-record-stats/components/FailCard';
 import RecordCard from '@/study-record-stats/components/RecordCard';
 import StudyCard from '@/study-record-stats/components/StudyCard';
 import TagDetailCard from '@/study-record-stats/components/TagDetailCard';
-import {toTrendBars} from '@/study-record-stats/tag-detail';
 import styles from './StatsSection.module.scss';
 
 interface StatsSectionProps {
@@ -36,25 +36,15 @@ export default function StatsSection({monthly, overview, renderTagCalendar}: Sta
 }
 
 function FailSection({monthly, renderTagCalendar}: FailSectionProps) {
-  const [selectedTag, setSelectedTag] = useState<string | null>(null);
   const detailRef = useRef<HTMLDivElement>(null);
-
-  /* 카드가 그려진 뒤에야 ref가 채워지므로 렌더가 끝난 뒤 스크롤한다 */
-  useEffect(() => {
-    if (selectedTag !== null) {
-      detailRef.current?.scrollIntoView({behavior: 'smooth', block: 'start'});
-    }
-  }, [selectedTag]);
-
-  const selectTag = (tag: string) => {
-    setSelectedTag((current) => (current === tag ? null : tag));
-  };
-
-  const selectedFailure = monthly.failureTags.find(({tag}) => tag === selectedTag);
+  const {selection, selectedFailure} = useSelectedFailureTag({
+    failureTags: monthly.failureTags,
+    onOpen: () => detailRef.current?.scrollIntoView({behavior: 'smooth', block: 'start'}),
+  });
 
   return (
     <>
-      <FailCard monthly={monthly} selection={{selectedTag, onSelect: selectTag}} />
+      <FailCard monthly={monthly} selection={selection} />
       {selectedFailure && (
         <TagDetailCard
           ref={detailRef}

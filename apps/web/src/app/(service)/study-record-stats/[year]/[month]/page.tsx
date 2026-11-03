@@ -3,16 +3,21 @@ import type {Metadata} from 'next';
 import {notFound} from 'next/navigation';
 import classNames from 'classnames';
 import {dehydrate, HydrationBoundary, noop, QueryClient} from '@tanstack/react-query';
-import {type CalendarMonth, getKoreanToday, parseMonth, toMonthParam} from '@plan-for-myself/shared';
+import {
+  type CalendarMonth,
+  formatStatsTitle,
+  getKoreanToday,
+  isBeforeFirstRecord,
+  isFutureMonth,
+  parseMonth,
+  toMonthParam,
+} from '@plan-for-myself/shared';
 import HandledErrorBoundary from '@/shared/components/HandledErrorBoundary';
 import LoadingSpinner from '@/shared/components/LoadingSpinner';
 import layout from '@/shared/styles/layout.module.scss';
-import {isFutureMonth} from '@/study-record/calendar-date';
 import {studyRecordQueries, studyRecordStatsQueries} from '@/study-record/queries';
 import FetchedStatsSection from '@/study-record-stats/components/FetchedStatsSection';
 import StatsPageHeader from '@/study-record-stats/components/StatsPageHeader';
-import {formatStatsTitle} from '@/study-record-stats/format';
-import {isBeforeFirstRecord} from '@/study-record-stats/month-navigation';
 import styles from './page.module.scss';
 
 interface PageProps {

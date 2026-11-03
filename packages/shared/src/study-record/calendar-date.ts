@@ -1,6 +1,11 @@
-import {type CalendarMonth, toDateMonthParam, toMonthParam} from '@plan-for-myself/shared';
+import type {CalendarMonth} from '../date/calendar-month';
+import {toDateMonthParam, toMonthParam} from '../date/month-param';
 
-export function statsPath({year, month}: CalendarMonth) {
+export function monthPath({year, month}: CalendarMonth): `/study-records/${number}/${number}` {
+  return `/study-records/${year}/${month}`;
+}
+
+export function statsPath({year, month}: CalendarMonth): `/study-record-stats/${number}/${number}` {
   return `/study-record-stats/${year}/${month}`;
 }
 

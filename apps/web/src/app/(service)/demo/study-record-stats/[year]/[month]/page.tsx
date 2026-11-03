@@ -1,4 +1,12 @@
-import {type CalendarMonth, parseMonth} from '@plan-for-myself/shared';
+import {
+  type CalendarMonth,
+  formatStatsTitle,
+  getStatsMonthNavigation,
+  isBeforeFirstRecord,
+  isFutureMonth,
+  isSameMonth,
+  parseMonth,
+} from '@plan-for-myself/shared';
 import type {Metadata} from 'next';
 import {notFound} from 'next/navigation';
 import classNames from 'classnames';
@@ -10,11 +18,8 @@ import DemoStatsSection from '@/demo/components/DemoStatsSection';
 import DemoTourTrigger from '@/demo/components/DemoTourTrigger';
 import {type DemoOverview, getDemoMonthly, getDemoOverview, getDemoRecords, getDemoToday} from '@/demo/demo-examples';
 import {demoCalendarPath, demoStatsPath} from '@/demo/demo-path';
-import {getStatsMonthNavigation, isBeforeFirstRecord} from '@/study-record-stats/month-navigation';
 import SubPageHeader from '@/shared/components/SubPageHeader';
 import layout from '@/shared/styles/layout.module.scss';
-import {isFutureMonth, isSameMonth} from '@/study-record/calendar-date';
-import {formatStatsTitle} from '@/study-record-stats/format';
 import styles from './page.module.scss';
 
 interface PageProps {

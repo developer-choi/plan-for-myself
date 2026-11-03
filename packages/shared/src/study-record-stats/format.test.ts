@@ -1,5 +1,12 @@
 import {describe, expect, it} from 'vitest';
-import {countMissedDays, formatDuration, formatMinutesDiff, formatMonthLabel, formatStreakNote} from './format';
+import {
+  countMissedDays,
+  formatAverageNote,
+  formatDuration,
+  formatMinutesDiff,
+  formatMonthLabel,
+  formatStreakNote,
+} from './format';
 
 const HOUR = 60;
 
@@ -65,6 +72,31 @@ describe('formatMinutesDiff()', () => {
   describe('Boundary cases', () => {
     it('지난달과 같으면 더하기 부호를 붙여야 한다', () => {
       expect(formatMinutesDiff(0)).toBe('+0분');
+    });
+  });
+});
+
+describe('formatAverageNote()', () => {
+  describe('General cases', () => {
+    it('지난달 평균과 차이가 있으면 지난달 대비 차이 문구를 반환해야 한다', () => {
+      const thisMonthAverage = 160;
+      const previousMonthAverage = 195;
+
+      expect(formatAverageNote(thisMonthAverage, previousMonthAverage)).toBe('지난달 −35분');
+    });
+  });
+
+  describe('Edge cases', () => {
+    it('지난달 평균과 같으면 undefined를 반환해야 한다', () => {
+      const sameAverage = 160;
+
+      expect(formatAverageNote(sameAverage, sameAverage)).toBeUndefined();
+    });
+
+    it('지난달 같은 날 종류 기록이 없으면 undefined를 반환해야 한다', () => {
+      const thisMonthAverage = 160;
+
+      expect(formatAverageNote(thisMonthAverage, null)).toBeUndefined();
     });
   });
 });

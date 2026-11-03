@@ -1,7 +1,7 @@
 import {Button} from '@developer-choi/design-system';
+import {type CalendarSummaryContent, STATS_LABEL} from '@plan-for-myself/shared';
 import {BarChartIcon} from '@radix-ui/react-icons';
 import Link from 'next/link';
-import type {CalendarSummaryContent} from '@/study-record/calendar-summary';
 import styles from './CalendarSummary.module.scss';
 
 export default function CalendarSummary({statsHref}: CalendarSummaryContent) {
@@ -11,7 +11,7 @@ export default function CalendarSummary({statsHref}: CalendarSummaryContent) {
         <Button asChild color="secondary" size="small" variant="outlined">
           <Link href={statsHref} id={CALENDAR_STATS_LINK_ID}>
             <BarChartIcon />
-            통계
+            {STATS_LABEL}
           </Link>
         </Button>
       )}
