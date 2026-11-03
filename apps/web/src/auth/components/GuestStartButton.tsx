@@ -3,14 +3,14 @@
 import {useState} from 'react';
 import {captureException} from '@sentry/nextjs';
 import {signIn} from 'next-auth/react';
-import {Button} from '@developer-choi/design-system';
+import {useHandleClientSideError} from '@plan-for-myself/shared/react';
+import {Alert, Button} from '@developer-choi/design-system';
 import {DEFAULT_HOME_URL} from '@/auth/redirect';
-import {useHandleClientSideError} from '@/shared/error/useHandleClientSideError';
 
 export default function GuestStartButton() {
   const [loading, setLoading] = useState(false);
 
-  const handleClientSideError = useHandleClientSideError();
+  const handleClientSideError = useHandleClientSideError(Alert);
 
   const startAsGuest = async () => {
     setLoading(true);
