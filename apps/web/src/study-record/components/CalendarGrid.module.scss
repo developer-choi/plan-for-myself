@@ -46,7 +46,7 @@
     box-shadow: var(--shadow-focus);
   }
 
-  &[aria-current='date'] .dayNumber {
+  &[data-today] .dayNumber {
     color: var(--color-on-primary);
     background: var(--color-primary);
   }
