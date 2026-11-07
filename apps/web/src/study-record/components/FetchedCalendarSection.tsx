@@ -1,8 +1,8 @@
 'use client';
 
 import type {StudyRecord} from '@plan-for-myself/shared';
+import {openOnce} from '@plan-for-myself/shared/react';
 import {useSuspenseQueries} from '@tanstack/react-query';
-import {overlay} from 'overlay-kit';
 import {type CalendarMonth, statsPath, toMonthParam} from '@/study-record/calendar-date';
 import CalendarSection from '@/study-record/components/CalendarSection';
 import FirstRecord from '@/study-record/components/FirstRecord';
@@ -25,7 +25,7 @@ export default function FetchedCalendarSection({month, today}: FetchedCalendarSe
   }
 
   const openRecordForm = (date: string, record?: StudyRecord) => {
-    overlay.open(({isOpen, unmount}) => (
+    openOnce('record-form', ({isOpen, unmount}) => (
       <RecordFormDialog date={date} isOpen={isOpen} month={toMonthParam(month)} record={record} onClose={unmount} />
     ));
   };

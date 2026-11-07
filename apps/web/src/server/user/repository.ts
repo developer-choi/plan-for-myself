@@ -18,6 +18,7 @@ export async function findOrCreateUserId(googleSub: string, db: Queryable = pool
 }
 
 export interface GoogleLoginRows {
+  isStillGuest: boolean;
   guestHasRecords: boolean;
   /** 이 OAuth 계정으로 가입된 사용자가 없으면 null */
   registeredUserId: string | null;
@@ -31,11 +32,13 @@ export async function findGoogleLoginRows(
   const {
     rows: [row],
   } = await db.query<{
+    isStillGuest: boolean;
     guestHasRecords: boolean;
     /** 이 OAuth 계정으로 가입된 사용자가 없으면 null */
     registeredUserId: string | null;
   }>(
-    `SELECT EXISTS (SELECT 1 FROM study_records WHERE user_id = $1) AS "guestHasRecords",
+    `SELECT EXISTS (SELECT 1 FROM users WHERE id = $1 AND is_guest) AS "isStillGuest",
+            EXISTS (SELECT 1 FROM study_records WHERE user_id = $1) AS "guestHasRecords",
             (SELECT id::text FROM users WHERE google_sub = $2) AS "registeredUserId"`,
     [guestUserId, googleSub],
   );

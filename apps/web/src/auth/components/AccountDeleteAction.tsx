@@ -2,7 +2,7 @@
 
 import {captureException} from '@sentry/nextjs';
 import {useMutation} from '@tanstack/react-query';
-import {overlay} from 'overlay-kit';
+import {openOnce} from '@plan-for-myself/shared/react';
 import classNames from 'classnames';
 import {Callout, Confirm} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
@@ -30,7 +30,9 @@ interface AccountDeleteConfirmProps {
 
 export default function AccountDeleteAction({text}: AccountDeleteActionProps) {
   const openConfirm = () => {
-    overlay.open(({isOpen, unmount}) => <AccountDeleteConfirm isOpen={isOpen} text={text} onClose={unmount} />);
+    openOnce('account-delete-confirm', ({isOpen, unmount}) => (
+      <AccountDeleteConfirm isOpen={isOpen} text={text} onClose={unmount} />
+    ));
   };
 
   return (
