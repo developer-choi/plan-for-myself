@@ -55,3 +55,24 @@ export interface RecordedDays {
   count: number;
   total: number;
 }
+
+export interface GetStudyRecordListApiRequest {
+  month: string;
+}
+
+export interface GetStudyRecordStatsOverviewApiRequest {
+  date: string;
+}
+
+export interface GetStudyRecordStatsMonthlyApiRequest {
+  month: string;
+  date: string;
+}
+
+export type StudyRecordFieldsRequest = Pick<StudyRecord, 'dateType' | 'studiedMinutes' | 'failTags'>;
+
+export type PostStudyRecordApiRequest = Omit<StudyRecord, 'pk'>;
+
+export type PatchStudyRecordApiRequest = Omit<StudyRecord, 'date'>;
+
+export type DeleteStudyRecordApiRequest = Pick<StudyRecord, 'pk'>;

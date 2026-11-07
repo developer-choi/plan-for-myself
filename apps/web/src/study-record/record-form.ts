@@ -1,8 +1,7 @@
 import {ApiResponseError} from '@developer-choi/utils/api';
-import type {StudyRecord} from '@plan-for-myself/shared';
+import type {StudyRecord, StudyRecordFieldsRequest} from '@plan-for-myself/shared';
 import {isHolidayDate, STUDY_RECORD_FIELD_LIMITS, STUDY_RECORD_FIELD_MESSAGES} from '@plan-for-myself/shared';
 import {z} from 'zod';
-import type {StudyRecordFieldsRequest} from '@/study-record/api';
 
 export type MinuteSlot = 'morning' | 'afternoon' | 'evening';
 

@@ -2,9 +2,10 @@ import {getKoreanToday} from '@plan-for-myself/shared';
 import {NextRequest, NextResponse} from 'next/server';
 import {getRequestUserId} from '@/auth/request-user';
 import {createStudyRecord, listStudyRecords} from '@/server/study-record/repository';
+import {readJsonBody} from '@/server/request';
 import {createdResponse, unauthorizedResponse} from '@/server/response';
 import {badRequestResponse, duplicateDateResponse} from '@/server/study-record/response';
-import {readJsonBody, validateMonth, validateNewStudyRecord} from '@/server/study-record/validate';
+import {validateMonth, validateNewStudyRecord} from '@/server/study-record/validate';
 
 export async function GET(request: NextRequest) {
   const userId = await getRequestUserId();
