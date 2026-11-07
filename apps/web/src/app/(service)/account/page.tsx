@@ -20,7 +20,7 @@ export default async function Page() {
   return (
     <div className={layout.shell}>
       <div className={classNames(layout.centered, layout.narrow)}>
-        <SubPageHeader exit={{href: ENTRY_URL, label: '달력', icon: CalendarIcon}} title="계정" />
+        <SubPageHeader exit={{href: ENTRY_URL, icon: CalendarIcon}} title="계정" />
         <main className={styles.body}>{loginState === 'guest' ? <GuestAccount /> : <GoogleAccount />}</main>
       </div>
     </div>

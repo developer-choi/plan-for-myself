@@ -50,8 +50,8 @@ export default function CalendarGrid({month, today, records, handlers}: Calendar
           return (
             <button
               key={date}
-              aria-current={date === today ? 'date' : undefined}
               className={styles.day}
+              data-today={date === today || undefined}
               type="button"
               onClick={isFuture ? handlers.onFutureDateClick : () => handlers.onRecordableDateClick(date, record)}
             >

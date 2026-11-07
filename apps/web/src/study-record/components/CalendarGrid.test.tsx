@@ -34,8 +34,8 @@ describe('CalendarGrid', () => {
     it('오늘 날짜를 넘기면 그 날짜 칸이 오늘로 표시된다', () => {
       renderGrid({});
 
-      expect(screen.getByRole('button', {name: '4'})).toHaveAttribute('aria-current', 'date');
-      expect(screen.getByRole('button', {name: '5'})).not.toHaveAttribute('aria-current');
+      expect(screen.getByRole('button', {name: '4'})).toHaveAttribute('data-today');
+      expect(screen.getByRole('button', {name: '5'})).not.toHaveAttribute('data-today');
     });
 
     it('기록이 있는 날 칸에는 날짜, 총 공부시간, 실패 태그가 차례로 보인다', () => {
