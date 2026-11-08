@@ -3,6 +3,14 @@ import classNames from 'classnames';
 import Link from 'next/link';
 import {Button} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
+import {
+  GOOGLE_LOGIN_LABEL,
+  INTRO_EXIT_LABEL,
+  KEEP_GUEST_LABEL,
+  LOGIN_DESCRIPTION,
+  LOGIN_FAILED_NOTICE,
+  START_RECORDING_LABEL,
+} from '@plan-for-myself/shared';
 import DiscardGuestButton from '@/auth/components/DiscardGuestButton';
 import GoogleLoginActions from '@/auth/components/GoogleLoginActions';
 import GuestLimitNotice from '@/auth/components/GuestLimitNotice';
@@ -15,12 +23,7 @@ import {auth} from '@/auth/next-auth';
 import {getLoginState} from '@/auth/path';
 import {DEFAULT_HOME_URL, ENTRY_URL, INTRO_URL} from '@/auth/redirect';
 import Logo from '@/shared/components/Logo';
-import {
-  GOOGLE_CONNECT_LABEL,
-  GOOGLE_CONNECT_PAGE_LABEL,
-  MY_CALENDAR_LABEL,
-  START_RECORDING_LABEL,
-} from '@/shared/labels';
+import {GOOGLE_CONNECT_LABEL, GOOGLE_CONNECT_PAGE_LABEL, MY_CALENDAR_LABEL} from '@/shared/labels';
 import type {SearchParamsPageProps} from '@/shared/types/page';
 import styles from './page.module.scss';
 
@@ -51,12 +54,14 @@ export default async function Page({searchParams}: SearchParamsPageProps) {
           {/* 삭제 후 로그인이 실패해 돌아오면 거절 안내 대신 실패 안내 하나만 둔다 */}
           {isRejected && errorKind === null && <RegisteredAccountNotice />}
           {errorKind === 'guest-limit' && <GuestLimitNotice />}
-          {errorKind === 'failed' && <LoginNotice title="로그인하지 못했어요">잠시 후 다시 시도해 주세요</LoginNotice>}
+          {errorKind === 'failed' && (
+            <LoginNotice title={LOGIN_FAILED_NOTICE.title}>{LOGIN_FAILED_NOTICE.content}</LoginNotice>
+          )}
           {isRejected ? (
             <>
               <DiscardGuestButton />
               <Button asChild color="secondary" size="xLarge">
-                <Link href={DEFAULT_HOME_URL}>삭제하지 않고 내 달력으로</Link>
+                <Link href={DEFAULT_HOME_URL}>{KEEP_GUEST_LABEL}</Link>
               </Button>
             </>
           ) : (
@@ -94,10 +99,10 @@ interface LoginPageCopy {
 
 const LOGGED_OUT_COPY: LoginPageCopy = {
   title: START_RECORDING_LABEL,
-  description: '이미 쓰던 계정이 있다면 Google로 로그인하세요.',
-  googleLabel: 'Google로 로그인',
+  description: LOGIN_DESCRIPTION,
+  googleLabel: GOOGLE_LOGIN_LABEL,
   exitHref: INTRO_URL,
-  exitLabel: '서비스 소개 보기',
+  exitLabel: INTRO_EXIT_LABEL,
 };
 
 const GUEST_COPY: LoginPageCopy = {

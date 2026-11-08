@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import {Button} from '@developer-choi/design-system';
+import {START_RECORDING_LABEL} from '@plan-for-myself/shared';
 import IntroActions from '@/intro/components/IntroActions';
 import TryWithoutLoginButton from '@/intro/components/TryWithoutLoginButton';
-import {START_RECORDING_LABEL} from '@/shared/labels';
 
 export default function LoggedOutIntroActions() {
   return (

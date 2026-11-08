@@ -1,8 +1,9 @@
 import {getKoreanDate, type StudyRecord} from '@plan-for-myself/shared';
 import pg from 'pg';
-import {toRecordDate, toRecordTimestamp} from './date';
-import {assertDevBranch} from './guard';
-import {isScenarioName, SCENARIOS} from './scenario';
+/* 시드는 ESM으로 돌아 Node가 확장자 없는 상대 경로를 못 푼다. 그래서 .mts는 .mjs로, .ts는 .js로 적는다 */
+import {toRecordDate, toRecordTimestamp} from './date.mjs';
+import {assertDevBranch} from './guard.js';
+import {isScenarioName, SCENARIOS} from './scenario.mjs';
 
 /* DB에는 timestamp 칸이 남아 있어 시드가 기록 추가 API와 같은 값으로 채운다 */
 type SeedRow = Omit<StudyRecord, 'pk' | 'date'> & {timestamp: number; recordDate: string};

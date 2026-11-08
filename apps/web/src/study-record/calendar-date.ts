@@ -1,4 +1,4 @@
-import type {CalendarMonth} from '@plan-for-myself/shared';
+import {type CalendarMonth, toDateMonthParam} from '@plan-for-myself/shared';
 
 export function statsPath({year, month}: CalendarMonth) {
   return `/study-record-stats/${year}/${month}`;
@@ -43,10 +43,6 @@ export function toMonthParam({year, month}: CalendarMonth): string {
   return `${year}-${pad(month)}`;
 }
 
-export function toDateMonthParam(date: string): string {
-  return date.slice(0, MONTH_PARAM_LENGTH);
-}
-
 export function formatDateTitle(date: string): string {
   const [year, month, day] = date.split('-').map(Number);
   return `${month}월 ${day}일 (${DAY_NAMES[new Date(year, month - 1, day).getDay()]})`;
@@ -54,7 +50,6 @@ export function formatDateTitle(date: string): string {
 
 const DAYS_PER_WEEK = 7;
 export const WEEKDAY_LABELS = ['월', '화', '수', '목', '금', '토', '일'] as const;
-const MONTH_PARAM_LENGTH = 'YYYY-MM'.length;
 const DAY_NAMES = ['일', '월', '화', '수', '목', '금', '토'] as const;
 
 function pad(value: number) {

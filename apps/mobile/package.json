@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "expo-router/entry",
   "dependencies": {
+    "@developer-choi/utils": "^0.1.0",
     "@expo-google-fonts/noto-sans-kr": "^0.4.4",
     "@plan-for-myself/shared": "workspace:*",
     "@react-native-vector-icons/lucide": "^14.0.0",
@@ -21,7 +22,8 @@
     "react-native-nitro-google-signin": "^2.3.0",
     "react-native-nitro-modules": "^0.37.1",
     "react-native-safe-area-context": "~5.7.0",
-    "react-native-screens": "~4.26.0"
+    "react-native-screens": "~4.26.0",
+    "react-native-svg": "15.15.4"
   },
   "devDependencies": {
     "@jest/globals": "~29.7.0",
