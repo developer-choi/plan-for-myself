@@ -4,7 +4,7 @@ import react from 'eslint-plugin-react';
 import tseslint from 'typescript-eslint';
 import checkFile from 'eslint-plugin-check-file';
 import {defineConfig, globalIgnores} from 'eslint/config';
-import {baseRules, mockFilesConfig, testFilesConfig} from '../../eslint.config.base.mts';
+import {baseRules, testFilesConfig} from '../../eslint.config.base.mts';
 
 export default defineConfig([
   // lunar.ts는 음력 변환표를 한 번 옮겨 두고 더 고치지 않는 파일이라 ESLint 대상에서 뺀다
@@ -32,5 +32,4 @@ export default defineConfig([
     },
   },
   testFilesConfig,
-  mockFilesConfig,
 ]);

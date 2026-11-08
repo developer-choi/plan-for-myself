@@ -1,8 +1,8 @@
-import type {StudyRecordOverview} from '@plan-for-myself/shared';
+import type {CalendarMonth, StudyRecordOverview} from '@plan-for-myself/shared';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {render} from '@testing-library/react';
 import {describe, expect, it} from 'vitest';
-import {type CalendarMonth, toMonthParam} from '@/study-record/calendar-date';
+import {toMonthParam} from '@/study-record/calendar-date';
 import {studyRecordStatsQueries} from '@/study-record/queries';
 import {createMonthly, queryAllTermTexts} from '@/study-record-stats/test-utils';
 import FetchedStatsSection from './FetchedStatsSection';

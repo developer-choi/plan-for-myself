@@ -1,24 +1,4 @@
-export interface CalendarMonth {
-  year: number;
-  month: number;
-}
-
-export function shiftMonth({year, month}: CalendarMonth, offset: number): CalendarMonth {
-  const date = new Date(year, month - 1 + offset, 1);
-  return {year: date.getFullYear(), month: date.getMonth() + 1};
-}
-
-export function parseMonth({year, month}: {year: string; month: string}): CalendarMonth | null {
-  if (!YEAR_PATTERN.test(year) || Number(year) > MAX_YEAR || !MONTH_PATTERN.test(month)) {
-    return null;
-  }
-
-  return {year: Number(year), month: Number(month)};
-}
-
-export function monthPath({year, month}: CalendarMonth) {
-  return `/study-records/${year}/${month}`;
-}
+import type {CalendarMonth} from '@plan-for-myself/shared';
 
 export function statsPath({year, month}: CalendarMonth) {
   return `/study-record-stats/${year}/${month}`;
@@ -67,10 +47,6 @@ export function toDateMonthParam(date: string): string {
   return date.slice(0, MONTH_PARAM_LENGTH);
 }
 
-export function formatMonthTitle({year, month}: CalendarMonth): string {
-  return `${year}년 ${month}월`;
-}
-
 export function formatDateTitle(date: string): string {
   const [year, month, day] = date.split('-').map(Number);
   return `${month}월 ${day}일 (${DAY_NAMES[new Date(year, month - 1, day).getDay()]})`;
@@ -80,9 +56,6 @@ const DAYS_PER_WEEK = 7;
 export const WEEKDAY_LABELS = ['월', '화', '수', '목', '금', '토', '일'] as const;
 const MONTH_PARAM_LENGTH = 'YYYY-MM'.length;
 const DAY_NAMES = ['일', '월', '화', '수', '목', '금', '토'] as const;
-const YEAR_PATTERN = /^[1-9]\d{3}$/;
-const MAX_YEAR = 9998;
-const MONTH_PATTERN = /^(?:[1-9]|1[0-2])$/;
 
 function pad(value: number) {
   return String(value).padStart(2, '0');

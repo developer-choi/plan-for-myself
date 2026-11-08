@@ -4,7 +4,7 @@ import nextTs from 'eslint-config-next/typescript';
 import pluginQuery from '@tanstack/eslint-plugin-query';
 import tseslint from 'typescript-eslint';
 import checkFile from 'eslint-plugin-check-file';
-import {baseRules, mockFilesConfig, testFilesConfig} from '../../eslint.config.base.mts';
+import {baseRules, testFilesConfig} from '../../eslint.config.base.mts';
 
 const eslintConfig = defineConfig([
   ...nextVitals,
@@ -49,7 +49,6 @@ const eslintConfig = defineConfig([
     ...tseslint.configs.disableTypeChecked,
   },
   testFilesConfig,
-  mockFilesConfig,
 ]);
 
 export default eslintConfig;

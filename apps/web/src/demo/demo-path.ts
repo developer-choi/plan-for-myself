@@ -1,4 +1,4 @@
-import type {CalendarMonth} from '@/study-record/calendar-date';
+import type {CalendarMonth} from '@plan-for-myself/shared';
 
 export function demoCalendarPath({year, month}: CalendarMonth) {
   return `/demo/study-records/${year}/${month}`;

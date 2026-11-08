@@ -1,8 +1,7 @@
 'use client';
 
 import {toast} from '@developer-choi/design-system';
-import type {StudyRecord} from '@plan-for-myself/shared';
-import type {CalendarMonth} from '@/study-record/calendar-date';
+import type {CalendarMonth, StudyRecord} from '@plan-for-myself/shared';
 import {getCalendarSummaryContent} from '@/study-record/calendar-summary';
 import CalendarGrid from '@/study-record/components/CalendarGrid';
 import CalendarSummary from '@/study-record/components/CalendarSummary';

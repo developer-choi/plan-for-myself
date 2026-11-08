@@ -25,7 +25,7 @@ export const baseRules = {
   'no-console': ['error', {allow: ['warn', 'error']}],
   '@typescript-eslint/restrict-template-expressions': ['error', {allowNullish: false}],
   '@typescript-eslint/parameter-properties': 'error',
-  'id-length': ['error', {min: 2}],
+  'id-length': ['error', {min: 2, properties: 'never'}],
   'id-denylist': ['error', 'Props', 'State'],
   'max-params': ['error', 3],
   '@typescript-eslint/naming-convention': [
@@ -144,10 +144,6 @@ export const baseRules = {
       message: 'catch 변수의 타입 어노테이션 금지. TS 4.4+에서 catch 변수는 기본 unknown입니다.',
     },
     {
-      selector: "ConditionalExpression > CallExpression[callee.name='clsx']",
-      message: 'clsx를 삼항으로 감싸지 마세요. 조건은 clsx(a, cond && b) 인자로 표현합니다.',
-    },
-    {
       selector:
         "Property[key.name='mutationFn'] > ArrowFunctionExpression[body.type='CallExpression'][body.callee.type='Identifier']",
       message:
@@ -190,21 +186,6 @@ export const baseRules = {
         'each 금지 — for를 쓰세요(it.for/test.for/describe.for). each는 배열 인자를 spread하는 Jest 호환용 레거시입니다(it.for/test.for는 Test Context도 제공, Vitest 공식 "Prefer test.for in new code"). Jest 마이그레이션을 안 하므로 신규 코드는 for. 객체 케이스는 .each→.for로 충분합니다.',
     },
     {
-      selector: "CallExpression[callee.property.name='resetHandlers'][arguments.length>0]",
-      message:
-        'Do not pass handlers to resetHandlers() — it wipes initial handlers and harms predictability. Use resetHandlers() then use(...) instead.',
-    },
-    {
-      selector: "Property[key.name='waitUntil'][value.value='networkidle']",
-      message:
-        'Playwright의 networkidle 금지 — 공식이 DISCOURAGED로 표시하며 "Don\'t use this method for testing, rely on web assertions to assess readiness instead"라고 명시합니다. 로드 상태를 기다리지 말고 expect(...).toBeVisible() 등 자동 재시도하는 검사문에 맡기세요.',
-    },
-    {
-      selector: "CallExpression[callee.property.name='waitForLoadState'][arguments.0.value='networkidle']",
-      message:
-        'Playwright의 networkidle 금지 — 공식이 DISCOURAGED로 표시하며 "Don\'t use this method for testing, rely on web assertions to assess readiness instead"라고 명시합니다. 로드 상태를 기다리지 말고 expect(...).toBeVisible() 등 자동 재시도하는 검사문에 맡기세요.',
-    },
-    {
       selector:
         "CallExpression[callee.property.name='catch'] > ArrowFunctionExpression:matches([body.type='Literal'][body.value=null], [body.type='Identifier'][body.name='undefined'])",
       message:
@@ -217,25 +198,6 @@ export const baseRules = {
     },
   ],
 };
-
-/**
- * MSW resolver 스코프 룰(목/핸들러·테스트 파일에만 적용, `mockFilesConfig`·`testFilesConfig`에서 spread).
- * 앱 소스에는 넣지 않는다 — `http.get(url, cb)`는 node:http에서 정당하게 쓰이므로 전역으로 잡으면 오탐.
- */
-const mswResolverRules = [
-  {
-    selector:
-      "CallExpression[callee.object.name='http'][callee.property.name=/^(get|post|put|delete|patch|all)$/][arguments.0.value=/[?]/]",
-    message:
-      'MSW predicate(http.get 등 첫 인자)에 쿼리스트링(?) 금지. predicate는 경로만으로 매칭하고 MSW가 쿼리를 조용히 제거하므로(런타임 경고 없음), 쿼리 값은 resolver에서 new URL(request.url).searchParams.get("page")로 읽으세요.',
-  },
-  {
-    selector:
-      "CallExpression[callee.object.name='http'][callee.property.name=/^(get|post|put|delete|patch|all)$/] > TemplateLiteral.arguments TemplateElement[value.raw=/[?]/]",
-    message:
-      'MSW predicate(http.get 등 첫 인자)에 쿼리스트링(?) 금지. predicate는 경로만으로 매칭하고 MSW가 쿼리를 조용히 제거하므로(런타임 경고 없음), 쿼리 값은 resolver에서 new URL(request.url).searchParams.get("page")로 읽으세요.',
-  },
-];
 
 /**
  * 테스트 파일 전용 override(각 워크스페이스 config 배열에 추가). 테스트 JSX의 `aria-*` 작성 금지 —
@@ -260,20 +222,18 @@ export const testFilesConfig = {
         message:
           'expect() 안에서 목 내부(mock.calls 등)를 파헤치지 않습니다. 인자 검증은 toHaveBeenCalledWith + expect.objectContaining(한 겹)으로, DOM 이벤트면 클릭한 엘리먼트를 변수로 잡아 대조하세요. 꼭 꺼내야 하면 이름 붙인 헬퍼 함수로 분리합니다.',
       },
-      ...mswResolverRules,
+      {
+        selector:
+          "CallExpression[callee.name='describe'] > ArrowFunctionExpression > BlockStatement > FunctionDeclaration",
+        message:
+          'describe 안에 함수를 정의하지 않습니다. 파일 아래(모듈 스코프)로 올리고, 상태는 모듈 변수나 인자로 넘기세요.',
+      },
+      {
+        selector:
+          "CallExpression[callee.name='describe'] > ArrowFunctionExpression > BlockStatement > VariableDeclaration > VariableDeclarator[init.type=/^(ArrowFunctionExpression|FunctionExpression)$/]",
+        message:
+          'describe 안에 함수를 정의하지 않습니다. 파일 아래(모듈 스코프)로 올리고, 상태는 모듈 변수나 인자로 넘기세요.',
+      },
     ],
-  },
-};
-
-/**
- * MSW 목/핸들러 파일 전용 override(각 워크스페이스 config 배열에 추가). resolver 스코프 룰(predicate 쿼리 금지)을
- * 목·핸들러 파일(`src/mocks/**`, `*.mock.*`)에 적용한다. 테스트 파일은 `testFilesConfig`가 담당하므로
- * `ignores`로 겹침(no-restricted-syntax last-wins)을 막는다.
- */
-export const mockFilesConfig = {
-  files: ['**/mocks/**/*.{ts,tsx}', '**/*.mock.{ts,tsx}'],
-  ignores: ['**/*.test.{ts,tsx}'],
-  rules: {
-    'no-restricted-syntax': ['error', ...baseRules['no-restricted-syntax'], ...mswResolverRules],
   },
 };

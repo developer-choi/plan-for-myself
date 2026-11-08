@@ -1,7 +1,6 @@
 'use client';
 
-import type {StudyRecord, StudyRecordMonthly, StudyRecordOverview} from '@plan-for-myself/shared';
-import type {CalendarMonth} from '@/study-record/calendar-date';
+import type {CalendarMonth, StudyRecord, StudyRecordMonthly, StudyRecordOverview} from '@plan-for-myself/shared';
 import StatsSection from '@/study-record-stats/components/StatsSection';
 import TagCalendar from '@/study-record-stats/components/TagCalendar';
 import {getTagCalendar} from '@/study-record-stats/tag-detail';
