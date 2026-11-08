@@ -1,0 +1,15 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "outputs": ["dist/**"]
+    },
+    "dev": {
+      "passThroughEnv": ["PORT"]
+    },
+    "start": {
+      "passThroughEnv": ["PORT"]
+    }
+  }
+}
