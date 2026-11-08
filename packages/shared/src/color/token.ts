@@ -15,4 +15,5 @@ export const colors = {
   card: '#fff',
   page: '#f7f8fa',
   off: '#f1f2f4',
+  backdrop: 'rgba(0, 0, 0, 0.5)',
 } as const;
