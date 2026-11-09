@@ -1,3 +1,5 @@
+import {StyleSheet} from 'react-native';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import * as Sentry from '@sentry/react-native';
 import {type ErrorBoundaryProps} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -5,6 +7,7 @@ import {StatusBar} from 'expo-status-bar';
 import {OverlayProvider} from 'overlay-kit';
 import {ENTRY_LABEL, getErrorInfo, RETRY_LABEL} from '@plan-for-myself/shared';
 import SessionProvider from '@/auth/components/SessionProvider';
+import AppToaster from '@/shared/components/AppToaster';
 import ErrorNotice from '@/shared/components/ErrorNotice';
 import QueryProvider from '@/shared/components/QueryProvider';
 import RootNavigator from '@/shared/components/RootNavigator';
@@ -13,18 +16,25 @@ import {sentryInitOptions} from '@/shared/sentry/init-options';
 
 export default Sentry.wrap(RootLayout);
 
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+  },
+});
+
 function RootLayout() {
   return (
-    <>
+    <GestureHandlerRootView style={styles.root}>
       <StatusBar style="auto" />
       <SessionProvider>
         <QueryProvider>
           <OverlayProvider>
             <RootNavigator />
+            <AppToaster />
           </OverlayProvider>
         </QueryProvider>
       </SessionProvider>
-    </>
+    </GestureHandlerRootView>
   );
 }
 
