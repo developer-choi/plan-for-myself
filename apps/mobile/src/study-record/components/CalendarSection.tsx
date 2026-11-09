@@ -1,13 +1,13 @@
 import type {RefObject} from 'react';
 import type {View} from 'react-native';
+import type {CalendarMonth} from '@plan-for-myself/shared/date';
+import type {demoStatsPath} from '@plan-for-myself/shared/demo';
 import {
-  type CalendarMonth,
-  type demoStatsPath,
   getCalendarSummaryContent,
   type statsPath,
   STUDY_RECORD_FIELD_MESSAGES,
   type StudyRecord,
-} from '@plan-for-myself/shared';
+} from '@plan-for-myself/shared/study-record';
 import {toast} from 'sonner-native';
 import CalendarGrid from '@/study-record/components/CalendarGrid';
 import CalendarSummary from '@/study-record/components/CalendarSummary';

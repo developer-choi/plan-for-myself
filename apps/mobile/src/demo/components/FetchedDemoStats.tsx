@@ -1,7 +1,9 @@
 import {useRef} from 'react';
 import {ScrollView, StyleSheet} from 'react-native';
 import {Redirect} from 'expo-router';
-import {type CalendarMonth, DEMO_HOME_URL, isSameMonth, toMonthParam} from '@plan-for-myself/shared';
+import {type CalendarMonth, toMonthParam} from '@plan-for-myself/shared/date';
+import {DEMO_HOME_URL} from '@plan-for-myself/shared/demo';
+import {isSameMonth} from '@plan-for-myself/shared/study-record';
 import {useSuspenseQuery} from '@tanstack/react-query';
 import DemoStatsSection from '@/demo/components/DemoStatsSection';
 import {demoQueries} from '@/demo/queries';

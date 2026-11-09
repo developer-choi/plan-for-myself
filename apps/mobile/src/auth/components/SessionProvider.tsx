@@ -1,7 +1,8 @@
 import {type PropsWithChildren, useCallback, useEffect, useRef, useState} from 'react';
 import {AppState} from 'react-native';
 import {captureException} from '@sentry/react-native';
-import {isUnauthorizedError, type RegisteredAccountRejection} from '@plan-for-myself/shared';
+import {isUnauthorizedError} from '@plan-for-myself/shared/error';
+import type {RegisteredAccountRejection} from '@plan-for-myself/shared/auth';
 import {
   GoogleOneTapSignIn,
   isCancelledResponse,

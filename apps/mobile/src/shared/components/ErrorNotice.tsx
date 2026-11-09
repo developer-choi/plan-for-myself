@@ -1,6 +1,6 @@
 import {Pressable, StyleSheet, View} from 'react-native';
 import {type Href, Link} from 'expo-router';
-import {colors} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
 import Button from '@/shared/components/Button';
 import Logo from '@/shared/components/Logo';
 import Text from '@/shared/components/Text';

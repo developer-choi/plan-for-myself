@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
-import {colors, GOOGLE_ACCOUNT_TITLE, GOOGLE_DELETE_TEXT} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
+import {GOOGLE_ACCOUNT_TITLE, GOOGLE_DELETE_TEXT} from '@plan-for-myself/shared/auth';
 import AccountDeleteAction from '@/auth/components/AccountDeleteAction';
 import Card from '@/shared/components/Card';
 import Text from '@/shared/components/Text';

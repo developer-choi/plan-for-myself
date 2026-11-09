@@ -1,6 +1,6 @@
-import {DISCARD_LABEL, GUEST_DELETE_TEXT} from '@plan-for-myself/shared';
+import {DISCARD_LABEL, GUEST_DELETE_TEXT} from '@plan-for-myself/shared/auth';
+import {openOnce} from '@plan-for-myself/shared/overlay';
 import {useRef, useState} from 'react';
-import {openOnce} from '@plan-for-myself/shared/react';
 import Button from '@/shared/components/Button';
 import Confirm from '@/shared/components/Confirm';
 

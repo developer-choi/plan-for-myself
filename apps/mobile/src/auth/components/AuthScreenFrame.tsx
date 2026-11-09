@@ -1,7 +1,7 @@
 import {type PropsWithChildren} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {colors} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
 import {contentWidth, spacing, typography} from '@/shared/styles/design-tokens';
 
 export default function AuthScreenFrame({children}: PropsWithChildren) {

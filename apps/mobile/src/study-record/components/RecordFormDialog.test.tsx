@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {STUDY_RECORD_FIELD_MESSAGES, type StudyRecord} from '@plan-for-myself/shared';
+import {STUDY_RECORD_FIELD_MESSAGES, type StudyRecord} from '@plan-for-myself/shared/study-record';
 import Text from '@/shared/components/Text';
 import {describe, expect, it} from '@jest/globals';
 import {CLOSE_ICON_BUTTON_TEST_ID} from '@/shared/components/CloseIconButton';

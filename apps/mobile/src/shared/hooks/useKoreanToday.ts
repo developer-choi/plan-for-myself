@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {AppState} from 'react-native';
-import {getKoreanToday} from '@plan-for-myself/shared';
+import {getKoreanToday} from '@plan-for-myself/shared/date';
 
 export default function useKoreanToday(): string {
   const [today, setToday] = useState(() => getKoreanToday());

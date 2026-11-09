@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import type {DemoChoiceReason} from '@plan-for-myself/shared';
+import type {DemoChoiceReason} from '@plan-for-myself/shared/demo';
 import {router, Slot} from 'expo-router';
 import {renderRouter, screen} from 'expo-router/testing-library';
 import {userEvent} from '@testing-library/react-native';

@@ -2,14 +2,9 @@ import {Suspense} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Redirect, useLocalSearchParams} from 'expo-router';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {
-  colors,
-  DEMO_HOME_URL,
-  demoCalendarPath,
-  formatMonthTitle,
-  parseMonth,
-  shiftMonth,
-} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
+import {DEMO_HOME_URL, demoCalendarPath} from '@plan-for-myself/shared/demo';
+import {formatMonthTitle, parseMonth, shiftMonth} from '@plan-for-myself/shared/date';
 import DemoBanner from '@/demo/components/DemoBanner';
 import DemoCalendarMenu from '@/demo/components/DemoCalendarMenu';
 import FetchedDemoCalendarSection from '@/demo/components/FetchedDemoCalendarSection';

@@ -1,4 +1,4 @@
-import type {CalendarMonth} from '@plan-for-myself/shared';
+import type {CalendarMonth} from '@plan-for-myself/shared/date';
 import {useSuspenseQuery} from '@tanstack/react-query';
 import DemoCalendarSection from '@/demo/components/DemoCalendarSection';
 import {demoQueries} from '@/demo/queries';

@@ -1,7 +1,7 @@
 import type {Breadcrumb, ErrorEvent, EventHint, Integration} from '@sentry/core';
 import type {ReactNativeOptions} from '@sentry/react-native';
 import {ApiRequestError, ApiResponseError} from '@developer-choi/utils/api';
-import {beforeSend} from '@plan-for-myself/shared';
+import {beforeSend} from '@plan-for-myself/shared/sentry';
 
 export const sentryInitOptions = {
   dsn: process.env.EXPO_PUBLIC_SENTRY_DSN,

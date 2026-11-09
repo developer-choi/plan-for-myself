@@ -1,4 +1,5 @@
-import {type CalendarMonth, getTagCalendar, toMonthParam} from '@plan-for-myself/shared';
+import {type CalendarMonth, toMonthParam} from '@plan-for-myself/shared/date';
+import {getTagCalendar} from '@plan-for-myself/shared/study-record-stats';
 import {useSuspenseQuery} from '@tanstack/react-query';
 import {studyRecordQueries} from '@/study-record/queries';
 import TagCalendar from '@/study-record-stats/components/TagCalendar';

@@ -1,5 +1,7 @@
 import {StyleSheet, View} from 'react-native';
-import {colors, CONNECT_KEEPS_RECORDS_HINT, GOOGLE_CONNECT_LABEL} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
+import {CONNECT_KEEPS_RECORDS_HINT} from '@plan-for-myself/shared/auth';
+import {GOOGLE_CONNECT_LABEL} from '@plan-for-myself/shared/label';
 import GoogleIcon from '@/auth/components/GoogleIcon';
 import useGoogleConnect from '@/auth/useGoogleConnect';
 import Button from '@/shared/components/Button';

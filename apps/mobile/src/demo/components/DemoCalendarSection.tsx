@@ -1,13 +1,8 @@
 import {useRef} from 'react';
 import type {View} from 'react-native';
-import {
-  type CalendarMonth,
-  type DemoOverview,
-  demoStatsPath,
-  findFirstRecordDateOfMonth,
-  parseDateParam,
-  type StudyRecord,
-} from '@plan-for-myself/shared';
+import {type CalendarMonth, parseDateParam} from '@plan-for-myself/shared/date';
+import {type DemoOverview, demoStatsPath} from '@plan-for-myself/shared/demo';
+import {findFirstRecordDateOfMonth, type StudyRecord} from '@plan-for-myself/shared/study-record';
 import DemoTourTrigger from '@/demo/components/DemoTourTrigger';
 import useOpenDemoChoiceDialog from '@/demo/useOpenDemoChoiceDialog';
 import CalendarSection from '@/study-record/components/CalendarSection';

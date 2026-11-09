@@ -1,7 +1,7 @@
 import type {ReactNode, RefObject} from 'react';
+import {colors} from '@plan-for-myself/shared/color';
+import type {FailureTag, StudyRecordMonthly} from '@plan-for-myself/shared/study-record';
 import {
-  colors,
-  type FailureTag,
   type FailureTagSelection,
   filterByStatus,
   formatAppearedNotePrefix,
@@ -12,8 +12,7 @@ import {
   formatRepeatedNotePrefix,
   getFirstFailureTagName,
   STATS_TEXT,
-  type StudyRecordMonthly,
-} from '@plan-for-myself/shared';
+} from '@plan-for-myself/shared/study-record-stats';
 import {Lucide} from '@react-native-vector-icons/lucide';
 import {type Insets, Pressable, StyleSheet, View} from 'react-native';
 import Card from '@/shared/components/Card';

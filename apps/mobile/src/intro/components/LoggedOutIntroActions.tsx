@@ -1,5 +1,5 @@
 import {router} from 'expo-router';
-import {START_RECORDING_LABEL} from '@plan-for-myself/shared';
+import {START_RECORDING_LABEL} from '@plan-for-myself/shared/label';
 import IntroActions from '@/intro/components/IntroActions';
 import TryWithoutLoginButton from '@/intro/components/TryWithoutLoginButton';
 import Button from '@/shared/components/Button';

@@ -1,4 +1,8 @@
-import {getRecordFormDefaultValues, type RecordFormValues, STUDY_RECORD_FIELD_MESSAGES} from '@plan-for-myself/shared';
+import {
+  getRecordFormDefaultValues,
+  type RecordFormValues,
+  STUDY_RECORD_FIELD_MESSAGES,
+} from '@plan-for-myself/shared/study-record';
 import {describe, expect, it} from '@jest/globals';
 import {render, screen, userEvent} from '@testing-library/react-native';
 import {FormProvider, useForm} from 'react-hook-form';

@@ -1,6 +1,6 @@
 import type {PropsWithChildren} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {colors} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
 import {radius, spacing} from '@/shared/styles/design-tokens';
 
 interface IntroFrameProps extends PropsWithChildren {

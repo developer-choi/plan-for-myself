@@ -1,5 +1,6 @@
 import type {PropsWithChildren} from 'react';
-import {type CalendarMonth, isBeforeFirstRecord, toMonthParam} from '@plan-for-myself/shared';
+import {type CalendarMonth, toMonthParam} from '@plan-for-myself/shared/date';
+import {isBeforeFirstRecord} from '@plan-for-myself/shared/study-record-stats';
 import {usePrefetchQuery, useQuery, useSuspenseQuery} from '@tanstack/react-query';
 import {Redirect} from 'expo-router';
 import LoadingSpinner from '@/shared/components/LoadingSpinner';

@@ -1,4 +1,4 @@
-import type {CalendarMonth} from '@plan-for-myself/shared';
+import type {CalendarMonth} from '@plan-for-myself/shared/date';
 import {renderRouter, screen} from 'expo-router/testing-library';
 import {describe, expect, it} from '@jest/globals';
 import {NEXT_MONTH_LINK_TEST_ID, PREVIOUS_MONTH_LINK_TEST_ID} from '@/shared/components/SubPageHeader';

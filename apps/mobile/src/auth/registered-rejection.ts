@@ -1,5 +1,5 @@
 import {useSyncExternalStore} from 'react';
-import {type RegisteredAccountRejection, REGISTERED_REJECTION_TTL_SECONDS} from '@plan-for-myself/shared';
+import {type RegisteredAccountRejection, REGISTERED_REJECTION_TTL_SECONDS} from '@plan-for-myself/shared/auth';
 
 interface StoredRejection {
   rejection: RegisteredAccountRejection;

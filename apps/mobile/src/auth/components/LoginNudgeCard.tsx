@@ -1,7 +1,8 @@
 import {StyleSheet, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {colors, GOOGLE_CONNECT_LABEL} from '@plan-for-myself/shared';
-import {useLoginNudge} from '@plan-for-myself/shared/react';
+import {colors} from '@plan-for-myself/shared/color';
+import {GOOGLE_CONNECT_LABEL} from '@plan-for-myself/shared/label';
+import {useLoginNudge} from '@plan-for-myself/shared/auth';
 import {appLoginNudgeStore} from '@/auth/login-nudge-store';
 import useGoogleConnect from '@/auth/useGoogleConnect';
 import Button from '@/shared/components/Button';

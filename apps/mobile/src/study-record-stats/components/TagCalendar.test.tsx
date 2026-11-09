@@ -1,5 +1,7 @@
 import {describe, expect, it} from '@jest/globals';
-import {type CalendarMonth, colors, getTagCalendar} from '@plan-for-myself/shared';
+import type {CalendarMonth} from '@plan-for-myself/shared/date';
+import {colors} from '@plan-for-myself/shared/color';
+import {getTagCalendar} from '@plan-for-myself/shared/study-record-stats';
 import {render, screen} from '@testing-library/react-native';
 import {createStudyRecord} from '@/study-record-stats/test-utils';
 import TagCalendar, {DAY_TEST_ID_PREFIX, LEADING_BLANK_TEST_ID} from './TagCalendar';

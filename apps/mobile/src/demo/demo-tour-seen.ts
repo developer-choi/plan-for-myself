@@ -1,4 +1,4 @@
-import type {DemoTourPart} from '@plan-for-myself/shared';
+import type {DemoTourPart} from '@plan-for-myself/shared/demo';
 
 export function hasSeenDemoTour(part: DemoTourPart): boolean {
   return seenParts.has(part);

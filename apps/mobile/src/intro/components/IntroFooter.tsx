@@ -1,6 +1,8 @@
 import {openURL} from 'expo-linking';
 import {Pressable, StyleSheet, View} from 'react-native';
-import {colors, GITHUB_REPOSITORY_URL, INTRO_TEXT, MAKER_URL, PRIVACY_POLICY_LABEL} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
+import {GITHUB_REPOSITORY_URL, INTRO_TEXT, MAKER_URL} from '@plan-for-myself/shared/intro';
+import {PRIVACY_POLICY_LABEL} from '@plan-for-myself/shared/label';
 import Text from '@/shared/components/Text';
 import {PRIVACY_POLICY_URL} from '@/shared/external-link';
 import {opacity, spacing, touchTarget, typography} from '@/shared/styles/design-tokens';

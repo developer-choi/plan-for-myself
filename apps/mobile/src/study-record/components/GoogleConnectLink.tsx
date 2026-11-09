@@ -1,6 +1,7 @@
 import {Pressable, StyleSheet} from 'react-native';
 import {Link} from 'expo-router';
-import {colors, GOOGLE_CONNECT_PAGE_LABEL} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
+import {GOOGLE_CONNECT_PAGE_LABEL} from '@plan-for-myself/shared/label';
 import Text from '@/shared/components/Text';
 import {opacity, typography} from '@/shared/styles/design-tokens';
 

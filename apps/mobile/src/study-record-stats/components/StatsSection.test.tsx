@@ -1,6 +1,6 @@
 import {createRef} from 'react';
 import {describe, expect, it} from '@jest/globals';
-import type {FailureTagTrend} from '@plan-for-myself/shared';
+import type {FailureTagTrend} from '@plan-for-myself/shared/study-record';
 import {act, render, screen, userEvent} from '@testing-library/react-native';
 import Text from '@/shared/components/Text';
 import {createFailureTag, createMonthly} from '@/study-record-stats/test-utils';

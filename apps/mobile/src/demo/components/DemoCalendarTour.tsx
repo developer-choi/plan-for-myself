@@ -1,11 +1,11 @@
 import {useRouter} from 'expo-router';
+import type {CalendarMonth} from '@plan-for-myself/shared/date';
 import {
-  type CalendarMonth,
   DEMO_CALENDAR_TOUR_STEPS,
   DEMO_TOUR_BUTTON_LABELS,
   type DemoCalendarTourTarget,
   demoStatsPath,
-} from '@plan-for-myself/shared';
+} from '@plan-for-myself/shared/demo';
 import DemoTour from '@/demo/components/DemoTour';
 import type {DemoTourStep} from '@/demo/useDemoTour';
 import type {CalendarTourTargets} from '@/study-record/components/CalendarSection';

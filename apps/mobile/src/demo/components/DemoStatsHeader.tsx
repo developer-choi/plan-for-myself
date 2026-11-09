@@ -1,10 +1,6 @@
-import {
-  type CalendarMonth,
-  demoCalendarPath,
-  demoStatsPath,
-  formatStatsTitle,
-  getStatsMonthNavigation,
-} from '@plan-for-myself/shared';
+import type {CalendarMonth} from '@plan-for-myself/shared/date';
+import {demoCalendarPath, demoStatsPath} from '@plan-for-myself/shared/demo';
+import {formatStatsTitle, getStatsMonthNavigation} from '@plan-for-myself/shared/study-record-stats';
 import {Lucide} from '@react-native-vector-icons/lucide';
 import {ICON_COLOR} from '@/shared/components/IconButton';
 import SubPageHeader from '@/shared/components/SubPageHeader';

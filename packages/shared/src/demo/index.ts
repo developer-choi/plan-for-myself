@@ -18,4 +18,4 @@ export {
   shouldShowDemoStatsTour,
 } from './demo-tour';
 export {type DemoChoiceDialogProps, openDemoChoiceDialog} from './open-demo-choice-dialog';
-export type {DemoOverview, GetDemoApiResponse} from './type';
+export type {DemoOverview, GetDemoApiRequest, GetDemoApiResponse} from './type';

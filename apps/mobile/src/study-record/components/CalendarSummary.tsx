@@ -1,7 +1,8 @@
 import type {Ref} from 'react';
 import {Pressable, StyleSheet, View} from 'react-native';
 import {type Href, Link} from 'expo-router';
-import {colors, STATS_LABEL} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
+import {STATS_LABEL} from '@plan-for-myself/shared/label';
 import {Lucide} from '@react-native-vector-icons/lucide';
 import Text from '@/shared/components/Text';
 import {controlHeight, opacity, radius, spacing, touchTarget, typography} from '@/shared/styles/design-tokens';

@@ -2,7 +2,7 @@ import {StyleSheet, useWindowDimensions} from 'react-native';
 import {Easing, Keyframe} from 'react-native-reanimated';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {Toaster} from 'sonner-native';
-import {colors} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
 import {fontFamily, radius, shadows, spacing, typography} from '@/shared/styles/design-tokens';
 
 export default function AppToaster() {

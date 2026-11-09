@@ -1,6 +1,6 @@
 export {createAccountApi} from './api';
 export {type AccountDeleteText, GOOGLE_DELETE_TEXT, GUEST_DELETE_TEXT} from './delete-text';
-export {GUEST_LIMIT_CODE, type LoginFailure} from './guest-limit';
+export {GUEST_LIMIT_CODE, hasGuestLimitCode, type LoginFailure} from './guest-limit';
 export {
   CONNECT_KEEPS_RECORDS_HINT,
   DISCARD_LABEL,

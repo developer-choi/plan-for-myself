@@ -1,6 +1,6 @@
 import {createRef} from 'react';
 import type {ScrollView} from 'react-native';
-import {colors} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
 import {render, screen, userEvent} from '@testing-library/react-native';
 import {describe, expect, it} from '@jest/globals';
 import {TestSessionProvider} from '@/auth/test-utils';

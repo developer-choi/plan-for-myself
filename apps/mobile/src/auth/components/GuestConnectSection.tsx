@@ -1,11 +1,6 @@
 import {Pressable, View} from 'react-native';
-import {
-  GOOGLE_CONNECT_LABEL,
-  GOOGLE_CONNECT_PAGE_LABEL,
-  KEEP_GUEST_LABEL,
-  type LoginFailure,
-  MY_CALENDAR_LABEL,
-} from '@plan-for-myself/shared';
+import {GOOGLE_CONNECT_LABEL, GOOGLE_CONNECT_PAGE_LABEL, MY_CALENDAR_LABEL} from '@plan-for-myself/shared/label';
+import {KEEP_GUEST_LABEL, type LoginFailure} from '@plan-for-myself/shared/auth';
 import AuthScreenFrame, {authScreenStyles} from '@/auth/components/AuthScreenFrame';
 import DiscardGuestButton from '@/auth/components/DiscardGuestButton';
 import GoogleIcon from '@/auth/components/GoogleIcon';

@@ -1,5 +1,6 @@
 import {useState} from 'react';
-import type {CalendarMonth, StudyRecord} from '@plan-for-myself/shared';
+import type {CalendarMonth} from '@plan-for-myself/shared/date';
+import type {StudyRecord} from '@plan-for-myself/shared/study-record';
 import Text from '@/shared/components/Text';
 import {describe, expect, it} from '@jest/globals';
 import {render, screen, userEvent} from '@testing-library/react-native';

@@ -1,7 +1,7 @@
 import {type ReactNode} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {type Href, Link} from 'expo-router';
-import {colors} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
 import {Lucide} from '@react-native-vector-icons/lucide';
 import IconButton, {ICON_COLOR} from '@/shared/components/IconButton';
 import Text from '@/shared/components/Text';

@@ -1,4 +1,4 @@
-import type {CalendarMonth} from '@plan-for-myself/shared';
+import type {CalendarMonth} from '@plan-for-myself/shared/date';
 import {useQuery} from '@tanstack/react-query';
 import {studyRecordStatsQueries} from '@/study-record/queries';
 import StatsPageHeader from '@/study-record-stats/components/StatsPageHeader';

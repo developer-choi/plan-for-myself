@@ -1,5 +1,5 @@
 import {describe, expect, it} from '@jest/globals';
-import {DEMO_TOUR_BUTTON_LABELS} from '@plan-for-myself/shared';
+import {DEMO_TOUR_BUTTON_LABELS} from '@plan-for-myself/shared/demo';
 import {getNextTourStepIndex, getTourBubbleDisplay} from './demo-tour-step';
 
 describe('getNextTourStepIndex()', () => {

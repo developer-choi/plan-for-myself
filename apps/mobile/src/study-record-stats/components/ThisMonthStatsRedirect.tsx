@@ -1,5 +1,6 @@
 import {Redirect} from 'expo-router';
-import {parseDateParam, statsPath} from '@plan-for-myself/shared';
+import {parseDateParam} from '@plan-for-myself/shared/date';
+import {statsPath} from '@plan-for-myself/shared/study-record';
 
 interface ThisMonthStatsRedirectProps {
   today: string;

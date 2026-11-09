@@ -1,5 +1,5 @@
 import {StyleSheet, View} from 'react-native';
-import {colors} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
 import Text from '@/shared/components/Text';
 import {radius, spacing, typography} from '@/shared/styles/design-tokens';
 

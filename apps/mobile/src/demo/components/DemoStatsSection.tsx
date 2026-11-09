@@ -1,13 +1,9 @@
 import {type RefObject, useRef} from 'react';
 import type {ScrollView, View} from 'react-native';
-import {
-  type CalendarMonth,
-  getTagCalendar,
-  shouldShowDemoStatsTour,
-  type StudyRecord,
-  type StudyRecordMonthly,
-  type StudyRecordOverview,
-} from '@plan-for-myself/shared';
+import type {CalendarMonth} from '@plan-for-myself/shared/date';
+import {getTagCalendar} from '@plan-for-myself/shared/study-record-stats';
+import {shouldShowDemoStatsTour} from '@plan-for-myself/shared/demo';
+import type {StudyRecord, StudyRecordMonthly, StudyRecordOverview} from '@plan-for-myself/shared/study-record';
 import DemoTourTrigger from '@/demo/components/DemoTourTrigger';
 import StatsSection, {type StatsTourTargets} from '@/study-record-stats/components/StatsSection';
 import TagCalendar from '@/study-record-stats/components/TagCalendar';
