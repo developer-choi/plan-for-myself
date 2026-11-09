@@ -1,5 +1,5 @@
-import {api} from '@/shared/api/client';
+import {apiClient} from '@/shared/api/client';
 
 export async function deleteAccountApi(): Promise<void> {
-  return api.delete<void>('/api/account');
+  return apiClient.delete<void>('/api/account');
 }
