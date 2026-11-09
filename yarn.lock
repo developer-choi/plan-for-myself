@@ -8830,6 +8830,7 @@ __metadata:
     "@nestjs/core": "npm:^12.3.3"
     "@nestjs/platform-express": "npm:^12.3.3"
     "@nestjs/testing": "npm:^12.3.3"
+    "@plan-for-myself/shared": "workspace:*"
     "@types/node": "npm:^24"
     "@types/pg": "npm:^8.23.1"
     "@types/supertest": "npm:^6.0.3"

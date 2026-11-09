@@ -1,16 +1,13 @@
-import {HttpStatus, type INestApplication} from '@nestjs/common';
-import {Test} from '@nestjs/testing';
+import {HttpStatus} from '@nestjs/common';
 import request from 'supertest';
-import type {App} from 'supertest/types';
-import {describe, it} from 'vitest';
-import {AppModule} from '../app.module';
-import {createDatabaseConnection, type DatabaseConnection} from '../db/database';
-import {DATABASE_CONNECTION} from '../db/database.module';
+import {describe, expect, it} from 'vitest';
+import type {DatabaseConnection} from '../db/database';
+import {createInMemoryConnection, startApp} from '../testing/start-app';
 
 describe('GET /health', () => {
   describe('General cases', () => {
     it('DB가 응답하면 정상 응답을 반환해야 한다', async () => {
-      const app = await startApp(await createInMemoryConnection());
+      const app = await startApp();
       try {
         await request(app.getHttpServer()).get('/health').expect(HttpStatus.OK, {status: 'ok'});
       } finally {
@@ -20,10 +17,14 @@ describe('GET /health', () => {
   });
 
   describe('Edge cases', () => {
-    it('DB 쿼리가 실패하면 500을 반환해야 한다', async () => {
+    it('DB 쿼리가 실패하면 500 INTERNAL_ERROR와 안내 문구를 반환해야 한다', async () => {
       const app = await startApp(await createClosedConnection());
       try {
-        await request(app.getHttpServer()).get('/health').expect(HttpStatus.INTERNAL_SERVER_ERROR);
+        const response = await request(app.getHttpServer()).get('/health').expect(HttpStatus.INTERNAL_SERVER_ERROR);
+        expect(response.body).toEqual({
+          code: 'INTERNAL_ERROR',
+          message: '서버에 문제가 생겼어요. 잠시 후 다시 시도해 주세요',
+        });
       } finally {
         await app.close();
       }
@@ -31,22 +32,8 @@ describe('GET /health', () => {
   });
 });
 
-function createInMemoryConnection() {
-  return createDatabaseConnection({});
-}
-
 async function createClosedConnection(): Promise<DatabaseConnection> {
   const connection = await createInMemoryConnection();
   await connection.close();
   return {db: connection.db, close: () => Promise.resolve()};
-}
-
-async function startApp(connection: DatabaseConnection) {
-  const moduleRef = await Test.createTestingModule({imports: [AppModule]})
-    .overrideProvider(DATABASE_CONNECTION)
-    .useValue(connection)
-    .compile();
-  const app = moduleRef.createNestApplication<INestApplication<App>>({logger: false});
-  await app.init();
-  return app;
 }

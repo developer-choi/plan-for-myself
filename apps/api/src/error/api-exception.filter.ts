@@ -1,0 +1,44 @@
+import {type ArgumentsHost, Catch, type ExceptionFilter, HttpException, HttpStatus, Logger} from '@nestjs/common';
+import {HttpAdapterHost} from '@nestjs/core';
+import {API_ERROR_CODES, type ApiErrorBody, type ApiErrorCode} from '@plan-for-myself/shared/error';
+
+@Catch()
+export class ApiExceptionFilter implements ExceptionFilter {
+  constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
+
+  catch(exception: unknown, host: ArgumentsHost) {
+    const {status, body} = toResponse(exception);
+    this.httpAdapterHost.httpAdapter.reply(host.switchToHttp().getResponse(), body, status);
+  }
+}
+
+const INTERNAL_ERROR_MESSAGE = '서버에 문제가 생겼어요. 잠시 후 다시 시도해 주세요';
+
+const ERROR_CODE_BY_STATUS: Partial<Record<number, ApiErrorCode>> = {
+  [HttpStatus.BAD_REQUEST]: API_ERROR_CODES.INVALID_BODY,
+  [HttpStatus.PAYLOAD_TOO_LARGE]: API_ERROR_CODES.INVALID_BODY,
+  [HttpStatus.UNSUPPORTED_MEDIA_TYPE]: API_ERROR_CODES.INVALID_BODY,
+  [HttpStatus.NOT_FOUND]: API_ERROR_CODES.NOT_FOUND,
+};
+
+const FIXED_MESSAGE_BY_CODE: Partial<Record<ApiErrorCode, string>> = {
+  [API_ERROR_CODES.INVALID_BODY]: '요청 형식이 올바르지 않아요',
+  [API_ERROR_CODES.NOT_FOUND]: '요청한 주소를 찾을 수 없어요',
+};
+
+const logger = new Logger('ApiExceptionFilter');
+
+function toResponse(exception: unknown): {status: number; body: ApiErrorBody} {
+  if (exception instanceof HttpException) {
+    const status = exception.getStatus();
+    const code = ERROR_CODE_BY_STATUS[status] ?? API_ERROR_CODES.INTERNAL_ERROR;
+    const message = FIXED_MESSAGE_BY_CODE[code] ?? exception.message;
+    return {status, body: {code, message}};
+  }
+
+  logger.error('처리하지 못한 예외', exception instanceof Error ? exception.stack : String(exception));
+  return {
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    body: {code: API_ERROR_CODES.INTERNAL_ERROR, message: INTERNAL_ERROR_MESSAGE},
+  };
+}
