@@ -1,4 +1,4 @@
-import {createStudyRecordQueries} from '@plan-for-myself/shared';
+import {createStudyRecordQueries, studyRecordQueryKeys} from '@plan-for-myself/shared';
 import {queryOptions} from '@tanstack/react-query';
 import {getStudyRecordStatsMonthlyApi, getStudyRecordStatsOverviewApi, studyRecordApi} from '@/study-record/api';
 
@@ -6,7 +6,7 @@ export const studyRecordQueries = createStudyRecordQueries(studyRecordApi);
 
 export const studyRecordStatsQueries = {
   all: {
-    key: () => ['study-record-stats'] as const,
+    key: studyRecordQueryKeys.stats,
   },
   overview: {
     key: (date: string) => [...studyRecordStatsQueries.all.key(), 'overview', date] as const,

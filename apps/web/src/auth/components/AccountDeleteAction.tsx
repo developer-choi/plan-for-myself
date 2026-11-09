@@ -6,9 +6,9 @@ import {openOnce} from '@plan-for-myself/shared/react';
 import classNames from 'classnames';
 import {Callout, Confirm} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
+import {isMutationSettling} from '@plan-for-myself/shared';
 import {deleteAccountApi} from '@/auth/api';
 import {ENTRY_URL} from '@/auth/redirect';
-import {isMutationSettling} from '@/shared/query/mutation';
 import styles from './AccountDeleteAction.module.scss';
 
 export interface AccountDeleteText {

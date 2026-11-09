@@ -4088,13 +4088,16 @@ __metadata:
     globals: "npm:^16.5.0"
     overlay-kit: "npm:^1.9.0"
     react: "npm:19.2.3"
+    react-hook-form: "npm:^7.71.1"
     typescript: "npm:~6.0.3"
     typescript-eslint: "npm:^8.57.2"
     vitest: "npm:^4.0.17"
+    zod: "npm:^4.3.5"
   peerDependencies:
     "@tanstack/react-query": ^5.90.20
     overlay-kit: ^1.9.0
     react: 19.2.3
+    react-hook-form: ^7.71.1
   languageName: unknown
   linkType: soft
 
@@ -12090,6 +12093,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"expo-navigation-bar@npm:~57.0.3":
+  version: 57.0.3
+  resolution: "expo-navigation-bar@npm:57.0.3"
+  dependencies:
+    debug: "npm:^4.3.2"
+  peerDependencies:
+    expo: "*"
+    react: "*"
+    react-native: "*"
+  checksum: 10c0/f7189a5569a86a74492f17ff5fda4e33a6c13b166ed516d412da6e3dc9c34013e00ef09185d43d9ae4cb2b69e8893a9e04da5bdf66580726e64416da0d890630
+  languageName: node
+  linkType: hard
+
 "expo-router@npm:~57.0.29":
   version: 57.0.29
   resolution: "expo-router@npm:57.0.29"
@@ -16761,6 +16777,7 @@ __metadata:
     expo-dev-client: "npm:~57.0.20"
     expo-font: "npm:~57.0.4"
     expo-linking: "npm:~57.0.13"
+    expo-navigation-bar: "npm:~57.0.3"
     expo-router: "npm:~57.0.29"
     expo-secure-store: "npm:~57.0.4"
     expo-splash-screen: "npm:~57.0.10"
@@ -16770,6 +16787,7 @@ __metadata:
     overlay-kit: "npm:^1.9.0"
     react: "npm:19.2.3"
     react-error-boundary: "npm:^6.1.0"
+    react-hook-form: "npm:^7.71.1"
     react-native: "npm:0.86.3"
     react-native-gesture-handler: "npm:~2.32.0"
     react-native-nitro-google-signin: "npm:^2.3.0"

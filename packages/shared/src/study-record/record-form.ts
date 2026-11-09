@@ -1,7 +1,10 @@
 import {ApiResponseError} from '@developer-choi/utils/api';
-import type {StudyRecord, StudyRecordFieldsRequest} from '@plan-for-myself/shared';
-import {isHolidayDate, STUDY_RECORD_FIELD_LIMITS, STUDY_RECORD_FIELD_MESSAGES} from '@plan-for-myself/shared';
+import type {FieldErrors} from 'react-hook-form';
 import {z} from 'zod';
+import {isHolidayDate} from '../date/holiday';
+import {parseDateParam} from '../date/month-param';
+import {STUDY_RECORD_FIELD_LIMITS, STUDY_RECORD_FIELD_MESSAGES} from './limits';
+import type {StudyRecord, StudyRecordFieldsRequest} from './type';
 
 export type MinuteSlot = 'morning' | 'afternoon' | 'evening';
 
@@ -12,9 +15,9 @@ export interface RecordFormValues {
   failTagInput: string;
 }
 
-export type AddFailTagResult = {ok: true; failTags: string[]} | {ok: false; message: string};
+type AddFailTagResult = {ok: true; failTags: string[]} | {ok: false; message: string};
 
-export interface RecordRejection {
+interface RecordRejection {
   message: string;
   isStale: boolean;
 }
@@ -39,9 +42,8 @@ export function getRecordFormDefaultValues(date: string, record?: StudyRecord): 
     };
   }
 
-  const [year, month, day] = date.split('-').map(Number);
   return {
-    holiday: isHolidayDate({year, month, date: day}),
+    holiday: isHolidayDate(parseDateParam(date)),
     failTags: [],
     minutes: {morning: '', afternoon: '', evening: ''},
     failTagInput: '',
@@ -80,6 +82,19 @@ export function addFailTag(failTags: string[], input: string): AddFailTagResult 
   }
 
   return {ok: true, failTags: [...failTags, tag]};
+}
+
+export function addPendingFailTag(failTags: string[], input: string): AddFailTagResult {
+  if (failTags.includes(input.trim())) {
+    return {ok: true, failTags};
+  }
+
+  return addFailTag(failTags, input);
+}
+
+/* 공부시간 칸이 모두 올바르면 undefined */
+export function getMinutesError(errors: FieldErrors<RecordFormValues>): string | undefined {
+  return MINUTE_SLOTS.map(({slot}) => errors.minutes?.[slot]?.message).find(Boolean);
 }
 
 export function parseRecordRejection(error: unknown): RecordRejection | null {

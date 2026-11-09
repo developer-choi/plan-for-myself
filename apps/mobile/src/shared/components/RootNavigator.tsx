@@ -1,6 +1,7 @@
 import {useEffect} from 'react';
 import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
+import {overlay} from 'overlay-kit';
 import {useSession} from '@/auth/session-context';
 
 export default function RootNavigator() {
@@ -13,6 +14,12 @@ export default function RootNavigator() {
       SplashScreen.hide();
     }
   }, [isLoading]);
+
+  useEffect(() => {
+    if (token === null) {
+      overlay.unmountAll();
+    }
+  }, [token]);
 
   if (isLoading) {
     return null;

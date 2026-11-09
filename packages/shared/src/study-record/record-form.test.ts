@@ -1,17 +1,22 @@
 import {ApiResponseError} from '@developer-choi/utils/api';
-import {STUDY_RECORD_FIELD_MESSAGES, type StudyRecord} from '@plan-for-myself/shared';
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
+import {STUDY_RECORD_FIELD_MESSAGES} from './limits';
 import {
   addFailTag,
+  addPendingFailTag,
   FAIL_TAG_DUPLICATE_MESSAGE,
+  getMinutesError,
   getRecordFormDefaultValues,
   type RecordFormValues,
   parseRecordRejection,
   toStudyRecordFields,
   validateMinuteInput,
 } from './record-form';
+import type {StudyRecord} from './type';
 
 const EMPTY_MINUTES = {morning: '', afternoon: '', evening: ''};
+const AFTERNOON_ERROR = '점심 칸 오류';
+const EVENING_ERROR = '저녁 칸 오류';
 
 function createValues(overrides: Partial<RecordFormValues> = {}): RecordFormValues {
   return {holiday: false, failTags: [], minutes: EMPTY_MINUTES, failTagInput: '', ...overrides};
@@ -118,7 +123,7 @@ describe('toStudyRecordFields()', () => {
 
 describe('validateMinuteInput()', () => {
   describe('Boundary cases', () => {
-    it('1440분을 넘으면 공부시간 문구를 반환해야 한다', () => {
+    it('1440분을 넘으면 공부시간 거절 문구를 반환해야 한다', () => {
       expect(validateMinuteInput('1441')).toBe(STUDY_RECORD_FIELD_MESSAGES.studiedMinutes);
     });
 
@@ -137,7 +142,7 @@ describe('validateMinuteInput()', () => {
     });
 
     ['abc', '1.5', '-10'].forEach((text) => {
-      it(`${text}이면 공부시간 문구를 반환해야 한다`, () => {
+      it(`${text}이면 공부시간 거절 문구를 반환해야 한다`, () => {
         expect(validateMinuteInput(text)).toBe(STUDY_RECORD_FIELD_MESSAGES.studiedMinutes);
       });
     });
@@ -184,7 +189,7 @@ describe('addFailTag()', () => {
       });
     });
 
-    it('6글자 태그는 목록에 더해야 한다', () => {
+    it('6글자 태그를 넣으면 그 태그를 더한 목록을 반환해야 한다', () => {
       expect(addFailTag([], '여섯글자태그')).toEqual({ok: true, failTags: ['여섯글자태그']});
     });
 
@@ -192,8 +197,43 @@ describe('addFailTag()', () => {
       expect(addFailTag([], '일곱글자의태그')).toEqual({ok: false, message: STUDY_RECORD_FIELD_MESSAGES.failTagLength});
     });
 
-    it('이모지 6개 태그는 서버처럼 6글자로 세어 목록에 더해야 한다', () => {
+    it('이모지 6개 태그를 넣으면 그 태그를 더한 목록을 반환해야 한다', () => {
       expect(addFailTag([], '😀😀😀😀😀😀')).toEqual({ok: true, failTags: ['😀😀😀😀😀😀']});
+    });
+  });
+});
+
+describe('addPendingFailTag()', () => {
+  describe('General cases', () => {
+    it('칸에 남은 글자가 새 태그면 그 태그를 더해 반환해야 한다', () => {
+      expect(addPendingFailTag(['늦잠'], '게임')).toEqual({ok: true, failTags: ['늦잠', '게임']});
+    });
+  });
+
+  describe('Edge cases', () => {
+    it('칸에 남은 글자가 이미 넣은 태그와 같으면 넘긴 목록을 그대로 반환해야 한다', () => {
+      expect(addPendingFailTag(['늦잠'], ' 늦잠 ')).toEqual({ok: true, failTags: ['늦잠']});
+    });
+  });
+});
+
+describe('getMinutesError()', () => {
+  describe('General cases', () => {
+    it('여러 칸에 오류가 있으면 아침·점심·저녁 순으로 앞선 칸의 문구를 반환해야 한다', () => {
+      const errors = {
+        minutes: {
+          afternoon: {type: 'validate', message: AFTERNOON_ERROR},
+          evening: {type: 'validate', message: EVENING_ERROR},
+        },
+      };
+
+      expect(getMinutesError(errors)).toBe(AFTERNOON_ERROR);
+    });
+  });
+
+  describe('Boundary cases', () => {
+    it('공부시간 칸에 오류가 없으면 undefined를 반환해야 한다', () => {
+      expect(getMinutesError({})).toBeUndefined();
     });
   });
 });

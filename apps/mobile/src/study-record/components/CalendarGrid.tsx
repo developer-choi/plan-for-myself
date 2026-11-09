@@ -10,6 +10,8 @@ interface CalendarGridProps {
   records: StudyRecord[];
   handlers: {
     onFutureDateClick: () => void;
+    /* 그날 기록이 없으면 record는 undefined */
+    onRecordableDateClick: (date: string, record?: StudyRecord) => void;
   };
 }
 
@@ -26,7 +28,7 @@ export default function CalendarGrid({month, today, records, handlers}: Calendar
       <View style={styles.grid}>
         {splitIntoWeeks(getCalendarDayCells(month, today, records)).map((week) => (
           <View key={week[0]?.date} style={styles.week}>
-            {week.map(({date, day, inMonth, isFuture, isToday, studiedTime, failTags}) => {
+            {week.map(({date, day, inMonth, record, isFuture, isToday, studiedTime, failTags}) => {
               if (!inMonth) {
                 return (
                   <View key={date} style={[styles.cell, styles.outsideDay]}>
@@ -39,7 +41,7 @@ export default function CalendarGrid({month, today, records, handlers}: Calendar
                 <Pressable
                   key={date}
                   style={[styles.cell, styles.day]}
-                  onPress={isFuture ? handlers.onFutureDateClick : undefined}
+                  onPress={isFuture ? handlers.onFutureDateClick : () => handlers.onRecordableDateClick(date, record)}
                 >
                   <Text style={[styles.dayNumber, styles.recordableDayNumber, isToday && styles.todayNumber]}>
                     {day}
