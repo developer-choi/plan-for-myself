@@ -1,6 +1,6 @@
-import type {ErrorEvent, EventHint, SeverityLevel} from '@sentry/nextjs';
+import type {ErrorEvent, EventHint, SeverityLevel} from '@sentry/core';
 import {BaseError} from '@developer-choi/utils/api';
-import {isUnauthorizedError} from '@plan-for-myself/shared';
+import {isUnauthorizedError} from '../error/unauthorized';
 
 export function beforeSend(event: ErrorEvent, hint: EventHint): ErrorEvent | null {
   const error = hint.originalException;

@@ -1,5 +1,6 @@
 import {type PropsWithChildren, useCallback, useEffect, useRef, useState} from 'react';
 import {AppState} from 'react-native';
+import {captureException} from '@sentry/react-native';
 import {isUnauthorizedError} from '@plan-for-myself/shared';
 import {
   GoogleOneTapSignIn,
@@ -97,14 +98,14 @@ function useAppTokenRefresh({isLoading, updateToken, signOut}: UseAppTokenRefres
 
   useEffect(() => {
     if (!isLoading) {
-      void refresh();
+      refresh().catch(captureException);
     }
   }, [isLoading, refresh]);
 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', (status) => {
       if (status === 'active') {
-        void refresh();
+        refresh().catch(captureException);
       }
     });
     return () => subscription.remove();

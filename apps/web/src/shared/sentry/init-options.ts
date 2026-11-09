@@ -1,5 +1,5 @@
 import type {BrowserOptions, EdgeOptions, NodeOptions} from '@sentry/nextjs';
-import {beforeSend} from '@/shared/sentry/before-send';
+import {beforeSend} from '@plan-for-myself/shared';
 
 export const sentryInitOptions = {
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,

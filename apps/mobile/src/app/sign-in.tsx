@@ -1,4 +1,5 @@
 import {useRef, useState} from 'react';
+import {captureException} from '@sentry/react-native';
 import LoginSection from '@/auth/components/LoginSection';
 import {useSession} from '@/auth/session-context';
 
@@ -21,7 +22,8 @@ export default function SignInScreen() {
     try {
       await signIn();
       setIsFailed(false);
-    } catch {
+    } catch (error) {
+      captureException(error);
       setIsFailed(true);
     } finally {
       isPendingCache.current = false;
