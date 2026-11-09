@@ -4,6 +4,7 @@ import type {App} from 'supertest/types';
 import {AppModule} from '../app.module';
 import {createDatabaseConnection, type DatabaseConnection} from '../db/database';
 import {DATABASE_CONNECTION} from '../db/database.module';
+import {setupOpenApi} from '../openapi/setup';
 
 export function createInMemoryConnection() {
   return createDatabaseConnection({});
@@ -15,6 +16,7 @@ export async function startApp(connection?: DatabaseConnection) {
     .useValue(connection ?? (await createInMemoryConnection()))
     .compile();
   const app = moduleRef.createNestApplication<INestApplication<App>>({logger: false});
+  setupOpenApi(app);
   await app.init();
   return app;
 }
