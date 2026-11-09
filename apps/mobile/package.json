@@ -21,6 +21,7 @@
     "expo-status-bar": "~57.0.1",
     "overlay-kit": "^1.9.0",
     "react": "19.2.3",
+    "react-error-boundary": "^6.1.0",
     "react-native": "0.86.3",
     "react-native-nitro-google-signin": "^2.3.0",
     "react-native-nitro-modules": "^0.37.1",

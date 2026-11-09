@@ -6,6 +6,7 @@ export const spacing = {
   md: 16,
   lg: 24,
   xl: 32,
+  xxl: 40,
   pageXMobile: 12,
   gridGap: 12,
 } as const;
