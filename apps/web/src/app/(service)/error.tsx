@@ -2,7 +2,7 @@
 
 import {ENTRY_LABEL, getErrorInfo, RETRY_LABEL} from '@plan-for-myself/shared';
 import {ENTRY_URL} from '@/auth/redirect';
-import ErrorScreen from '@/shared/components/ErrorScreen';
+import ErrorNotice from '@/shared/components/ErrorNotice';
 import useReportPageError from '@/shared/error/useReportPageError';
 
 interface ErrorPageProps {
@@ -15,7 +15,7 @@ export default function ErrorPage({error, retry}: ErrorPageProps) {
   const {title, content} = getErrorInfo(error);
 
   return (
-    <ErrorScreen
+    <ErrorNotice
       action={{children: RETRY_LABEL, onClick: retry}}
       content={content}
       link={{href: ENTRY_URL, label: ENTRY_LABEL}}

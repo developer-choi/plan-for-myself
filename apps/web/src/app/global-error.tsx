@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import {themeClassName} from '@developer-choi/design-system';
 import {ENTRY_LABEL, getErrorInfo, RETRY_LABEL} from '@plan-for-myself/shared';
 import {ENTRY_URL} from '@/auth/redirect';
-import ErrorScreen from '@/shared/components/ErrorScreen';
+import ErrorNotice from '@/shared/components/ErrorNotice';
 import useReportPageError from '@/shared/error/useReportPageError';
 import {font} from '@/shared/styles/font';
 import {themeStyle} from '@/shared/styles/theme';
@@ -23,7 +23,7 @@ export default function GlobalError({error, retry}: GlobalErrorProps) {
     <html lang="ko">
       <body className={classNames(font.className, themeClassName)} style={themeStyle}>
         <title>Plan for myself</title>
-        <ErrorScreen
+        <ErrorNotice
           action={{children: RETRY_LABEL, onClick: retry}}
           content={content}
           link={{href: ENTRY_URL, label: ENTRY_LABEL}}

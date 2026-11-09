@@ -1,3 +1,22 @@
+$viewportHeight: 100dvh;
+
+.main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: $viewportHeight;
+  padding-inline: var(--spacing-lg);
+  background-color: var(--color-bg-subtle);
+}
+
+.frame {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  align-items: center;
+  max-width: var(--content-width-narrow);
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -20,4 +39,16 @@
 
 .action {
   margin-top: var(--spacing-xs);
+}
+
+.link {
+  padding: var(--spacing-xs);
+  color: var(--color-fg-secondary);
+  text-decoration: underline;
+}
+
+.main .frame,
+.main .frame * {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
 }
