@@ -10,7 +10,7 @@ import classNames from 'classnames';
 import {type BaseSyntheticEvent, useState} from 'react';
 import {FormProvider, useForm, type UseFormReturn, useWatch} from 'react-hook-form';
 import {isMutationSettling} from '@/shared/query/mutation';
-import {deleteStudyRecordApi, patchStudyRecordApi, postStudyRecordApi} from '@/study-record/api';
+import {studyRecordApi} from '@/study-record/api';
 import {formatDateTitle} from '@/study-record/calendar-date';
 import RecordFormFields from '@/study-record/components/RecordFormFields';
 import {studyRecordQueries, studyRecordStatsQueries} from '@/study-record/queries';
@@ -133,9 +133,9 @@ function useRecordForm({date, month, record, onClose}: UseRecordFormParams): Use
       }
     },
   };
-  const postMutation = useMutation({mutationFn: postStudyRecordApi, ...cacheHandlers});
-  const patchMutation = useMutation({mutationFn: patchStudyRecordApi, ...cacheHandlers});
-  const deleteMutation = useMutation({mutationFn: deleteStudyRecordApi, ...cacheHandlers});
+  const postMutation = useMutation({mutationFn: studyRecordApi.postStudyRecordApi, ...cacheHandlers});
+  const patchMutation = useMutation({mutationFn: studyRecordApi.patchStudyRecordApi, ...cacheHandlers});
+  const deleteMutation = useMutation({mutationFn: studyRecordApi.deleteStudyRecordApi, ...cacheHandlers});
   const saving = isMutationSettling(postMutation, patchMutation);
   const deleting = isMutationSettling(deleteMutation);
 

@@ -1,5 +1,5 @@
 import {queryOptions} from '@tanstack/react-query';
-import {getStudyRecordListApi, getStudyRecordStatsMonthlyApi, getStudyRecordStatsOverviewApi} from '@/study-record/api';
+import {getStudyRecordStatsMonthlyApi, getStudyRecordStatsOverviewApi, studyRecordApi} from '@/study-record/api';
 
 export const studyRecordQueries = {
   list: {
@@ -7,7 +7,7 @@ export const studyRecordQueries = {
     options: (month: string) =>
       queryOptions({
         queryKey: studyRecordQueries.list.key(month),
-        queryFn: () => getStudyRecordListApi({month}),
+        queryFn: () => studyRecordApi.getStudyRecordListApi({month}),
       }),
   },
 };

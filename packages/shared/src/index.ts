@@ -17,6 +17,7 @@ export {getErrorInfo} from './error/info';
 export {isUnauthorizedError} from './error/unauthorized';
 export {ENTRY_LABEL, LOGOUT_LABEL, RETRY_LABEL, START_RECORDING_LABEL} from './label/labels';
 export {beforeSend} from './sentry/before-send';
+export {createStudyRecordApi} from './study-record/api';
 export {isEmptyStudyRecord} from './study-record/empty';
 export {minutesFormat, studiedTimeFormat} from './study-record/format';
 export {
