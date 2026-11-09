@@ -4088,13 +4088,16 @@ __metadata:
     globals: "npm:^16.5.0"
     overlay-kit: "npm:^1.9.0"
     react: "npm:19.2.3"
+    react-hook-form: "npm:^7.71.1"
     typescript: "npm:~6.0.3"
     typescript-eslint: "npm:^8.57.2"
     vitest: "npm:^4.0.17"
+    zod: "npm:^4.3.5"
   peerDependencies:
     "@tanstack/react-query": ^5.90.20
     overlay-kit: ^1.9.0
     react: 19.2.3
+    react-hook-form: ^7.71.1
   languageName: unknown
   linkType: soft
 

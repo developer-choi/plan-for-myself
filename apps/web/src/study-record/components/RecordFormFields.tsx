@@ -2,17 +2,17 @@
 
 import {Caption, Chip, Radio, RadioGroup, TextField} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
-import {STUDY_RECORD_FIELD_LIMITS} from '@plan-for-myself/shared';
-import classNames from 'classnames';
-import {type KeyboardEvent, useId} from 'react';
-import {Controller, useController, useFormContext} from 'react-hook-form';
 import {
   addFailTag,
   MINUTE_SLOTS,
   type MinuteSlot,
   type RecordFormValues,
+  STUDY_RECORD_FIELD_LIMITS,
   validateMinuteInput,
-} from '@/study-record/record-form';
+} from '@plan-for-myself/shared';
+import classNames from 'classnames';
+import {type KeyboardEvent, useId} from 'react';
+import {Controller, useController, useFormContext} from 'react-hook-form';
 import calendarStyles from './CalendarGrid.module.scss';
 import styles from './RecordForm.module.scss';
 

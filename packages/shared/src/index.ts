@@ -16,6 +16,7 @@ export {
   shiftMonth,
   WEEKDAY_LABELS,
 } from './date/calendar-month';
+export {formatDateTitle} from './date/date-title';
 export {isHolidayDate} from './date/holiday';
 export {getKoreanDate, getKoreanToday, KST} from './date/korean';
 export {convertLunarDateToSolar, type SimpleDate} from './date/lunar';
@@ -24,6 +25,7 @@ export type {DateType} from './date-type/type';
 export {getErrorInfo} from './error/info';
 export {isUnauthorizedError} from './error/unauthorized';
 export {ENTRY_LABEL, LOGOUT_LABEL, RETRY_LABEL, START_RECORDING_LABEL} from './label/labels';
+export {isMutationSettling} from './query/mutation';
 export {beforeSend} from './sentry/before-send';
 export {createStudyRecordApi} from './study-record/api';
 export {getCalendarDayCells} from './study-record/calendar-day-cells';
@@ -35,6 +37,15 @@ export {
   STUDY_RECORD_FIELD_MESSAGES,
 } from './study-record/limits';
 export {createStudyRecordQueries} from './study-record/queries';
+export {studyRecordQueryKeys} from './study-record/query-keys';
+export {
+  addFailTag,
+  getRecordFormDefaultValues,
+  MINUTE_SLOTS,
+  type MinuteSlot,
+  type RecordFormValues,
+  validateMinuteInput,
+} from './study-record/record-form';
 export type {
   DeleteStudyRecordApiRequest,
   FailureTag,

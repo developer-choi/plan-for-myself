@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "sideEffects": false,
   "exports": {
     ".": "./src/index.ts",
     "./react": "./src/react.ts"
@@ -14,12 +15,14 @@
   },
   "dependencies": {
     "@developer-choi/utils": "^0.1.0",
-    "@sentry/core": "^10.76.2"
+    "@sentry/core": "^10.76.2",
+    "zod": "^4.3.5"
   },
   "peerDependencies": {
     "@tanstack/react-query": "^5.90.20",
     "overlay-kit": "^1.9.0",
-    "react": "19.2.3"
+    "react": "19.2.3",
+    "react-hook-form": "^7.71.1"
   },
   "devDependencies": {
     "@tanstack/react-query": "^5.90.20",
@@ -30,6 +33,7 @@
     "globals": "^16.5.0",
     "overlay-kit": "^1.9.0",
     "react": "19.2.3",
+    "react-hook-form": "^7.71.1",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.57.2",
     "vitest": "^4.0.17"
