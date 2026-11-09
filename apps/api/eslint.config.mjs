@@ -25,6 +25,7 @@ export default defineConfig([
     settings: {react: {version: '19'}},
     rules: {
       ...baseRules,
+      '@typescript-eslint/parameter-properties': ['error', {allow: ['private readonly']}],
       'check-file/folder-naming-convention': ['error', {'src/**/*': 'KEBAB_CASE'}],
     },
   },

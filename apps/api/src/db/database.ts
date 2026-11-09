@@ -1,0 +1,59 @@
+import {PGlite} from '@electric-sql/pglite';
+import {Logger} from '@nestjs/common';
+import {drizzle as drizzlePg} from 'drizzle-orm/node-postgres';
+import type {PgDatabase, PgQueryResultHKT} from 'drizzle-orm/pg-core';
+import {drizzle as drizzlePglite} from 'drizzle-orm/pglite';
+import {Pool} from 'pg';
+import {InvalidEnvError} from '../error/invalid-env.error';
+
+export type Database = PgDatabase<PgQueryResultHKT>;
+
+export interface DatabaseConnection {
+  db: Database;
+  close(): Promise<void>;
+}
+
+interface DatabaseOptions {
+  connectionString?: string;
+  dataDir?: string;
+  logQueries?: boolean;
+}
+
+interface DatabaseEnv {
+  /** 환경변수 POSTGRES_URL이 없거나 빈 값이면 비어 있다 */
+  postgresUrl?: string;
+  /** 환경변수 NODE_ENV가 없으면 비어 있다 */
+  nodeEnv?: string;
+  /** 환경변수 DB_QUERY_LOG가 없으면 비어 있다 */
+  queryLog?: string;
+}
+
+export function resolveDatabaseOptions({postgresUrl, nodeEnv, queryLog}: DatabaseEnv): DatabaseOptions {
+  const logQueries = queryLog === 'true';
+  if (postgresUrl) {
+    return {connectionString: postgresUrl, logQueries};
+  }
+  if (nodeEnv === 'production') {
+    throw new InvalidEnvError('운영(NODE_ENV=production)에서는 POSTGRES_URL이 있어야 한다');
+  }
+  return {dataDir: LOCAL_DATA_DIR, logQueries};
+}
+
+export async function createDatabaseConnection({
+  connectionString,
+  dataDir,
+  logQueries,
+}: DatabaseOptions): Promise<DatabaseConnection> {
+  if (connectionString) {
+    const pool = new Pool({connectionString, connectionTimeoutMillis: CONNECTION_TIMEOUT_MS});
+    pool.on('error', (error) => logger.error('DB 연결 풀 에러', error));
+    return {db: drizzlePg({client: pool, logger: logQueries}), close: () => pool.end()};
+  }
+
+  const client = await PGlite.create(dataDir);
+  return {db: drizzlePglite({client, logger: logQueries}), close: () => client.close()};
+}
+
+const LOCAL_DATA_DIR = '.local-db';
+const CONNECTION_TIMEOUT_MS = 5000;
+const logger = new Logger('Database');

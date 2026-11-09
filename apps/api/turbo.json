@@ -6,10 +6,10 @@
       "outputs": ["dist/**"]
     },
     "dev": {
-      "passThroughEnv": ["PORT"]
+      "passThroughEnv": ["PORT", "NODE_ENV", "POSTGRES_URL", "DB_QUERY_LOG"]
     },
     "start": {
-      "passThroughEnv": ["PORT"]
+      "passThroughEnv": ["PORT", "NODE_ENV", "POSTGRES_URL", "DB_QUERY_LOG"]
     }
   }
 }
