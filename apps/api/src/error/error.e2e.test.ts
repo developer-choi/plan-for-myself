@@ -23,7 +23,7 @@ describe('에러 응답', () => {
   });
 
   describe('Edge cases', () => {
-    it.for([
+    [
       {name: '깨진 JSON이면', status: HttpStatus.BAD_REQUEST, headers: {}, body: '{broken'},
       {
         name: 'gzip이라면서 gzip이 아니면',
@@ -43,13 +43,15 @@ describe('에러 응답', () => {
         headers: {'Content-Encoding': 'foo'},
         body: '{}',
       },
-    ])('본문이 $name $status INVALID_BODY와 요청 형식 안내 문구를 반환해야 한다', async ({status, headers, body}) => {
-      const response = await request(app.getHttpServer())
-        .post('/health')
-        .set({'Content-Type': 'application/json', ...headers})
-        .send(body)
-        .expect(status);
-      expect(response.body).toEqual({code: 'INVALID_BODY', message: '요청 형식이 올바르지 않아요'});
+    ].forEach(({name, status, headers, body}) => {
+      it(`본문이 ${name} ${status} INVALID_BODY와 요청 형식 안내 문구를 반환해야 한다`, async () => {
+        const response = await request(app.getHttpServer())
+          .post('/health')
+          .set({'Content-Type': 'application/json', ...headers})
+          .send(body)
+          .expect(status);
+        expect(response.body).toEqual({code: 'INVALID_BODY', message: '요청 형식이 올바르지 않아요'});
+      });
     });
   });
 });
