@@ -48,6 +48,10 @@ export const typography = {
   body3: {fontSize: 12, lineHeight: 16},
 } as const;
 
+export const fontSize = {
+  xxs: 10,
+} as const;
+
 export const shadows = {
   hover: '0 2px 8px rgba(0, 0, 0, 0.1)',
   dialog:
