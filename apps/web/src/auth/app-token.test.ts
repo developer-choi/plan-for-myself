@@ -1,8 +1,8 @@
 // @vitest-environment node
 import {decodeJwt, SignJWT} from 'jose';
 import {describe, expect, it} from 'vitest';
+import {APP_TOKEN_AUDIENCE} from '@plan-for-myself/shared/auth';
 import {
-  APP_TOKEN_AUDIENCE,
   issueAppToken,
   issueGuestAppToken,
   pickRequestUserId,

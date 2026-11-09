@@ -15,6 +15,7 @@ export default defineRailway((context) => {
       SENTRY_ENVIRONMENT: `api-${context.environment}`,
       POSTGRES_URL: preserve(),
       SENTRY_DSN: preserve(),
+      AUTH_SECRET: preserve(),
     },
   });
 

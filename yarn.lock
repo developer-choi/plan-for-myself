@@ -4204,6 +4204,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nestjs/authentication@npm:^0.1.5":
+  version: 0.1.5
+  resolution: "@nestjs/authentication@npm:0.1.5"
+  peerDependencies:
+    "@nestjs/common": ^12.0.0
+    "@nestjs/core": ^12.0.0
+    "@nestjs/microservices": ^12.0.0
+    "@nestjs/websockets": ^12.0.0
+    reflect-metadata: ^0.1.13 || ^0.2.0
+    rxjs: ^7.1.0
+  peerDependenciesMeta:
+    "@nestjs/microservices":
+      optional: true
+    "@nestjs/websockets":
+      optional: true
+  checksum: 10c0/6816dda3764e156470172b00f49a3f5c00b8dadb136ec0765d2f779d8f770289b3fe3f76bb0934da3b12e26518875f54ce9c214e08e541db90f48e5b7ab93544
+  languageName: node
+  linkType: hard
+
 "@nestjs/common@npm:^12.3.3":
   version: 12.4.0
   resolution: "@nestjs/common@npm:12.4.0"
@@ -9501,6 +9520,7 @@ __metadata:
   resolution: "api@workspace:apps/api"
   dependencies:
     "@electric-sql/pglite": "npm:^0.5.8"
+    "@nestjs/authentication": "npm:^0.1.5"
     "@nestjs/common": "npm:^12.3.3"
     "@nestjs/config": "npm:^12.1.0"
     "@nestjs/core": "npm:^12.3.3"
@@ -9518,6 +9538,7 @@ __metadata:
     eslint-plugin-check-file: "npm:^3.3.1"
     eslint-plugin-react: "npm:^7.37.5"
     globals: "npm:^16.5.0"
+    jose: "npm:^6.2.13"
     pg: "npm:^8.23.1"
     reflect-metadata: "npm:^0.2.2"
     rxjs: "npm:^7.8.2"

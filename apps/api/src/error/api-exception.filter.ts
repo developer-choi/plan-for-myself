@@ -20,12 +20,14 @@ const ERROR_CODE_BY_STATUS: Partial<Record<number, ApiErrorCode>> = {
   [HttpStatus.BAD_REQUEST]: API_ERROR_CODES.INVALID_BODY,
   [HttpStatus.PAYLOAD_TOO_LARGE]: API_ERROR_CODES.INVALID_BODY,
   [HttpStatus.UNSUPPORTED_MEDIA_TYPE]: API_ERROR_CODES.INVALID_BODY,
+  [HttpStatus.UNAUTHORIZED]: API_ERROR_CODES.UNAUTHORIZED,
   [HttpStatus.NOT_FOUND]: API_ERROR_CODES.NOT_FOUND,
 };
 
 const FIXED_MESSAGE_BY_CODE: Partial<Record<ApiErrorCode, string>> = {
   [API_ERROR_CODES.INVALID_BODY]: '요청 형식이 올바르지 않아요',
   [API_ERROR_CODES.NOT_FOUND]: '요청한 주소를 찾을 수 없어요',
+  [API_ERROR_CODES.UNAUTHORIZED]: '로그인이 필요해요',
 };
 
 const logger = new Logger('ApiExceptionFilter');
