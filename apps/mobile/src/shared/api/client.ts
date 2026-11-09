@@ -3,7 +3,7 @@ import {getAppToken} from '@/auth/app-token-storage';
 
 const API_URL = process.env.EXPO_PUBLIC_API_URL ?? '';
 
-export const api = new FetchApiClient(API_URL, resolveRequestContext);
+export const apiClient = new FetchApiClient(API_URL, resolveRequestContext);
 
 async function resolveRequestContext(): Promise<RequestContext> {
   const token = await getAppToken();

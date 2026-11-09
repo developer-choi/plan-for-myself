@@ -1,8 +1,8 @@
 'use client';
 
 import type {CalendarMonth} from '@plan-for-myself/shared';
+import {toMonthParam} from '@plan-for-myself/shared';
 import {useSuspenseQuery} from '@tanstack/react-query';
-import {toMonthParam} from '@/study-record/calendar-date';
 import {studyRecordQueries} from '@/study-record/queries';
 import TagCalendar from '@/study-record-stats/components/TagCalendar';
 import {getTagCalendar} from '@/study-record-stats/tag-detail';

@@ -1,6 +1,6 @@
 import {FetchApiClient, type RequestContext} from '@developer-choi/utils/api';
 
-export const api = new FetchApiClient('', resolveRequestContext);
+export const apiClient = new FetchApiClient('', resolveRequestContext);
 
 export interface ServerRequestSource {
   /* 받은 요청에 쿠키 헤더가 없으면(로그인 전 등) null */

@@ -6,6 +6,7 @@ export const spacing = {
   md: 16,
   lg: 24,
   xl: 32,
+  xxl: 40,
   pageXMobile: 12,
   gridGap: 12,
 } as const;
@@ -45,6 +46,10 @@ export const typography = {
   body1: {fontSize: 16, lineHeight: 24},
   body2: {fontSize: 14, lineHeight: 20},
   body3: {fontSize: 12, lineHeight: 16},
+} as const;
+
+export const fontSize = {
+  xxs: 10,
 } as const;
 
 export const shadows = {

@@ -1,9 +1,8 @@
 import type {CalendarMonth, StudyRecord} from '@plan-for-myself/shared';
-import {minutesFormat} from '@plan-for-myself/shared';
+import {getCalendarDayCells, WEEKDAY_LABELS} from '@plan-for-myself/shared';
 import {Badge} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
 import classNames from 'classnames';
-import {getCalendarCells, WEEKDAY_LABELS} from '@/study-record/calendar-date';
 import styles from './CalendarGrid.module.scss';
 
 interface CalendarGridProps {
@@ -18,8 +17,6 @@ interface CalendarGridProps {
 }
 
 export default function CalendarGrid({month, today, records, handlers}: CalendarGridProps) {
-  const recordByDate = new Map(records.map((record) => [record.date, record]));
-
   return (
     <div className={styles.calendar}>
       <div className={styles.weekdays}>
@@ -30,50 +27,46 @@ export default function CalendarGrid({month, today, records, handlers}: Calendar
         ))}
       </div>
       <div className={styles.grid}>
-        {getCalendarCells(month).map(({date, day, inMonth}) => {
-          if (!inMonth) {
+        {getCalendarDayCells(month, today, records).map(
+          ({date, day, inMonth, record, isFuture, isToday, studiedTime, failTags}) => {
+            if (!inMonth) {
+              return (
+                <time
+                  key={date}
+                  className={classNames(typography.body3, styles.dayNumber, styles.outsideDay)}
+                  dateTime={date}
+                >
+                  {day}
+                </time>
+              );
+            }
+
             return (
-              <time
+              <button
                 key={date}
-                className={classNames(typography.body3, styles.dayNumber, styles.outsideDay)}
-                dateTime={date}
+                className={styles.day}
+                data-today={isToday || undefined}
+                type="button"
+                onClick={isFuture ? handlers.onFutureDateClick : () => handlers.onRecordableDateClick(date, record)}
               >
-                {day}
-              </time>
+                <time className={classNames(typography.body3, typography.bold, styles.dayNumber)} dateTime={date}>
+                  {day}
+                </time>
+                {studiedTime && (
+                  <Badge className={styles.chip} color="neutral" size="small" variant="soft">
+                    {studiedTime}
+                  </Badge>
+                )}
+                {failTags.map((tag) => (
+                  <Badge key={tag} className={styles.chip} color="danger" size="small" variant="solid">
+                    <span className={styles.chipText}>{tag}</span>
+                  </Badge>
+                ))}
+              </button>
             );
-          }
-
-          const record = recordByDate.get(date);
-          const isFuture = date > today;
-          const totalMinutes = record?.studiedMinutes.reduce((sum, minutes) => sum + minutes, 0) ?? 0;
-
-          return (
-            <button
-              key={date}
-              className={styles.day}
-              data-today={date === today || undefined}
-              type="button"
-              onClick={isFuture ? handlers.onFutureDateClick : () => handlers.onRecordableDateClick(date, record)}
-            >
-              <time className={classNames(typography.body3, typography.bold, styles.dayNumber)} dateTime={date}>
-                {day}
-              </time>
-              {totalMinutes > 0 && (
-                <Badge className={styles.chip} color="neutral" size="small" variant="soft">
-                  {minutesFormat(totalMinutes)}
-                </Badge>
-              )}
-              {record?.failTags.slice(0, MAX_FAIL_TAGS).map((tag) => (
-                <Badge key={tag} className={styles.chip} color="danger" size="small" variant="solid">
-                  <span className={styles.chipText}>{tag}</span>
-                </Badge>
-              ))}
-            </button>
-          );
-        })}
+          },
+        )}
       </div>
     </div>
   );
 }
-
-const MAX_FAIL_TAGS = 2;

@@ -20,30 +20,36 @@ interface ErrorNoticeProps {
   title: string;
   content: string;
   action: ErrorNoticeAction;
-  link: ErrorNoticeLink;
+  link?: ErrorNoticeLink;
+  size?: 'large' | 'medium';
 }
 
-export default function ErrorNotice({title, content, action, link}: ErrorNoticeProps) {
-  return (
-    <View style={styles.main}>
-      <View style={styles.frame}>
-        <View style={styles.container}>
-          <Logo size="large" />
-          <View style={styles.text}>
-            <Text style={styles.title}>{title}</Text>
-            <Text style={styles.content}>{content}</Text>
-          </View>
-          <Button label={action.label} style={styles.action} onPress={action.onPress} />
+export default function ErrorNotice({title, content, action, link, size = 'large'}: ErrorNoticeProps) {
+  const isFullScreen = size === 'large';
+  const textStyles = isFullScreen ? largeTextStyles : mediumTextStyles;
+
+  const notice = (
+    <View style={styles.frame}>
+      <View style={styles.container}>
+        <Logo size="large" />
+        <View style={styles.text}>
+          <Text style={[styles.title, textStyles.title]}>{title}</Text>
+          <Text style={[styles.content, textStyles.content]}>{content}</Text>
         </View>
+        <Button label={action.label} style={styles.action} onPress={action.onPress} />
+      </View>
+      {link && (
         <Link asChild replace href={link.href}>
           {/* Link asChild가 Pressable의 함수 style을 버려서, children 함수로 눌림 상태를 받아 Text에 건다 */}
           <Pressable hitSlop={spacing.sm}>
             {({pressed}) => <Text style={[styles.link, pressed && styles.pressed]}>{link.label}</Text>}
           </Pressable>
         </Link>
-      </View>
+      )}
     </View>
   );
+
+  return isFullScreen ? <View style={styles.main}>{notice}</View> : notice;
 }
 
 const styles = StyleSheet.create({
@@ -68,13 +74,11 @@ const styles = StyleSheet.create({
     maxWidth: contentWidth.narrow,
   },
   title: {
-    ...typography.h2,
     color: colors.text,
     fontWeight: 'bold',
     textAlign: 'center',
   },
   content: {
-    ...typography.body1,
     color: colors.textSecondary,
     textAlign: 'center',
   },
@@ -90,4 +94,14 @@ const styles = StyleSheet.create({
   pressed: {
     opacity: opacity.pressed,
   },
+});
+
+const largeTextStyles = StyleSheet.create({
+  title: typography.h2,
+  content: typography.body1,
+});
+
+const mediumTextStyles = StyleSheet.create({
+  title: typography.h4,
+  content: typography.body2,
 });

@@ -1,11 +1,12 @@
 'use client';
 
 import type {CalendarMonth, StudyRecordMonthly} from '@plan-for-myself/shared';
+import {toMonthParam} from '@plan-for-myself/shared';
 import {Suspense} from 'react';
 import {useSuspenseQuery} from '@tanstack/react-query';
 import HandledErrorBoundary from '@/shared/components/HandledErrorBoundary';
 import LoadingSpinner from '@/shared/components/LoadingSpinner';
-import {isSameMonth, toMonthParam} from '@/study-record/calendar-date';
+import {isSameMonth} from '@/study-record/calendar-date';
 import {studyRecordStatsQueries} from '@/study-record/queries';
 import FetchedTagCalendar from '@/study-record-stats/components/FetchedTagCalendar';
 import StatsSection from '@/study-record-stats/components/StatsSection';

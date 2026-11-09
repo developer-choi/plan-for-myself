@@ -1,10 +1,11 @@
 import type {StudyRecord, StudyRecordOverview} from '@plan-for-myself/shared';
+import {toMonthParam} from '@plan-for-myself/shared';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {OverlayProvider} from 'overlay-kit';
 import {describe, expect, it} from 'vitest';
-import {formatDateTitle, toMonthParam} from '@/study-record/calendar-date';
+import {formatDateTitle} from '@/study-record/calendar-date';
 import {studyRecordQueries, studyRecordStatsQueries} from '@/study-record/queries';
 import FetchedCalendarSection from './FetchedCalendarSection';
 
