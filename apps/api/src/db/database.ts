@@ -1,8 +1,10 @@
+import {fileURLToPath} from 'node:url';
 import {PGlite} from '@electric-sql/pglite';
 import {Logger} from '@nestjs/common';
 import {drizzle as drizzlePg} from 'drizzle-orm/node-postgres';
 import type {PgDatabase, PgQueryResultHKT} from 'drizzle-orm/pg-core';
 import {drizzle as drizzlePglite} from 'drizzle-orm/pglite';
+import {migrate} from 'drizzle-orm/pglite/migrator';
 import {Pool} from 'pg';
 import {InvalidEnvError} from '../error/invalid-env.error';
 
@@ -50,10 +52,15 @@ export async function createDatabaseConnection({
     return {db: drizzlePg({client: pool, logger: logQueries}), close: () => pool.end()};
   }
 
+  /* 운영 Postgres의 테이블은 아직 웹 마이그레이션이 만들어서 PGlite에만 적용한다 */
   const client = await PGlite.create(dataDir);
-  return {db: drizzlePglite({client, logger: logQueries}), close: () => client.close()};
+  const db = drizzlePglite({client, logger: logQueries});
+  await migrate(db, {migrationsFolder: MIGRATIONS_DIR});
+  return {db, close: () => client.close()};
 }
 
 const LOCAL_DATA_DIR = '.local-db';
+/* 번들에서는 이 파일이 dist 바로 아래라 tsdown.config.ts의 copy가 dist/migrations에 둔다 */
+const MIGRATIONS_DIR = fileURLToPath(new URL('./migrations', import.meta.url));
 const CONNECTION_TIMEOUT_MS = 5000;
 const logger = new Logger('Database');

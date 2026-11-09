@@ -9,7 +9,8 @@
     "start": "node --enable-source-maps dist/main.mjs",
     "lint": "eslint . --max-warnings 0",
     "check-types": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.8",
@@ -30,6 +31,7 @@
     "@types/node": "^24",
     "@types/pg": "^8.23.1",
     "@types/supertest": "^6.0.3",
+    "drizzle-kit": "^0.31.11",
     "eslint": "^9",
     "eslint-plugin-check-file": "^3.3.1",
     "eslint-plugin-react": "^7.37.5",

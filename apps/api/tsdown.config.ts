@@ -26,4 +26,5 @@ export default defineConfig({
       handle(level, log);
     },
   }),
+  copy: ['src/db/migrations'],
 });
