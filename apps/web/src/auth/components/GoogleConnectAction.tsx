@@ -6,7 +6,8 @@ import {Button} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
 import {continueWithGoogle} from '@/auth/actions';
 import GoogleIcon from '@/auth/components/GoogleIcon';
-import {CONNECT_KEEPS_RECORDS_HINT, GOOGLE_CONNECT_LABEL} from '@plan-for-myself/shared';
+import {CONNECT_KEEPS_RECORDS_HINT} from '@plan-for-myself/shared/auth';
+import {GOOGLE_CONNECT_LABEL} from '@plan-for-myself/shared/label';
 import styles from './GoogleConnectAction.module.scss';
 
 export default function GoogleConnectAction() {

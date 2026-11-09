@@ -4,14 +4,9 @@ import Link from 'next/link';
 import {notFound} from 'next/navigation';
 import classNames from 'classnames';
 import typography from '@developer-choi/design-system/styles/typography';
-import {
-  formatMonthTitle,
-  getKoreanToday,
-  GOOGLE_CONNECT_PAGE_LABEL,
-  monthPath,
-  parseMonth,
-  shiftMonth,
-} from '@plan-for-myself/shared';
+import {formatMonthTitle, getKoreanToday, parseMonth, shiftMonth} from '@plan-for-myself/shared/date';
+import {GOOGLE_CONNECT_PAGE_LABEL} from '@plan-for-myself/shared/label';
+import {monthPath} from '@plan-for-myself/shared/study-record';
 import FetchedLoginNudgeCard from '@/auth/components/FetchedLoginNudgeCard';
 import {auth} from '@/auth/next-auth';
 import {getLoginState} from '@/auth/path';

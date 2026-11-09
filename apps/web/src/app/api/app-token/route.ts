@@ -2,7 +2,7 @@ import {
   type PostAppTokenApiRequest,
   type PostAppTokenApiResponse,
   registeredAccountRejectionSchema,
-} from '@plan-for-myself/shared';
+} from '@plan-for-myself/shared/auth';
 import {NextRequest, NextResponse} from 'next/server';
 import {z} from 'zod';
 import {exchangeGoogleIdToken} from '@/auth/app-login';

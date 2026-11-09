@@ -1,4 +1,4 @@
-import type {FailureTag, FailureTagStatus} from '@plan-for-myself/shared';
+import type {FailureTag, FailureTagStatus} from '@plan-for-myself/shared/study-record';
 import {render, screen, within} from '@testing-library/react';
 import {describe, expect, it} from 'vitest';
 import {createMonthly} from '@/study-record-stats/test-utils';

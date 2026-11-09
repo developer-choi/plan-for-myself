@@ -1,5 +1,5 @@
 import {render, screen} from '@testing-library/react';
-import {MY_CALENDAR_LABEL, START_RECORDING_LABEL} from '@plan-for-myself/shared';
+import {MY_CALENDAR_LABEL, START_RECORDING_LABEL} from '@plan-for-myself/shared/label';
 import {describe, expect, it} from 'vitest';
 import {DEFAULT_HOME_URL} from '@/auth/redirect';
 import DemoBanner from './DemoBanner';

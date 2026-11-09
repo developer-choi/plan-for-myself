@@ -1,5 +1,5 @@
 import type {CSSProperties} from 'react';
-import {colors} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
 
 type ThemeVariable = `--color-${string}` | '--shadow-focus' | `--content-width-${string}`;
 

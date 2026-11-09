@@ -1,7 +1,6 @@
 'use client';
 
-import type {DemoChoiceReason} from '@plan-for-myself/shared';
-import {openDemoChoiceDialog} from '@plan-for-myself/shared/react';
+import {type DemoChoiceReason, openDemoChoiceDialog} from '@plan-for-myself/shared/demo';
 import {useSession} from 'next-auth/react';
 import {getLoginState} from '@/auth/path';
 import LoggedInDemoChoiceDialog from '@/demo/components/LoggedInDemoChoiceDialog';

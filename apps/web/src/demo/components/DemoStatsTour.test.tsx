@@ -1,10 +1,7 @@
-import {
-  type CalendarMonth,
-  type DemoOverview,
-  FAILURE_TAG_TREND_MONTH_LIMIT,
-  MY_CALENDAR_LABEL,
-  shiftMonth,
-} from '@plan-for-myself/shared';
+import {type CalendarMonth, shiftMonth} from '@plan-for-myself/shared/date';
+import type {DemoOverview} from '@plan-for-myself/shared/demo';
+import {FAILURE_TAG_TREND_MONTH_LIMIT} from '@plan-for-myself/shared/study-record';
+import {MY_CALENDAR_LABEL} from '@plan-for-myself/shared/label';
 import {act, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type {Session} from 'next-auth';

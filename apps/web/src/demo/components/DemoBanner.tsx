@@ -2,7 +2,8 @@ import {Button} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
 import classNames from 'classnames';
 import Link from 'next/link';
-import {DEMO_BANNER_MESSAGE, MY_CALENDAR_LABEL, START_RECORDING_LABEL} from '@plan-for-myself/shared';
+import {DEMO_BANNER_MESSAGE} from '@plan-for-myself/shared/demo';
+import {MY_CALENDAR_LABEL, START_RECORDING_LABEL} from '@plan-for-myself/shared/label';
 import {DEFAULT_HOME_URL} from '@/auth/redirect';
 import styles from './DemoBanner.module.scss';
 

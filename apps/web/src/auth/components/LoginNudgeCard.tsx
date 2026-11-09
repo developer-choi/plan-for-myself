@@ -6,10 +6,10 @@ import classNames from 'classnames';
 import {Cross2Icon} from '@radix-ui/react-icons';
 import {Button, IconButton} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
-import {useLoginNudge} from '@plan-for-myself/shared/react';
+import {useLoginNudge} from '@plan-for-myself/shared/auth';
+import {GOOGLE_CONNECT_LABEL} from '@plan-for-myself/shared/label';
 import {continueWithGoogle} from '@/auth/actions';
 import {webLoginNudgeStore} from '@/auth/login-nudge-store';
-import {GOOGLE_CONNECT_LABEL} from '@plan-for-myself/shared';
 import styles from './LoginNudgeCard.module.scss';
 
 interface LoginNudgeCardProps {

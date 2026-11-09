@@ -1,6 +1,6 @@
 import type {Metadata} from 'next';
 import classNames from 'classnames';
-import {ACCOUNT_LABEL} from '@plan-for-myself/shared';
+import {ACCOUNT_LABEL} from '@plan-for-myself/shared/label';
 import {CalendarIcon} from '@radix-ui/react-icons';
 import {auth} from '@/auth/next-auth';
 import {ENTRY_URL} from '@/auth/redirect';

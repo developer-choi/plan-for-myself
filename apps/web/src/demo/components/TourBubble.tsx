@@ -1,7 +1,7 @@
 'use client';
 
 import type {ReactNode} from 'react';
-import {DEMO_TOUR_STEP_COUNT} from '@plan-for-myself/shared';
+import {DEMO_TOUR_STEP_COUNT} from '@plan-for-myself/shared/demo';
 import classNames from 'classnames';
 import type {TooltipRenderProps} from 'react-joyride';
 import {Cross2Icon} from '@radix-ui/react-icons';

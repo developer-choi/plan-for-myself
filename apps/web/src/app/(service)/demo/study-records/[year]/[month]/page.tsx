@@ -1,10 +1,6 @@
-import {
-  demoCalendarPath,
-  findFirstRecordDateOfMonth,
-  formatMonthTitle,
-  parseMonth,
-  shiftMonth,
-} from '@plan-for-myself/shared';
+import {demoCalendarPath} from '@plan-for-myself/shared/demo';
+import {findFirstRecordDateOfMonth} from '@plan-for-myself/shared/study-record';
+import {formatMonthTitle, parseMonth, shiftMonth} from '@plan-for-myself/shared/date';
 import type {Metadata} from 'next';
 import {notFound} from 'next/navigation';
 import {auth} from '@/auth/next-auth';

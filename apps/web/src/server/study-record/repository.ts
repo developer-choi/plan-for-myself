@@ -1,4 +1,4 @@
-import type {StudyRecord} from '@plan-for-myself/shared';
+import type {StudyRecord} from '@plan-for-myself/shared/study-record';
 import {pool} from '@/server/db/pool';
 import type {NewStudyRecord, StudyRecordFields} from './validate';
 

@@ -1,6 +1,6 @@
 // @vitest-environment node
 import type {PGlite} from '@electric-sql/pglite';
-import type {PostAppTokenApiResponse} from '@plan-for-myself/shared';
+import type {PostAppTokenApiResponse} from '@plan-for-myself/shared/auth';
 import {beforeEach, describe, expect, it} from 'vitest';
 import {issueAppTokenExchange, issueAppTokenForNewGuest} from '@/auth/app-login';
 import {readAuthorizationUserId} from '@/auth/app-token';

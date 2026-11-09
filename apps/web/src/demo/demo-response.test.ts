@@ -1,4 +1,4 @@
-import {parseDateParam, shiftMonth, toMonthParam} from '@plan-for-myself/shared';
+import {parseDateParam, shiftMonth, toMonthParam} from '@plan-for-myself/shared/date';
 import {describe, expect, it} from 'vitest';
 import {getDemoResponse} from './demo-response';
 

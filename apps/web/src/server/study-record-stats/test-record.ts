@@ -1,4 +1,5 @@
-import type {DateType, StudyRecord} from '@plan-for-myself/shared';
+import type {DateType} from '@plan-for-myself/shared/date-type';
+import type {StudyRecord} from '@plan-for-myself/shared/study-record';
 
 interface TestRecordOptions {
   failTags?: string[];

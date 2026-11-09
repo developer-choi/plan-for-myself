@@ -1,11 +1,7 @@
 'use client';
 
-import {
-  type CalendarMonth,
-  DEMO_CALENDAR_TOUR_STEPS,
-  type DemoCalendarTourTarget,
-  demoStatsPath,
-} from '@plan-for-myself/shared';
+import type {CalendarMonth} from '@plan-for-myself/shared/date';
+import {DEMO_CALENDAR_TOUR_STEPS, type DemoCalendarTourTarget, demoStatsPath} from '@plan-for-myself/shared/demo';
 import {useRouter} from 'next/navigation';
 import {ACTIONS, type EventData, EVENTS, Joyride, type Step, type TooltipRenderProps} from 'react-joyride';
 import TourBubble from '@/demo/components/TourBubble';

@@ -1,4 +1,5 @@
-import {INTRO_MENU_LABEL, INTRO_URL, MY_CALENDAR_LABEL, PRIVACY_POLICY_LABEL} from '@plan-for-myself/shared';
+import {INTRO_MENU_LABEL, MY_CALENDAR_LABEL, PRIVACY_POLICY_LABEL} from '@plan-for-myself/shared/label';
+import {INTRO_URL} from '@plan-for-myself/shared/intro';
 import {DEFAULT_HOME_URL} from '@/auth/redirect';
 import HeaderMenu from '@/shared/components/HeaderMenu';
 

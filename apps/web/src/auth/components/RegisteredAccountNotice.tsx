@@ -1,4 +1,4 @@
-import {REGISTERED_ACCOUNT_NOTICE} from '@plan-for-myself/shared';
+import {REGISTERED_ACCOUNT_NOTICE} from '@plan-for-myself/shared/auth';
 import LoginNotice from '@/auth/components/LoginNotice';
 
 export default function RegisteredAccountNotice() {

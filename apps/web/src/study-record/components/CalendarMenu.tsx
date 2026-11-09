@@ -2,13 +2,13 @@
 
 import {
   ACCOUNT_LABEL,
-  DEMO_HOME_URL,
   DEMO_TOUR_LABEL,
   INTRO_MENU_LABEL,
-  INTRO_URL,
   LOGOUT_LABEL,
   PRIVACY_POLICY_LABEL,
-} from '@plan-for-myself/shared';
+} from '@plan-for-myself/shared/label';
+import {DEMO_HOME_URL} from '@plan-for-myself/shared/demo';
+import {INTRO_URL} from '@plan-for-myself/shared/intro';
 import {ENTRY_URL} from '@/auth/redirect';
 import {signOutAndReplace} from '@/auth/sign-out';
 import HeaderMenu from '@/shared/components/HeaderMenu';

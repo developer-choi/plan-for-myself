@@ -2,8 +2,9 @@
 
 import {Button} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
-import {FIRST_RECORD_TEXT, toDateMonthParam} from '@plan-for-myself/shared';
-import {openOnce} from '@plan-for-myself/shared/react';
+import {FIRST_RECORD_TEXT} from '@plan-for-myself/shared/study-record';
+import {toDateMonthParam} from '@plan-for-myself/shared/date';
+import {openOnce} from '@plan-for-myself/shared/overlay';
 import {PlusIcon} from '@radix-ui/react-icons';
 import classNames from 'classnames';
 import Logo from '@/shared/components/Logo';

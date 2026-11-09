@@ -1,4 +1,4 @@
-import {FAILURE_TAG_TREND_MONTH_LIMIT, type FailureTagTrend} from '@plan-for-myself/shared';
+import {FAILURE_TAG_TREND_MONTH_LIMIT, type FailureTagTrend} from '@plan-for-myself/shared/study-record';
 import {addMonths, listMonths} from './date';
 import {getTagCount, isReduced, type TagCountByMonth} from './tag-count';
 

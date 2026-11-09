@@ -1,4 +1,4 @@
-import {GUEST_LIMIT_CODE} from '@plan-for-myself/shared';
+import {GUEST_LIMIT_CODE} from '@plan-for-myself/shared/auth';
 import {checkRateLimit} from '@vercel/firewall';
 import {CredentialsSignin} from 'next-auth';
 import {pool} from '@/server/db/pool';

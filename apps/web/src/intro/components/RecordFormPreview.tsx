@@ -1,12 +1,9 @@
 'use client';
 
 import typography from '@developer-choi/design-system/styles/typography';
-import {
-  formatDateTitle,
-  getRecordFormDefaultValues,
-  INTRO_FORM_RECORD,
-  type RecordFormValues,
-} from '@plan-for-myself/shared';
+import {formatDateTitle} from '@plan-for-myself/shared/date';
+import {getRecordFormDefaultValues, type RecordFormValues} from '@plan-for-myself/shared/study-record';
+import {INTRO_FORM_RECORD} from '@plan-for-myself/shared/intro';
 import classNames from 'classnames';
 import {FormProvider, useForm} from 'react-hook-form';
 import RecordFormFields from '@/study-record/components/RecordFormFields';

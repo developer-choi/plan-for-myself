@@ -1,4 +1,4 @@
-import type {StudyRecord, StudyRecordOverview} from '@plan-for-myself/shared';
+import type {StudyRecord, StudyRecordOverview} from '@plan-for-myself/shared/study-record';
 import {addDays} from './date';
 import {sumMinutes} from './minutes';
 

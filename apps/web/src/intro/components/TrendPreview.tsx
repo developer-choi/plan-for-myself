@@ -2,7 +2,8 @@ import typography from '@developer-choi/design-system/styles/typography';
 import classNames from 'classnames';
 import Card from '@/shared/components/Card';
 import TrendBars from '@/study-record-stats/components/TrendBars';
-import {INTRO_MONTHLY, INTRO_TAG, INTRO_TEXT, INTRO_TREND, toTrendBars} from '@plan-for-myself/shared';
+import {INTRO_MONTHLY, INTRO_TAG, INTRO_TEXT, INTRO_TREND} from '@plan-for-myself/shared/intro';
+import {toTrendBars} from '@plan-for-myself/shared/study-record-stats';
 import styles from './PreviewCard.module.scss';
 
 export default function TrendPreview() {

@@ -1,4 +1,4 @@
-import {GUEST_LIMIT_NOTICE} from '@plan-for-myself/shared';
+import {GUEST_LIMIT_NOTICE} from '@plan-for-myself/shared/auth';
 import LoginNotice from '@/auth/components/LoginNotice';
 
 export default function GuestLimitNotice() {

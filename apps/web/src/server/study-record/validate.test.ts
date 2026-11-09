@@ -1,4 +1,4 @@
-import {STUDY_RECORD_FIELD_MESSAGES} from '@plan-for-myself/shared';
+import {STUDY_RECORD_FIELD_MESSAGES} from '@plan-for-myself/shared/study-record';
 import {describe, expect, it} from 'vitest';
 import {validateDate, validateNewStudyRecord, validateNotFutureMonth, validateStudyRecordUpdate} from './validate';
 

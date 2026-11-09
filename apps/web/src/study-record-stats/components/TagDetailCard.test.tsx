@@ -1,7 +1,7 @@
 import {render, screen} from '@testing-library/react';
 import {createRef} from 'react';
 import {describe, expect, it} from 'vitest';
-import {type TrendBar} from '@plan-for-myself/shared';
+import type {TrendBar} from '@plan-for-myself/shared/study-record-stats';
 import TagDetailCard from './TagDetailCard';
 
 describe('TagDetailCard', () => {

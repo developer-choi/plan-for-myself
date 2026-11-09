@@ -1,8 +1,8 @@
 'use client';
 
 import {useTransition} from 'react';
-import {DISCARD_LABEL, GUEST_DELETE_TEXT} from '@plan-for-myself/shared';
-import {openOnce} from '@plan-for-myself/shared/react';
+import {DISCARD_LABEL, GUEST_DELETE_TEXT} from '@plan-for-myself/shared/auth';
+import {openOnce} from '@plan-for-myself/shared/overlay';
 import {Button, Confirm} from '@developer-choi/design-system';
 import {discardGuestAndContinueWithGoogle} from '@/auth/actions';
 

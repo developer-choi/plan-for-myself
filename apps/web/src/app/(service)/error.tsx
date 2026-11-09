@@ -1,6 +1,7 @@
 'use client';
 
-import {ENTRY_LABEL, getErrorInfo, RETRY_LABEL} from '@plan-for-myself/shared';
+import {ENTRY_LABEL, RETRY_LABEL} from '@plan-for-myself/shared/label';
+import {getErrorInfo} from '@plan-for-myself/shared/error';
 import {ENTRY_URL} from '@/auth/redirect';
 import ErrorNotice from '@/shared/components/ErrorNotice';
 import useReportPageError from '@/shared/error/useReportPageError';

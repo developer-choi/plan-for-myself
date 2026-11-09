@@ -1,4 +1,4 @@
-import {parseDateParam} from '@plan-for-myself/shared';
+import {parseDateParam} from '@plan-for-myself/shared/date';
 import {NextRequest, NextResponse} from 'next/server';
 import {getDemoResponse} from '@/demo/demo-response';
 import {badRequestResponse} from '@/server/study-record/response';

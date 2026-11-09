@@ -1,7 +1,8 @@
 import {Button} from '@developer-choi/design-system';
-import {type CalendarSummaryContent, STATS_LABEL} from '@plan-for-myself/shared';
 import {BarChartIcon} from '@radix-ui/react-icons';
 import Link from 'next/link';
+import type {CalendarSummaryContent} from '@plan-for-myself/shared/study-record';
+import {STATS_LABEL} from '@plan-for-myself/shared/label';
 import styles from './CalendarSummary.module.scss';
 
 export default function CalendarSummary({statsHref}: CalendarSummaryContent) {

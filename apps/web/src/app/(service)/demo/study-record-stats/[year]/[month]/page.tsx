@@ -1,14 +1,12 @@
+import {type CalendarMonth, parseMonth} from '@plan-for-myself/shared/date';
 import {
-  type CalendarMonth,
   demoCalendarPath,
   type DemoOverview,
   demoStatsPath,
-  formatStatsTitle,
-  getStatsMonthNavigation,
-  isSameMonth,
-  parseMonth,
   shouldShowDemoStatsTour,
-} from '@plan-for-myself/shared';
+} from '@plan-for-myself/shared/demo';
+import {formatStatsTitle, getStatsMonthNavigation} from '@plan-for-myself/shared/study-record-stats';
+import {isSameMonth} from '@plan-for-myself/shared/study-record';
 import type {Metadata} from 'next';
 import {notFound} from 'next/navigation';
 import classNames from 'classnames';

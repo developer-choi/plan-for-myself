@@ -1,4 +1,4 @@
-import type {DemoTourPart} from '@plan-for-myself/shared';
+import type {DemoTourPart} from '@plan-for-myself/shared/demo';
 
 export const DEMO_TOUR_SEEN_STORAGE_KEYS: Record<DemoTourPart, string> = {
   calendar: 'demo-tour-seen-calendar',
