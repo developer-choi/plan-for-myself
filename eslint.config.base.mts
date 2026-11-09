@@ -97,7 +97,12 @@ export const baseRules = {
         {
           group: ['**/index', '**/index.ts', '**/index.tsx'],
           message:
-            '내부 barrel(index) import 금지. 대상 모듈을 직접 import 하세요. 패키지 entry는 alias(@scope/pkg)로 import.',
+            '내부 barrel(index) import 금지. 대상 모듈을 직접 import 하세요. 패키지 entry는 그 패키지가 exports로 연 경로(@scope/pkg 또는 @scope/pkg/<폴더>)로 import.',
+        },
+        {
+          group: ['@plan-for-myself/shared/*/**', '**/packages/shared/**'],
+          message:
+            'shared는 폴더 진입점(@plan-for-myself/shared/<폴더>)으로만 import 하세요. 폴더 진입점이 내보내지 않은 파일에 닿는 경로입니다.',
         },
       ],
     },
