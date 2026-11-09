@@ -6,11 +6,11 @@ import {
   type StudyRecord,
   type StudyRecordMonthly,
   type StudyRecordOverview,
+  toMonthParam,
 } from '@plan-for-myself/shared';
 import {calculateMonthly} from '@/server/study-record-stats/monthly';
 import {calculateOverview} from '@/server/study-record-stats/overview';
 import {getDemoMonth, getDemoToday, getLastDayOfMonth, toDateString} from '@/demo/demo-today';
-import {toMonthParam} from '@/study-record/calendar-date';
 
 export {getDemoMonth, getDemoToday} from '@/demo/demo-today';
 

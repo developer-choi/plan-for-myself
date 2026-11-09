@@ -1,7 +1,7 @@
 import type {CalendarMonth, FailureTag, StudyRecordOverview} from '@plan-for-myself/shared';
+import {toMonthParam} from '@plan-for-myself/shared';
 import {render, screen} from '@testing-library/react';
 import {describe, expect, it} from 'vitest';
-import {toMonthParam} from '@/study-record/calendar-date';
 import {createMonthly, getDefinitionByTerm, queryAllTermTexts} from '@/study-record-stats/test-utils';
 import StatsSection from './StatsSection';
 

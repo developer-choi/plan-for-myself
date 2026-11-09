@@ -7,17 +7,26 @@ export {
 } from './auth/login-text';
 export type {PostAppTokenApiRequest, PostAppTokenApiResponse, PostAppTokenRefreshApiResponse} from './auth/type';
 export {colors} from './color/token';
-export {type CalendarMonth, formatMonthTitle, monthPath, parseMonth, shiftMonth} from './date/calendar-month';
+export {
+  type CalendarMonth,
+  formatMonthTitle,
+  getCalendarCells,
+  monthPath,
+  parseMonth,
+  shiftMonth,
+  WEEKDAY_LABELS,
+} from './date/calendar-month';
 export {isHolidayDate} from './date/holiday';
 export {getKoreanDate, getKoreanToday, KST} from './date/korean';
 export {convertLunarDateToSolar, type SimpleDate} from './date/lunar';
-export {toDateMonthParam} from './date/month-param';
+export {toDateMonthParam, toMonthParam} from './date/month-param';
 export type {DateType} from './date-type/type';
 export {getErrorInfo} from './error/info';
 export {isUnauthorizedError} from './error/unauthorized';
 export {ENTRY_LABEL, LOGOUT_LABEL, RETRY_LABEL, START_RECORDING_LABEL} from './label/labels';
 export {beforeSend} from './sentry/before-send';
 export {createStudyRecordApi} from './study-record/api';
+export {getCalendarDayCells} from './study-record/calendar-day-cells';
 export {isEmptyStudyRecord} from './study-record/empty';
 export {minutesFormat, studiedTimeFormat} from './study-record/format';
 export {
@@ -25,6 +34,7 @@ export {
   STUDY_RECORD_FIELD_LIMITS,
   STUDY_RECORD_FIELD_MESSAGES,
 } from './study-record/limits';
+export {createStudyRecordQueries} from './study-record/queries';
 export type {
   DeleteStudyRecordApiRequest,
   FailureTag,

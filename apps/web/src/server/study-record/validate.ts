@@ -26,7 +26,7 @@ export interface MonthRange {
 export function validateNewStudyRecord(body: unknown, today: string): Validation<NewStudyRecord> {
   const result = rejectEmptyRecord(validate(newStudyRecordSchema, body));
   if (result.ok && result.value.date > today) {
-    return {ok: false, rejection: {code: 'INVALID_DATE', message: FUTURE_DATE_MESSAGE}};
+    return {ok: false, rejection: {code: 'INVALID_DATE', message: STUDY_RECORD_FIELD_MESSAGES.futureDate}};
   }
   return result;
 }
@@ -75,7 +75,6 @@ const STUDY_RECORD_LIMITS = {
 
 const DATE_MESSAGE = '날짜가 올바르지 않아요';
 const MONTH_MESSAGE = '조회할 달이 올바르지 않아요';
-const FUTURE_DATE_MESSAGE = '오늘과 지난 날짜만 기록할 수 있어요';
 const FUTURE_MONTH_MESSAGE = '미래 달은 조회할 수 없어요';
 const FUTURE_LOOKUP_DATE_MESSAGE = '오늘과 지난 날짜만 조회할 수 있어요';
 const STUDIED_MINUTES_MESSAGE = STUDY_RECORD_FIELD_MESSAGES.studiedMinutes;

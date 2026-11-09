@@ -1,5 +1,5 @@
 import type {CalendarMonth, FailureTagTrend, StudyRecord} from '@plan-for-myself/shared';
-import {getCalendarCells} from '@/study-record/calendar-date';
+import {getCalendarCells} from '@plan-for-myself/shared';
 import {formatMonthLabel} from '@/study-record-stats/format';
 
 export interface TrendBar {

@@ -2,6 +2,7 @@
 
 import {toast} from '@developer-choi/design-system';
 import type {CalendarMonth, StudyRecord} from '@plan-for-myself/shared';
+import {STUDY_RECORD_FIELD_MESSAGES} from '@plan-for-myself/shared';
 import {getCalendarSummaryContent} from '@/study-record/calendar-summary';
 import CalendarGrid from '@/study-record/components/CalendarGrid';
 import CalendarSummary from '@/study-record/components/CalendarSummary';
@@ -32,7 +33,7 @@ export default function CalendarSection({
       <CalendarSummary {...summary} />
       <CalendarGrid
         handlers={{
-          onFutureDateClick: () => toast({title: FUTURE_DATE_MESSAGE}),
+          onFutureDateClick: () => toast({title: STUDY_RECORD_FIELD_MESSAGES.futureDate}),
           onRecordableDateClick: handlers.onRecordableDateClick,
         }}
         month={month}
@@ -42,5 +43,3 @@ export default function CalendarSection({
     </>
   );
 }
-
-const FUTURE_DATE_MESSAGE = '오늘과 지난 날짜만 기록할 수 있어요';

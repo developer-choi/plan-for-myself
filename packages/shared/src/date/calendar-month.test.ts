@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {formatMonthTitle, parseMonth, shiftMonth} from './calendar-month';
+import {formatMonthTitle, getCalendarCells, parseMonth, shiftMonth} from './calendar-month';
 
 describe('shiftMonth()', () => {
   describe('General cases', () => {
@@ -70,6 +70,96 @@ describe('formatMonthTitle()', () => {
   describe('General cases', () => {
     it('달을 넘기면 「YYYY년 M월」 제목을 반환해야 한다', () => {
       expect(formatMonthTitle({year: 2026, month: 10})).toBe('2026년 10월');
+    });
+  });
+});
+
+describe('getCalendarCells()', () => {
+  const daysPerWeek = 7;
+
+  describe('General cases', () => {
+    it('첫 칸을 월요일 날짜로 반환해야 한다', () => {
+      const monday = 1;
+      const cells = getCalendarCells({year: 2026, month: 9});
+
+      expect(new Date(`${cells[0]?.date ?? ''}T00:00:00`).getDay()).toBe(monday);
+    });
+
+    it('그 달이 걸친 주 수 × 7개의 칸을 반환해야 한다', () => {
+      const weeks = 5;
+
+      expect(getCalendarCells({year: 2026, month: 9})).toHaveLength(weeks * daysPerWeek);
+    });
+
+    it('앞 빈칸은 지난달 날짜를 이번 달 밖 칸으로 반환해야 한다', () => {
+      const cells = getCalendarCells({year: 2026, month: 9});
+
+      expect(cells[0]).toEqual({date: '2026-08-31', day: 31, inMonth: false});
+    });
+
+    it('뒤 빈칸은 다음 달 날짜를 이번 달 밖 칸으로 반환해야 한다', () => {
+      const cells = getCalendarCells({year: 2026, month: 9});
+
+      expect(cells.at(-1)).toEqual({date: '2026-10-04', day: 4, inMonth: false});
+    });
+
+    it('1일부터 말일까지는 이번 달 칸으로 반환해야 한다', () => {
+      const cells = getCalendarCells({year: 2026, month: 9});
+
+      const daysInSeptember = 30;
+      const firstDayIndex = 1;
+      const septemberCells = cells.slice(firstDayIndex, firstDayIndex + daysInSeptember);
+
+      expect(septemberCells.every(({inMonth}) => inMonth)).toBe(true);
+      expect(septemberCells.map(({day}) => day)).toEqual(
+        Array.from({length: daysInSeptember}, (_day, index) => index + 1),
+      );
+    });
+  });
+
+  describe('Boundary cases', () => {
+    it('1일이 월요일이면 첫 칸을 1일로 반환해야 한다', () => {
+      const cells = getCalendarCells({year: 2026, month: 6});
+
+      expect(cells[0]).toEqual({date: '2026-06-01', day: 1, inMonth: true});
+    });
+
+    it('1일이 일요일이면 1일 앞에 이번 달 밖 칸 6개를 반환해야 한다', () => {
+      const leadingDays = 6;
+      const cells = getCalendarCells({year: 2026, month: 2});
+
+      expect(cells.slice(0, leadingDays).every(({inMonth}) => !inMonth)).toBe(true);
+      expect(cells[leadingDays]).toEqual({date: '2026-02-01', day: 1, inMonth: true});
+    });
+
+    it('4주에 딱 맞는 2월이면 4주치 칸을 반환해야 한다', () => {
+      const weeks = 4;
+
+      expect(getCalendarCells({year: 2027, month: 2})).toHaveLength(weeks * daysPerWeek);
+    });
+
+    it('6주에 걸친 달이면 6주치 칸을 반환해야 한다', () => {
+      const weeks = 6;
+
+      expect(getCalendarCells({year: 2026, month: 3})).toHaveLength(weeks * daysPerWeek);
+    });
+
+    it('윤년 2월이면 29일을 이번 달 칸으로 반환해야 한다', () => {
+      const cells = getCalendarCells({year: 2044, month: 2});
+
+      expect(cells.find(({date}) => date === '2044-02-29')?.inMonth).toBe(true);
+    });
+
+    it('12월이면 뒤 빈칸을 다음 해 1월 날짜로 반환해야 한다', () => {
+      const cells = getCalendarCells({year: 2026, month: 12});
+
+      expect(cells.at(-1)).toEqual({date: '2027-01-03', day: 3, inMonth: false});
+    });
+
+    it('1월이면 앞 빈칸을 전해 12월 날짜로 반환해야 한다', () => {
+      const cells = getCalendarCells({year: 2027, month: 1});
+
+      expect(cells[0]).toEqual({date: '2026-12-28', day: 28, inMonth: false});
     });
   });
 });
