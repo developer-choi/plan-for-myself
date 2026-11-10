@@ -122,8 +122,48 @@ describe('OpenAPI 문서', () => {
       });
     });
 
+    it('/docs-json이면 예시 API에 인증을 싣지 않아야 한다', async () => {
+      const response = await request(app.getHttpServer()).get('/docs-json');
+
+      expect(response.body).toHaveProperty(DEMO_GET_PATH);
+      expect(response.body).not.toHaveProperty([...DEMO_GET_PATH, 'security']);
+    });
+
+    it('/docs-json이면 예시 API 응답의 첫 기록 날짜를 비어 있을 수 없게 실어야 한다', async () => {
+      const response = await request(app.getHttpServer()).get('/docs-json');
+
+      expect(response.body).toHaveProperty(
+        [...DEMO_OK_SCHEMA_PATH, 'properties', 'overview', 'properties', 'firstRecordDate', 'type'],
+        'string',
+      );
+      expect(response.body).not.toHaveProperty([
+        ...DEMO_OK_SCHEMA_PATH,
+        'properties',
+        'overview',
+        'properties',
+        'firstRecordDate',
+        'nullable',
+      ]);
+    });
+
+    it('/docs-json이면 예시 API 응답의 월 통계를 비어 있을 수 있게 실어야 한다', async () => {
+      const response = await request(app.getHttpServer()).get('/docs-json');
+
+      expect(response.body).toHaveProperty([...DEMO_OK_SCHEMA_PATH, 'properties', 'monthly', 'nullable'], true);
+    });
+
     it('/docs면 문서 화면을 반환해야 한다', async () => {
       await request(app.getHttpServer()).get('/docs').expect(HttpStatus.OK).expect('Content-Type', /html/);
     });
   });
 });
+
+const DEMO_GET_PATH = ['paths', '/api/demo', 'get'];
+const DEMO_OK_SCHEMA_PATH = [
+  ...DEMO_GET_PATH,
+  'responses',
+  String(HttpStatus.OK),
+  'content',
+  'application/json',
+  'schema',
+];

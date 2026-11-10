@@ -26,7 +26,6 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import {getKoreanToday} from '@plan-for-myself/shared/date';
-import {DATE_TYPES} from '@plan-for-myself/shared/date-type';
 import {API_ERROR_CODES} from '@plan-for-myself/shared/error';
 import {
   checkNewStudyRecord,
@@ -41,34 +40,13 @@ import {
 import {z} from 'zod';
 import {throwIfRejected} from '../error/throw-if-rejected';
 import {apiErrorSchema} from '../openapi/api-error-schema';
+import {STUDY_RECORD_SCHEMA} from '../openapi/study-record-schemas';
 import type {UserRow} from '../user/user.repository';
 import {ParsePkPipe} from './parse-pk.pipe';
 import {DUPLICATE_DATE, RECORD_NOT_FOUND} from './study-record.errors';
 import {StudyRecordRepository} from './study-record.repository';
 
 const monthQuerySchema = z.object({month: monthSchema});
-
-const {minItems: STUDIED_MINUTES_MIN_ITEMS, maxItems: STUDIED_MINUTES_MAX_ITEMS} = z.toJSONSchema(
-  newStudyRecordSchema.shape.studiedMinutes,
-  {target: 'openapi-3.0'},
-);
-
-const STUDY_RECORD_SCHEMA = {
-  type: 'object',
-  required: ['pk', 'date', 'dateType', 'studiedMinutes', 'failTags'],
-  properties: {
-    pk: {type: 'integer'},
-    date: {type: 'string', format: 'date'},
-    dateType: {type: 'string', enum: [...DATE_TYPES]},
-    studiedMinutes: {
-      type: 'array',
-      items: {type: 'integer'},
-      minItems: STUDIED_MINUTES_MIN_ITEMS,
-      maxItems: STUDIED_MINUTES_MAX_ITEMS,
-    },
-    failTags: {type: 'array', items: {type: 'string'}},
-  },
-};
 
 const ERROR_RESPONSES = {
   unauthorized: {
