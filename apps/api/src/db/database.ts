@@ -47,7 +47,12 @@ export async function createDatabaseConnection({
   logQueries,
 }: DatabaseOptions): Promise<DatabaseConnection> {
   if (connectionString) {
-    const pool = new Pool({connectionString, connectionTimeoutMillis: CONNECTION_TIMEOUT_MS});
+    const pool = new Pool({
+      connectionString,
+      connectionTimeoutMillis: CONNECTION_TIMEOUT_MS,
+      // eslint-disable-next-line @typescript-eslint/naming-convention -- pg가 정한 옵션 이름이다
+      query_timeout: QUERY_TIMEOUT_MS,
+    });
     pool.on('error', (error) => logger.error('DB 연결 풀 에러', error));
     return {db: drizzlePg({client: pool, logger: logQueries}), close: () => pool.end()};
   }
@@ -63,4 +68,5 @@ const LOCAL_DATA_DIR = '.local-db';
 /* 번들에서는 이 파일이 dist 바로 아래라 tsdown.config.ts의 copy가 dist/migrations에 둔다 */
 const MIGRATIONS_DIR = fileURLToPath(new URL('./migrations', import.meta.url));
 const CONNECTION_TIMEOUT_MS = 5000;
+const QUERY_TIMEOUT_MS = 10_000;
 const logger = new Logger('Database');
