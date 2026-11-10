@@ -1,4 +1,5 @@
-import {type DemoChoiceDialogProps, LOGGED_IN_DEMO_CHOICE_TITLES} from '@plan-for-myself/shared/demo';
+import {LOGGED_IN_DEMO_CHOICE_TITLES} from '@plan-for-myself/shared/demo';
+import type {DemoChoiceDialogProps} from '@plan-for-myself/shared/demo/react';
 import {MY_CALENDAR_LABEL} from '@plan-for-myself/shared/label';
 import DemoChoiceDialogFrame from '@/demo/components/DemoChoiceDialogFrame';
 import {resetStackTo} from '@/shared/reset-stack';

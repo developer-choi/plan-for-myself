@@ -1,4 +1,5 @@
-import {type DemoChoiceDialogProps, LOGGED_OUT_DEMO_CHOICE_MESSAGES} from '@plan-for-myself/shared/demo';
+import {LOGGED_OUT_DEMO_CHOICE_MESSAGES} from '@plan-for-myself/shared/demo';
+import type {DemoChoiceDialogProps} from '@plan-for-myself/shared/demo/react';
 import {START_RECORDING_LABEL} from '@plan-for-myself/shared/label';
 import DemoChoiceDialogFrame from '@/demo/components/DemoChoiceDialogFrame';
 import {resetStackTo} from '@/shared/reset-stack';

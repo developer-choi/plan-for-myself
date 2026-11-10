@@ -4,7 +4,7 @@ import {useState} from 'react';
 import {captureException} from '@sentry/nextjs';
 import {signIn} from 'next-auth/react';
 import {GUEST_START_LABEL} from '@plan-for-myself/shared/auth';
-import {useHandleClientSideError} from '@plan-for-myself/shared/error';
+import {useHandleClientSideError} from '@plan-for-myself/shared/error/react';
 import {Alert, Button} from '@developer-choi/design-system';
 import {DEFAULT_HOME_URL} from '@/auth/redirect';
 

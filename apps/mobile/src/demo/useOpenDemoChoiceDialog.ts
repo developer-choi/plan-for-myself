@@ -1,4 +1,5 @@
-import {type DemoChoiceReason, openDemoChoiceDialog} from '@plan-for-myself/shared/demo';
+import type {DemoChoiceReason} from '@plan-for-myself/shared/demo';
+import {openDemoChoiceDialog} from '@plan-for-myself/shared/demo/react';
 import {useSession} from '@/auth/session-context';
 import LoggedInDemoChoiceDialog from '@/demo/components/LoggedInDemoChoiceDialog';
 import LoggedOutDemoChoiceDialog from '@/demo/components/LoggedOutDemoChoiceDialog';

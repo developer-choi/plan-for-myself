@@ -3,7 +3,8 @@
 import {Button, Callout, Dialog, IconButton} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
 import {formatDateTitle} from '@plan-for-myself/shared/date';
-import {RECORD_FORM_LABELS, type StudyRecord, useRecordForm} from '@plan-for-myself/shared/study-record';
+import {RECORD_FORM_LABELS, type StudyRecord} from '@plan-for-myself/shared/study-record';
+import {useRecordForm} from '@plan-for-myself/shared/study-record/react';
 import {Cross2Icon} from '@radix-ui/react-icons';
 import {captureException} from '@sentry/nextjs';
 import classNames from 'classnames';

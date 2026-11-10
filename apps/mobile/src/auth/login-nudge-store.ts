@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {captureException} from '@sentry/react-native';
-import {LOGIN_NUDGE_STORAGE_KEY, type LoginNudgeStore} from '@plan-for-myself/shared/auth';
+import {LOGIN_NUDGE_STORAGE_KEY} from '@plan-for-myself/shared/auth';
+import type {LoginNudgeStore} from '@plan-for-myself/shared/auth/react';
 
 export const appLoginNudgeStore: LoginNudgeStore = {
   subscribe,

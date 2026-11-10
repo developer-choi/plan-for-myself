@@ -8,8 +8,8 @@ import {
   RECORD_FORM_LABELS,
   type RecordFormValues,
   validateMinuteInput,
-  useFailTagInput,
 } from '@plan-for-myself/shared/study-record';
+import {useFailTagInput} from '@plan-for-myself/shared/study-record/react';
 import {Lucide} from '@react-native-vector-icons/lucide';
 import {Controller, useController, useFormContext} from 'react-hook-form';
 import IconButton from '@/shared/components/IconButton';

@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import {Cross2Icon} from '@radix-ui/react-icons';
 import {Button, IconButton} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
-import {useLoginNudge} from '@plan-for-myself/shared/auth';
+import {useLoginNudge} from '@plan-for-myself/shared/auth/react';
 import {GOOGLE_CONNECT_LABEL} from '@plan-for-myself/shared/label';
 import {continueWithGoogle} from '@/auth/actions';
 import {webLoginNudgeStore} from '@/auth/login-nudge-store';

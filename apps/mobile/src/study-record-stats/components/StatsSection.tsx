@@ -1,5 +1,6 @@
 import {type ReactNode, type RefObject, useImperativeHandle, useRef} from 'react';
-import {getFirstFailureTagName, toTrendBars, useSelectedFailureTag} from '@plan-for-myself/shared/study-record-stats';
+import {getFirstFailureTagName, toTrendBars} from '@plan-for-myself/shared/study-record-stats';
+import {useSelectedFailureTag} from '@plan-for-myself/shared/study-record-stats/react';
 import type {StudyRecordMonthly, StudyRecordOverview} from '@plan-for-myself/shared/study-record';
 import {type ScrollView, StyleSheet, View} from 'react-native';
 import {spacing} from '@/shared/styles/design-tokens';

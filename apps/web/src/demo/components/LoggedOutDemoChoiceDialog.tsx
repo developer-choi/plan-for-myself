@@ -5,11 +5,8 @@ import typography from '@developer-choi/design-system/styles/typography';
 import {Cross2Icon} from '@radix-ui/react-icons';
 import classNames from 'classnames';
 import Link from 'next/link';
-import {
-  DEMO_CONTINUE_LABEL,
-  type DemoChoiceDialogProps,
-  LOGGED_OUT_DEMO_CHOICE_MESSAGES,
-} from '@plan-for-myself/shared/demo';
+import {DEMO_CONTINUE_LABEL, LOGGED_OUT_DEMO_CHOICE_MESSAGES} from '@plan-for-myself/shared/demo';
+import type {DemoChoiceDialogProps} from '@plan-for-myself/shared/demo/react';
 import {START_RECORDING_LABEL} from '@plan-for-myself/shared/label';
 import {focusOnMount} from '@/demo/focus-on-mount';
 import styles from './DemoChoiceDialog.module.scss';
