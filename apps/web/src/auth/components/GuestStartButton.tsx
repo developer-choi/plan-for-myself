@@ -3,6 +3,7 @@
 import {useState} from 'react';
 import {captureException} from '@sentry/nextjs';
 import {signIn} from 'next-auth/react';
+import {GUEST_START_LABEL} from '@plan-for-myself/shared';
 import {useHandleClientSideError} from '@plan-for-myself/shared/react';
 import {Alert, Button} from '@developer-choi/design-system';
 import {DEFAULT_HOME_URL} from '@/auth/redirect';
@@ -25,7 +26,7 @@ export default function GuestStartButton() {
 
   return (
     <Button color="secondary" loading={loading} size="xLarge" variant="outlined" onClick={startAsGuest}>
-      게스트로 시작하기
+      {GUEST_START_LABEL}
     </Button>
   );
 }

@@ -4,7 +4,9 @@ import {describe, expect, it} from 'vitest';
 import {
   APP_TOKEN_AUDIENCE,
   issueAppToken,
+  issueGuestAppToken,
   pickRequestUserId,
+  readAppTokenGuestUserId,
   readAppTokenKey,
   readAuthorizationUserId,
   refreshAppToken,
@@ -16,6 +18,57 @@ describe('issueAppToken()', () => {
       const {iat, exp} = decodeJwt(await issueAppToken('user-1'));
 
       expect(Number(exp) - Number(iat)).toBe(THIRTY_DAYS_IN_SECONDS);
+    });
+  });
+});
+
+describe('issueGuestAppToken()', () => {
+  describe('General cases', () => {
+    it('사용자 ID를 넘기면 그 사용자의 게스트 토큰을 반환해야 한다', async () => {
+      const {sub, isGuest} = decodeJwt(await issueGuestAppToken('user-1'));
+
+      expect({sub, isGuest}).toEqual({sub: 'user-1', isGuest: true});
+    });
+
+    it('웹 세션 유지 기간과 같은 30일 뒤에 만료되는 토큰을 반환해야 한다', async () => {
+      const {iat, exp} = decodeJwt(await issueGuestAppToken('user-1'));
+
+      expect(Number(exp) - Number(iat)).toBe(THIRTY_DAYS_IN_SECONDS);
+    });
+
+    it('사용자 ID를 넘기면 그 사용자 ID로 풀리는 토큰을 반환해야 한다', async () => {
+      const token = await issueGuestAppToken('user-1');
+
+      expect(await readAuthorizationUserId(`Bearer ${token}`)).toBe('user-1');
+    });
+  });
+});
+
+describe('readAppTokenGuestUserId()', () => {
+  describe('General cases', () => {
+    it('게스트 토큰이면 그 사용자 ID를 반환해야 한다', async () => {
+      const userId = 'user-1';
+      const token = await issueGuestAppToken(userId);
+
+      expect(await readAppTokenGuestUserId(`Bearer ${token}`)).toBe(userId);
+    });
+
+    it('구글 사용자 토큰이면 null을 반환해야 한다', async () => {
+      const token = await issueAppToken('user-1');
+
+      expect(await readAppTokenGuestUserId(`Bearer ${token}`)).toBeNull();
+    });
+  });
+
+  describe('Edge cases', () => {
+    it('서명이 틀린 토큰이면 null을 반환해야 한다', async () => {
+      const token = await createTamperedToken();
+
+      expect(await readAppTokenGuestUserId(`Bearer ${token}`)).toBeNull();
+    });
+
+    it('authorization이 없으면 null을 반환해야 한다', async () => {
+      expect(await readAppTokenGuestUserId(null)).toBeNull();
     });
   });
 });

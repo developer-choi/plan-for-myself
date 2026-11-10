@@ -1,4 +1,4 @@
-export type LoginErrorKind = 'guest-limit' | 'failed';
+import {GUEST_LIMIT_CODE, type LoginFailure} from '@plan-for-myself/shared';
 
 interface LoginErrorQuery {
   /* 없음: 로그인 오류로 돌아온 게 아닌 경우 */
@@ -7,7 +7,7 @@ interface LoginErrorQuery {
   code?: string | string[];
 }
 
-export function getLoginErrorKind(query: LoginErrorQuery): LoginErrorKind | null {
+export function getLoginErrorKind(query: LoginErrorQuery): LoginFailure | null {
   const error = Array.isArray(query.error) ? query.error[0] : query.error;
   const code = Array.isArray(query.code) ? query.code[0] : query.code;
 
@@ -17,5 +17,3 @@ export function getLoginErrorKind(query: LoginErrorQuery): LoginErrorKind | null
 
   return code === GUEST_LIMIT_CODE ? 'guest-limit' : 'failed';
 }
-
-export const GUEST_LIMIT_CODE = 'guest_limit';

@@ -65,7 +65,7 @@ describe('decideGoogleLogin()', () => {
         it('거절 판정을 반환해야 한다', () => {
           const decision = decideGoogleLogin({...guestFacts, guestHasRecords: true, registeredUserId});
 
-          expect(decision).toEqual({type: 'reject'});
+          expect(decision).toEqual({type: 'reject', guestUserId});
         });
       });
     });

@@ -1,8 +1,16 @@
 export const START_RECORDING_LABEL = '기록 시작하기';
 
+export const MY_CALENDAR_LABEL = '내 달력으로 이동';
+
+export const GOOGLE_CONNECT_PAGE_LABEL = 'Google 연결';
+
+export const GOOGLE_CONNECT_LABEL = 'Google 계정 연결하기';
+
+export const ACCOUNT_LABEL = '계정';
 export const STATS_LABEL = '통계';
 
 export const RETRY_LABEL = '다시 시도';
 export const ENTRY_LABEL = '처음으로';
 
 export const LOGOUT_LABEL = '로그아웃';
+export const PRIVACY_POLICY_LABEL = '개인정보 처리방침';

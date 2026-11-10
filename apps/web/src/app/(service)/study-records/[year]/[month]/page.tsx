@@ -4,13 +4,19 @@ import Link from 'next/link';
 import {notFound} from 'next/navigation';
 import classNames from 'classnames';
 import typography from '@developer-choi/design-system/styles/typography';
-import {formatMonthTitle, getKoreanToday, monthPath, parseMonth, shiftMonth} from '@plan-for-myself/shared';
-import LoginNudgeCard from '@/auth/components/LoginNudgeCard';
+import {
+  formatMonthTitle,
+  getKoreanToday,
+  GOOGLE_CONNECT_PAGE_LABEL,
+  monthPath,
+  parseMonth,
+  shiftMonth,
+} from '@plan-for-myself/shared';
+import FetchedLoginNudgeCard from '@/auth/components/FetchedLoginNudgeCard';
 import {auth} from '@/auth/next-auth';
 import {getLoginState} from '@/auth/path';
 import HandledErrorBoundary from '@/shared/components/HandledErrorBoundary';
 import LoadingSpinner from '@/shared/components/LoadingSpinner';
-import {GOOGLE_CONNECT_PAGE_LABEL} from '@/shared/labels';
 import layout from '@/shared/styles/layout.module.scss';
 import CalendarHeader from '@/study-record/components/CalendarHeader';
 import CalendarMenu from '@/study-record/components/CalendarMenu';
@@ -60,7 +66,7 @@ export default async function Page({params}: PageProps) {
           </Suspense>
         </HandledErrorBoundary>
       </main>
-      {isGuest && <LoginNudgeCard today={today} />}
+      {isGuest && <FetchedLoginNudgeCard today={today} />}
     </div>
   );
 }

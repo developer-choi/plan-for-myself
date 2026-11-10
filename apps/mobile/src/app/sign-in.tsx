@@ -1,35 +1,110 @@
 import {useRef, useState} from 'react';
+import {router, useLocalSearchParams} from 'expo-router';
 import {captureException} from '@sentry/react-native';
-import LoginSection from '@/auth/components/LoginSection';
+import {type LoginFailure, shouldShowRegisteredNotice} from '@plan-for-myself/shared';
+import GuestConnectSection from '@/auth/components/GuestConnectSection';
+import LoginSection, {type PendingAction} from '@/auth/components/LoginSection';
+import {getLoginFailure} from '@/auth/login-failure';
+import {readTokenUserId} from '@/auth/read-app-token';
+import {useRegisteredRejection} from '@/auth/registered-rejection';
 import {useSession} from '@/auth/session-context';
+import useGoogleConnect, {type GoogleConnectOutcome} from '@/auth/useGoogleConnect';
+import {resetStackTo} from '@/shared/reset-stack';
 
 export default function SignInScreen() {
   const {
-    handlers: {signIn},
+    session: {token, isGuest},
+    handlers: {signIn, startAsGuest},
   } = useSession();
+  const {error} = useLocalSearchParams<{error?: string}>();
+  const rejection = useRegisteredRejection();
+  const {
+    isPending: isConnectPending,
+    handlers: {connect, discardGuestAndConnect},
+  } = useGoogleConnect();
 
-  const [isPending, setIsPending] = useState(false);
-  const isPendingCache = useRef(false);
-  const [isFailed, setIsFailed] = useState(false);
+  const [pendingAction, setPendingAction] = useState<PendingAction | null>(null);
+  const pendingActionCache = useRef<PendingAction | null>(null);
+  const [failure, setFailure] = useState<LoginFailure | null>(error === 'failed' ? 'failed' : null);
 
   const handleSignIn = async () => {
-    if (isPendingCache.current) {
+    if (pendingActionCache.current !== null) {
       return;
     }
 
-    isPendingCache.current = true;
-    setIsPending(true);
+    pendingActionCache.current = 'google';
+    setPendingAction('google');
     try {
       await signIn();
-      setIsFailed(false);
+      setFailure(null);
     } catch (error) {
       captureException(error);
-      setIsFailed(true);
+      setFailure('failed');
     } finally {
-      isPendingCache.current = false;
-      setIsPending(false);
+      pendingActionCache.current = null;
+      setPendingAction(null);
     }
   };
 
-  return <LoginSection handlers={{onSignIn: handleSignIn}} isFailed={isFailed} isPending={isPending} />;
+  const handleStartAsGuest = async () => {
+    if (pendingActionCache.current !== null) {
+      return;
+    }
+
+    pendingActionCache.current = 'guest';
+    setPendingAction('guest');
+    try {
+      await startAsGuest();
+      setFailure(null);
+      router.replace('/');
+    } catch (error) {
+      const nextFailure = getLoginFailure(error);
+      if (nextFailure === 'failed') {
+        captureException(error);
+      }
+      setFailure(nextFailure);
+    } finally {
+      pendingActionCache.current = null;
+      setPendingAction(null);
+    }
+  };
+
+  const handleConnectOutcome = (outcome: GoogleConnectOutcome) => {
+    if (outcome === 'cancelled') {
+      return;
+    }
+
+    setFailure(outcome === 'failed' ? 'failed' : null);
+    if (outcome === 'connected') {
+      resetStackTo('/');
+    }
+  };
+
+  if (isGuest) {
+    return (
+      <GuestConnectSection
+        failure={failure}
+        handlers={{
+          onConnect: () => {
+            connect().then(handleConnectOutcome).catch(captureException);
+          },
+          onDiscard: async () => handleConnectOutcome(await discardGuestAndConnect()),
+          onLeave: () => resetStackTo('/'),
+        }}
+        isPending={isConnectPending}
+        isRejected={shouldShowRegisteredNotice(rejection, {userId: readTokenUserId(token), isGuest})}
+      />
+    );
+  }
+
+  return (
+    <LoginSection
+      failure={failure}
+      handlers={{
+        onSignIn: handleSignIn,
+        onStartAsGuest: handleStartAsGuest,
+      }}
+      pendingAction={pendingAction}
+    />
+  );
 }

@@ -1,12 +1,17 @@
 import type {
   PostAppTokenApiRequest,
   PostAppTokenApiResponse,
+  PostAppTokenGuestApiResponse,
   PostAppTokenRefreshApiResponse,
 } from '@plan-for-myself/shared';
 import {apiClient} from '@/shared/api/client';
 
 export async function postAppTokenApi(request: PostAppTokenApiRequest): Promise<PostAppTokenApiResponse> {
   return apiClient.post<PostAppTokenApiResponse>('/api/app-token', {body: request});
+}
+
+export async function postAppTokenGuestApi(signal: AbortSignal): Promise<PostAppTokenGuestApiResponse> {
+  return apiClient.post<PostAppTokenGuestApiResponse>('/api/app-token/guest', {body: undefined, signal});
 }
 
 export async function postAppTokenRefreshApi(signal: AbortSignal): Promise<PostAppTokenRefreshApiResponse> {

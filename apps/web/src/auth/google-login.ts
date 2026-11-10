@@ -18,7 +18,7 @@ export interface GoogleLoginFacts {
 export type GoogleLoginDecision =
   | {type: 'link'; guestUserId: string}
   | {type: 'switch-delete-empty-guest'; guestUserId: string; registeredUserId: string}
-  | {type: 'reject'}
+  | {type: 'reject'; guestUserId: string}
   | {type: 'switch-discard-guest'; guestUserId: string; registeredUserId: string}
   | {type: 'find-or-create'};
 
@@ -52,7 +52,7 @@ export function decideGoogleLogin({
     return {type: 'switch-discard-guest', guestUserId, registeredUserId};
   }
 
-  return {type: 'reject'};
+  return {type: 'reject', guestUserId};
 }
 
 export async function findGoogleLoginFacts(
@@ -73,7 +73,7 @@ export async function findGoogleLoginFacts(
 }
 
 /**
- * @throws {Error} 거절 판정이 나왔을 때(signIn이 먼저 거절했어야 한다), 또는 판정 뒤 조건부 쿼리가 0행이라 상태가 판정과 어긋났을 때
+ * @throws {Error} 거절 판정이 나왔을 때(호출자가 먼저 거절했어야 한다), 또는 판정 뒤 조건부 쿼리가 0행이라 상태가 판정과 어긋났을 때
  */
 export async function resolveGoogleLogin(
   params: GoogleLoginParams,

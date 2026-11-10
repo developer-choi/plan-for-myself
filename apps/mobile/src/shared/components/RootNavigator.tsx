@@ -6,7 +6,7 @@ import {useSession} from '@/auth/session-context';
 
 export default function RootNavigator() {
   const {
-    session: {token, isLoading},
+    session: {token, isLoading, isGuest},
   } = useSession();
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export default function RootNavigator() {
         <Stack.Screen name="study-records/[year]/[month]" />
         <Stack.Screen name="study-record-stats/[year]/[month]" />
       </Stack.Protected>
-      <Stack.Protected guard={token === null}>
+      <Stack.Protected guard={token === null || isGuest}>
         <Stack.Screen name="sign-in" />
       </Stack.Protected>
     </Stack>

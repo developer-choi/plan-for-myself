@@ -1,6 +1,6 @@
+import {GUEST_LIMIT_CODE} from '@plan-for-myself/shared';
 import {checkRateLimit} from '@vercel/firewall';
 import {CredentialsSignin} from 'next-auth';
-import {GUEST_LIMIT_CODE} from '@/auth/login-error';
 import {pool} from '@/server/db/pool';
 import {createGuestUserId, type Queryable} from '@/server/user/repository';
 

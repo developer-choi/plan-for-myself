@@ -1,16 +1,18 @@
 import {type PropsWithChildren, useCallback, useEffect, useRef, useState} from 'react';
 import {AppState} from 'react-native';
 import {captureException} from '@sentry/react-native';
-import {isUnauthorizedError} from '@plan-for-myself/shared';
+import {isUnauthorizedError, type RegisteredAccountRejection} from '@plan-for-myself/shared';
 import {
   GoogleOneTapSignIn,
   isCancelledResponse,
   isNoSavedCredentialFoundResponse,
   isSuccessResponse,
 } from 'react-native-nitro-google-signin';
-import {postAppTokenApi, postAppTokenRefreshApi} from '@/auth/api';
+import {postAppTokenApi, postAppTokenGuestApi, postAppTokenRefreshApi} from '@/auth/api';
 import {deleteAppToken, getAppToken, saveAppToken} from '@/auth/app-token-storage';
-import {SessionContext} from '@/auth/session-context';
+import {readIsGuest} from '@/auth/read-app-token';
+import {clearRegisteredRejection, readRegisteredRejection, saveRegisteredRejection} from '@/auth/registered-rejection';
+import {type GoogleConnectResult, SessionContext} from '@/auth/session-context';
 import {ApiResponseError} from '@developer-choi/utils/api';
 import {isTransientApiError} from '@/shared/api/transient';
 
@@ -34,17 +36,61 @@ export default function SessionProvider({children}: PropsWithChildren) {
     })();
   }, []);
 
+  const commitToken = useCallback(async (next: string) => {
+    await saveAppToken(next);
+    setToken(next);
+  }, []);
+
   const signIn = useCallback(async () => {
     const idToken = await requestGoogleIdToken();
     if (idToken === null) {
       return;
     }
-    const {token: next} = await postAppTokenApi({idToken});
-    await saveAppToken(next);
-    setToken(next);
-  }, []);
+    const exchange = await postAppTokenApi({idToken, discardIntent: null});
+    if (exchange.type === 'registered-account') {
+      throw new Error('게스트 토큰 없이 보낸 교환이 이미 가입됨으로 거절됐다');
+    }
+    await commitToken(exchange.token);
+  }, [commitToken]);
+
+  const exchangeForConnect = useCallback(
+    async (discardIntent: RegisteredAccountRejection | null): Promise<GoogleConnectResult> => {
+      const idToken = await requestGoogleIdToken();
+      if (idToken === null) {
+        return 'cancelled';
+      }
+
+      const exchange = await postAppTokenApi({idToken, discardIntent});
+      if (exchange.type === 'registered-account') {
+        saveRegisteredRejection(exchange.rejection);
+        return 'rejected';
+      }
+
+      await commitToken(exchange.token);
+      clearRegisteredRejection();
+      return 'connected';
+    },
+    [commitToken],
+  );
+
+  const connectGoogle = useCallback(() => exchangeForConnect(null), [exchangeForConnect]);
+
+  const discardGuestAndConnect = useCallback(async (): Promise<GoogleConnectResult> => {
+    const discardIntent = readRegisteredRejection();
+    if (discardIntent === null) {
+      clearRegisteredRejection();
+      return 'rejection-expired';
+    }
+    return exchangeForConnect(discardIntent);
+  }, [exchangeForConnect]);
+
+  const startAsGuest = useCallback(async () => {
+    const {token: next} = await requestGuestToken();
+    await commitToken(next);
+  }, [commitToken]);
 
   const signOut = useCallback(async () => {
+    clearRegisteredRejection();
     try {
       await deleteAppToken();
     } finally {
@@ -55,11 +101,21 @@ export default function SessionProvider({children}: PropsWithChildren) {
 
   useAppTokenRefresh({isLoading, updateToken: setToken, signOut});
 
-  return <SessionContext value={{session: {token, isLoading}, handlers: {signIn, signOut}}}>{children}</SessionContext>;
+  return (
+    <SessionContext
+      value={{
+        session: {token, isLoading, isGuest: readIsGuest(token)},
+        handlers: {signIn, startAsGuest, connectGoogle, discardGuestAndConnect, signOut},
+      }}
+    >
+      {children}
+    </SessionContext>
+  );
 }
 
 const WEB_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID ?? '';
 const REFRESH_TIMEOUT_MILLISECONDS = 10_000;
+const GUEST_START_TIMEOUT_MILLISECONDS = 10_000;
 
 function useAppTokenRefresh({isLoading, updateToken, signOut}: UseAppTokenRefreshParams) {
   const isRefreshingCache = useRef(false);
@@ -74,11 +130,16 @@ function useAppTokenRefresh({isLoading, updateToken, signOut}: UseAppTokenRefres
 
     isRefreshingCache.current = true;
     try {
-      if ((await getAppToken()) === null) {
+      const sent = await getAppToken();
+      if (sent === null) {
         return;
       }
       const next = await requestRefreshedToken();
       if (next === null) {
+        return;
+      }
+      /* 기다리는 사이 Google 연결·로그아웃으로 토큰이 바뀌었으면, 서버가 옛 토큰 claim을 복사한 응답이 새 토큰을 덮어쓴다 */
+      if ((await getAppToken()) !== sent) {
         return;
       }
       await saveAppToken(next);
@@ -127,6 +188,16 @@ async function requestRefreshedToken(): Promise<string | null> {
       return null;
     }
     throw error;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+async function requestGuestToken() {
+  const abortController = new AbortController();
+  const timeoutId = setTimeout(() => abortController.abort(), GUEST_START_TIMEOUT_MILLISECONDS);
+  try {
+    return await postAppTokenGuestApi(abortController.signal);
   } finally {
     clearTimeout(timeoutId);
   }
