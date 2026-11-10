@@ -5,13 +5,13 @@ import Text from '@/shared/components/Text';
 import {radius, spacing, typography} from '@/shared/styles/design-tokens';
 
 interface CardProps extends PropsWithChildren {
-  title: string;
+  title?: string;
 }
 
 export default function Card({title, children}: CardProps) {
   return (
     <View style={styles.card}>
-      <Text style={styles.title}>{title}</Text>
+      {title !== undefined && <Text style={styles.title}>{title}</Text>}
       {children}
     </View>
   );

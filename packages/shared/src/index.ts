@@ -1,9 +1,12 @@
-export {GUEST_DELETE_TEXT} from './auth/delete-text';
+export {createAccountApi} from './auth/api';
+export {type AccountDeleteText, GOOGLE_DELETE_TEXT, GUEST_DELETE_TEXT} from './auth/delete-text';
 export {GUEST_LIMIT_CODE, hasGuestLimitCode, type LoginFailure} from './auth/guest-limit';
 export {
   CONNECT_KEEPS_RECORDS_HINT,
   DISCARD_LABEL,
+  GOOGLE_ACCOUNT_TITLE,
   GOOGLE_LOGIN_LABEL,
+  GUEST_ACCOUNT_TITLE,
   GUEST_CONNECT_NOTE,
   GUEST_LIMIT_NOTICE,
   GUEST_START_LABEL,

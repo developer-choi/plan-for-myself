@@ -1,3 +1,4 @@
+export {default as useAccountDelete} from './auth/useAccountDelete';
 export {default as useHandleClientSideError} from './error/useHandleClientSideError';
 export {type LoginNudgeStore, default as useLoginNudge} from './auth/useLoginNudge';
 export {openOnce} from './overlay/open-once';

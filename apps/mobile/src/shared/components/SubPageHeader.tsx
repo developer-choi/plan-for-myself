@@ -10,7 +10,7 @@ import {spacing, typography} from '@/shared/styles/design-tokens';
 interface SubPageHeaderProps {
   title: string;
   exit: SubPageHeaderExit;
-  monthNavigation: SubPageMonthNavigation;
+  monthNavigation?: SubPageMonthNavigation;
 }
 
 interface SubPageHeaderExit {
@@ -33,6 +33,12 @@ interface MonthLinkProps {
 }
 
 export default function SubPageHeader({title, exit, monthNavigation}: SubPageHeaderProps) {
+  const heading = (
+    <Text numberOfLines={1} style={styles.title}>
+      {title}
+    </Text>
+  );
+
   return (
     <View style={styles.header}>
       <View style={styles.side}>
@@ -40,13 +46,15 @@ export default function SubPageHeader({title, exit, monthNavigation}: SubPageHea
           <IconButton icon={exit.icon} />
         </Link>
       </View>
-      <View style={styles.monthNavigation}>
-        <MonthLink href={monthNavigation.previousHref} icon={PREVIOUS_ICON} testID={PREVIOUS_MONTH_LINK_TEST_ID} />
-        <Text numberOfLines={1} style={styles.title}>
-          {title}
-        </Text>
-        <MonthLink href={monthNavigation.nextHref} icon={NEXT_ICON} testID={NEXT_MONTH_LINK_TEST_ID} />
-      </View>
+      {monthNavigation ? (
+        <View style={styles.monthNavigation}>
+          <MonthLink href={monthNavigation.previousHref} icon={PREVIOUS_ICON} testID={PREVIOUS_MONTH_LINK_TEST_ID} />
+          {heading}
+          <MonthLink href={monthNavigation.nextHref} icon={NEXT_ICON} testID={NEXT_MONTH_LINK_TEST_ID} />
+        </View>
+      ) : (
+        heading
+      )}
       <View style={styles.side} />
     </View>
   );

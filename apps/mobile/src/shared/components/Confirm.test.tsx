@@ -14,6 +14,18 @@ describe('Confirm', () => {
         expect(screen.queryByText(TITLE)).not.toBeOnTheScreen();
       });
     });
+
+    it('실패 문구를 넘기면 창 안에 보여야 한다', async () => {
+      await render(<Confirm {...CONFIRM_PROPS} failure={FAILURE} />);
+
+      expect(screen.getByText(FAILURE)).toBeOnTheScreen();
+    });
+
+    it('실패 문구를 넘기지 않으면 실패 문구가 없어야 한다', async () => {
+      await render(<Confirm {...CONFIRM_PROPS} />);
+
+      expect(screen.queryByText(FAILURE)).not.toBeOnTheScreen();
+    });
   });
 
   describe('Edge cases', () => {
@@ -30,6 +42,15 @@ describe('Confirm', () => {
 });
 
 const TITLE = '삭제할까요?';
+const FAILURE = '탈퇴하지 못했어요. 잠시 후 다시 시도해 주세요';
+const CONFIRM_PROPS = {
+  open: true,
+  title: TITLE,
+  content: '되돌릴 수 없어요.',
+  confirmLabel: '삭제',
+  loading: false,
+  handlers: {onCancel: () => {}, onConfirm: () => {}},
+};
 
 function ClosableConfirm({loading}: {loading: boolean}) {
   const [open, setOpen] = useState(true);

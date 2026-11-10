@@ -1,5 +1,4 @@
+import {createAccountApi} from '@plan-for-myself/shared';
 import {apiClient} from '@/shared/api/client';
 
-export async function deleteAccountApi(): Promise<void> {
-  return apiClient.delete<void>('/api/account');
-}
+export const accountApi = createAccountApi(apiClient);

@@ -22,6 +22,14 @@ describe('SubPageHeader', () => {
 
       expect(screen.getByTestId(NEXT_MONTH_LINK_TEST_ID)).toBeOnTheScreen();
     });
+
+    it('달을 넘겨 보지 않는 화면이면 제목만 보이고 달 링크가 없어야 한다', async () => {
+      await render(<SubPageHeader exit={EXIT} title={ACCOUNT_TITLE} />);
+
+      expect(screen.getByText(ACCOUNT_TITLE)).toBeOnTheScreen();
+      expect(screen.queryByTestId(PREVIOUS_MONTH_LINK_TEST_ID)).not.toBeOnTheScreen();
+      expect(screen.queryByTestId(NEXT_MONTH_LINK_TEST_ID)).not.toBeOnTheScreen();
+    });
   });
 
   describe('Edge cases', () => {
@@ -41,13 +49,9 @@ describe('SubPageHeader', () => {
 
 const PREVIOUS_HREF: Href = '/study-record-stats/2026/8';
 const NEXT_HREF: Href = '/study-record-stats/2026/10';
+const EXIT = {href: '/study-records/2026/9', icon: <Lucide name="calendar" />} as const;
+const ACCOUNT_TITLE = '계정';
 
 async function renderHeader(monthNavigation: MonthNavigation) {
-  await render(
-    <SubPageHeader
-      exit={{href: '/study-records/2026/9', icon: <Lucide name="calendar" />}}
-      monthNavigation={monthNavigation}
-      title="2026년 9월 통계"
-    />,
-  );
+  await render(<SubPageHeader exit={EXIT} monthNavigation={monthNavigation} title="2026년 9월 통계" />);
 }

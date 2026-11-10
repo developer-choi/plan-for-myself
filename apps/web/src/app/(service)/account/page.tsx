@@ -1,5 +1,6 @@
 import type {Metadata} from 'next';
 import classNames from 'classnames';
+import {ACCOUNT_LABEL} from '@plan-for-myself/shared';
 import {CalendarIcon} from '@radix-ui/react-icons';
 import {auth} from '@/auth/next-auth';
 import {ENTRY_URL} from '@/auth/redirect';
@@ -11,7 +12,7 @@ import layout from '@/shared/styles/layout.module.scss';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {
-  title: '계정',
+  title: ACCOUNT_LABEL,
 };
 
 export default async function Page() {
@@ -20,7 +21,7 @@ export default async function Page() {
   return (
     <div className={layout.shell}>
       <div className={classNames(layout.centered, layout.narrow)}>
-        <SubPageHeader exit={{href: ENTRY_URL, icon: CalendarIcon}} title="계정" />
+        <SubPageHeader exit={{href: ENTRY_URL, icon: CalendarIcon}} title={ACCOUNT_LABEL} />
         <main className={styles.body}>{loginState === 'guest' ? <GuestAccount /> : <GoogleAccount />}</main>
       </div>
     </div>

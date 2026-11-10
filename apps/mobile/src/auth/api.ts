@@ -1,10 +1,13 @@
-import type {
-  PostAppTokenApiRequest,
-  PostAppTokenApiResponse,
-  PostAppTokenGuestApiResponse,
-  PostAppTokenRefreshApiResponse,
+import {
+  createAccountApi,
+  type PostAppTokenApiRequest,
+  type PostAppTokenApiResponse,
+  type PostAppTokenGuestApiResponse,
+  type PostAppTokenRefreshApiResponse,
 } from '@plan-for-myself/shared';
 import {apiClient} from '@/shared/api/client';
+
+export const accountApi = createAccountApi(apiClient);
 
 export async function postAppTokenApi(request: PostAppTokenApiRequest): Promise<PostAppTokenApiResponse> {
   return apiClient.post<PostAppTokenApiResponse>('/api/app-token', {body: request});

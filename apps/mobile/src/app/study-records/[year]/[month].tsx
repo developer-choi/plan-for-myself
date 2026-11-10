@@ -13,6 +13,7 @@ import CalendarHeader from '@/study-record/components/CalendarHeader';
 import CalendarMenu from '@/study-record/components/CalendarMenu';
 import FetchedCalendarSection from '@/study-record/components/FetchedCalendarSection';
 import GoogleConnectLink from '@/study-record/components/GoogleConnectLink';
+import GuestCalendarMenu from '@/study-record/components/GuestCalendarMenu';
 
 export default function CalendarScreen() {
   const viewMonth = parseMonth(useLocalSearchParams<{year: string; month: string}>());
@@ -28,7 +29,7 @@ export default function CalendarScreen() {
   return (
     <SafeAreaView edges={['top', 'bottom']} style={styles.shell}>
       <CalendarHeader
-        menu={isGuest ? undefined : <CalendarMenu />}
+        menu={isGuest ? <GuestCalendarMenu /> : <CalendarMenu />}
         nextHref={monthPath(shiftMonth(viewMonth, 1))}
         previousHref={monthPath(shiftMonth(viewMonth, -1))}
         right={isGuest ? <GoogleConnectLink /> : undefined}

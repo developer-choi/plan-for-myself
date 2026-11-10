@@ -6,6 +6,8 @@ export const DISCARD_LABEL = '게스트 계정 삭제 후 로그인';
 export const GUEST_CONNECT_NOTE = '나중에 Google 계정을 연결할 수 있어요.';
 export const KEEP_GUEST_LABEL = '삭제하지 않고 내 달력으로';
 export const CONNECT_KEEPS_RECORDS_HINT = '지금 기록이 그대로 이어져요';
+export const GUEST_ACCOUNT_TITLE = '게스트 계정으로 이용 중';
+export const GOOGLE_ACCOUNT_TITLE = 'Google 계정으로 로그인 중';
 
 export const GUEST_LIMIT_NOTICE = {
   title: '게스트로 시작하기가 잠시 막혔어요',

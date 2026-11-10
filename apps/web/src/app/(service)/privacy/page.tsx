@@ -2,6 +2,7 @@ import type {ReactNode} from 'react';
 import type {Metadata} from 'next';
 import classNames from 'classnames';
 import typography from '@developer-choi/design-system/styles/typography';
+import {PRIVACY_POLICY_LABEL} from '@plan-for-myself/shared';
 import {HomeIcon} from '@radix-ui/react-icons';
 import {ENTRY_URL} from '@/auth/redirect';
 import Card from '@/shared/components/Card';
@@ -29,14 +30,14 @@ interface EmailLinkProps {
 }
 
 export const metadata: Metadata = {
-  title: '개인정보 처리방침',
+  title: PRIVACY_POLICY_LABEL,
 };
 
 export default function Page() {
   return (
     <div className={layout.shell}>
       <div className={classNames(layout.centered, layout.reading)}>
-        <SubPageHeader exit={{href: ENTRY_URL, icon: HomeIcon}} title="개인정보 처리방침" />
+        <SubPageHeader exit={{href: ENTRY_URL, icon: HomeIcon}} title={PRIVACY_POLICY_LABEL} />
         <main className={styles.body}>
           <Card>
             <article className={classNames(typography.body1, styles.article)}>
@@ -64,7 +65,7 @@ const POLICY_ITEMS: PolicyItem[] = [
   {
     title: '수집하는 정보',
     content:
-      'Google 계정 고유 ID(이메일·이름은 저장하지 않아요), 게스트 식별 쿠키, 직접 적은 기록(공부시간·실패 태그·날짜), 접속할 때의 IP 주소, 오류가 났을 때의 오류 정보(오류 내용과 코드 위치, 오류가 난 요청의 주소(조회 조건 포함)와 그 요청에 담긴 기록, 서버가 돌려준 오류 내용, 웹에서는 그때의 페이지 주소·브라우저·OS 종류·접속 IP로 추정한 국가·도시, 앱에서는 기기 설치 ID, 기기 정보(모델·제조사·OS·화면 크기·배터리·메모리·저장공간·CPU·기기를 켠 시각·루팅 여부·네트워크 종류·시간대·언어), 앱 버전·앱을 켠 시각·앱 업데이트 정보, 접속 IP로 추정한 국가·도시, 오류 직전의 앱 동작 기록(화면 이동·터치·콘솔 메시지), 앱이 비정상 종료될 때는 앱이 쓰는 권한 목록)',
+      'Google 계정 고유 ID(이메일·이름은 저장하지 않아요), 게스트 식별 쿠키, 앱의 로그인·게스트 상태를 유지하는 앱 토큰, 직접 적은 기록(공부시간·실패 태그·날짜), 접속할 때의 IP 주소, 오류가 났을 때의 오류 정보(오류 내용과 코드 위치, 오류가 난 요청의 주소(조회 조건 포함)와 그 요청에 담긴 기록, 서버가 돌려준 오류 내용, 웹에서는 그때의 페이지 주소·브라우저·OS 종류·접속 IP로 추정한 국가·도시, 앱에서는 기기 설치 ID, 기기 정보(모델·제조사·OS·화면 크기·배터리·메모리·저장공간·CPU·기기를 켠 시각·루팅 여부·네트워크 종류·시간대·언어), 앱 버전·앱을 켠 시각·앱 업데이트 정보, 접속 IP로 추정한 국가·도시, 오류 직전의 앱 동작 기록(화면 이동·터치·콘솔 메시지), 앱이 비정상 종료될 때는 앱이 쓰는 권한 목록)',
   },
   {
     title: '쓰는 곳',
@@ -119,7 +120,7 @@ const POLICY_ITEMS: PolicyItem[] = [
   {
     title: '쿠키',
     content:
-      '쿠키는 브라우저에 저장돼 접속할 때 서버로 보내지는 작은 정보예요. 로그인·게스트 세션 쿠키와, 이미 가입된 계정 안내(10분)·게스트 기록 삭제 확인(5분)에 쓰는 짧은 쿠키를 써요. 짧은 쿠키에는 Google 계정 고유 ID를 서버 비밀키로 바꾼 값과 게스트 ID가 담기고, 시간이 지나면 사라져요. 로그인 안내 말풍선을 띄운 날짜는 브라우저 저장소에만 담고 서버로 보내지 않아요. 브라우저 설정에서 쿠키를 막을 수 있지만, 막으면 로그인과 기록을 쓸 수 없어요. 연결 안내 카드를 닫은 날과 그때 기록한 날 수는 기기에만 담고 서버로 보내지 않아요',
+      '쿠키는 브라우저에 저장돼 접속할 때 서버로 보내지는 작은 정보예요. 로그인·게스트 세션 쿠키와, 이미 가입된 계정 안내(10분)·게스트 기록 삭제 확인(5분)에 쓰는 짧은 쿠키를 써요. 짧은 쿠키에는 Google 계정 고유 ID를 서버 비밀키로 바꾼 값과 게스트 ID가 담기고, 시간이 지나면 사라져요. 로그인 안내 말풍선을 띄운 날짜는 브라우저 저장소에만 담고 서버로 보내지 않아요. 브라우저 설정에서 쿠키를 막을 수 있지만, 막으면 로그인과 기록을 쓸 수 없어요. 앱은 쿠키를 쓰지 않고, 로그인·게스트 상태를 유지하는 앱 토큰을 기기의 안전한 저장소에 담아요. 연결 안내 카드를 닫은 날과 그때 기록한 날 수는 기기에만 담고 서버로 보내지 않아요',
   },
   {
     title: '안전 조치',
