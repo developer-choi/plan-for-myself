@@ -8,8 +8,6 @@ import {
   formatStreakNote,
 } from './format';
 
-const HOUR = 60;
-
 describe('formatDuration()', () => {
   describe('General cases', () => {
     it('시간과 분이 다 있으면 「N시간 M분」이어야 한다', () => {
@@ -156,3 +154,5 @@ describe('formatMonthLabel()', () => {
     });
   });
 });
+
+const HOUR = 60;
