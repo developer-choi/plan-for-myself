@@ -1,11 +1,12 @@
 'use client';
 
+import type {DemoTourPart} from '@plan-for-myself/shared';
 import {useEffect, useState, useSyncExternalStore} from 'react';
 import dynamic from 'next/dynamic';
 import {captureException} from '@sentry/nextjs';
 import {ErrorBoundary} from 'react-error-boundary';
 import type {DemoCalendarTourProps} from '@/demo/components/DemoCalendarTour';
-import {type DemoTourPart, hasSeenDemoTour, markDemoTourSeen} from '@/demo/demo-tour-seen';
+import {hasSeenDemoTour, markDemoTourSeen} from '@/demo/demo-tour-seen';
 
 type DemoTourTriggerProps =
   ({part: Extract<DemoTourPart, 'calendar'>} & DemoCalendarTourProps) | {part: Extract<DemoTourPart, 'stats'>};

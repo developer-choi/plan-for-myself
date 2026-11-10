@@ -1,8 +1,6 @@
-import {ACCOUNT_LABEL, PRIVACY_POLICY_LABEL} from '@plan-for-myself/shared';
+import {ACCOUNT_LABEL, DEMO_HOME_URL, DEMO_TOUR_LABEL, PRIVACY_POLICY_LABEL} from '@plan-for-myself/shared';
 import {INTRO_URL} from '@/auth/redirect';
-import {DEMO_HOME_URL} from '@/demo/demo-path';
 import HeaderMenu from '@/shared/components/HeaderMenu';
-import {DEMO_TOUR_LABEL} from '@/shared/labels';
 
 export default function GuestCalendarMenu() {
   return (

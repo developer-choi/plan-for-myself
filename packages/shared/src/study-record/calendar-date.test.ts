@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {isFutureMonth, isSameMonth} from './calendar-date';
+import {findFirstRecordDateOfMonth, isFutureMonth, isSameMonth} from './calendar-date';
 
 describe('isSameMonth()', () => {
   describe('General cases', () => {
@@ -31,6 +31,22 @@ describe('isFutureMonth()', () => {
 
     it('보는 달이 오늘과 같은 달이면 false여야 한다', () => {
       expect(isFutureMonth('2026-10-29', {year: 2026, month: 10})).toBe(false);
+    });
+  });
+});
+
+describe('findFirstRecordDateOfMonth()', () => {
+  describe('General cases', () => {
+    it('앞 달 기록이 함께 있어도 보는 달의 첫 기록 날을 반환해야 한다', () => {
+      const records = [{date: '2026-09-30'}, {date: '2026-10-03'}, {date: '2026-10-05'}];
+
+      expect(findFirstRecordDateOfMonth(records, {year: 2026, month: 10})).toBe('2026-10-03');
+    });
+  });
+
+  describe('Edge cases', () => {
+    it('그 달 기록이 없으면 undefined를 반환해야 한다', () => {
+      expect(findFirstRecordDateOfMonth([{date: '2026-09-30'}], {year: 2026, month: 10})).toBeUndefined();
     });
   });
 });

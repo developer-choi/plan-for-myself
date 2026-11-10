@@ -1,11 +1,15 @@
 'use client';
 
-import {ACCOUNT_LABEL, LOGOUT_LABEL, PRIVACY_POLICY_LABEL} from '@plan-for-myself/shared';
+import {
+  ACCOUNT_LABEL,
+  DEMO_HOME_URL,
+  DEMO_TOUR_LABEL,
+  LOGOUT_LABEL,
+  PRIVACY_POLICY_LABEL,
+} from '@plan-for-myself/shared';
 import {ENTRY_URL, INTRO_URL} from '@/auth/redirect';
 import {signOutAndReplace} from '@/auth/sign-out';
-import {DEMO_HOME_URL} from '@/demo/demo-path';
 import HeaderMenu from '@/shared/components/HeaderMenu';
-import {DEMO_TOUR_LABEL} from '@/shared/labels';
 
 export default function CalendarMenu() {
   const logout = () => {

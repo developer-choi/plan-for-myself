@@ -1,6 +1,7 @@
+import {createRef} from 'react';
 import {describe, expect, it} from '@jest/globals';
 import {colors, type FailureTagStatus, type StudyRecordMonthly} from '@plan-for-myself/shared';
-import type {TextStyle} from 'react-native';
+import type {TextStyle, View} from 'react-native';
 import {render, screen} from '@testing-library/react-native';
 import {createFailureTag, createMonthly} from '@/study-record-stats/test-utils';
 import FailCard, {TAG_ROW_TEST_ID_PREFIX} from './FailCard';
@@ -162,6 +163,25 @@ describe('FailCard', () => {
         expect(screen.getByTestId(`${TAG_ROW_TEST_ID_PREFIX}${tag}`)).not.toHaveStyle(SELECTED_ROW_STYLE);
         expect(screen.getByText(tag)).not.toHaveStyle(SELECTED_TEXT_STYLE);
       });
+    });
+  });
+
+  describe('체험 말풍선이 짚을 줄', () => {
+    it('묶음 순서로 맨 앞인 태그 줄에 말풍선 ref가 붙어야 한다', async () => {
+      const firstTagRowRef = createRef<View>();
+      const failureTags = [
+        createFailureTag({tag: '새로 생긴 태그', status: 'appeared'}),
+        createFailureTag({tag: '반복 태그', status: 'repeated'}),
+      ];
+      await render(
+        <FailCard
+          monthly={createMonthly({failureTags})}
+          selection={NO_SELECTION}
+          tourTargets={{failGroupsRef: createRef<View>(), firstTagRowRef}}
+        />,
+      );
+
+      expect(firstTagRowRef.current?.props.testID).toBe(`${TAG_ROW_TEST_ID_PREFIX}반복 태그`);
     });
   });
 });

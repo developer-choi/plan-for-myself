@@ -1,8 +1,6 @@
 'use client';
 
-import type {CalendarMonth, StudyRecord} from '@plan-for-myself/shared';
-import type {DemoOverview} from '@/demo/demo-examples';
-import {demoStatsPath} from '@/demo/demo-path';
+import {type CalendarMonth, type DemoOverview, demoStatsPath, type StudyRecord} from '@plan-for-myself/shared';
 import {useOpenDemoChoiceDialog} from '@/demo/useOpenDemoChoiceDialog';
 import CalendarSection from '@/study-record/components/CalendarSection';
 

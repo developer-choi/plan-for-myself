@@ -1,6 +1,7 @@
 export {default as useAccountDelete} from './auth/useAccountDelete';
 export {default as useHandleClientSideError} from './error/useHandleClientSideError';
 export {type LoginNudgeStore, default as useLoginNudge} from './auth/useLoginNudge';
+export {openDemoChoiceDialog} from './demo/open-demo-choice-dialog';
 export {openOnce} from './overlay/open-once';
 export {createQueryClient} from './query/query-client';
 export {default as useFailTagInput} from './study-record/useFailTagInput';

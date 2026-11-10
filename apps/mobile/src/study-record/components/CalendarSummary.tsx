@@ -1,3 +1,4 @@
+import type {Ref} from 'react';
 import {Pressable, StyleSheet, View} from 'react-native';
 import {type Href, Link} from 'expo-router';
 import {colors, STATS_LABEL} from '@plan-for-myself/shared';
@@ -7,9 +8,10 @@ import {controlHeight, opacity, radius, spacing, touchTarget, typography} from '
 
 interface CalendarSummaryProps {
   statsHref?: Href;
+  statsLinkRef?: Ref<View>;
 }
 
-export default function CalendarSummary({statsHref}: CalendarSummaryProps) {
+export default function CalendarSummary({statsHref, statsLinkRef}: CalendarSummaryProps) {
   return (
     <View style={styles.summary}>
       {statsHref !== undefined && (
@@ -17,7 +19,7 @@ export default function CalendarSummary({statsHref}: CalendarSummaryProps) {
           {/* Link asChild가 Pressable의 함수 style을 버려서, children 함수로 눌림 상태를 받아 안쪽 View에 건다 */}
           <Pressable hitSlop={STATS_HIT_SLOP}>
             {({pressed}) => (
-              <View style={[styles.statsButton, pressed && styles.pressed]}>
+              <View ref={statsLinkRef} collapsable={false} style={[styles.statsButton, pressed && styles.pressed]}>
                 <Lucide color={colors.textSecondary} name="bar-chart" size={STATS_ICON_SIZE} />
                 <Text style={styles.statsLabel}>{STATS_LABEL}</Text>
               </View>

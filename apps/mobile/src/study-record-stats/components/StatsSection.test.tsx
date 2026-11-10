@@ -1,14 +1,36 @@
 import {createRef} from 'react';
 import {describe, expect, it} from '@jest/globals';
 import type {FailureTagTrend} from '@plan-for-myself/shared';
-import {render, screen, userEvent} from '@testing-library/react-native';
+import {act, render, screen, userEvent} from '@testing-library/react-native';
 import Text from '@/shared/components/Text';
 import {createFailureTag, createMonthly} from '@/study-record-stats/test-utils';
 import {TAG_ROW_TEST_ID_PREFIX} from './FailCard';
-import StatsSection from './StatsSection';
+import StatsSection, {type StatsTourTargets} from './StatsSection';
 
 describe('StatsSection', () => {
   describe('General cases', () => {
+    it('체험 말풍선이 첫 태그를 열면 첫 태그의 달력이 보여야 한다', async () => {
+      const tourTargets = createTourTargets();
+      await renderStatsSection(tourTargets);
+
+      await act(() => tourTargets.firstTagOpenerRef.current?.openFirstTag(0));
+
+      expect(screen.getByText(OVERSLEEP_CALENDAR)).toBeOnTheScreen();
+    });
+
+    describe('첫 태그의 달력이 이미 열린 상태', () => {
+      it('체험 말풍선이 첫 태그를 다시 열어도 달력이 그대로 보여야 한다', async () => {
+        const user = userEvent.setup();
+        const tourTargets = createTourTargets();
+        await renderStatsSection(tourTargets);
+        await user.press(screen.getByText(OVERSLEEP.tag));
+
+        await act(() => tourTargets.firstTagOpenerRef.current?.openFirstTag(0));
+
+        expect(screen.getByText(OVERSLEEP_CALENDAR)).toBeOnTheScreen();
+      });
+    });
+
     it('태그 줄을 누르기 전에는 태그 달력이 보이지 않아야 한다', async () => {
       await renderStatsSection();
 
@@ -61,13 +83,23 @@ const SNACK_CALENDAR = `${SNACK.tag}${CALENDAR_SUFFIX}`;
 const OVERSLEEP_ROW_TEST_ID = `${TAG_ROW_TEST_ID_PREFIX}${OVERSLEEP.tag}`;
 const MONTHLY = createMonthly({failureTags: [OVERSLEEP, SNACK]});
 
-function renderStatsSection() {
+function createTourTargets(): StatsTourTargets {
+  return {
+    failGroupsRef: createRef(),
+    firstTagRowRef: createRef(),
+    tagDetailCardRef: createRef(),
+    firstTagOpenerRef: createRef(),
+  };
+}
+
+function renderStatsSection(tourTargets?: StatsTourTargets) {
   return render(
     <StatsSection
       monthly={MONTHLY}
       overview={null}
       renderTagCalendar={(tag) => <Text>{`${tag}${CALENDAR_SUFFIX}`}</Text>}
       scrollViewRef={createRef()}
+      tourTargets={tourTargets}
     />,
   );
 }
