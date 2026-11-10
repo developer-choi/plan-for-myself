@@ -17,8 +17,10 @@ describe('excludeHeaderIntegration()', () => {
 
 describe('excludeRequestBreadcrumb()', () => {
   describe('General cases', () => {
-    it.each(['fetch', 'xhr'])('%s 기록은 버려야 한다', (category) => {
-      expect(excludeRequestBreadcrumb({category})).toBeNull();
+    ['fetch', 'xhr'].forEach((category) => {
+      it(`${category} 기록은 버려야 한다`, () => {
+        expect(excludeRequestBreadcrumb({category})).toBeNull();
+      });
     });
 
     it('요청 기록이 아니면 그대로 남겨야 한다', () => {
