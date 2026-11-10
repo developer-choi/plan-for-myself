@@ -9,6 +9,7 @@ import {ApiExceptionFilter} from './error/api-exception.filter';
 import {HealthController} from './health/health.controller';
 import {SentryShutdownModule} from './sentry/sentry-shutdown.module';
 import {StudyRecordModule} from './study-record/study-record.module';
+import {StudyRecordStatsModule} from './study-record-stats/study-record-stats.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import {StudyRecordModule} from './study-record/study-record.module';
     AuthenticationModule.forRoot(),
     AuthModule,
     StudyRecordModule,
+    StudyRecordStatsModule,
   ],
   controllers: [HealthController],
   providers: [

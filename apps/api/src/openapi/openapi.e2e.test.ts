@@ -1,5 +1,9 @@
 import {HttpStatus, type INestApplication} from '@nestjs/common';
-import {RECORD_REJECTION_CODES} from '@plan-for-myself/shared/study-record';
+import {
+  FAILURE_TAG_STATUSES,
+  FAILURE_TAG_TREND_STATUSES,
+  RECORD_REJECTION_CODES,
+} from '@plan-for-myself/shared/study-record';
 import request from 'supertest';
 import type {App} from 'supertest/types';
 import {afterAll, beforeAll, describe, expect, it} from 'vitest';
@@ -59,6 +63,57 @@ describe('OpenAPI 문서', () => {
               responses: {
                 [HttpStatus.BAD_REQUEST]: {
                   content: {'application/json': {schema: {properties: {code: {enum: RECORD_REJECTION_CODES}}}}},
+                },
+              },
+            },
+          },
+        },
+      });
+    });
+
+    [
+      {
+        name: '실패 태그 상태',
+        statusSchema: {status: {enum: FAILURE_TAG_STATUSES}},
+      },
+      {
+        name: '추이 상태',
+        statusSchema: {trend: {items: {properties: {status: {enum: FAILURE_TAG_TREND_STATUSES}}}}},
+      },
+    ].forEach(({name, statusSchema}) => {
+      it(`/docs-json이면 월 통계의 ${name}에 shared 상태 값을 실어야 한다`, async () => {
+        const response = await request(app.getHttpServer()).get('/docs-json');
+
+        expect(response.body).toMatchObject({
+          paths: {
+            '/api/study-record-stats/monthly': {
+              get: {
+                responses: {
+                  [HttpStatus.OK]: {
+                    content: {
+                      'application/json': {schema: {properties: {failureTags: {items: {properties: statusSchema}}}}},
+                    },
+                  },
+                },
+              },
+            },
+          },
+        });
+      });
+    });
+
+    it('/docs-json이면 월 통계의 400 응답에 달·날짜 code를 실어야 한다', async () => {
+      const response = await request(app.getHttpServer()).get('/docs-json');
+
+      expect(response.body).toMatchObject({
+        paths: {
+          '/api/study-record-stats/monthly': {
+            get: {
+              responses: {
+                [HttpStatus.BAD_REQUEST]: {
+                  content: {
+                    'application/json': {schema: {properties: {code: {enum: ['INVALID_MONTH', 'INVALID_DATE']}}}},
+                  },
                 },
               },
             },

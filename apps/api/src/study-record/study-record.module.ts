@@ -7,5 +7,6 @@ import {StudyRecordRepository} from './study-record.repository';
   imports: [DatabaseModule],
   controllers: [StudyRecordController],
   providers: [StudyRecordRepository],
+  exports: [StudyRecordRepository],
 })
 export class StudyRecordModule {}

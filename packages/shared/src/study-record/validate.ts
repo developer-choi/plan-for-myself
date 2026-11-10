@@ -64,25 +64,34 @@ export function toRejection(issues: readonly SchemaIssue[]): Rejection {
 export function validateDate(date: string | null, today: string): Validation<string> {
   const result = dateSchema.safeParse(date);
   if (!result.success) {
-    return {ok: false, rejection: {code: 'INVALID_DATE', message: DATE_MESSAGE}};
+    return {ok: false, rejection: {code: API_ERROR_CODES.INVALID_DATE, message: DATE_MESSAGE}};
   }
-  if (result.data > today) {
-    return {ok: false, rejection: {code: 'INVALID_DATE', message: FUTURE_LOOKUP_DATE_MESSAGE}};
-  }
-  return {ok: true, value: result.data};
+  return toValidation(result.data, checkLookupDate(result.data, today));
 }
 
 export function validateMonth(month: string | null): Validation<MonthRange> {
   const result = monthSchema.safeParse(month);
   return result.success
     ? {ok: true, value: result.data}
-    : {ok: false, rejection: {code: 'INVALID_MONTH', message: MONTH_MESSAGE}};
+    : {ok: false, rejection: {code: API_ERROR_CODES.INVALID_MONTH, message: MONTH_MESSAGE}};
 }
 
 export function validateNotFutureMonth(month: MonthRange, date: string): Validation<MonthRange> {
-  return month.from > date
-    ? {ok: false, rejection: {code: 'INVALID_MONTH', message: FUTURE_MONTH_MESSAGE}}
-    : {ok: true, value: month};
+  return toValidation(month, checkNotFutureMonth(month, date));
+}
+
+/**
+ * null: 오늘이거나 지난 날짜다
+ */
+export function checkLookupDate(date: string, today: string): Rejection | null {
+  return date > today ? {code: API_ERROR_CODES.INVALID_DATE, message: FUTURE_LOOKUP_DATE_MESSAGE} : null;
+}
+
+/**
+ * null: 조회 기준 날짜보다 뒤의 달이 아니다
+ */
+export function checkNotFutureMonth(month: MonthRange, date: string): Rejection | null {
+  return month.from > date ? {code: API_ERROR_CODES.INVALID_MONTH, message: FUTURE_MONTH_MESSAGE} : null;
 }
 
 /* 숫자가 아니거나 int 범위를 넘는 pk는 어느 기록도 가리키지 않으므로 null로 돌려 404로 답하게 한다 */
@@ -117,7 +126,7 @@ const failTagSchema = z
   .regex(/^\S+$/, {error: STUDY_RECORD_FIELD_MESSAGES.failTagSpace})
   .max(STUDY_RECORD_LIMITS.failTags.maxLength, {error: STUDY_RECORD_FIELD_MESSAGES.failTagLength});
 
-const dateSchema = z.iso
+export const dateSchema = z.iso
   .date({error: DATE_MESSAGE})
   .refine((date) => date >= STUDY_RECORD_LIMITS.date.min && date <= STUDY_RECORD_LIMITS.date.max, {
     error: DATE_MESSAGE,

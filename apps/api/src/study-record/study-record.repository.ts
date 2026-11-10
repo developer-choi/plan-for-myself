@@ -13,15 +13,15 @@ type CreateResult = {ok: true; record: StudyRecord} | {ok: false; reason: 'DUPLI
 export class StudyRecordRepository {
   constructor(@Inject(DATABASE) private readonly db: Database) {}
 
-  list(userId: number, range: MonthRange): Promise<StudyRecord[]> {
+  list(userId: number, range: MonthRange | null): Promise<StudyRecord[]> {
     return this.db
       .select(COLUMNS)
       .from(studyRecords)
       .where(
         and(
           eq(studyRecords.userId, userId),
-          gte(studyRecords.recordDate, range.from),
-          lt(studyRecords.recordDate, range.until),
+          range ? gte(studyRecords.recordDate, range.from) : undefined,
+          range ? lt(studyRecords.recordDate, range.until) : undefined,
         ),
       )
       .orderBy(asc(studyRecords.recordDate));

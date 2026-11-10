@@ -1,6 +1,5 @@
 import {CurrentUser} from '@nestjs/authentication';
 import {
-  BadRequestException,
   Body,
   ConflictException,
   Controller,
@@ -28,7 +27,7 @@ import {
 } from '@nestjs/swagger';
 import {getKoreanToday} from '@plan-for-myself/shared/date';
 import {DATE_TYPES} from '@plan-for-myself/shared/date-type';
-import {API_ERROR_CODES, type ApiErrorCode} from '@plan-for-myself/shared/error';
+import {API_ERROR_CODES} from '@plan-for-myself/shared/error';
 import {
   checkNewStudyRecord,
   checkStudyRecordUpdate,
@@ -40,6 +39,8 @@ import {
   studyRecordUpdateSchema,
 } from '@plan-for-myself/shared/study-record';
 import {z} from 'zod';
+import {throwIfRejected} from '../error/throw-if-rejected';
+import {apiErrorSchema} from '../openapi/api-error-schema';
 import type {UserRow} from '../user/user.repository';
 import {ParsePkPipe} from './parse-pk.pipe';
 import {DUPLICATE_DATE, RECORD_NOT_FOUND} from './study-record.errors';
@@ -109,10 +110,7 @@ export class StudyRecordController {
   @ApiBadRequestResponse(ERROR_RESPONSES.invalidNewRecord)
   @ApiConflictResponse(ERROR_RESPONSES.duplicateDate)
   async create(@CurrentUser() user: UserRow, @Body({schema: newStudyRecordSchema}) record: NewStudyRecord) {
-    const rejection = checkNewStudyRecord(record, getKoreanToday());
-    if (rejection) {
-      throw new BadRequestException(rejection);
-    }
+    throwIfRejected(checkNewStudyRecord(record, getKoreanToday()));
 
     const created = await this.repository.create(user.id, record);
     if (created.ok) {
@@ -131,10 +129,7 @@ export class StudyRecordController {
     @Param('pk', ParsePkPipe) pk: number,
     @Body({schema: studyRecordUpdateSchema}) fields: StudyRecordFields,
   ) {
-    const rejection = checkStudyRecordUpdate(fields);
-    if (rejection) {
-      throw new BadRequestException(rejection);
-    }
+    throwIfRejected(checkStudyRecordUpdate(fields));
 
     const updated = await this.repository.update({userId: user.id, pk}, fields);
     if (!updated) {
@@ -152,12 +147,4 @@ export class StudyRecordController {
       throw new NotFoundException(RECORD_NOT_FOUND);
     }
   }
-}
-
-function apiErrorSchema(codes: readonly ApiErrorCode[]) {
-  return {
-    type: 'object',
-    required: ['code', 'message'],
-    properties: {code: {type: 'string', enum: [...codes]}, message: {type: 'string'}},
-  };
 }

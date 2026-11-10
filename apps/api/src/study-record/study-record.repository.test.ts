@@ -43,6 +43,15 @@ describe('StudyRecordRepository', () => {
     });
 
     describe('Edge cases', () => {
+      it('기간이 null이면 달을 가리지 않고 내 기록 전부를 반환해야 한다', async () => {
+        await repository.create(userId, createRecord('2026-08-31'));
+        await repository.create(userId, createRecord('2026-10-01'));
+
+        const records = await repository.list(userId, null);
+
+        expect(records.map(({date}) => date)).toEqual(['2026-08-31', '2026-10-01']);
+      });
+
       it('남의 기록은 반환하지 않아야 한다', async () => {
         await repository.create(await insertGuest(connection.db), createRecord(RECORD_DATE));
 

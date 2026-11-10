@@ -14,17 +14,22 @@ export {
   validateMinuteInput,
 } from './record-form';
 export {RECORD_FORM_LABELS} from './record-form-labels';
-export type {
-  FailureTag,
-  FailureTagStatus,
-  FailureTagTrend,
-  StudyRecord,
-  StudyRecordMonthly,
-  StudyRecordOverview,
+export {
+  FAILURE_TAG_STATUSES,
+  FAILURE_TAG_TREND_STATUSES,
+  type FailureTag,
+  type FailureTagStatus,
+  type FailureTagTrend,
+  type StudyRecord,
+  type StudyRecordMonthly,
+  type StudyRecordOverview,
 } from './type';
 export {
+  checkLookupDate,
   checkNewStudyRecord,
+  checkNotFutureMonth,
   checkStudyRecordUpdate,
+  dateSchema,
   type MonthRange,
   monthSchema,
   type NewStudyRecord,
