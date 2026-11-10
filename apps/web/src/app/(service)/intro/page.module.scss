@@ -43,6 +43,10 @@
   word-break: keep-all;
 }
 
+.heading {
+  white-space: pre-line;
+}
+
 .featureHeader {
   display: flex;
   flex-direction: column;

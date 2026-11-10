@@ -22,7 +22,7 @@ import {fontSize, opacity, radius, spacing, touchTarget, typography} from '@/sha
 
 interface FailCardProps {
   monthly: StudyRecordMonthly;
-  selection: FailureTagSelection;
+  selection?: FailureTagSelection;
   tourTargets?: FailCardTourTargets;
 }
 
@@ -42,7 +42,7 @@ interface GroupProps {
 
 interface TagRowProps {
   name: string;
-  selection: FailureTagSelection;
+  selection: FailureTagSelection | undefined;
   hitSlop: Insets;
   rowRef: RefObject<View | null> | undefined;
   children: ReactNode;
@@ -246,7 +246,7 @@ function Group({title, icon, tone, tags, hasDividerAbove, children}: GroupProps)
 }
 
 function TagRow({name, selection, hitSlop, rowRef, children}: TagRowProps) {
-  const selected = selection.selectedTag === name;
+  const selected = selection?.selectedTag === name;
 
   return (
     <Pressable
@@ -254,7 +254,7 @@ function TagRow({name, selection, hitSlop, rowRef, children}: TagRowProps) {
       hitSlop={hitSlop}
       style={({pressed}) => [styles.tagRow, selected && styles.tagRowSelected, pressed && styles.pressed]}
       testID={`${TAG_ROW_TEST_ID_PREFIX}${name}`}
-      onPress={() => selection.onSelect(name)}
+      onPress={() => selection?.onSelect(name)}
     >
       <Text numberOfLines={1} style={[styles.tagName, selected && styles.selectedText]}>
         {name}

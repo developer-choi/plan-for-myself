@@ -1,6 +1,7 @@
 export const START_RECORDING_LABEL = '기록 시작하기';
 
 export const MY_CALENDAR_LABEL = '내 달력으로 이동';
+export const INTRO_MENU_LABEL = '서비스 소개';
 
 export const DEMO_TOUR_LABEL = '예시 둘러보기';
 

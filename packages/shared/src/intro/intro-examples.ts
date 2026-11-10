@@ -1,13 +1,12 @@
 /* eslint-disable no-magic-numbers -- 소개 페이지 그림에만 쓰는 고정 예시 데이터라 숫자를 그대로 적는다 */
+import type {CalendarMonth} from '../date/calendar-month';
 import type {
-  CalendarMonth,
   FailureTag,
   FailureTagTrend,
   StudyRecord,
   StudyRecordMonthly,
   StudyRecordOverview,
-} from '@plan-for-myself/shared';
-import {isReduced} from '@/server/study-record-stats/tag-count';
+} from '../study-record/type';
 
 export const INTRO_MONTH: CalendarMonth = {year: 2026, month: 9};
 export const INTRO_TAG = '늦잠';
@@ -30,7 +29,7 @@ export const INTRO_RECORDS: StudyRecord[] = Array.from({length: LAST_DAY}, (_day
     pk: day,
     date: `2026-09-${String(day).padStart(2, '0')}`,
     dateType: 'weekday',
-    studiedMinutes: [STUDY_MINUTES[day % STUDY_MINUTES.length], 0, 0],
+    studiedMinutes: [STUDY_MINUTES[day % STUDY_MINUTES.length] ?? 0, 0, 0],
     failTags: FAIL_TAGS[day] ?? [],
   }));
 
@@ -49,7 +48,7 @@ export const INTRO_MONTHLY: StudyRecordMonthly = {
   inProgress: true,
   recordedDays: {count: INTRO_RECORDS.length, total: LAST_DAY},
   study: {totalMinutes: 4800, weekdayAvg: 170, holidayAvg: 180, prevWeekdayAvg: 160, prevHolidayAvg: 170},
-  failureTags: Object.entries(AUGUST_COUNTS).map(([tag, previousCount]) => toFailureTag(tag, previousCount)),
+  failureTags: [toFailureTag('늦잠', 'repeated'), toFailureTag('게임', 'appeared'), toFailureTag('과식', 'reduced')],
 };
 
 export const INTRO_TREND: FailureTagTrend[] = [
@@ -67,14 +66,6 @@ function countTag(tag: string): number {
   return INTRO_RECORDS.filter((record) => record.failTags.includes(tag)).length;
 }
 
-function toFailureTag(tag: string, previousCount: number): FailureTag {
-  const count = countTag(tag);
-  return {tag, count, previousCount, status: getStatus(count, previousCount), trend: []};
-}
-
-function getStatus(count: number, previousCount: number): FailureTag['status'] {
-  if (previousCount === 0) {
-    return 'appeared';
-  }
-  return isReduced(count, previousCount) ? 'reduced' : 'repeated';
+function toFailureTag(tag: keyof typeof AUGUST_COUNTS, status: FailureTag['status']): FailureTag {
+  return {tag, count: countTag(tag), previousCount: AUGUST_COUNTS[tag], status, trend: []};
 }

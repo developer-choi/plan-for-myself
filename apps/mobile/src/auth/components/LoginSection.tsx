@@ -1,9 +1,10 @@
-import {StyleSheet, View} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
 import {
   colors,
   GOOGLE_LOGIN_LABEL,
   GUEST_CONNECT_NOTE,
   GUEST_START_LABEL,
+  INTRO_EXIT_LABEL,
   LOGIN_DESCRIPTION,
   type LoginFailure,
   START_RECORDING_LABEL,
@@ -15,7 +16,7 @@ import LoginFailedNotice from '@/auth/components/LoginFailedNotice';
 import Button from '@/shared/components/Button';
 import Logo from '@/shared/components/Logo';
 import Text from '@/shared/components/Text';
-import {spacing, typography} from '@/shared/styles/design-tokens';
+import {opacity, spacing, touchTarget, typography} from '@/shared/styles/design-tokens';
 
 export type PendingAction = 'google' | 'guest';
 
@@ -25,13 +26,16 @@ interface LoginSectionProps {
   handlers: {
     onSignIn: () => Promise<void>;
     onStartAsGuest: () => Promise<void>;
+    onExit: () => void;
   };
 }
 
 export default function LoginSection({failure, pendingAction, handlers}: LoginSectionProps) {
   return (
     <AuthScreenFrame>
-      <Logo size="large" />
+      <Pressable disabled={pendingAction !== null} onPress={handlers.onExit}>
+        <Logo size="large" />
+      </Pressable>
       <View style={styles.text}>
         <Text style={authScreenStyles.title}>{START_RECORDING_LABEL}</Text>
         <Text style={styles.description}>{LOGIN_DESCRIPTION}</Text>
@@ -64,11 +68,25 @@ export default function LoginSection({failure, pendingAction, handlers}: LoginSe
           </View>
         </View>
       </View>
+      <Pressable
+        disabled={pendingAction !== null}
+        hitSlop={EXIT_LINK_HIT_SLOP}
+        style={({pressed}) => [
+          authScreenStyles.exitLink,
+          pendingAction !== null && styles.exitLinkDisabled,
+          pressed && styles.pressed,
+        ]}
+        onPress={handlers.onExit}
+      >
+        <Text style={authScreenStyles.exitLabel}>{INTRO_EXIT_LABEL}</Text>
+      </Pressable>
     </AuthScreenFrame>
   );
 }
 
 const GUEST_DEVICE_NOTE = '이 기기에서만 쓸 수 있어요.';
+
+const EXIT_LINK_HIT_SLOP = (touchTarget.min - typography.body2.lineHeight - 2 * spacing.xs) / 2;
 
 const styles = StyleSheet.create({
   text: {
@@ -87,5 +105,11 @@ const styles = StyleSheet.create({
     ...typography.body2,
     textAlign: 'center',
     color: colors.textSecondary,
+  },
+  exitLinkDisabled: {
+    opacity: opacity.disabled,
+  },
+  pressed: {
+    opacity: opacity.pressed,
   },
 });

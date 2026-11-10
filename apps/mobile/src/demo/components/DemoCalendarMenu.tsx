@@ -1,5 +1,5 @@
 import {openURL} from 'expo-linking';
-import {MY_CALENDAR_LABEL, PRIVACY_POLICY_LABEL} from '@plan-for-myself/shared';
+import {INTRO_MENU_LABEL, INTRO_URL, MY_CALENDAR_LABEL, PRIVACY_POLICY_LABEL} from '@plan-for-myself/shared';
 import {useSession} from '@/auth/session-context';
 import HeaderMenu from '@/shared/components/HeaderMenu';
 import {PRIVACY_POLICY_URL} from '@/shared/external-link';
@@ -13,6 +13,7 @@ export default function DemoCalendarMenu() {
     <HeaderMenu
       items={[
         ...(isLoggedIn ? [{label: MY_CALENDAR_LABEL, onPress: () => resetStackTo('/')}] : []),
+        {label: INTRO_MENU_LABEL, onPress: () => resetStackTo(INTRO_URL)},
         {label: PRIVACY_POLICY_LABEL, onPress: () => void openURL(PRIVACY_POLICY_URL)},
       ]}
     />
