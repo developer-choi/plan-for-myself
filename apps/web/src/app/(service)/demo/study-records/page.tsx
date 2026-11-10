@@ -1,6 +1,5 @@
-import {demoCalendarPath} from '@plan-for-myself/shared/demo';
+import {demoCalendarPath, getDemoMonth} from '@plan-for-myself/shared/demo';
 import {redirect} from 'next/navigation';
-import {getDemoMonth} from '@/demo/demo-today';
 
 export default function Page() {
   redirect(demoCalendarPath(getDemoMonth()));

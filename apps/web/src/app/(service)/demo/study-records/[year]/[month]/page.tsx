@@ -1,4 +1,10 @@
-import {demoCalendarPath} from '@plan-for-myself/shared/demo';
+import {
+  demoCalendarPath,
+  getDemoMonth,
+  getDemoOverview,
+  getDemoRecords,
+  getDemoToday,
+} from '@plan-for-myself/shared/demo';
 import {findFirstRecordDateOfMonth} from '@plan-for-myself/shared/study-record';
 import {formatMonthTitle, parseMonth, shiftMonth} from '@plan-for-myself/shared/date';
 import type {Metadata} from 'next';
@@ -9,7 +15,6 @@ import DemoBanner from '@/demo/components/DemoBanner';
 import DemoCalendarMenu from '@/demo/components/DemoCalendarMenu';
 import DemoCalendarSection from '@/demo/components/DemoCalendarSection';
 import DemoTourTrigger from '@/demo/components/DemoTourTrigger';
-import {getDemoMonth, getDemoOverview, getDemoRecords, getDemoToday} from '@/demo/demo-examples';
 import layout from '@/shared/styles/layout.module.scss';
 import CalendarHeader from '@/study-record/components/CalendarHeader';
 import styles from './page.module.scss';

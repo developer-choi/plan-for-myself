@@ -1,5 +1,5 @@
+import type {Rejection} from '@plan-for-myself/shared/study-record';
 import {HTTP_STATUS, rejectResponse} from '@/server/response';
-import type {Rejection} from './validate';
 
 export function badRequestResponse(rejection: Rejection) {
   return rejectResponse(HTTP_STATUS.BAD_REQUEST, rejection);

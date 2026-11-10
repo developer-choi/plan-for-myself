@@ -1,12 +1,11 @@
 import {getKoreanToday} from '@plan-for-myself/shared/date';
+import {validateDate, validateMonth, validateNotFutureMonth} from '@plan-for-myself/shared/study-record';
+import {calculateMonthly, toMonth} from '@plan-for-myself/shared/study-record-stats';
 import {NextRequest, NextResponse} from 'next/server';
 import {getRequestUserId} from '@/auth/request-user';
 import {listStudyRecords} from '@/server/study-record/repository';
 import {unauthorizedResponse} from '@/server/response';
 import {badRequestResponse} from '@/server/study-record/response';
-import {validateDate, validateMonth, validateNotFutureMonth} from '@/server/study-record/validate';
-import {toMonth} from '@/server/study-record-stats/date';
-import {calculateMonthly} from '@/server/study-record-stats/monthly';
 
 /* 전달 비교와 첫 기록 달 판정이 그 달 밖의 기록을 보므로 그 달만이 아니라 본인 기록 전체를 읽는다 */
 export async function GET(request: NextRequest) {

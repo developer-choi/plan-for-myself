@@ -1,5 +1,5 @@
 export function addDays(date: string, amount: number) {
-  const [year, month, day] = date.split('-').map(Number);
+  const [year = 0, month = 0, day = 0] = date.split('-').map(Number);
   return formatDate(Date.UTC(year, month - 1, day + amount));
 }
 
@@ -8,7 +8,7 @@ export function toMonth(date: string) {
 }
 
 export function addMonths(month: string, amount: number) {
-  const [year, monthNumber] = month.split('-').map(Number);
+  const [year = 0, monthNumber = 0] = month.split('-').map(Number);
   return formatDate(Date.UTC(year, monthNumber - 1 + amount, 1)).slice(0, MONTH_LENGTH);
 }
 
@@ -21,7 +21,7 @@ export function listMonths(from: string, to: string) {
 }
 
 export function getDaysInMonth(month: string) {
-  const [year, monthNumber] = month.split('-').map(Number);
+  const [year = 0, monthNumber = 0] = month.split('-').map(Number);
   return new Date(Date.UTC(year, monthNumber, 0)).getUTCDate();
 }
 

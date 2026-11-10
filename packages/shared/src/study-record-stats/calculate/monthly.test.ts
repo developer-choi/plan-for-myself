@@ -1,4 +1,4 @@
-import {describe, expect, it} from 'vitest';
+import {assert, describe, expect, it} from 'vitest';
 import {calculateMonthly} from './monthly';
 import {createTestRecord} from './test-record';
 
@@ -281,6 +281,7 @@ describe('calculateMonthly()', () => {
           ...createTagRecords(THIS_MONTH, {늦잠: 3}),
         ];
         const [oversleep] = calculateMonthly(records, THIS_MONTH, TODAY).failureTags;
+        assert(oversleep);
 
         expect(oversleep.trend.map(({month, count}) => ({month, count}))).toEqual([
           {month: '2026-07', count: 1},
@@ -296,6 +297,7 @@ describe('calculateMonthly()', () => {
           ...createTagRecords(THIS_MONTH, {늦잠: 3}),
         ];
         const [oversleep] = calculateMonthly(records, THIS_MONTH, TODAY).failureTags;
+        assert(oversleep);
 
         expect(oversleep.trend.map(({previousCount}) => previousCount)).toEqual([0, 1, 2]);
       });
@@ -309,6 +311,7 @@ describe('calculateMonthly()', () => {
         ];
 
         const [oversleep] = calculateMonthly(records, THIS_MONTH, TODAY).failureTags;
+        assert(oversleep);
 
         expect(oversleep.trend.map(({month, count}) => ({month, count}))).toEqual([{month: THIS_MONTH, count: 1}]);
       });

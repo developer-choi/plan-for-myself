@@ -1,9 +1,6 @@
-import {
-  isEmptyStudyRecord,
-  STUDY_RECORD_FIELD_LIMITS,
-  STUDY_RECORD_FIELD_MESSAGES,
-} from '@plan-for-myself/shared/study-record';
 import {z} from 'zod';
+import {isEmptyStudyRecord} from './empty';
+import {STUDY_RECORD_FIELD_LIMITS, STUDY_RECORD_FIELD_MESSAGES} from './limits';
 
 export type NewStudyRecord = z.infer<typeof newStudyRecordSchema>;
 export type StudyRecordFields = z.infer<typeof studyRecordFieldsSchema>;
@@ -42,7 +39,7 @@ export function validateStudyRecordUpdate(body: unknown): Validation<StudyRecord
 export function validateDate(date: string | null, today: string): Validation<string> {
   const result = dateSchema.safeParse(date);
   if (!result.success) {
-    return {ok: false, rejection: {code: 'INVALID_DATE', message: result.error.issues[0].message}};
+    return {ok: false, rejection: {code: 'INVALID_DATE', message: DATE_MESSAGE}};
   }
   if (result.data > today) {
     return {ok: false, rejection: {code: 'INVALID_DATE', message: FUTURE_LOOKUP_DATE_MESSAGE}};
@@ -54,7 +51,7 @@ export function validateMonth(month: string | null): Validation<MonthRange> {
   const result = monthSchema.safeParse(month);
   return result.success
     ? {ok: true, value: result.data}
-    : {ok: false, rejection: {code: 'INVALID_MONTH', message: result.error.issues[0].message}};
+    : {ok: false, rejection: {code: 'INVALID_MONTH', message: MONTH_MESSAGE}};
 }
 
 export function validateNotFutureMonth(month: MonthRange, date: string): Validation<MonthRange> {
@@ -130,7 +127,7 @@ const monthSchema = z
     {error: MONTH_MESSAGE},
   )
   .transform((month) => {
-    const [year, monthNumber] = month.split('-').map(Number);
+    const [year = 0, monthNumber = 0] = month.split('-').map(Number);
     return {from: `${month}-01`, until: new Date(Date.UTC(year, monthNumber, 1)).toISOString().slice(0, DATE_LENGTH)};
   });
 
@@ -157,8 +154,8 @@ function validate<T>(schema: z.ZodType<T>, body: unknown): Validation<T> {
   }
 
   const [issue] = result.error.issues;
-  const field = issue.path[0];
-  if (isRecordField(field)) {
+  const field = issue?.path[0];
+  if (issue && isRecordField(field)) {
     return {ok: false, rejection: {code: REJECTION_CODES[field], message: issue.message}};
   }
   return {ok: false, rejection: {code: 'INVALID_BODY', message: '요청 형식이 올바르지 않아요'}};

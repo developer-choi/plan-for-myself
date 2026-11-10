@@ -1,12 +1,9 @@
 /* eslint-disable no-magic-numbers -- 예시 달력·통계에만 쓰는 고정 예시 데이터라 숫자를 그대로 적는다 */
 import {type CalendarMonth, isHolidayDate, shiftMonth, toMonthParam} from '@plan-for-myself/shared/date';
-import type {DemoOverview} from '@plan-for-myself/shared/demo';
 import type {StudyRecord, StudyRecordMonthly} from '@plan-for-myself/shared/study-record';
-import {calculateMonthly} from '@/server/study-record-stats/monthly';
-import {calculateOverview} from '@/server/study-record-stats/overview';
-import {getDemoMonth, getDemoToday, getLastDayOfMonth, toDateString} from '@/demo/demo-today';
-
-export {getDemoMonth, getDemoToday} from '@/demo/demo-today';
+import {calculateMonthly, calculateOverview} from '@plan-for-myself/shared/study-record-stats';
+import {getDemoMonth, getDemoToday, getLastDayOfMonth, toDateString} from './demo-today';
+import type {DemoOverview} from './type';
 
 /*
  * 예시 기록은 이번 달 기준 몇 달 전 며칠로 적는다. 월별 추이가 최대 6개월이라 그만큼만 둔다
@@ -103,6 +100,6 @@ function toDemoDate(month: CalendarMonth, day: number) {
 }
 
 function isHoliday(date: string) {
-  const [year, month, day] = date.split('-').map(Number);
+  const [year = 0, month = 0, day = 0] = date.split('-').map(Number);
   return isHolidayDate({year, month, date: day});
 }

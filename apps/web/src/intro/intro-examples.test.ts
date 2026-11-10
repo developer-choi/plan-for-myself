@@ -1,6 +1,6 @@
 import {INTRO_MONTHLY, INTRO_TREND} from '@plan-for-myself/shared/intro';
+import {isReduced} from '@plan-for-myself/shared/study-record-stats';
 import {describe, expect, it} from 'vitest';
-import {isReduced} from '@/server/study-record-stats/tag-count';
 
 describe('소개 고정 예시 데이터', () => {
   describe('General cases', () => {

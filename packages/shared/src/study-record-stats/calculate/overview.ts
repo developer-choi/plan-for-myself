@@ -32,7 +32,8 @@ function countLongestStreak(sortedDates: string[]) {
   let run = 0;
 
   sortedDates.forEach((date, index) => {
-    const continuesPreviousDay = index > 0 && addDays(sortedDates[index - 1], 1) === date;
+    const previousDate = sortedDates[index - 1];
+    const continuesPreviousDay = previousDate !== undefined && addDays(previousDate, 1) === date;
     run = continuesPreviousDay ? run + 1 : 1;
     longest = Math.max(longest, run);
   });

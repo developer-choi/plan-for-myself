@@ -3,6 +3,11 @@ import {
   demoCalendarPath,
   type DemoOverview,
   demoStatsPath,
+  getDemoMonthly,
+  getDemoOverview,
+  getDemoRecords,
+  getDemoToday,
+  isDemoStatsMonth,
   shouldShowDemoStatsTour,
 } from '@plan-for-myself/shared/demo';
 import {formatStatsTitle, getStatsMonthNavigation} from '@plan-for-myself/shared/study-record-stats';
@@ -16,8 +21,6 @@ import {getLoginState} from '@/auth/path';
 import DemoBanner from '@/demo/components/DemoBanner';
 import DemoStatsSection from '@/demo/components/DemoStatsSection';
 import DemoTourTrigger from '@/demo/components/DemoTourTrigger';
-import {getDemoMonthly, getDemoOverview, getDemoRecords, getDemoToday} from '@/demo/demo-examples';
-import {isDemoStatsMonth} from '@/demo/demo-response';
 import SubPageHeader from '@/shared/components/SubPageHeader';
 import layout from '@/shared/styles/layout.module.scss';
 import styles from './page.module.scss';

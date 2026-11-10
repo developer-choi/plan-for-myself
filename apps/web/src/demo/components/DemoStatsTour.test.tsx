@@ -1,5 +1,11 @@
 import {type CalendarMonth, shiftMonth} from '@plan-for-myself/shared/date';
-import type {DemoOverview} from '@plan-for-myself/shared/demo';
+import {
+  type DemoOverview,
+  getDemoMonth,
+  getDemoMonthly,
+  getDemoOverview,
+  getDemoRecords,
+} from '@plan-for-myself/shared/demo';
 import {FAILURE_TAG_TREND_MONTH_LIMIT} from '@plan-for-myself/shared/study-record';
 import {MY_CALENDAR_LABEL} from '@plan-for-myself/shared/label';
 import {act, render, screen, waitFor} from '@testing-library/react';
@@ -8,7 +14,6 @@ import type {Session} from 'next-auth';
 import {SessionProvider} from 'next-auth/react';
 import {OverlayProvider} from 'overlay-kit';
 import {afterEach, describe, expect, it, vi} from 'vitest';
-import {getDemoMonth, getDemoMonthly, getDemoOverview, getDemoRecords} from '@/demo/demo-examples';
 import DemoStatsSection from './DemoStatsSection';
 import DemoStatsTour from './DemoStatsTour';
 

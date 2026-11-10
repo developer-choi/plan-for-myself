@@ -1,19 +1,12 @@
-import {STUDY_RECORD_FIELD_MESSAGES} from '@plan-for-myself/shared/study-record';
 import {describe, expect, it} from 'vitest';
-import {validateDate, validateNewStudyRecord, validateNotFutureMonth, validateStudyRecordUpdate} from './validate';
-
-const TODAY = '2026-09-24';
-
-const EMPTY_RECORD_REJECTION = {
-  ok: false,
-  rejection: {code: 'EMPTY_RECORD', message: STUDY_RECORD_FIELD_MESSAGES.emptyRecord},
-};
-
-const MORNING_MINUTES = 30;
-
-function createBody(date: string) {
-  return {date, dateType: 'weekday', studiedMinutes: [MORNING_MINUTES, 0, 0], failTags: []};
-}
+import {STUDY_RECORD_FIELD_MESSAGES} from './limits';
+import {
+  validateDate,
+  validateMonth,
+  validateNewStudyRecord,
+  validateNotFutureMonth,
+  validateStudyRecordUpdate,
+} from './validate';
 
 describe('validateNewStudyRecord()', () => {
   describe('General cases', () => {
@@ -104,6 +97,45 @@ describe('validateDate()', () => {
       });
     });
   });
+
+  describe('Edge cases', () => {
+    [
+      {date: null, reason: '날짜가 없는 요청'},
+      {date: '2026-13-01', reason: '13월'},
+      {date: '2026-02-30', reason: '없는 날'},
+      {date: '2026-9-24', reason: '앞에 0이 빠진 달'},
+    ].forEach(({date, reason}) => {
+      it(`${reason}이면 날짜 형식 문구로 거절해야 한다`, () => {
+        expect(validateDate(date, TODAY)).toEqual({
+          ok: false,
+          rejection: {code: 'INVALID_DATE', message: '날짜가 올바르지 않아요'},
+        });
+      });
+    });
+  });
+});
+
+describe('validateMonth()', () => {
+  describe('General cases', () => {
+    it('달을 그 달 1일부터 다음 달 1일 전까지의 범위로 바꿔야 한다', () => {
+      expect(validateMonth('2026-09')).toEqual({ok: true, value: {from: '2026-09-01', until: '2026-10-01'}});
+    });
+  });
+
+  describe('Edge cases', () => {
+    [
+      {month: null, reason: '달이 없는 요청'},
+      {month: '2026-13', reason: '13월'},
+      {month: '2026-9', reason: '앞에 0이 빠진 달'},
+    ].forEach(({month, reason}) => {
+      it(`${reason}이면 달 형식 문구로 거절해야 한다`, () => {
+        expect(validateMonth(month)).toEqual({
+          ok: false,
+          rejection: {code: 'INVALID_MONTH', message: '조회할 달이 올바르지 않아요'},
+        });
+      });
+    });
+  });
 });
 
 describe('validateNotFutureMonth()', () => {
@@ -123,3 +155,16 @@ describe('validateNotFutureMonth()', () => {
     });
   });
 });
+
+const TODAY = '2026-09-24';
+
+const EMPTY_RECORD_REJECTION = {
+  ok: false,
+  rejection: {code: 'EMPTY_RECORD', message: STUDY_RECORD_FIELD_MESSAGES.emptyRecord},
+};
+
+const MORNING_MINUTES = 30;
+
+function createBody(date: string) {
+  return {date, dateType: 'weekday', studiedMinutes: [MORNING_MINUTES, 0, 0], failTags: []};
+}
