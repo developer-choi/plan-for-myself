@@ -1,22 +1,27 @@
 import {type ReactNode} from 'react';
-import type {FailureTag, FailureTagStatus, StudyRecordMonthly} from '@plan-for-myself/shared';
+import {
+  type FailureTag,
+  type FailureTagSelection,
+  filterByStatus,
+  formatAppearedNotePrefix,
+  formatFailCardTitle,
+  formatFailEmptyTitle,
+  formatReducedGroupTitle,
+  formatReducedNotePrefix,
+  formatRepeatedNotePrefix,
+  STATS_TEXT,
+  type StudyRecordMonthly,
+} from '@plan-for-myself/shared';
 import {CheckIcon, Cross2Icon} from '@radix-ui/react-icons';
 import typography from '@developer-choi/design-system/styles/typography';
 import classNames from 'classnames';
 import Card from '@/shared/components/Card';
-import {formatMonthLabel} from '@/study-record-stats/format';
 import styles from './FailCard.module.scss';
 
 interface FailCardProps {
   monthly: StudyRecordMonthly;
   /* 태그 줄을 눌러 고르지 않는 화면(소개)이면 비운다 */
-  selection?: FailCardTagSelection;
-}
-
-interface FailCardTagSelection {
-  /* 아무 태그도 선택하지 않았으면 null */
-  selectedTag: string | null;
-  onSelect: (tag: string) => void;
+  selection?: FailureTagSelection;
 }
 
 interface GroupProps {
@@ -32,13 +37,12 @@ interface TagRowProps {
   id: string | undefined;
   name: string;
   /* FailCard가 selection을 받지 않으면 undefined */
-  selection: FailCardTagSelection | undefined;
+  selection: FailureTagSelection | undefined;
   children: ReactNode;
 }
 
 export default function FailCard({monthly, selection}: FailCardProps) {
   const {failureTags, inProgress} = monthly;
-  const monthLabel = formatMonthLabel(monthly.month);
   const hasNoFailure = failureTags.length === 0;
   const repeatedTags = filterByStatus(failureTags, 'repeated');
   const appearedTags = filterByStatus(failureTags, 'appeared');
@@ -47,38 +51,35 @@ export default function FailCard({monthly, selection}: FailCardProps) {
   const getTagRowId = (name: string) => (name === firstTagName ? FIRST_TAG_ROW_ID : undefined);
 
   return (
-    <Card title={`${monthLabel} 실패`}>
+    <Card title={formatFailCardTitle(monthly.month)}>
       {hasNoFailure ? (
         <div className={styles.empty}>
-          <p className={classNames(typography.body2, styles.emptyTitle)}>{monthLabel}에 적은 실패가 없어요</p>
-          <p className={classNames(typography.body3, styles.emptySub)}>실패를 적으면 지난달과 비교해 보여 줘요</p>
+          <p className={classNames(typography.body2, styles.emptyTitle)}>{formatFailEmptyTitle(monthly.month)}</p>
+          <p className={classNames(typography.body3, styles.emptySub)}>{STATS_TEXT.failEmptyHint}</p>
         </div>
       ) : (
         <div id={FAIL_GROUPS_ID}>
-          <Group icon={<Cross2Icon />} tags={repeatedTags} title="반복하고 있어요" tone="fail">
+          <Group icon={<Cross2Icon />} tags={repeatedTags} title={STATS_TEXT.repeatedGroupTitle} tone="fail">
             {(tag) => (
               <TagRow id={getTagRowId(tag.tag)} name={tag.tag} selection={selection}>
-                지난달 {tag.previousCount}번 → {inProgress && '벌써 '}
+                {formatRepeatedNotePrefix(tag.previousCount, inProgress)}
                 <span className={styles.count}>{tag.count}번</span>
               </TagRow>
             )}
           </Group>
-          <Group icon={<Cross2Icon />} tags={appearedTags} title="새로 생겼어요" tone="fail">
+          <Group icon={<Cross2Icon />} tags={appearedTags} title={STATS_TEXT.appearedGroupTitle} tone="fail">
             {(tag) => (
               <TagRow id={getTagRowId(tag.tag)} name={tag.tag} selection={selection}>
-                {inProgress ? '이번 달' : monthLabel} 처음 · <span className={styles.count}>{tag.count}번</span>
+                {formatAppearedNotePrefix(monthly.month, inProgress)}
+                <span className={styles.count}>{tag.count}번</span>
               </TagRow>
             )}
           </Group>
-          <Group
-            icon={<CheckIcon />}
-            tags={reducedTags}
-            title={inProgress ? '줄어들고 있어요' : '줄었어요'}
-            tone="success"
-          >
+          <Group icon={<CheckIcon />} tags={reducedTags} title={formatReducedGroupTitle(inProgress)} tone="success">
             {(tag) => (
               <TagRow id={getTagRowId(tag.tag)} name={tag.tag} selection={selection}>
-                지난달 {tag.previousCount}번 → <span className={styles.count}>{tag.count}번</span>
+                {formatReducedNotePrefix(tag.previousCount)}
+                <span className={styles.count}>{tag.count}번</span>
               </TagRow>
             )}
           </Group>
@@ -125,12 +126,8 @@ function TagRow({id, name, selection, children}: TagRowProps) {
       <span className={styles.tagRowInner}>
         <span className={styles.tagName}>{name}</span>
         <span className={styles.tagText}>{children}</span>
-        <span className={styles.more}>자세히 ›</span>
+        <span className={styles.more}>{STATS_TEXT.moreLabel}</span>
       </span>
     </button>
   );
-}
-
-function filterByStatus(failureTags: FailureTag[], status: FailureTagStatus): FailureTag[] {
-  return failureTags.filter((failureTag) => failureTag.status === status);
 }

@@ -11,7 +11,6 @@ export {
   type CalendarMonth,
   formatMonthTitle,
   getCalendarCells,
-  monthPath,
   parseMonth,
   shiftMonth,
   WEEKDAY_LABELS,
@@ -20,16 +19,19 @@ export {formatDateTitle} from './date/date-title';
 export {isHolidayDate} from './date/holiday';
 export {getKoreanDate, getKoreanToday, KST} from './date/korean';
 export {convertLunarDateToSolar, type SimpleDate} from './date/lunar';
-export {toDateMonthParam, toMonthParam} from './date/month-param';
+export {parseDateParam, toDateMonthParam, toMonthParam} from './date/month-param';
 export type {DateType} from './date-type/type';
 export {getErrorInfo} from './error/info';
 export {isUnauthorizedError} from './error/unauthorized';
-export {ENTRY_LABEL, LOGOUT_LABEL, RETRY_LABEL, START_RECORDING_LABEL} from './label/labels';
+export {ENTRY_LABEL, LOGOUT_LABEL, RETRY_LABEL, START_RECORDING_LABEL, STATS_LABEL} from './label/labels';
 export {isMutationSettling} from './query/mutation';
 export {beforeSend} from './sentry/before-send';
 export {createStudyRecordApi} from './study-record/api';
 export {getCalendarDayCells} from './study-record/calendar-day-cells';
+export {isFutureMonth, isSameMonth, monthPath, statsPath} from './study-record/calendar-date';
+export {type CalendarSummaryContent, getCalendarSummaryContent} from './study-record/calendar-summary';
 export {isEmptyStudyRecord} from './study-record/empty';
+export {FIRST_RECORD_TEXT} from './study-record/first-record-text';
 export {minutesFormat, studiedTimeFormat} from './study-record/format';
 export {
   FAILURE_TAG_TREND_MONTH_LIMIT,
@@ -47,14 +49,35 @@ export {
   validateMinuteInput,
 } from './study-record/record-form';
 export {RECORD_FORM_LABELS} from './study-record/record-form-labels';
+export {
+  filterByStatus,
+  formatAppearedNotePrefix,
+  formatFailCardTitle,
+  formatFailEmptyTitle,
+  formatReducedGroupTitle,
+  formatReducedNotePrefix,
+  formatRepeatedNotePrefix,
+} from './study-record-stats/failure-tag';
+export {
+  countMissedDays,
+  formatAverageNote,
+  formatDuration,
+  formatMonthRecordLabel,
+  formatMonthStudyLabel,
+  formatStatsTitle,
+  formatStreakNote,
+} from './study-record-stats/format';
+export {getStatsMonthNavigation, isBeforeFirstRecord} from './study-record-stats/month-navigation';
+export {createStudyRecordStatsQueries} from './study-record-stats/queries';
+export type {FailureTagSelection} from './study-record-stats/selected-tag';
+export {STATS_TEXT} from './study-record-stats/stats-text';
+export {getTagCalendar, type TagCalendarData, toTrendBars, type TrendBar} from './study-record-stats/tag-detail';
 export type {
   DeleteStudyRecordApiRequest,
   FailureTag,
   FailureTagStatus,
   FailureTagTrend,
   GetStudyRecordListApiRequest,
-  GetStudyRecordStatsMonthlyApiRequest,
-  GetStudyRecordStatsOverviewApiRequest,
   PatchStudyRecordApiRequest,
   PostStudyRecordApiRequest,
   RecordedDays,

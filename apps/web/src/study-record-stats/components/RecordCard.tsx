@@ -1,7 +1,13 @@
-import type {StudyRecordMonthly, StudyRecordOverview} from '@plan-for-myself/shared';
+import {
+  countMissedDays,
+  formatMonthRecordLabel,
+  formatStreakNote,
+  STATS_TEXT,
+  type StudyRecordMonthly,
+  type StudyRecordOverview,
+} from '@plan-for-myself/shared';
 import Card from '@/shared/components/Card';
 import StatList, {StatListItem, StatSentence, StatValue} from '@/study-record-stats/components/StatList';
-import {countMissedDays, formatMonthLabel, formatStreakNote} from '@/study-record-stats/format';
 
 interface RecordCardProps {
   /* 지난 달 통계면 null — 지금 기준 값(연속 기록·역대 최장)은 이번 달에서만 보인다 */
@@ -19,22 +25,22 @@ export default function RecordCard({streak, totalRecordedDays, monthly}: RecordC
   const hasStreak = streak !== null;
 
   return (
-    <Card title="기록">
+    <Card title={STATS_TEXT.recordCardTitle}>
       <StatList>
         {hasStreak && (
           <StatListItem
-            label="연속 기록"
+            label={STATS_TEXT.streakLabel}
             note={formatStreakNote(streak)}
             value={<StatValue>{streak.current}일</StatValue>}
           />
         )}
         <StatListItem
-          label={`${formatMonthLabel(monthly.month)} 기록`}
+          label={formatMonthRecordLabel(monthly.month)}
           value={<RecordedDaysSentence recordedDays={monthly.recordedDays} />}
         />
         {totalRecordedDays !== null && (
           <StatListItem
-            label="누적 기록"
+            label={STATS_TEXT.totalRecordLabel}
             value={<StatValue>{totalRecordedDays.toLocaleString('ko-KR')}일</StatValue>}
           />
         )}
@@ -47,14 +53,14 @@ function RecordedDaysSentence({recordedDays}: RecordedDaysSentenceProps) {
   const missedDays = countMissedDays(recordedDays);
 
   if (missedDays === null) {
-    return <StatSentence>오늘 첫 기록을 남겨 보세요</StatSentence>;
+    return <StatSentence>{STATS_TEXT.recordFirstToday}</StatSentence>;
   }
   if (missedDays === 0) {
-    return <StatSentence>빠짐없이 남겼어요</StatSentence>;
+    return <StatSentence>{STATS_TEXT.recordNoMissedDays}</StatSentence>;
   }
   return (
     <StatSentence>
-      남기지 못한 날이 <StatValue>{missedDays}일</StatValue> 있어요
+      {STATS_TEXT.missedDaysPrefix} <StatValue>{missedDays}일</StatValue> {STATS_TEXT.missedDaysSuffix}
     </StatSentence>
   );
 }

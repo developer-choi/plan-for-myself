@@ -2,7 +2,7 @@ import typography from '@developer-choi/design-system/styles/typography';
 import classNames from 'classnames';
 import Card from '@/shared/components/Card';
 import TagCalendar from '@/study-record-stats/components/TagCalendar';
-import {getTagCalendar} from '@/study-record-stats/tag-detail';
+import {getTagCalendar} from '@plan-for-myself/shared';
 import {INTRO_MONTH, INTRO_RECORDS, INTRO_TAG} from '@/intro/intro-examples';
 import styles from './PreviewCard.module.scss';
 

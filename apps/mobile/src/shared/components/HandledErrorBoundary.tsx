@@ -6,12 +6,24 @@ import {getErrorInfo, RETRY_LABEL} from '@plan-for-myself/shared';
 import ErrorNotice from '@/shared/components/ErrorNotice';
 import {fallbackSlotSizes} from '@/shared/components/fallback-slot';
 import useReportPageError from '@/shared/error/useReportPageError';
+import {type FallbackSize} from '@/shared/types/fallback';
 
-export default function HandledErrorBoundary({children}: PropsWithChildren) {
+interface HandledErrorBoundaryProps extends PropsWithChildren {
+  size?: FallbackSize;
+}
+
+interface HandledErrorFallbackProps extends FallbackProps {
+  size: FallbackSize;
+}
+
+export default function HandledErrorBoundary({children, size = 'screen'}: HandledErrorBoundaryProps) {
   return (
     <QueryErrorResetBoundary>
       {({reset}) => (
-        <ErrorBoundary FallbackComponent={HandledErrorFallback} onReset={reset}>
+        <ErrorBoundary
+          fallbackRender={(fallbackProps) => <HandledErrorFallback {...fallbackProps} size={size} />}
+          onReset={reset}
+        >
           {children}
         </ErrorBoundary>
       )}
@@ -26,16 +38,16 @@ const styles = StyleSheet.create({
   },
 });
 
-function HandledErrorFallback({error, resetErrorBoundary}: FallbackProps) {
+function HandledErrorFallback({error, resetErrorBoundary, size}: HandledErrorFallbackProps) {
   useReportPageError(error);
   const {title, content} = getErrorInfo(error);
 
   return (
-    <View style={[styles.slot, fallbackSlotSizes.screen]}>
+    <View style={[styles.slot, fallbackSlotSizes[size]]}>
       <ErrorNotice
         action={{label: RETRY_LABEL, onPress: resetErrorBoundary}}
         content={content}
-        size="medium"
+        size={size === 'card' ? 'small' : 'medium'}
         title={title}
       />
     </View>

@@ -1,9 +1,5 @@
-import {
-  type CalendarMonth,
-  formatMonthTitle,
-  type RecordedDays,
-  type StudyRecordOverview,
-} from '@plan-for-myself/shared';
+import {type CalendarMonth, formatMonthTitle} from '../date/calendar-month';
+import type {RecordedDays, StudyRecordOverview} from '../study-record/type';
 
 export function formatDuration(minutes: number): string {
   const hours = Math.floor(minutes / MINUTES_PER_HOUR);
@@ -23,6 +19,11 @@ export function formatMinutesDiff(minutes: number): string {
   return `${sign}${formatDuration(Math.abs(minutes))}`;
 }
 
+export function formatAverageNote(minutes: number, previousMinutes: number | null): string | undefined {
+  const diff = previousMinutes === null ? 0 : minutes - previousMinutes;
+  return diff === 0 ? undefined : `지난달 ${formatMinutesDiff(diff)}`;
+}
+
 /* 세는 대상 날이 0이면(그달 1일, 그날 기록 전) 셀 것이 없어 null */
 export function countMissedDays({count, total}: RecordedDays): number | null {
   return total === 0 ? null : total - count;
@@ -36,6 +37,14 @@ export function formatStreakNote({current, longest}: StudyRecordOverview['streak
 export function formatMonthLabel(month: string): string {
   const [, monthNumber] = month.split('-');
   return `${Number(monthNumber)}월`;
+}
+
+export function formatMonthRecordLabel(month: string): string {
+  return `${formatMonthLabel(month)} 기록`;
+}
+
+export function formatMonthStudyLabel(month: string): string {
+  return `${formatMonthLabel(month)} 총 공부`;
 }
 
 export function formatStatsTitle(month: CalendarMonth): string {

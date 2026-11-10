@@ -4,23 +4,6 @@ import {describe, expect, it} from 'vitest';
 import {createMonthly} from '@/study-record-stats/test-utils';
 import FailCard from './FailCard';
 
-const REDUCED_TITLE_IN_PROGRESS = '줄어들고 있어요';
-const REDUCED_TITLE_FINISHED = '줄었어요';
-const ALREADY = '벌써';
-const FIRST_IN_PROGRESS = '이번 달 처음';
-const FIRST_IN_FINISHED_MONTH = '8월 처음';
-const NO_FAILURE_TITLE = /에 적은 실패가 없어요$/;
-
-const GROUPS: {status: FailureTagStatus; label: string; title: string}[] = [
-  {status: 'repeated', label: '반복', title: '반복하고 있어요'},
-  {status: 'appeared', label: '새로 생긴', title: '새로 생겼어요'},
-  {status: 'reduced', label: '줄어든', title: REDUCED_TITLE_IN_PROGRESS},
-];
-
-const OVERSLEEP: FailureTag = {tag: '늦잠', count: 4, previousCount: 3, status: 'repeated', trend: []};
-const PHONE_GAME: FailureTag = {tag: '폰게임', count: 2, previousCount: 0, status: 'appeared', trend: []};
-const SNACK: FailureTag = {tag: '야식', count: 0, previousCount: 3, status: 'reduced', trend: []};
-
 describe('FailCard', () => {
   describe('General cases', () => {
     GROUPS.forEach(({status, label, title}) => {
@@ -79,13 +62,13 @@ describe('FailCard', () => {
     it('실패 태그가 없으면 그 달에 적은 실패가 없다는 안내가 보인다', () => {
       render(<FailCard monthly={createMonthly({failureTags: []})} />);
 
-      expect(screen.getByText(NO_FAILURE_TITLE)).toBeInTheDocument();
+      expect(screen.getByText(FAIL_EMPTY_TITLE)).toBeInTheDocument();
     });
 
     it('실패 태그가 있으면 실패가 없다는 안내가 보이지 않는다', () => {
       render(<FailCard monthly={createMonthly({failureTags: [OVERSLEEP]})} />);
 
-      expect(screen.queryByText(NO_FAILURE_TITLE)).not.toBeInTheDocument();
+      expect(screen.queryByText(FAIL_EMPTY_TITLE)).not.toBeInTheDocument();
     });
 
     it('횟수로는 반복인 태그를 줄어들었다고 받으면 줄어든 묶음에 보인다', () => {
@@ -145,6 +128,23 @@ describe('FailCard', () => {
     });
   });
 });
+
+const REDUCED_TITLE_IN_PROGRESS = '줄어들고 있어요';
+const REDUCED_TITLE_FINISHED = '줄었어요';
+const ALREADY = '벌써';
+const FIRST_IN_PROGRESS = '이번 달 처음';
+const FIRST_IN_FINISHED_MONTH = '8월 처음';
+const FAIL_EMPTY_TITLE = '9월에 적은 실패가 없어요';
+
+const GROUPS: {status: FailureTagStatus; label: string; title: string}[] = [
+  {status: 'repeated', label: '반복', title: '반복하고 있어요'},
+  {status: 'appeared', label: '새로 생긴', title: '새로 생겼어요'},
+  {status: 'reduced', label: '줄어든', title: REDUCED_TITLE_IN_PROGRESS},
+];
+
+const OVERSLEEP: FailureTag = {tag: '늦잠', count: 4, previousCount: 3, status: 'repeated', trend: []};
+const PHONE_GAME: FailureTag = {tag: '폰게임', count: 2, previousCount: 0, status: 'appeared', trend: []};
+const SNACK: FailureTag = {tag: '야식', count: 0, previousCount: 3, status: 'reduced', trend: []};
 
 function createTag(status: FailureTagStatus): FailureTag {
   return {tag: `${status}-태그`, count: 1, previousCount: 1, status, trend: []};

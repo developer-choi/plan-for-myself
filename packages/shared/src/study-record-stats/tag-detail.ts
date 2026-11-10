@@ -1,6 +1,6 @@
-import type {CalendarMonth, FailureTagTrend, StudyRecord} from '@plan-for-myself/shared';
-import {getCalendarCells} from '@plan-for-myself/shared';
-import {formatMonthLabel} from '@/study-record-stats/format';
+import {type CalendarMonth, getCalendarCells} from '../date/calendar-month';
+import type {FailureTagTrend, StudyRecord} from '../study-record/type';
+import {formatMonthLabel} from './format';
 
 export interface TrendBar {
   label: string;
@@ -8,9 +8,9 @@ export interface TrendBar {
   status: FailureTagTrend['status'];
 }
 
-export type TagCalendarDayState = 'hit' | 'none';
+type TagCalendarDayState = 'hit' | 'none';
 
-export interface TagCalendarDay {
+interface TagCalendarDay {
   date: string;
   day: number;
   state: TagCalendarDayState;

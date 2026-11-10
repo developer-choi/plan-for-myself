@@ -1,7 +1,12 @@
-import type {StudyRecordMonthly} from '@plan-for-myself/shared';
+import {
+  formatAverageNote,
+  formatDuration,
+  formatMonthStudyLabel,
+  STATS_TEXT,
+  type StudyRecordMonthly,
+} from '@plan-for-myself/shared';
 import Card from '@/shared/components/Card';
 import StatList, {StatListItem, StatValue} from '@/study-record-stats/components/StatList';
-import {formatDuration, formatMinutesDiff, formatMonthLabel} from '@/study-record-stats/format';
 
 interface StudyCardProps {
   monthly: StudyRecordMonthly;
@@ -20,16 +25,23 @@ export default function StudyCard({monthly, totalStudiedMinutes}: StudyCardProps
   const {totalMinutes, weekdayAvg, holidayAvg, prevWeekdayAvg, prevHolidayAvg} = monthly.study;
 
   return (
-    <Card title="공부">
+    <Card title={STATS_TEXT.studyCardTitle}>
       <StatList>
         <StatListItem
-          label={`${formatMonthLabel(monthly.month)} 총 공부`}
+          label={formatMonthStudyLabel(monthly.month)}
           value={<StatValue>{formatDuration(totalMinutes)}</StatValue>}
         />
-        {weekdayAvg !== null && <AverageItem label="평일 평균" minutes={weekdayAvg} previousMinutes={prevWeekdayAvg} />}
-        {holidayAvg !== null && <AverageItem label="휴일 평균" minutes={holidayAvg} previousMinutes={prevHolidayAvg} />}
+        {weekdayAvg !== null && (
+          <AverageItem label={STATS_TEXT.weekdayAverageLabel} minutes={weekdayAvg} previousMinutes={prevWeekdayAvg} />
+        )}
+        {holidayAvg !== null && (
+          <AverageItem label={STATS_TEXT.holidayAverageLabel} minutes={holidayAvg} previousMinutes={prevHolidayAvg} />
+        )}
         {totalStudiedMinutes !== null && (
-          <StatListItem label="누적 총 공부" value={<StatValue>{formatDuration(totalStudiedMinutes)}</StatValue>} />
+          <StatListItem
+            label={STATS_TEXT.totalStudyLabel}
+            value={<StatValue>{formatDuration(totalStudiedMinutes)}</StatValue>}
+          />
         )}
       </StatList>
     </Card>
@@ -37,12 +49,10 @@ export default function StudyCard({monthly, totalStudiedMinutes}: StudyCardProps
 }
 
 function AverageItem({label, minutes, previousMinutes}: AverageItemProps) {
-  const diff = previousMinutes === null ? 0 : minutes - previousMinutes;
-
   return (
     <StatListItem
       label={label}
-      note={diff === 0 ? undefined : `지난달 ${formatMinutesDiff(diff)}`}
+      note={formatAverageNote(minutes, previousMinutes)}
       value={<StatValue>{formatDuration(minutes)}</StatValue>}
     />
   );

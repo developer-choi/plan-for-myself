@@ -1,9 +1,14 @@
 'use client';
 
-import type {CalendarMonth, StudyRecord, StudyRecordMonthly, StudyRecordOverview} from '@plan-for-myself/shared';
+import {
+  type CalendarMonth,
+  getTagCalendar,
+  type StudyRecord,
+  type StudyRecordMonthly,
+  type StudyRecordOverview,
+} from '@plan-for-myself/shared';
 import StatsSection from '@/study-record-stats/components/StatsSection';
 import TagCalendar from '@/study-record-stats/components/TagCalendar';
-import {getTagCalendar} from '@/study-record-stats/tag-detail';
 
 interface DemoStatsSectionProps {
   month: CalendarMonth;

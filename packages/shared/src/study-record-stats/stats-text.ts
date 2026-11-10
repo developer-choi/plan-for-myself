@@ -1,0 +1,18 @@
+export const STATS_TEXT = {
+  recordCardTitle: '기록',
+  studyCardTitle: '공부',
+  failEmptyHint: '실패를 적으면 지난달과 비교해 보여 줘요',
+  repeatedGroupTitle: '반복하고 있어요',
+  appearedGroupTitle: '새로 생겼어요',
+  moreLabel: '자세히 ›',
+  streakLabel: '연속 기록',
+  totalRecordLabel: '누적 기록',
+  recordFirstToday: '오늘 첫 기록을 남겨 보세요',
+  recordNoMissedDays: '빠짐없이 남겼어요',
+  missedDaysPrefix: '남기지 못한 날이',
+  missedDaysSuffix: '있어요',
+  weekdayAverageLabel: '평일 평균',
+  holidayAverageLabel: '휴일 평균',
+  totalStudyLabel: '누적 총 공부',
+  inProgressLabel: '진행 중',
+};

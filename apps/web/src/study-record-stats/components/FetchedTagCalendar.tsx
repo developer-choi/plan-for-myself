@@ -1,11 +1,10 @@
 'use client';
 
 import type {CalendarMonth} from '@plan-for-myself/shared';
-import {toMonthParam} from '@plan-for-myself/shared';
+import {getTagCalendar, toMonthParam} from '@plan-for-myself/shared';
 import {useSuspenseQuery} from '@tanstack/react-query';
 import {studyRecordQueries} from '@/study-record/queries';
 import TagCalendar from '@/study-record-stats/components/TagCalendar';
-import {getTagCalendar} from '@/study-record-stats/tag-detail';
 
 interface FetchedTagCalendarProps {
   month: CalendarMonth;

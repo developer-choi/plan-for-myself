@@ -1,7 +1,6 @@
-import {WEEKDAY_LABELS} from '@plan-for-myself/shared';
+import {type TagCalendarData, WEEKDAY_LABELS} from '@plan-for-myself/shared';
 import typography from '@developer-choi/design-system/styles/typography';
 import classNames from 'classnames';
-import {type TagCalendarData} from '@/study-record-stats/tag-detail';
 import styles from './TagCalendar.module.scss';
 
 interface TagCalendarProps {

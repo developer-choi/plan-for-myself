@@ -7,4 +7,8 @@ export const fallbackSlotSizes = StyleSheet.create({
     paddingVertical: spacing.xxl,
     paddingHorizontal: spacing.pageXMobile,
   },
+  card: {
+    paddingVertical: spacing.lg,
+    paddingHorizontal: spacing.md,
+  },
 });

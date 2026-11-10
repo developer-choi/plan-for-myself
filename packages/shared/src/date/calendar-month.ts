@@ -40,10 +40,6 @@ export function parseMonth({year, month}: {year: string; month: string}): Calend
   return {year: Number(year), month: Number(month)};
 }
 
-export function monthPath({year, month}: CalendarMonth): `/study-records/${number}/${number}` {
-  return `/study-records/${year}/${month}`;
-}
-
 export function formatMonthTitle({year, month}: CalendarMonth): string {
   return `${year}년 ${month}월`;
 }

@@ -1,5 +1,5 @@
-import type {FailureTagTrend, StudyRecord} from '@plan-for-myself/shared';
 import {describe, expect, it} from 'vitest';
+import type {FailureTagTrend, StudyRecord} from '../study-record/type';
 import {getTagCalendar, toTrendBars, type TagCalendarData} from './tag-detail';
 
 describe('toTrendBars()', () => {

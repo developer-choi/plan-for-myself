@@ -2,7 +2,7 @@ import typography from '@developer-choi/design-system/styles/typography';
 import classNames from 'classnames';
 import Card from '@/shared/components/Card';
 import TrendBars from '@/study-record-stats/components/TrendBars';
-import {toTrendBars} from '@/study-record-stats/tag-detail';
+import {toTrendBars} from '@plan-for-myself/shared';
 import {INTRO_MONTHLY, INTRO_TAG, INTRO_TREND} from '@/intro/intro-examples';
 import styles from './PreviewCard.module.scss';
 
