@@ -3,7 +3,3 @@ export interface AppTokenClaims {
   /** 없으면 Google 사용자 토큰이다 */
   isGuest?: boolean;
 }
-
-export interface PostAppTokenRefreshApiResponse {
-  token: string;
-}

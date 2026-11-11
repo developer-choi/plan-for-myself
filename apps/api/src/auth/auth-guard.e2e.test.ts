@@ -30,7 +30,7 @@ describe('앱 토큰 인증', () => {
 
       const response = await request(app.getHttpServer()).get(PROBE_PATH).set('Authorization', bearer(token));
 
-      expect(response.body).toEqual({id: userId});
+      expect(response.body).toEqual({id: userId, isGuest: true});
     });
 
     it('토큰 없이 헬스 체크를 부르면 200을 반환해야 한다', async () => {

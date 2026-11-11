@@ -7,6 +7,8 @@ export type PostAppTokenApiResponse = z.infer<typeof postAppTokenApiResponseSche
 
 export type PostAppTokenGuestApiResponse = z.infer<typeof postAppTokenGuestApiResponseSchema>;
 
+export type PostAppTokenRefreshApiResponse = z.infer<typeof postAppTokenRefreshApiResponseSchema>;
+
 export const postAppTokenApiRequestSchema = z.object(
   {
     idToken: z.jwt({error: 'idToken은 JWT 형식으로 보내 주세요'}),
@@ -22,3 +24,5 @@ export const postAppTokenApiResponseSchema = z.discriminatedUnion('type', [
 ]);
 
 export const postAppTokenGuestApiResponseSchema = z.object({token: z.jwt()});
+
+export const postAppTokenRefreshApiResponseSchema = z.object({token: z.jwt()});

@@ -7,6 +7,8 @@ export {
   postAppTokenApiResponseSchema,
   type PostAppTokenGuestApiResponse,
   postAppTokenGuestApiResponseSchema,
+  type PostAppTokenRefreshApiResponse,
+  postAppTokenRefreshApiResponseSchema,
 } from './app-token-exchange';
 export {type AccountDeleteText, GOOGLE_DELETE_TEXT, GUEST_DELETE_TEXT} from './delete-text';
 export {GUEST_LIMIT_CODE, hasGuestLimitCode, type LoginFailure} from './guest-limit';
@@ -32,4 +34,4 @@ export {
   type RegisteredAccountRejection,
   registeredAccountRejectionSchema,
 } from './registered-rejection';
-export type {AppTokenClaims, PostAppTokenRefreshApiResponse} from './type';
+export type {AppTokenClaims} from './type';

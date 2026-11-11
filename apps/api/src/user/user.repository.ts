@@ -9,6 +9,7 @@ import {studyRecords, users} from '../db/schema';
 
 export interface UserRow {
   id: number;
+  isGuest: boolean;
 }
 
 interface GoogleLoginRows {
@@ -27,7 +28,7 @@ export class UserRepository {
    * null: 그 번호의 사용자 행이 없다
    */
   async findById(id: number): Promise<UserRow | null> {
-    const [row] = await this.db.select({id: users.id}).from(users).where(eq(users.id, id));
+    const [row] = await this.db.select({id: users.id, isGuest: users.isGuest}).from(users).where(eq(users.id, id));
     return row ?? null;
   }
 

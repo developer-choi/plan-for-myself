@@ -8,6 +8,7 @@ interface TestTokenOptions {
   expirationTime?: string;
   withoutExpiration?: boolean;
   secret?: string;
+  isGuest?: boolean;
 }
 
 export function signTestToken(
@@ -19,9 +20,10 @@ export function signTestToken(
     expirationTime = '1h',
     withoutExpiration = false,
     secret = process.env.AUTH_SECRET,
+    isGuest = false,
   }: TestTokenOptions = {},
 ): Promise<string> {
-  const jwt = new SignJWT({}).setProtectedHeader({alg: algorithm}).setAudience(audience);
+  const jwt = new SignJWT(isGuest ? {isGuest} : {}).setProtectedHeader({alg: algorithm}).setAudience(audience);
   if (sub !== undefined) {
     jwt.setSubject(sub);
   }
