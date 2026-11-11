@@ -4,6 +4,7 @@ import {ConfigModule} from '@nestjs/config';
 import {APP_FILTER, APP_PIPE} from '@nestjs/core';
 import {toRejection} from '@plan-for-myself/shared/study-record';
 import {AuthModule} from './auth/auth.module';
+import {envSchema} from './config/env';
 import {DatabaseModule} from './db/database.module';
 import {DemoModule} from './demo/demo.module';
 import {ApiExceptionFilter} from './error/api-exception.filter';
@@ -14,7 +15,7 @@ import {StudyRecordStatsModule} from './study-record-stats/study-record-stats.mo
 
 @Module({
   imports: [
-    ConfigModule.forRoot({isGlobal: true, envFilePath: '.env.local'}),
+    ConfigModule.forRoot({isGlobal: true, envFilePath: '.env.local', validationSchema: envSchema}),
     DatabaseModule,
     SentryShutdownModule,
     AuthenticationModule.forRoot(),

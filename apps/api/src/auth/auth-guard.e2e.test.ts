@@ -1,7 +1,5 @@
-import {AuthenticationRegistry, CurrentUser} from '@nestjs/authentication';
+import {CurrentUser} from '@nestjs/authentication';
 import {Controller, Get, HttpStatus, type INestApplication} from '@nestjs/common';
-import {ConfigService} from '@nestjs/config';
-import {ImpossibleStateError} from '@plan-for-myself/shared/error';
 import {eq, sql} from 'drizzle-orm';
 import request from 'supertest';
 import type {App} from 'supertest/types';
@@ -11,8 +9,7 @@ import {users} from '../db/schema';
 import {bearer, signTestToken} from '../testing/app-token';
 import {createInMemoryConnection, startApp} from '../testing/start-app';
 import {insertGuest as insertGuestRow} from '../testing/users';
-import {UserRepository, type UserRow} from '../user/user.repository';
-import {AppTokenProvider} from './app-token.provider';
+import type {UserRow} from '../user/user.repository';
 
 describe('앱 토큰 인증', () => {
   let app: INestApplication<App>;
@@ -73,14 +70,6 @@ describe('앱 토큰 인증', () => {
 
       expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
       expect(response.body).toMatchObject({code: 'UNAUTHORIZED'});
-    });
-
-    it('AUTH_SECRET이 31바이트면 토큰 검증기를 만들 때 ImpossibleStateError를 던져야 한다', () => {
-      expect(() => createProvider('thirty-one-bytes-test-secret-x!')).toThrow(ImpossibleStateError);
-    });
-
-    it('AUTH_SECRET이 한글로 채운 32바이트면 토큰 검증기를 만들어야 한다', () => {
-      expect(() => createProvider('가나다라마바사아자차ab')).not.toThrow();
     });
   });
 
@@ -176,10 +165,6 @@ describe('앱 토큰 인증', () => {
         await failingApp.close();
       }
     });
-
-    it('AUTH_SECRET이 비어 있으면 토큰 검증기를 만들 때 ImpossibleStateError를 던져야 한다', () => {
-      expect(() => createProvider('')).toThrow(ImpossibleStateError);
-    });
   });
 });
 
@@ -200,14 +185,6 @@ async function createClosedConnection(): Promise<DatabaseConnection> {
   const closedConnection = await createInMemoryConnection();
   await closedConnection.close();
   return {db: closedConnection.db, close: () => Promise.resolve()};
-}
-
-function createProvider(secret: string) {
-  return new AppTokenProvider(
-    new ConfigService({AUTH_SECRET: secret}),
-    new UserRepository(connection.db),
-    new AuthenticationRegistry(),
-  );
 }
 
 function insertGuest() {
