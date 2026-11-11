@@ -13,6 +13,53 @@ describe('UserRepository', () => {
     return () => connection.close();
   });
 
+  describe('delete()', () => {
+    describe('General cases', () => {
+      it('기록이 있는 사용자를 지우면 사용자 행이 없어야 한다', async () => {
+        const userId = await insertGuest(connection.db);
+        await insertRecord(connection.db, userId);
+
+        await repository.delete(userId);
+
+        expect(await repository.findById(userId)).toBeNull();
+      });
+
+      it('사용자를 지우면 그 사용자의 기록이 없어야 한다', async () => {
+        const userId = await insertGuest(connection.db);
+        await insertRecord(connection.db, userId);
+
+        await repository.delete(userId);
+
+        expect(await findRecordOwners(connection.db, userId)).toEqual([]);
+      });
+    });
+
+    describe('Edge cases', () => {
+      it('남의 사용자 행은 남아 있어야 한다', async () => {
+        const userId = await insertGuest(connection.db);
+        const otherId = await insertGuest(connection.db);
+
+        await repository.delete(userId);
+
+        expect(await repository.findById(otherId)).toEqual({id: otherId, isGuest: true});
+      });
+
+      it('남의 기록은 남아 있어야 한다', async () => {
+        const userId = await insertGuest(connection.db);
+        const otherId = await insertGuest(connection.db);
+        await insertRecord(connection.db, otherId);
+
+        await repository.delete(userId);
+
+        expect(await findRecordOwners(connection.db, otherId)).toHaveLength(1);
+      });
+
+      it('이미 없는 사용자면 에러 없이 끝나야 한다', async () => {
+        await expect(repository.delete(MISSING_USER_ID)).resolves.toBeUndefined();
+      });
+    });
+  });
+
   describe('findGoogleLoginRows()', () => {
     describe('General cases', () => {
       it('기록 있는 게스트가 가입된 Google 계정으로 오면 게스트 여부·기록 여부·가입된 사용자 번호를 반환해야 한다', async () => {

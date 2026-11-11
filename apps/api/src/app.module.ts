@@ -4,6 +4,7 @@ import {ConfigModule, ConfigService} from '@nestjs/config';
 import {APP_FILTER, APP_PIPE} from '@nestjs/core';
 import {APP_TOKEN_AUDIENCE} from '@plan-for-myself/shared/auth';
 import {toRejection} from '@plan-for-myself/shared/study-record';
+import {AccountModule} from './account/account.module';
 import {APP_TOKEN_TTL_DAYS} from './auth/app-token-ttl';
 import {AuthModule} from './auth/auth.module';
 import {type Env, envSchema} from './config/env';
@@ -35,6 +36,7 @@ import {StudyRecordStatsModule} from './study-record-stats/study-record-stats.mo
     StudyRecordModule,
     StudyRecordStatsModule,
     DemoModule,
+    AccountModule,
   ],
   controllers: [HealthController],
   providers: [

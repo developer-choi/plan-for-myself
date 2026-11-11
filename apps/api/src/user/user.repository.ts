@@ -100,6 +100,14 @@ export class UserRepository {
     );
   }
 
+  async delete(id: number): Promise<void> {
+    /* study_records.user_id FK에 ON DELETE CASCADE가 없어 기록을 함께 지워야 사용자 행을 지울 수 있다 */
+    const deletedRecords = this.db
+      .$with('deleted_records')
+      .as(this.db.delete(studyRecords).where(eq(studyRecords.userId, id)));
+    await this.db.with(deletedRecords).delete(users).where(eq(users.id, id));
+  }
+
   private async writeUnlessRaced(write: Promise<unknown[]>): Promise<boolean> {
     try {
       return (await write).length > 0;
