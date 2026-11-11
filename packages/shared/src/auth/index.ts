@@ -1,5 +1,11 @@
 export {createAccountApi} from './api';
 export {APP_TOKEN_AUDIENCE} from './app-token-audience';
+export {
+  type PostAppTokenApiRequest,
+  postAppTokenApiRequestSchema,
+  type PostAppTokenApiResponse,
+  postAppTokenApiResponseSchema,
+} from './app-token-exchange';
 export {type AccountDeleteText, GOOGLE_DELETE_TEXT, GUEST_DELETE_TEXT} from './delete-text';
 export {GUEST_LIMIT_CODE, hasGuestLimitCode, type LoginFailure} from './guest-limit';
 export {
@@ -24,10 +30,4 @@ export {
   type RegisteredAccountRejection,
   registeredAccountRejectionSchema,
 } from './registered-rejection';
-export type {
-  AppTokenClaims,
-  PostAppTokenApiRequest,
-  PostAppTokenApiResponse,
-  PostAppTokenGuestApiResponse,
-  PostAppTokenRefreshApiResponse,
-} from './type';
+export type {AppTokenClaims, PostAppTokenGuestApiResponse, PostAppTokenRefreshApiResponse} from './type';

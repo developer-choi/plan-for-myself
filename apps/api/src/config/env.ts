@@ -8,6 +8,7 @@ export const envSchema = z.object({
     .refine((secret) => new TextEncoder().encode(secret).byteLength >= HS256_MIN_KEY_BYTES, {
       error: `AUTH_SECRET은 ${HS256_MIN_KEY_BYTES}바이트 이상이어야 한다`,
     }),
+  AUTH_GOOGLE_ID: z.string({error: 'AUTH_GOOGLE_ID가 있어야 한다'}).min(1, {error: 'AUTH_GOOGLE_ID가 비어 있다'}),
 });
 
 export type Env = z.infer<typeof envSchema>;

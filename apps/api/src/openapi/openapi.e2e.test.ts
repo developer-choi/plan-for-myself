@@ -152,6 +152,51 @@ describe('OpenAPI 문서', () => {
       expect(response.body).toHaveProperty([...DEMO_OK_SCHEMA_PATH, 'properties', 'monthly', 'nullable'], true);
     });
 
+    it('/docs-json이면 Google idToken 교환의 200 응답에 토큰과 거절 두 모양을 실어야 한다', async () => {
+      const response = await request(app.getHttpServer()).get('/docs-json');
+
+      expect(response.body).toMatchObject({
+        paths: {
+          '/api/app-token': {
+            post: {
+              responses: {
+                [HttpStatus.OK]: {
+                  content: {
+                    'application/json': {
+                      schema: {
+                        oneOf: [
+                          {properties: {type: {enum: ['session']}}, required: ['type', 'token']},
+                          {properties: {type: {enum: ['registered-account']}}, required: ['type', 'rejection']},
+                        ],
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+    });
+
+    it('/docs-json이면 Google idToken 교환의 경합 응답에 LOGIN_CONFLICT code를 실어야 한다', async () => {
+      const response = await request(app.getHttpServer()).get('/docs-json');
+
+      expect(response.body).toMatchObject({
+        paths: {
+          '/api/app-token': {
+            post: {
+              responses: {
+                [HttpStatus.CONFLICT]: {
+                  content: {'application/json': {schema: {properties: {code: {enum: ['LOGIN_CONFLICT']}}}}},
+                },
+              },
+            },
+          },
+        },
+      });
+    });
+
     it('/docs면 문서 화면을 반환해야 한다', async () => {
       await request(app.getHttpServer()).get('/docs').expect(HttpStatus.OK).expect('Content-Type', /html/);
     });

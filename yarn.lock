@@ -9540,6 +9540,7 @@ __metadata:
     eslint-plugin-check-file: "npm:^3.3.1"
     eslint-plugin-react: "npm:^7.37.5"
     globals: "npm:^16.5.0"
+    google-auth-library: "npm:^11.3.1"
     jose: "npm:^6.2.13"
     pg: "npm:^8.23.1"
     reflect-metadata: "npm:^0.2.2"

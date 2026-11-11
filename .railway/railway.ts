@@ -16,6 +16,7 @@ export default defineRailway((context) => {
       POSTGRES_URL: preserve(),
       SENTRY_DSN: preserve(),
       AUTH_SECRET: preserve(),
+      AUTH_GOOGLE_ID: preserve(),
     },
   });
 

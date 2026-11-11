@@ -1,6 +1,6 @@
 import {DrizzleQueryError} from 'drizzle-orm';
 
-interface PostgresErrorFields {
+export interface PostgresErrorFields {
   code?: string;
   constraint?: string;
   table?: string;
