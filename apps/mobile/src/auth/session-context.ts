@@ -8,6 +8,7 @@ export interface SessionContextValue {
     token: string | null;
     isLoading: boolean;
     isGuest: boolean;
+    isSignedOutByServer: boolean;
   };
   handlers: {
     signIn: () => Promise<void>;
@@ -15,6 +16,7 @@ export interface SessionContextValue {
     connectGoogle: () => Promise<GoogleConnectResult>;
     discardGuestAndConnect: () => Promise<GoogleConnectResult>;
     signOut: () => Promise<void>;
+    signOutOnUnauthorized: () => Promise<void>;
   };
 }
 

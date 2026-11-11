@@ -20,12 +20,13 @@ import {isTransientApiError} from '@/shared/api/transient';
 interface UseAppTokenRefreshParams {
   isLoading: boolean;
   updateToken: (token: string) => void;
-  signOut: () => Promise<void>;
+  signOutOnUnauthorized: () => Promise<void>;
 }
 
 export default function SessionProvider({children}: PropsWithChildren) {
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSignedOutByServer, setIsSignedOutByServer] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -40,6 +41,7 @@ export default function SessionProvider({children}: PropsWithChildren) {
   const commitToken = useCallback(async (next: string) => {
     await saveAppToken(next);
     setToken(next);
+    setIsSignedOutByServer(false);
   }, []);
 
   const signIn = useCallback(async () => {
@@ -90,23 +92,34 @@ export default function SessionProvider({children}: PropsWithChildren) {
     await commitToken(next);
   }, [commitToken]);
 
-  const signOut = useCallback(async () => {
+  const signOutAs = useCallback(async ({isByServer}: {isByServer: boolean}) => {
     clearRegisteredRejection();
     try {
       await deleteAppToken();
     } finally {
       setToken(null);
+      setIsSignedOutByServer(isByServer);
     }
     await GoogleOneTapSignIn.signOut();
   }, []);
 
-  useAppTokenRefresh({isLoading, updateToken: setToken, signOut});
+  const signOut = useCallback(() => signOutAs({isByServer: false}), [signOutAs]);
+
+  const signOutOnUnauthorized = useCallback(async () => {
+    /* 직접 로그아웃 뒤 늦게 돌아온 401이 「로그인이 풀렸어요」를 띄우지 않게 한다 */
+    if ((await getAppToken()) === null) {
+      return;
+    }
+    await signOutAs({isByServer: true});
+  }, [signOutAs]);
+
+  useAppTokenRefresh({isLoading, updateToken: setToken, signOutOnUnauthorized});
 
   return (
     <SessionContext
       value={{
-        session: {token, isLoading, isGuest: readIsGuest(token)},
-        handlers: {signIn, startAsGuest, connectGoogle, discardGuestAndConnect, signOut},
+        session: {token, isLoading, isGuest: readIsGuest(token), isSignedOutByServer},
+        handlers: {signIn, startAsGuest, connectGoogle, discardGuestAndConnect, signOut, signOutOnUnauthorized},
       }}
     >
       {children}
@@ -118,7 +131,7 @@ const WEB_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID ?? '';
 const REFRESH_TIMEOUT_MILLISECONDS = 10_000;
 const GUEST_START_TIMEOUT_MILLISECONDS = 10_000;
 
-function useAppTokenRefresh({isLoading, updateToken, signOut}: UseAppTokenRefreshParams) {
+function useAppTokenRefresh({isLoading, updateToken, signOutOnUnauthorized}: UseAppTokenRefreshParams) {
   const isRefreshingCache = useRef(false);
 
   /**
@@ -147,7 +160,7 @@ function useAppTokenRefresh({isLoading, updateToken, signOut}: UseAppTokenRefres
       updateToken(next);
     } catch (error) {
       if (isUnauthorizedError(error)) {
-        await signOut();
+        await signOutOnUnauthorized();
         return;
       }
       if (!isTransientApiError(error)) {
@@ -156,7 +169,7 @@ function useAppTokenRefresh({isLoading, updateToken, signOut}: UseAppTokenRefres
     } finally {
       isRefreshingCache.current = false;
     }
-  }, [updateToken, signOut]);
+  }, [updateToken, signOutOnUnauthorized]);
 
   useEffect(() => {
     if (!isLoading) {

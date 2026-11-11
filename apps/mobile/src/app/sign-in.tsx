@@ -14,7 +14,7 @@ import {resetStackTo} from '@/shared/reset-stack';
 
 export default function SignInScreen() {
   const {
-    session: {token, isGuest},
+    session: {token, isGuest, isSignedOutByServer},
     handlers: {signIn, startAsGuest},
   } = useSession();
   const {error} = useLocalSearchParams<{error?: string}>();
@@ -106,6 +106,7 @@ export default function SignInScreen() {
         onStartAsGuest: handleStartAsGuest,
         onExit: () => resetStackTo(INTRO_URL),
       }}
+      isSignedOutByServer={isSignedOutByServer}
       pendingAction={pendingAction}
     />
   );
