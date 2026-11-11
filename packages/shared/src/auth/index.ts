@@ -29,9 +29,5 @@ export {
 } from './login-text';
 export {LOGIN_NUDGE_STORAGE_KEY} from './login-nudge-date';
 export {shouldShowRegisteredNotice} from './registered-notice';
-export {
-  REGISTERED_REJECTION_TTL_SECONDS,
-  type RegisteredAccountRejection,
-  registeredAccountRejectionSchema,
-} from './registered-rejection';
+export {REGISTERED_REJECTION_TTL_SECONDS, type RegisteredAccountRejection} from './registered-rejection';
 export type {AppTokenClaims} from './type';

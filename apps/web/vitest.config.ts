@@ -9,7 +9,7 @@ export default defineConfig({
     include: ['src/**/*.test.{ts,tsx}', 'seed/**/*.test.ts'],
     setupFiles: ['./vitest.setup.ts'],
     restoreMocks: true,
-    env: {AUTH_SECRET: 'test-auth-secret-for-vitest-only-32bytes+', AUTH_GOOGLE_ID: ''},
+    env: {AUTH_SECRET: 'test-auth-secret-for-vitest-only-32bytes+'},
     server: {deps: {inline: ['next-auth']}},
   },
 });

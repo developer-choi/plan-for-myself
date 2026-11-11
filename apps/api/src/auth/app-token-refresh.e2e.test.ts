@@ -69,12 +69,15 @@ describe('앱 토큰 갱신 API', () => {
       expect(await readRefreshedClaims(response.body)).not.toHaveProperty('isGuest');
     });
 
-    it('만료된 지 10초 지난 토큰이면 새 토큰을 반환해야 한다', async () => {
+    it('만료된 지 1초 지난 토큰이면 401 UNAUTHORIZED를 반환해야 한다', async () => {
       const guestId = await insertGuest(connection.db);
 
-      const response = await refresh(await signTestToken(String(guestId), {expirationTime: '10s ago'}));
+      const response = await refresh(await signTestToken(String(guestId), {expirationTime: '1s ago'}));
 
-      expect(await readRefreshedClaims(response.body)).toMatchObject({sub: String(guestId)});
+      expect({status: response.status, code: (response.body as {code: string}).code}).toEqual({
+        status: HttpStatus.UNAUTHORIZED,
+        code: 'UNAUTHORIZED',
+      });
     });
 
     it('탈퇴한 사용자의 토큰이면 401 UNAUTHORIZED를 반환해야 한다', async () => {

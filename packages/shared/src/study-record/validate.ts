@@ -9,8 +9,6 @@ export type StudyRecordFields = z.infer<typeof studyRecordFieldsSchema>;
 
 export type Rejection = ApiErrorBody;
 
-export type Validation<T> = {ok: true; value: T} | {ok: false; rejection: Rejection};
-
 export interface MonthRange {
   from: string;
   until: string;
@@ -19,16 +17,6 @@ export interface MonthRange {
 interface SchemaIssue {
   message: string;
   path?: readonly (PropertyKey | {key: PropertyKey})[];
-}
-
-export function validateNewStudyRecord(body: unknown, today: string): Validation<NewStudyRecord> {
-  const result = validate(newStudyRecordSchema, body);
-  return result.ok ? toValidation(result.value, checkNewStudyRecord(result.value, today)) : result;
-}
-
-export function validateStudyRecordUpdate(body: unknown): Validation<StudyRecordFields> {
-  const result = validate(studyRecordUpdateSchema, body);
-  return result.ok ? toValidation(result.value, checkStudyRecordUpdate(result.value)) : result;
 }
 
 /**
@@ -59,25 +47,6 @@ export function toRejection(issues: readonly SchemaIssue[]): Rejection {
     return {code: REJECTION_CODES[field], message: issue.message};
   }
   return {code: API_ERROR_CODES.INVALID_BODY, message: '요청 형식이 올바르지 않아요'};
-}
-
-export function validateDate(date: string | null, today: string): Validation<string> {
-  const result = dateSchema.safeParse(date);
-  if (!result.success) {
-    return {ok: false, rejection: {code: API_ERROR_CODES.INVALID_DATE, message: DATE_MESSAGE}};
-  }
-  return toValidation(result.data, checkLookupDate(result.data, today));
-}
-
-export function validateMonth(month: string | null): Validation<MonthRange> {
-  const result = monthSchema.safeParse(month);
-  return result.success
-    ? {ok: true, value: result.data}
-    : {ok: false, rejection: {code: API_ERROR_CODES.INVALID_MONTH, message: MONTH_MESSAGE}};
-}
-
-export function validateNotFutureMonth(month: MonthRange, date: string): Validation<MonthRange> {
-  return toValidation(month, checkNotFutureMonth(month, date));
 }
 
 /**
@@ -193,15 +162,6 @@ const EMPTY_RECORD_REJECTION: Rejection = {
   code: API_ERROR_CODES.EMPTY_RECORD,
   message: STUDY_RECORD_FIELD_MESSAGES.emptyRecord,
 };
-
-function validate<T>(schema: z.ZodType<T>, body: unknown): Validation<T> {
-  const result = schema.safeParse(body);
-  return result.success ? {ok: true, value: result.data} : {ok: false, rejection: toRejection(result.error.issues)};
-}
-
-function toValidation<T>(value: T, rejection: Rejection | null): Validation<T> {
-  return rejection ? {ok: false, rejection} : {ok: true, value};
-}
 
 function isRejectableField(field: PropertyKey | undefined): field is keyof typeof REJECTION_CODES {
   return typeof field === 'string' && Object.hasOwn(REJECTION_CODES, field);

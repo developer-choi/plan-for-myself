@@ -9024,60 +9024,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/cli-config@npm:0.3.0":
-  version: 0.3.0
-  resolution: "@vercel/cli-config@npm:0.3.0"
-  dependencies:
-    xdg-app-paths: "npm:5"
-    zod: "npm:4.1.11"
-  checksum: 10c0/fed548360f3df1ab6d3d0b176e9da96454271cffa772fcd4db5920c589913e188af10fab4abce5c9f66e31b68b6dcf4d694af00d26e17e6b182fa73938a7240b
-  languageName: node
-  linkType: hard
-
-"@vercel/cli-exec@npm:1.0.1":
-  version: 1.0.1
-  resolution: "@vercel/cli-exec@npm:1.0.1"
-  dependencies:
-    execa: "npm:5.1.1"
-  checksum: 10c0/4063e59898e5984249a933ace889b152e392f64640fe4d9f6edb8b9bf4c76d43216f561c3774e30a0fe17248ff2732b44dfed017bd73de79a3a245bb0769f0ea
-  languageName: node
-  linkType: hard
-
-"@vercel/firewall@npm:^1.2.6":
-  version: 1.2.6
-  resolution: "@vercel/firewall@npm:1.2.6"
-  checksum: 10c0/d8f92b2917ff435e45f7844eeec0c6eb2a8d3b66a942730d38d65ff0945c903206b8051693d63c80715d2109abe154ad6f88d9a9093c45d948561a41610454df
-  languageName: node
-  linkType: hard
-
-"@vercel/functions@npm:^3.9.9":
-  version: 3.9.9
-  resolution: "@vercel/functions@npm:3.9.9"
-  dependencies:
-    "@vercel/oidc": "npm:3.8.9"
-  peerDependencies:
-    "@aws-sdk/credential-provider-web-identity": "*"
-    ws: ">=8"
-  peerDependenciesMeta:
-    "@aws-sdk/credential-provider-web-identity":
-      optional: true
-    ws:
-      optional: true
-  checksum: 10c0/dba48fb3728476023e1adbddd83911b6214aa28d20952468be5e2030e53e8cf2a7b236095f82172547b982b843ae1b2d73b711d683f58df23bdd69e62ea3817b
-  languageName: node
-  linkType: hard
-
-"@vercel/oidc@npm:3.8.9":
-  version: 3.8.9
-  resolution: "@vercel/oidc@npm:3.8.9"
-  dependencies:
-    "@vercel/cli-config": "npm:0.3.0"
-    "@vercel/cli-exec": "npm:1.0.1"
-    jose: "npm:^5.9.6"
-  checksum: 10c0/d3205010d774e1cc8ac0b5f379e5dbdccb4331ec079b8e890d9a06572d794cdfc2720233f7048529a619b77c6e0031c25f98d6cbf4e8b88e48c24f221ef8732d
-  languageName: node
-  linkType: hard
-
 "@vitejs/plugin-react@npm:^5.1.1":
   version: 5.2.0
   resolution: "@vitejs/plugin-react@npm:5.2.0"
@@ -13473,7 +13419,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"execa@npm:5.1.1, execa@npm:^5.0.0":
+"execa@npm:^5.0.0":
   version: 5.1.1
   resolution: "execa@npm:5.1.1"
   dependencies:
@@ -16994,13 +16940,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:^5.9.6":
-  version: 5.10.0
-  resolution: "jose@npm:5.10.0"
-  checksum: 10c0/e20d9fc58d7e402f2e5f04e824b8897d5579aae60e64cb88ebdea1395311c24537bf4892f7de413fab1acf11e922797fb1b42269bc8fc65089a3749265ccb7b0
-  languageName: node
-  linkType: hard
-
 "jose@npm:^6.0.6":
   version: 6.2.12
   resolution: "jose@npm:6.2.12"
@@ -19446,13 +19385,6 @@ __metadata:
     strip-ansi: "npm:^5.2.0"
     wcwidth: "npm:^1.0.1"
   checksum: 10c0/04cb375f222c36a16a95e6c39c473644a99a42fc34d35c37507cb836ea0a71f4d831fcd53198a460869114b2730891d63cc1047304afe5ddb078974d468edfb1
-  languageName: node
-  linkType: hard
-
-"os-paths@npm:^4.0.1":
-  version: 4.4.0
-  resolution: "os-paths@npm:4.4.0"
-  checksum: 10c0/3d16cde656dbadfce3fb4dd2dd10343d530ac0ebbd0d6f99dcaa84561b5eeec5342be1640139ab5a0a27dbb24fd0bb352b2e9a06359552be791fcd2f00d37eda
   languageName: node
   linkType: hard
 
@@ -24600,7 +24532,6 @@ __metadata:
   dependencies:
     "@developer-choi/design-system": "npm:^0.8.0"
     "@developer-choi/utils": "npm:^0.1.0"
-    "@electric-sql/pglite": "npm:^0.5.8"
     "@plan-for-myself/shared": "workspace:*"
     "@radix-ui/react-icons": "npm:^1.3.2"
     "@sentry/nextjs": "npm:^10.75.2"
@@ -24614,15 +24545,12 @@ __metadata:
     "@types/pg": "npm:^8.23.1"
     "@types/react": "npm:~19.2.2"
     "@types/react-dom": "npm:~19.2.3"
-    "@vercel/firewall": "npm:^1.2.6"
-    "@vercel/functions": "npm:^3.9.9"
     "@vitejs/plugin-react": "npm:^5.1.1"
     classnames: "npm:^2.5.1"
     client-only: "npm:^0.0.1"
     dotenv: "npm:^18.0.5"
     eslint: "npm:^9"
     eslint-config-next: "npm:16.4.0"
-    google-auth-library: "npm:^11.3.1"
     jose: "npm:^6.2.13"
     jsdom: "npm:^28.1.0"
     next: "npm:16.4.0"
@@ -24643,7 +24571,6 @@ __metadata:
     vite: "npm:^7.2.4"
     vite-tsconfig-paths: "npm:^6.1.1"
     vitest: "npm:^4.0.17"
-    zod: "npm:^4.3.5"
   languageName: unknown
   linkType: soft
 
@@ -25056,25 +24983,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"xdg-app-paths@npm:5":
-  version: 5.5.1
-  resolution: "xdg-app-paths@npm:5.5.1"
-  dependencies:
-    os-paths: "npm:^4.0.1"
-    xdg-portable: "npm:^7.2.0"
-  checksum: 10c0/9fbd81fea0cb8d2a7f2473e4da90ece034c32dc6c271449ba048dc37c45da54c8c9401e65df1012071b8b9a4e1a6166d8a83beb86d943ef102bac5f22d6e3581
-  languageName: node
-  linkType: hard
-
-"xdg-portable@npm:^7.2.0":
-  version: 7.3.0
-  resolution: "xdg-portable@npm:7.3.0"
-  dependencies:
-    os-paths: "npm:^4.0.1"
-  checksum: 10c0/d363f73aede0b198b9e76d2f40bd68b2af56ecd25d0c692cd6fbbfbd2857943f53a4ce97bd50584d8baf580e0cc20b40789d1ca22e4834499e5e1ea975ce35cb
-  languageName: node
-  linkType: hard
-
 "xml-name-validator@npm:^4.0.0":
   version: 4.0.0
   resolution: "xml-name-validator@npm:4.0.0"
@@ -25254,13 +25162,6 @@ __metadata:
   peerDependencies:
     zod: ^3.25.0 || ^4.0.0
   checksum: 10c0/0ccfec48c46de1be440b719cd02044d4abb89ed0e14c13e637cd55bf29102f67ccdba373f25def0fc7130e5f15025be4d557a7edcc95d5a3811599aade689e1b
-  languageName: node
-  linkType: hard
-
-"zod@npm:4.1.11":
-  version: 4.1.11
-  resolution: "zod@npm:4.1.11"
-  checksum: 10c0/ce6a4c4acfbf51d7dd0f2669c82f207d62a1f00264eef608994b94eb99d86a74c99f59b0dd3e61ef82909ee136631378b709e0908f0a02a2d5c21d0c497de5db
   languageName: node
   linkType: hard
 

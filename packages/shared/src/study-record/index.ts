@@ -40,9 +40,4 @@ export {
   type StudyRecordFields,
   studyRecordUpdateSchema,
   toRejection,
-  validateDate,
-  validateMonth,
-  validateNewStudyRecord,
-  validateNotFutureMonth,
-  validateStudyRecordUpdate,
 } from './validate';
