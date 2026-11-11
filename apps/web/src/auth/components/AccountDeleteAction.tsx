@@ -9,6 +9,7 @@ import {Callout, Confirm} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
 import {accountApi} from '@/auth/api';
 import {ENTRY_URL} from '@/auth/redirect';
+import {signOutAndReplace} from '@/auth/sign-out';
 import styles from './AccountDeleteAction.module.scss';
 
 interface AccountDeleteActionProps {
@@ -44,7 +45,7 @@ function AccountDeleteConfirm({isOpen, text, onClose}: AccountDeleteConfirmProps
     handlers: {deleteAccount},
   } = useAccountDelete({
     deleteAccountApi: accountApi.deleteAccountApi,
-    onDeleted: () => window.location.replace(ENTRY_URL),
+    onDeleted: () => signOutAndReplace(ENTRY_URL),
     reportError: captureException,
   });
 
