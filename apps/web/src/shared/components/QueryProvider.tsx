@@ -22,6 +22,6 @@ function createWebQueryClient() {
     }
 
     isSigningOut = true;
-    signOutAndReplace(toLoginUrl(window.location.pathname + window.location.search));
+    signOutAndReplace(toLoginUrl(window.location.pathname + window.location.search, 'signed-out'));
   });
 }

@@ -24,3 +24,8 @@ export const REGISTERED_ACCOUNT_NOTICE = {
   reason: '이미 가입된 Google 계정이에요',
   consequence: '로그인하면 지금 게스트 계정과 기록이 삭제돼요',
 };
+
+export const SIGNED_OUT_NOTICE = {
+  title: '로그인이 풀렸어요',
+  content: '세션이 만료됐거나 다른 기기에서 계정을 정리했을 수 있어요. 게스트였다면 그 계정의 기록은 더 볼 수 없어요',
+};
