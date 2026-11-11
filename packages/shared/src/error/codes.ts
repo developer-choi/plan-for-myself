@@ -11,6 +11,8 @@ export const API_ERROR_CODES = {
   ROUTE_NOT_FOUND: 'ROUTE_NOT_FOUND',
   DUPLICATE_DATE: 'DUPLICATE_DATE',
   LOGIN_CONFLICT: 'LOGIN_CONFLICT',
+  /* 웹·앱이 이미 이 소문자 값으로 한도 안내를 고른다 */
+  GUEST_LIMIT: 'guest_limit',
   INTERNAL_ERROR: 'INTERNAL_ERROR',
 } as const;
 

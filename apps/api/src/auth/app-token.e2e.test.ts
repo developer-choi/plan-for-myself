@@ -1,12 +1,11 @@
 import {HttpStatus, type INestApplication} from '@nestjs/common';
-import {APP_TOKEN_AUDIENCE, type PostAppTokenApiResponse} from '@plan-for-myself/shared/auth';
+import type {PostAppTokenApiResponse} from '@plan-for-myself/shared/auth';
 import {sql} from 'drizzle-orm';
-import {jwtVerify} from 'jose';
 import request from 'supertest';
 import type {App} from 'supertest/types';
 import {afterAll, assert, beforeAll, describe, expect, it} from 'vitest';
 import type {DatabaseConnection} from '../db/database';
-import {bearer, signTestToken} from '../testing/app-token';
+import {bearer, readAppTokenClaims, signTestToken} from '../testing/app-token';
 import {createInMemoryConnection, startApp} from '../testing/start-app';
 import {findRecordOwners, findUser, insertGoogleUser, insertGuest, insertRecord} from '../testing/users';
 import {GOOGLE_ID_TOKEN_VERIFIER, type GoogleIdTokenVerifier} from './google-id-token.verifier';
@@ -323,14 +322,8 @@ function readRejection(body: unknown) {
   return response.rejection;
 }
 
-/* 웹(apps/web/src/auth/app-token.ts)이 앱 토큰을 검증하는 방식 그대로 읽어 웹과 서로 통하는 토큰인지 본다 */
-async function readSessionClaims(body: unknown) {
-  const {payload} = await jwtVerify(readSessionToken(body), new TextEncoder().encode(process.env.AUTH_SECRET), {
-    audience: APP_TOKEN_AUDIENCE,
-    algorithms: ['HS256'],
-    requiredClaims: ['exp'],
-  });
-  return payload;
+function readSessionClaims(body: unknown) {
+  return readAppTokenClaims(readSessionToken(body));
 }
 
 async function insertGuestWithRecord() {

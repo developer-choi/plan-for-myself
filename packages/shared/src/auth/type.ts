@@ -4,10 +4,6 @@ export interface AppTokenClaims {
   isGuest?: boolean;
 }
 
-export interface PostAppTokenGuestApiResponse {
-  token: string;
-}
-
 export interface PostAppTokenRefreshApiResponse {
   token: string;
 }

@@ -1,5 +1,5 @@
-import {Authenticate, CurrentUser} from '@nestjs/authentication';
-import {Body, Controller, HttpCode, HttpStatus, Inject, Post, UnauthorizedException} from '@nestjs/common';
+import {Authenticate, CurrentUser, Public} from '@nestjs/authentication';
+import {Body, Controller, HttpCode, HttpStatus, Inject, Post, UnauthorizedException, UseGuards} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
@@ -7,6 +7,7 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiTags,
+  ApiTooManyRequestsResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import {
@@ -14,12 +15,16 @@ import {
   postAppTokenApiRequestSchema,
   type PostAppTokenApiResponse,
   postAppTokenApiResponseSchema,
+  type PostAppTokenGuestApiResponse,
+  postAppTokenGuestApiResponseSchema,
 } from '@plan-for-myself/shared/auth';
 import {API_ERROR_CODES} from '@plan-for-myself/shared/error';
 import {apiErrorSchema} from '../openapi/api-error-schema';
 import type {UserRow} from '../user/user.repository';
 import {GOOGLE_ID_TOKEN_VERIFIER, type GoogleIdTokenVerifier} from './google-id-token.verifier';
 import {GoogleLoginService} from './google-login.service';
+import {GuestLoginService} from './guest-login.service';
+import {GUEST_THROTTLE, GUEST_THROTTLE_MINUTES, GuestThrottlerGuard} from './guest-throttler.guard';
 
 @ApiTags('app-token')
 @Controller('app-token')
@@ -27,6 +32,7 @@ export class AppTokenController {
   constructor(
     @Inject(GOOGLE_ID_TOKEN_VERIFIER) private readonly verifier: GoogleIdTokenVerifier,
     private readonly googleLoginService: GoogleLoginService,
+    private readonly guestLoginService: GuestLoginService,
   ) {}
 
   /**
@@ -66,5 +72,19 @@ export class AppTokenController {
       throw new UnauthorizedException();
     }
     return this.googleLoginService.exchange({googleSub, discardIntent, tokenUserId: user?.id ?? null});
+  }
+
+  @Post('guest')
+  @HttpCode(HttpStatus.OK)
+  @Public()
+  @UseGuards(GuestThrottlerGuard)
+  @ApiOperation({summary: '게스트 토큰 발급', description: '로그인 없이 사용하는 게스트 계정을 만들고 그 토큰을 준다'})
+  @ApiOkResponse({description: '게스트 앱 토큰', standardSchema: postAppTokenGuestApiResponseSchema})
+  @ApiTooManyRequestsResponse({
+    description: `같은 IP(IPv6는 /64 대역)에서 최근 ${GUEST_THROTTLE_MINUTES}분 안에 게스트를 ${GUEST_THROTTLE.limit}번 넘게 만들었다. 걸린 때부터 ${GUEST_THROTTLE_MINUTES}분 동안 막는다`,
+    schema: apiErrorSchema([API_ERROR_CODES.GUEST_LIMIT]),
+  })
+  startAsGuest(): Promise<PostAppTokenGuestApiResponse> {
+    return this.guestLoginService.start();
   }
 }

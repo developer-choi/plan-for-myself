@@ -47,6 +47,14 @@ export class UserRepository {
     return row;
   }
 
+  async createGuest(): Promise<number> {
+    const [row] = await this.db.insert(users).values({isGuest: true}).returning({id: users.id});
+    if (!row) {
+      throw new ImpossibleStateError('게스트를 넣었는데 돌아온 행이 없다');
+    }
+    return row.id;
+  }
+
   async findOrCreateByGoogleSub(googleSub: string): Promise<number> {
     const [row] = await this.db
       .insert(users)
