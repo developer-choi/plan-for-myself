@@ -26,15 +26,9 @@ apps/mobile  (React Native) ─┘
 
 웹과 앱은 화면만 다를 뿐 로직은 대부분 같아서, 같은 로직을 한 번만 구현하고 한 번만 고치려고 [모노레포로 옮기고](https://github.com/developer-choi/plan-for-myself/pull/35) [공통 패키지를 같이 쓰게 했습니다](https://github.com/developer-choi/plan-for-myself/pull/36).
 
-웹과 앱이 같이 쓰는 것의 예:
-
-- `useRecordForm` — 기록을 저장·삭제하고 서버의 거절을 안내하는 폼 로직
-- `createStudyRecordApi` — 기록 API 함수. 인증 방식이 다른 API 클라이언트를 인자로 받습니다
-- `beforeSend` — 에러 보고(Sentry)로 보내기 전에 로그인 만료(401)를 버리고, 에러마다 심각도를 붙이는 규칙
-
 ## 앱 (React Native)
 
-- 웹을 웹뷰로 띄우지 않고, 화면을 React Native로 다시 만들었습니다. 웹이 이미 있어 비용만 보면 웹뷰가 합리적이었지만, React Native를 익히는 것이 목적이었습니다. → [웹뷰 없이 앱을 배포하고 운영하기](docs/cases/development.md#웹뷰-없이-앱을-배포하고-운영하기)
+- 웹을 웹뷰로 띄우지 않고, 화면을 React Native로 다시 만들었습니다. 웹이 이미 있어 비용만 보면 웹뷰가 합리적이었지만, React Native를 익히는 것이 목적이었습니다. 화면은 다시 만들었어도 로직은 웹과 대부분 같이 씁니다 — [기록 폼](https://github.com/developer-choi/plan-for-myself/pull/124), [달력 칸 계산](https://github.com/developer-choi/plan-for-myself/pull/123), [통계 표시](https://github.com/developer-choi/plan-for-myself/pull/125), 에러 보고(Sentry)로 보내기 전에 거르는 규칙. → [웹뷰 없이 앱을 배포하고 운영하기](docs/cases/development.md#웹뷰-없이-앱을-배포하고-운영하기)
 - [Expo로 만들었습니다](https://github.com/developer-choi/plan-for-myself/pull/36). 카메라 같은 네이티브 기능을 쓰지 않고, 모노레포용 번들러 설정을 Expo가 맡아 주기 때문입니다.
 - 네이티브 코드가 바뀌지 않은 수정은 [EAS Update로 스토어 심사 없이 내보내고 되돌립니다]([PR: EAS Update 설정과 되돌림]).
 
