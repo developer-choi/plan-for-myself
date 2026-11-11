@@ -58,7 +58,7 @@ export async function createDatabaseConnection({
     return {db: drizzlePg({client: pool, logger: toQueryLogger(logQueries)}), close: () => pool.end()};
   }
 
-  /* 운영 Postgres의 테이블은 아직 웹 마이그레이션이 만들어서 PGlite에만 적용한다 */
+  /* 여기서 Postgres에도 적용하면 배포가 운영 DB를 바꾼다 */
   const client = await PGlite.create(dataDir);
   const db = drizzlePglite({client, logger: toQueryLogger(logQueries)});
   await migrate(db, {migrationsFolder: MIGRATIONS_DIR});

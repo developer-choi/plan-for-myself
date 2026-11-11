@@ -8,10 +8,6 @@
     "start": "next start",
     "lint": "eslint . --max-warnings 0",
     "check-types": "tsc --noEmit",
-    "migrate": "node-pg-migrate --migrations-dir migrations --migration-file-language sql --database-url-var POSTGRES_URL_NON_POOLING --envPath .env.local",
-    "migrate:up": "yarn migrate up",
-    "migrate:down": "yarn migrate down",
-    "migrate:create": "yarn migrate create",
     "db:seed": "tsx --env-file-if-exists=.env.local seed/index.mts",
     "test": "vitest run"
   },
@@ -56,7 +52,6 @@
     "eslint": "^9",
     "eslint-config-next": "16.4.0",
     "jsdom": "^28.1.0",
-    "node-pg-migrate": "^9.0.0",
     "tsx": "^4.23.15",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.57.2",
