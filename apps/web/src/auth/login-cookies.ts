@@ -6,8 +6,8 @@ export function createRegisteredRejection(guestUserId: string, googleSub: string
   return {guestUserId, googleSubHash: hashGoogleSub(googleSub)};
 }
 
-export async function setRegisteredRejection(guestUserId: string, googleSub: string): Promise<void> {
-  (await cookies()).set(REJECTION_COOKIE, serialize(createRegisteredRejection(guestUserId, googleSub)), {
+export async function setRegisteredRejection(rejection: RegisteredAccountRejection): Promise<void> {
+  (await cookies()).set(REJECTION_COOKIE, serialize(rejection), {
     ...COOKIE_OPTIONS,
     maxAge: REGISTERED_REJECTION_TTL_SECONDS,
   });
