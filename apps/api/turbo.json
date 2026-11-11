@@ -6,10 +6,26 @@
       "outputs": ["dist/**"]
     },
     "dev": {
-      "passThroughEnv": ["PORT", "NODE_ENV", "POSTGRES_URL", "DB_QUERY_LOG", "AUTH_SECRET", "AUTH_GOOGLE_ID"]
+      "passThroughEnv": [
+        "PORT",
+        "NODE_ENV",
+        "POSTGRES_URL",
+        "DB_QUERY_LOG",
+        "AUTH_SECRET",
+        "AUTH_GOOGLE_ID",
+        "CORS_ORIGINS"
+      ]
     },
     "start": {
-      "passThroughEnv": ["PORT", "NODE_ENV", "POSTGRES_URL", "DB_QUERY_LOG", "AUTH_SECRET", "AUTH_GOOGLE_ID"]
+      "passThroughEnv": [
+        "PORT",
+        "NODE_ENV",
+        "POSTGRES_URL",
+        "DB_QUERY_LOG",
+        "AUTH_SECRET",
+        "AUTH_GOOGLE_ID",
+        "CORS_ORIGINS"
+      ]
     }
   }
 }

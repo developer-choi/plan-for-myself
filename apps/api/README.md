@@ -8,16 +8,18 @@ Railway 프로젝트 하나에 `staging`·`production` 환경을 두고, 환경�
 
 ### 설정 파일 밖에서 넣는 것
 
-| 항목             | staging                  | production               |
-| ---------------- | ------------------------ | ------------------------ |
-| `POSTGRES_URL`   | Neon `dev` 직접 연결     | Neon `main` 직접 연결    |
-| `SENTRY_DSN`     | 웹과 같은 프로젝트의 DSN | 웹과 같은 프로젝트의 DSN |
-| `AUTH_SECRET`    | 웹과 다른 새 값          | 웹과 다른 새 값          |
-| `AUTH_GOOGLE_ID` | 웹과 같은 값             | 웹과 같은 값             |
+| 항목             | staging                              | production                           |
+| ---------------- | ------------------------------------ | ------------------------------------ |
+| `POSTGRES_URL`   | Neon `dev` 직접 연결                 | Neon `main` 직접 연결                |
+| `SENTRY_DSN`     | 웹과 같은 프로젝트의 DSN             | 웹과 같은 프로젝트의 DSN             |
+| `AUTH_SECRET`    | 웹과 다른 새 값                      | 웹과 다른 새 값                      |
+| `AUTH_GOOGLE_ID` | 웹과 같은 값                         | 웹과 같은 값                         |
+| `CORS_ORIGINS`   | 로컬 웹·QA 브랜치의 Vercel 고정 별칭 | `https://plan-for-myself.vercel.app` |
 
 - 표의 변수는 설정 파일에 `preserve()`로만 있어 대시보드에서 넣는다. 서버가 새로 요구하는 변수는 staging은 `railway up` 전에, production은 머지 전에 넣고 Deploy까지 한다(값이 없으면 새 배포가 실패하고 이전 배포가 계속 돈다)
 - `POSTGRES_URL`은 pooled가 아닌 직접 연결 주소에 `options=-c%20statement_timeout%3D5s` 쿼리 파라미터를 붙여, DB가 5초 넘게 도는 쿼리를 스스로 취소하게 한다. pooled 주소는 이 옵션을 받지 않아 접속이 거부된다
 - `AUTH_SECRET`은 이 서버가 앱 토큰을 서명·검증하는 키로, 웹과 다른 32바이트 이상 값이다
+- `CORS_ORIGINS`는 쉼표로 구분한 출처 목록이고, 각 출처는 브라우저가 보내는 `Origin` 헤더와 글자까지 같아야 한다. 끝 슬래시·경로·대문자·기본 포트 표기가 있으면 서버가 뜨지 않는다. staging의 로컬 웹 출처는 `http://localhost:3000`이다
 - 서비스 변수는 설정 파일이 모두 정한다. 설정 파일에 없는 변수는 apply 때 지워지므로(plan에 `Delete variable`로 나온다), 서버가 새 변수를 요구하면 설정 파일에 값이나 `preserve()`로 먼저 더한다. 그 브랜치에서 apply한 뒤 대시보드에 값을 넣는다(master에서 apply하면 넣은 값이 지워진다)
 - `PORT`는 Railway가 넣고, `NODE_ENV=production`은 Dockerfile이 정한다
 - `SENTRY_ENABLED=true`인데 `SENTRY_DSN`·`SENTRY_ENVIRONMENT`가 없으면 서버가 뜨지 않는다

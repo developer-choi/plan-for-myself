@@ -8,6 +8,7 @@ export default defineConfig({
     env: {
       AUTH_SECRET: 'test-only-auth-secret-of-64-bytes-so-hs384-and-hs512-rows-fail!!',
       AUTH_GOOGLE_ID: 'test-only-google-client-id',
+      CORS_ORIGINS: 'http://localhost:3000, https://web.example',
     },
   },
 });
