@@ -36,8 +36,6 @@ apps/mobile  (React Native) ─┘
 
 - 웹을 웹뷰로 띄우지 않고, 화면을 React Native로 다시 만들었습니다. 웹이 이미 있어 비용만 보면 웹뷰가 합리적이었지만, React Native를 익히는 것이 목적이었습니다. → [웹뷰 없이 앱을 배포하고 운영하기](docs/cases/development.md#웹뷰-없이-앱을-배포하고-운영하기)
 - [Expo로 만들었습니다](https://github.com/developer-choi/plan-for-myself/pull/36). 카메라 같은 네이티브 기능을 쓰지 않고, 모노레포용 번들러 설정을 Expo가 맡아 주기 때문입니다.
-- 로그인 토큰은 기기의 안전한 저장소(`expo-secure-store`)에 두어, 앱을 껐다 켜도 [로그인이 유지됩니다]([PR: 앱 로그인]).
-- 에러 보고는 웹과 같은 거르는 규칙에 더해, 로그인 요청에 실린 Google ID 토큰을 빼고, JS 에러에서는 기기의 앱 권한 목록도 [빼고 보냅니다]([PR: 앱 에러 보고]).
 - 네이티브 코드가 바뀌지 않은 수정은 [EAS Update로 스토어 심사 없이 내보내고 되돌립니다]([PR: EAS Update 설정과 되돌림]).
 
 ## 대표 작업 사례
@@ -58,7 +56,7 @@ apps/mobile  (React Native) ─┘
 
 #### 해결
 
-기록 폼 로직을 [공통 패키지의 훅 하나로 두고]([PR: 기록 폼 로직을 공통 패키지로]), 웹과 앱은 같은 훅을 호출해 화면만 각자 그리게 했습니다.
+기록 폼 로직을 [공통 패키지의 훅 하나로 두고](https://github.com/developer-choi/plan-for-myself/pull/124), 웹과 앱은 같은 훅을 호출해 화면만 각자 그리게 했습니다.
 
 API 클라이언트와 Sentry SDK처럼 플랫폼마다 다른 것은, 공통 패키지가 직접 가져오지 않고 인자로 받습니다.
 
