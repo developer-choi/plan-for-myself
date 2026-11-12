@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import type {Session} from 'next-auth';
 import {SessionProvider} from 'next-auth/react';
 import {OverlayProvider} from 'overlay-kit';
-import {getDemoMonth, getDemoOverview, getDemoRecords, getDemoToday} from '@plan-for-myself/shared/demo';
+import {getDemoMonth, getDemoResponse} from '@plan-for-myself/shared/demo';
 import {MY_CALENDAR_LABEL, START_RECORDING_LABEL} from '@plan-for-myself/shared/label';
 import {describe, expect, it} from 'vitest';
 import DemoCalendarSection from './DemoCalendarSection';
@@ -128,15 +128,12 @@ const EMPTY_DAY = 2;
 const LOGGED_IN_SESSION: Session = {userId: 'user-1', isGuest: false, expires: '2099-01-01T00:00:00.000Z'};
 
 function renderSection(session: Session | null = null) {
+  const {today, records, overview} = getDemoResponse(null, NOW);
+
   render(
     <SessionProvider session={session}>
       <OverlayProvider>
-        <DemoCalendarSection
-          month={getDemoMonth(NOW)}
-          overview={getDemoOverview(NOW)}
-          records={getDemoRecords(NOW)}
-          today={getDemoToday(NOW)}
-        />
+        <DemoCalendarSection month={getDemoMonth(NOW)} overview={overview} records={records} today={today} />
       </OverlayProvider>
     </SessionProvider>,
   );

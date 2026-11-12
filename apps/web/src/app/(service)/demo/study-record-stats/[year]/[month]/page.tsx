@@ -1,17 +1,12 @@
-import {type CalendarMonth, parseMonth} from '@plan-for-myself/shared/date';
+import {type CalendarMonth, parseMonth, toMonthParam} from '@plan-for-myself/shared/date';
 import {
   demoCalendarPath,
-  type DemoOverview,
   demoStatsPath,
-  getDemoMonthly,
-  getDemoOverview,
-  getDemoRecords,
-  getDemoToday,
-  isDemoStatsMonth,
+  type GetDemoApiResponse,
   shouldShowDemoStatsTour,
 } from '@plan-for-myself/shared/demo';
 import {formatStatsTitle, getStatsMonthNavigation} from '@plan-for-myself/shared/study-record-stats';
-import {isSameMonth} from '@plan-for-myself/shared/study-record';
+import {isSameMonth, type StudyRecordMonthly} from '@plan-for-myself/shared/study-record';
 import type {Metadata} from 'next';
 import {notFound} from 'next/navigation';
 import classNames from 'classnames';
@@ -21,6 +16,7 @@ import {getLoginState} from '@/auth/path';
 import DemoBanner from '@/demo/components/DemoBanner';
 import DemoStatsSection from '@/demo/components/DemoStatsSection';
 import DemoTourTrigger from '@/demo/components/DemoTourTrigger';
+import {serverDemoApi} from '@/demo/server-api';
 import SubPageHeader from '@/shared/components/SubPageHeader';
 import layout from '@/shared/styles/layout.module.scss';
 import styles from './page.module.scss';
@@ -29,30 +25,24 @@ interface PageProps {
   params: Promise<{year: string; month: string}>;
 }
 
-interface DemoStatsMonth {
-  viewMonth: CalendarMonth;
-  today: string;
-  overview: DemoOverview;
-}
+type DemoStats = GetDemoApiResponse & {viewMonth: CalendarMonth; monthly: StudyRecordMonthly};
 
 export async function generateMetadata({params}: PageProps): Promise<Metadata> {
-  const demoMonth = parseDemoStatsMonth(await params, new Date());
+  const demoStats = await readDemoStats(await params);
 
-  return demoMonth ? {title: formatStatsTitle(demoMonth.viewMonth)} : {};
+  return demoStats ? {title: formatStatsTitle(demoStats.viewMonth)} : {};
 }
 
 export default async function Page({params}: PageProps) {
-  const now = new Date();
-  const demoMonth = parseDemoStatsMonth(await params, now);
+  const [demoStats, session] = await Promise.all([readDemoStats(await params), auth()]);
 
-  if (!demoMonth) {
+  if (!demoStats) {
     notFound();
   }
 
-  const {viewMonth, today, overview} = demoMonth;
+  const {viewMonth, today, records, overview, monthly} = demoStats;
 
-  const isLoggedIn = getLoginState(await auth()) !== 'logged-out';
-  const monthly = getDemoMonthly(viewMonth, now);
+  const isLoggedIn = getLoginState(session) !== 'logged-out';
   const {previous, next} = getStatsMonthNavigation({
     today,
     month: viewMonth,
@@ -76,7 +66,7 @@ export default async function Page({params}: PageProps) {
             month={viewMonth}
             monthly={monthly}
             overview={isSameMonth(today, viewMonth) ? overview : null}
-            records={getDemoRecords(now)}
+            records={records}
           />
         </main>
       </div>
@@ -85,15 +75,16 @@ export default async function Page({params}: PageProps) {
   );
 }
 
-/* null: 404가 될 달(주소가 달이 아님·미래 달·첫 기록 전) */
-function parseDemoStatsMonth(params: {year: string; month: string}, now: Date): DemoStatsMonth | null {
+/** null: 404가 될 달(주소가 달이 아님·미래 달·첫 기록 전) */
+async function readDemoStats(params: {year: string; month: string}): Promise<DemoStats | null> {
   const viewMonth = parseMonth(params);
-  const today = getDemoToday(now);
-  const overview = getDemoOverview(now);
 
-  if (!viewMonth || !isDemoStatsMonth(viewMonth, today, overview.firstRecordDate)) {
+  if (!viewMonth) {
     return null;
   }
 
-  return {viewMonth, today, overview};
+  const response = await serverDemoApi.getDemoApi({month: toMonthParam(viewMonth)});
+  const {monthly} = response;
+
+  return monthly === null ? null : {...response, viewMonth, monthly};
 }
