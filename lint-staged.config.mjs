@@ -14,5 +14,6 @@ export default {
   '**/*.{scss,css}': 'stylelint --fix --max-warnings 0 --allow-empty-input',
   'apps/web/**/*.{ts,tsx}': [eslintIn('web'), vitestRelatedIn('web')],
   'apps/mobile/**/*.{ts,tsx}': [eslintIn('mobile'), jestRelatedIn('mobile')],
+  'apps/api/**/*.ts': [eslintIn('api'), vitestRelatedIn('api')],
   'packages/shared/**/*.{ts,tsx}': [eslintIn('@plan-for-myself/shared'), vitestRelatedIn('@plan-for-myself/shared')],
 };
