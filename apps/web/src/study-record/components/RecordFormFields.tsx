@@ -9,8 +9,8 @@ import {
   RECORD_FORM_LABELS,
   type RecordFormValues,
   validateMinuteInput,
-  useFailTagInput,
 } from '@plan-for-myself/shared/study-record';
+import {useFailTagInput} from '@plan-for-myself/shared/study-record/react';
 import classNames from 'classnames';
 import {type KeyboardEvent, useId} from 'react';
 import {Controller, useFormContext} from 'react-hook-form';

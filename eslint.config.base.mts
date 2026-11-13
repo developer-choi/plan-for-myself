@@ -100,9 +100,9 @@ export const baseRules = {
             '내부 barrel(index) import 금지. 대상 모듈을 직접 import 하세요. 패키지 entry는 그 패키지가 exports로 연 경로(@scope/pkg 또는 @scope/pkg/<폴더>)로 import.',
         },
         {
-          group: ['@plan-for-myself/shared/*/**', '**/packages/shared/**'],
+          group: ['@plan-for-myself/shared/*/**', '**/packages/shared/**', '!@plan-for-myself/shared/*/react'],
           message:
-            'shared는 폴더 진입점(@plan-for-myself/shared/<폴더>)으로만 import 하세요. 폴더 진입점이 내보내지 않은 파일에 닿는 경로입니다.',
+            'shared는 폴더 진입점(@plan-for-myself/shared/<폴더>)으로만 import 하세요. React·react-query·react-hook-form에 런타임으로 기대는 것은 <폴더>/react에 있습니다(폴더 전체가 React용인 overlay·query는 폴더 진입점). 폴더 진입점이 내보내지 않은 파일에 닿는 경로입니다.',
         },
       ],
     },

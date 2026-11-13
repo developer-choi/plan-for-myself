@@ -1,7 +1,8 @@
 import {KeyboardAvoidingView, Modal, Pressable, ScrollView, StyleSheet, View} from 'react-native';
 import {colors} from '@plan-for-myself/shared/color';
 import {formatDateTitle} from '@plan-for-myself/shared/date';
-import {RECORD_FORM_LABELS, type StudyRecord, useRecordForm} from '@plan-for-myself/shared/study-record';
+import {RECORD_FORM_LABELS, type StudyRecord} from '@plan-for-myself/shared/study-record';
+import {useRecordForm} from '@plan-for-myself/shared/study-record/react';
 import {captureException} from '@sentry/react-native';
 import {FormProvider} from 'react-hook-form';
 import Button from '@/shared/components/Button';

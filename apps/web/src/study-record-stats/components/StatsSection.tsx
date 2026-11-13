@@ -1,7 +1,8 @@
 'use client';
 
 import type {StudyRecordMonthly, StudyRecordOverview} from '@plan-for-myself/shared/study-record';
-import {useSelectedFailureTag, toTrendBars} from '@plan-for-myself/shared/study-record-stats';
+import {toTrendBars} from '@plan-for-myself/shared/study-record-stats';
+import {useSelectedFailureTag} from '@plan-for-myself/shared/study-record-stats/react';
 import {type ReactNode, useRef} from 'react';
 import FailCard from '@/study-record-stats/components/FailCard';
 import RecordCard from '@/study-record-stats/components/RecordCard';

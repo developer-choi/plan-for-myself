@@ -5,6 +5,7 @@
   "type": "module",
   "sideEffects": false,
   "exports": {
+    "./*/react": "./src/*/react.ts",
     "./*": "./src/*/index.ts"
   },
   "scripts": {
