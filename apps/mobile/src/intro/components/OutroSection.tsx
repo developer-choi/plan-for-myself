@@ -1,6 +1,7 @@
 import type {ReactNode} from 'react';
 import {StyleSheet} from 'react-native';
-import {colors, INTRO_TEXT} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
+import {INTRO_TEXT} from '@plan-for-myself/shared/intro';
 import IntroSection from '@/intro/components/IntroSection';
 import Text from '@/shared/components/Text';
 import {typography} from '@/shared/styles/design-tokens';

@@ -3,7 +3,7 @@ import {
   DEMO_STATS_TOUR_STEPS,
   DEMO_TOUR_BUTTON_LABELS,
   type DemoStatsTourTarget,
-} from '@plan-for-myself/shared';
+} from '@plan-for-myself/shared/demo';
 import DemoTour from '@/demo/components/DemoTour';
 import {TOUR_BUBBLE_TWO_LINE_HEIGHT} from '@/demo/components/TourBubble';
 import {TOUR_BUBBLE_GAP} from '@/demo/demo-tour-geometry';

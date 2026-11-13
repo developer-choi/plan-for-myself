@@ -1,7 +1,7 @@
 'use server';
 
 import {redirect} from 'next/navigation';
-import {shouldShowRegisteredNotice} from '@plan-for-myself/shared';
+import {shouldShowRegisteredNotice} from '@plan-for-myself/shared/auth';
 import {clearDiscardIntent, readRegisteredRejection, setDiscardIntent} from '@/auth/login-cookies';
 import {auth, signIn} from '@/auth/next-auth';
 import {DEFAULT_HOME_URL, toRedirectPath} from '@/auth/redirect';

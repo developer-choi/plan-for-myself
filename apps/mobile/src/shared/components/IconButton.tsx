@@ -1,6 +1,6 @@
 import {type ReactNode} from 'react';
 import {Pressable, type PressableProps, type StyleProp, StyleSheet, type ViewStyle} from 'react-native';
-import {colors} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
 import {radius, spacing} from '@/shared/styles/design-tokens';
 
 interface IconButtonProps extends Omit<PressableProps, 'children' | 'style'> {

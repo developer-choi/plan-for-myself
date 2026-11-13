@@ -1,5 +1,6 @@
 import {Redirect} from 'expo-router';
-import {getKoreanDate, monthPath} from '@plan-for-myself/shared';
+import {getKoreanDate} from '@plan-for-myself/shared/date';
+import {monthPath} from '@plan-for-myself/shared/study-record';
 
 export default function HomeScreen() {
   const {year, month: monthIndex} = getKoreanDate();

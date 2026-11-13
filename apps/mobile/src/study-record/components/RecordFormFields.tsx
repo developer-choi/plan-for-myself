@@ -1,15 +1,15 @@
 import type {Ref} from 'react';
 import {Pressable, StyleSheet, TextInput, type TextInputProps, View} from 'react-native';
+import {colors} from '@plan-for-myself/shared/color';
 import {
-  colors,
   getMinutesError,
   MINUTE_SLOTS,
   type MinuteSlot,
   RECORD_FORM_LABELS,
   type RecordFormValues,
   validateMinuteInput,
-} from '@plan-for-myself/shared';
-import {useFailTagInput} from '@plan-for-myself/shared/react';
+  useFailTagInput,
+} from '@plan-for-myself/shared/study-record';
 import {Lucide} from '@react-native-vector-icons/lucide';
 import {Controller, useController, useFormContext} from 'react-hook-form';
 import IconButton from '@/shared/components/IconButton';

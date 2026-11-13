@@ -1,7 +1,7 @@
 import {type ReactNode, type Ref} from 'react';
 import Card from '@/shared/components/Card';
 import TrendBars from '@/study-record-stats/components/TrendBars';
-import {type TrendBar} from '@plan-for-myself/shared';
+import type {TrendBar} from '@plan-for-myself/shared/study-record-stats';
 import styles from './TagDetailCard.module.scss';
 
 interface TrendSectionProps {

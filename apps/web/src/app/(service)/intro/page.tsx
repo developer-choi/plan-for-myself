@@ -11,14 +11,8 @@ import LoggedOutIntroActions from '@/intro/components/LoggedOutIntroActions';
 import RecordFormPreview from '@/intro/components/RecordFormPreview';
 import TagCalendarPreview from '@/intro/components/TagCalendarPreview';
 import TrendPreview from '@/intro/components/TrendPreview';
-import {
-  GITHUB_REPOSITORY_URL,
-  INTRO_MONTHLY,
-  INTRO_STREAK,
-  INTRO_TEXT,
-  MAKER_URL,
-  PRIVACY_POLICY_LABEL,
-} from '@plan-for-myself/shared';
+import {GITHUB_REPOSITORY_URL, INTRO_MONTHLY, INTRO_STREAK, INTRO_TEXT, MAKER_URL} from '@plan-for-myself/shared/intro';
+import {PRIVACY_POLICY_LABEL} from '@plan-for-myself/shared/label';
 import Logo from '@/shared/components/Logo';
 import RecordCard from '@/study-record-stats/components/RecordCard';
 import styles from './page.module.scss';

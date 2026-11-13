@@ -1,4 +1,4 @@
-import {GUEST_LIMIT_CODE, type LoginFailure} from '@plan-for-myself/shared';
+import {GUEST_LIMIT_CODE, type LoginFailure} from '@plan-for-myself/shared/auth';
 
 interface LoginErrorQuery {
   /* 없음: 로그인 오류로 돌아온 게 아닌 경우 */

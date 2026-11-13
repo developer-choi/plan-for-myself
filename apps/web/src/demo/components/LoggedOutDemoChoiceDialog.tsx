@@ -9,8 +9,8 @@ import {
   DEMO_CONTINUE_LABEL,
   type DemoChoiceDialogProps,
   LOGGED_OUT_DEMO_CHOICE_MESSAGES,
-  START_RECORDING_LABEL,
-} from '@plan-for-myself/shared';
+} from '@plan-for-myself/shared/demo';
+import {START_RECORDING_LABEL} from '@plan-for-myself/shared/label';
 import {focusOnMount} from '@/demo/focus-on-mount';
 import styles from './DemoChoiceDialog.module.scss';
 

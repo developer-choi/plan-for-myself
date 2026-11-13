@@ -1,5 +1,5 @@
-import type {CalendarMonth, FailureTag, StudyRecordOverview} from '@plan-for-myself/shared';
-import {toMonthParam} from '@plan-for-myself/shared';
+import {type CalendarMonth, toMonthParam} from '@plan-for-myself/shared/date';
+import type {FailureTag, StudyRecordOverview} from '@plan-for-myself/shared/study-record';
 import {render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {describe, expect, it} from 'vitest';

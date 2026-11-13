@@ -1,4 +1,5 @@
-import {getKoreanDate, type StudyRecord} from '@plan-for-myself/shared';
+import {getKoreanDate} from '@plan-for-myself/shared/date';
+import type {StudyRecord} from '@plan-for-myself/shared/study-record';
 import pg from 'pg';
 /* 시드는 ESM으로 돌아 Node가 확장자 없는 상대 경로를 못 푼다. 그래서 .mts는 .mjs로, .ts는 .js로 적는다 */
 import {toRecordDate, toRecordTimestamp} from './date.mjs';

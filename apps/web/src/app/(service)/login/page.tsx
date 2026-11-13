@@ -6,17 +6,19 @@ import typography from '@developer-choi/design-system/styles/typography';
 import {
   GOOGLE_CONNECT_LABEL,
   GOOGLE_CONNECT_PAGE_LABEL,
+  MY_CALENDAR_LABEL,
+  START_RECORDING_LABEL,
+} from '@plan-for-myself/shared/label';
+import {
   GOOGLE_LOGIN_LABEL,
   GUEST_CONNECT_NOTE,
   INTRO_EXIT_LABEL,
-  INTRO_URL,
   KEEP_GUEST_LABEL,
   LOGIN_DESCRIPTION,
   LOGIN_FAILED_NOTICE,
-  MY_CALENDAR_LABEL,
   shouldShowRegisteredNotice,
-  START_RECORDING_LABEL,
-} from '@plan-for-myself/shared';
+} from '@plan-for-myself/shared/auth';
+import {INTRO_URL} from '@plan-for-myself/shared/intro';
 import DiscardGuestButton from '@/auth/components/DiscardGuestButton';
 import GoogleLoginActions from '@/auth/components/GoogleLoginActions';
 import GuestLimitNotice from '@/auth/components/GuestLimitNotice';

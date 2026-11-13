@@ -1,4 +1,5 @@
-import {INTRO_MONTHLY, INTRO_TAG, INTRO_TEXT, INTRO_TREND, toTrendBars} from '@plan-for-myself/shared';
+import {INTRO_MONTHLY, INTRO_TAG, INTRO_TEXT, INTRO_TREND} from '@plan-for-myself/shared/intro';
+import {toTrendBars} from '@plan-for-myself/shared/study-record-stats';
 import PreviewSubTitle from '@/intro/components/PreviewSubTitle';
 import Card from '@/shared/components/Card';
 import TrendBars from '@/study-record-stats/components/TrendBars';

@@ -1,4 +1,4 @@
-import type {StudyRecord} from '@plan-for-myself/shared';
+import type {StudyRecord} from '@plan-for-myself/shared/study-record';
 
 export function sumMinutes(record: StudyRecord) {
   return record.studiedMinutes.reduce((sum, minutes) => sum + minutes, 0);

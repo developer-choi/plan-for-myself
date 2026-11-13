@@ -1,11 +1,6 @@
 import {type ReactNode, type RefObject, useImperativeHandle, useRef} from 'react';
-import {
-  getFirstFailureTagName,
-  type StudyRecordMonthly,
-  type StudyRecordOverview,
-  toTrendBars,
-} from '@plan-for-myself/shared';
-import {useSelectedFailureTag} from '@plan-for-myself/shared/react';
+import {getFirstFailureTagName, toTrendBars, useSelectedFailureTag} from '@plan-for-myself/shared/study-record-stats';
+import type {StudyRecordMonthly, StudyRecordOverview} from '@plan-for-myself/shared/study-record';
 import {type ScrollView, StyleSheet, View} from 'react-native';
 import {spacing} from '@/shared/styles/design-tokens';
 import FailCard, {type FailCardTourTargets} from '@/study-record-stats/components/FailCard';

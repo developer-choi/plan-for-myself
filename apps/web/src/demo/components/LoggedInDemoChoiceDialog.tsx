@@ -4,8 +4,8 @@ import {
   DEMO_CONTINUE_LABEL,
   type DemoChoiceDialogProps,
   LOGGED_IN_DEMO_CHOICE_TITLES,
-  MY_CALENDAR_LABEL,
-} from '@plan-for-myself/shared';
+} from '@plan-for-myself/shared/demo';
+import {MY_CALENDAR_LABEL} from '@plan-for-myself/shared/label';
 import {Button, Dialog, IconButton} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
 import {Cross2Icon} from '@radix-ui/react-icons';

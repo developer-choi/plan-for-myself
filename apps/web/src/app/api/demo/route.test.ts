@@ -1,4 +1,4 @@
-import type {GetDemoApiResponse} from '@plan-for-myself/shared';
+import type {GetDemoApiResponse} from '@plan-for-myself/shared/demo';
 import {NextRequest} from 'next/server';
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {GET} from './route';

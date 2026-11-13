@@ -1,4 +1,4 @@
-import {KST, type SimpleDate} from '@plan-for-myself/shared';
+import {KST, type SimpleDate} from '@plan-for-myself/shared/date';
 
 export function addDays(day: SimpleDate, amount: number): SimpleDate {
   return fromUTCDate(new Date(Date.UTC(day.year, day.month - 1, day.date + amount)));

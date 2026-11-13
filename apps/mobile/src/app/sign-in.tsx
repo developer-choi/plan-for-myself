@@ -1,7 +1,8 @@
 import {useRef, useState} from 'react';
 import {router, useLocalSearchParams} from 'expo-router';
 import {captureException} from '@sentry/react-native';
-import {INTRO_URL, type LoginFailure, shouldShowRegisteredNotice} from '@plan-for-myself/shared';
+import {INTRO_URL} from '@plan-for-myself/shared/intro';
+import {type LoginFailure, shouldShowRegisteredNotice} from '@plan-for-myself/shared/auth';
 import GuestConnectSection from '@/auth/components/GuestConnectSection';
 import LoginSection, {type PendingAction} from '@/auth/components/LoginSection';
 import {getLoginFailure} from '@/auth/login-failure';

@@ -1,8 +1,8 @@
 'use client';
 
 import {captureException} from '@sentry/nextjs';
-import type {AccountDeleteText} from '@plan-for-myself/shared';
-import {openOnce, useAccountDelete} from '@plan-for-myself/shared/react';
+import {type AccountDeleteText, useAccountDelete} from '@plan-for-myself/shared/auth';
+import {openOnce} from '@plan-for-myself/shared/overlay';
 import classNames from 'classnames';
 import {Callout, Confirm} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';

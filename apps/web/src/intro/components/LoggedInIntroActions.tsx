@@ -1,4 +1,4 @@
-import {MY_CALENDAR_LABEL} from '@plan-for-myself/shared';
+import {MY_CALENDAR_LABEL} from '@plan-for-myself/shared/label';
 import Link from 'next/link';
 import {Button} from '@developer-choi/design-system';
 import {DEFAULT_HOME_URL} from '@/auth/redirect';

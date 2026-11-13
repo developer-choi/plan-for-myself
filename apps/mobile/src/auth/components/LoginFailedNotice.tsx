@@ -1,4 +1,4 @@
-import {LOGIN_FAILED_NOTICE} from '@plan-for-myself/shared';
+import {LOGIN_FAILED_NOTICE} from '@plan-for-myself/shared/auth';
 import LoginNotice from '@/auth/components/LoginNotice';
 
 export default function LoginFailedNotice() {

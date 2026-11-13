@@ -1,5 +1,6 @@
 import {describe, expect, it} from '@jest/globals';
-import {colors, type TrendBar} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
+import type {TrendBar} from '@plan-for-myself/shared/study-record-stats';
 import {render, screen} from '@testing-library/react-native';
 import TrendBars, {BAR_TEST_ID_PREFIX, EMPTY_SLOT_TEST_ID, HATCHED_BAR_TEST_ID_PREFIX} from './TrendBars';
 

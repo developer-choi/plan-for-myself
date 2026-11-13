@@ -1,4 +1,4 @@
-import type {PostAppTokenRefreshApiResponse} from '@plan-for-myself/shared';
+import type {PostAppTokenRefreshApiResponse} from '@plan-for-myself/shared/auth';
 import {NextRequest, NextResponse} from 'next/server';
 import {refreshAppToken} from '@/auth/app-token';
 import {unauthorizedResponse} from '@/server/response';

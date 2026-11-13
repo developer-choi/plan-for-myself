@@ -1,7 +1,7 @@
 import {type ReactNode, useState} from 'react';
 import {type LayoutChangeEvent, Modal, StyleSheet, useWindowDimensions, View} from 'react-native';
 import Svg, {Path} from 'react-native-svg';
-import {colors} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
 import {
   getSpotlightPath,
   getTourBubblePosition,

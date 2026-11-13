@@ -1,4 +1,4 @@
-import {DEMO_TOUR_BUTTON_LABELS} from '@plan-for-myself/shared';
+import {DEMO_TOUR_BUTTON_LABELS} from '@plan-for-myself/shared/demo';
 import type {FloatingOptions, Locale, Options, Styles} from 'react-joyride';
 
 export const DEMO_TOUR_OPTIONS = {

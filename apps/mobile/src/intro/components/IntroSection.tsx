@@ -1,6 +1,6 @@
 import type {PropsWithChildren} from 'react';
 import {type StyleProp, StyleSheet, View, type ViewStyle} from 'react-native';
-import {colors} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
 import {contentWidth, spacing} from '@/shared/styles/design-tokens';
 
 interface IntroSectionProps extends PropsWithChildren {

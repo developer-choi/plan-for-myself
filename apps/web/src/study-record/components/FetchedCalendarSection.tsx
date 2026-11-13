@@ -1,7 +1,8 @@
 'use client';
 
-import {type CalendarMonth, statsPath, type StudyRecord, toMonthParam} from '@plan-for-myself/shared';
-import {openOnce} from '@plan-for-myself/shared/react';
+import {type CalendarMonth, toMonthParam} from '@plan-for-myself/shared/date';
+import {statsPath, type StudyRecord} from '@plan-for-myself/shared/study-record';
+import {openOnce} from '@plan-for-myself/shared/overlay';
 import {useSuspenseQueries} from '@tanstack/react-query';
 import CalendarSection from '@/study-record/components/CalendarSection';
 import FirstRecord from '@/study-record/components/FirstRecord';

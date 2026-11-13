@@ -1,4 +1,8 @@
-import {isEmptyStudyRecord, STUDY_RECORD_FIELD_LIMITS, STUDY_RECORD_FIELD_MESSAGES} from '@plan-for-myself/shared';
+import {
+  isEmptyStudyRecord,
+  STUDY_RECORD_FIELD_LIMITS,
+  STUDY_RECORD_FIELD_MESSAGES,
+} from '@plan-for-myself/shared/study-record';
 import {z} from 'zod';
 
 export type NewStudyRecord = z.infer<typeof newStudyRecordSchema>;

@@ -1,5 +1,5 @@
 import {createHmac} from 'node:crypto';
-import {type RegisteredAccountRejection, REGISTERED_REJECTION_TTL_SECONDS} from '@plan-for-myself/shared';
+import {type RegisteredAccountRejection, REGISTERED_REJECTION_TTL_SECONDS} from '@plan-for-myself/shared/auth';
 import {cookies} from 'next/headers';
 
 export function createRegisteredRejection(guestUserId: string, googleSub: string): RegisteredAccountRejection {

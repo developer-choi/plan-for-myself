@@ -1,5 +1,6 @@
 import {Redirect} from 'expo-router';
-import {demoCalendarPath, parseDateParam} from '@plan-for-myself/shared';
+import {demoCalendarPath} from '@plan-for-myself/shared/demo';
+import {parseDateParam} from '@plan-for-myself/shared/date';
 import {useSuspenseQuery} from '@tanstack/react-query';
 import {demoQueries} from '@/demo/queries';
 

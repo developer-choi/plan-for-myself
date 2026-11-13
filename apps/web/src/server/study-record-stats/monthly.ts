@@ -1,4 +1,5 @@
-import type {DateType, FailureTag, FailureTagStatus, StudyRecord, StudyRecordMonthly} from '@plan-for-myself/shared';
+import type {DateType} from '@plan-for-myself/shared/date-type';
+import type {FailureTag, FailureTagStatus, StudyRecord, StudyRecordMonthly} from '@plan-for-myself/shared/study-record';
 import {addMonths, getDayOfMonth, getDaysInMonth, toMonth} from './date';
 import {sumMinutes} from './minutes';
 import {countTagsByMonth, getTagCount, isReduced, type TagCountByMonth} from './tag-count';

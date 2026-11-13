@@ -1,6 +1,8 @@
 import {StyleSheet, View} from 'react-native';
 import Svg, {Line, Rect} from 'react-native-svg';
-import {colors, FAILURE_TAG_TREND_MONTH_LIMIT, STATS_TEXT, type TrendBar} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
+import {FAILURE_TAG_TREND_MONTH_LIMIT} from '@plan-for-myself/shared/study-record';
+import {STATS_TEXT, type TrendBar} from '@plan-for-myself/shared/study-record-stats';
 import Text from '@/shared/components/Text';
 import {spacing, typography} from '@/shared/styles/design-tokens';
 

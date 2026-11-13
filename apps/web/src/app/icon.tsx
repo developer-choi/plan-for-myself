@@ -1,5 +1,5 @@
 import {ImageResponse} from 'next/og';
-import {colors} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
 import Logo, {LOGO_SIZE} from '@/shared/components/Logo';
 
 export const size = {width: LOGO_SIZE.medium, height: LOGO_SIZE.medium};

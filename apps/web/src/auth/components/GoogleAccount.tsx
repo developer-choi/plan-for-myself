@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import typography from '@developer-choi/design-system/styles/typography';
-import {GOOGLE_ACCOUNT_TITLE, GOOGLE_DELETE_TEXT} from '@plan-for-myself/shared';
+import {GOOGLE_ACCOUNT_TITLE, GOOGLE_DELETE_TEXT} from '@plan-for-myself/shared/auth';
 import AccountDeleteAction from '@/auth/components/AccountDeleteAction';
 import Card from '@/shared/components/Card';
 

@@ -1,4 +1,4 @@
-import {GUEST_LIMIT_CODE, type PostAppTokenGuestApiResponse} from '@plan-for-myself/shared';
+import {GUEST_LIMIT_CODE, type PostAppTokenGuestApiResponse} from '@plan-for-myself/shared/auth';
 import {NextRequest, NextResponse} from 'next/server';
 import {issueAppTokenForNewGuest} from '@/auth/app-login';
 import {HTTP_STATUS, rejectResponse} from '@/server/response';

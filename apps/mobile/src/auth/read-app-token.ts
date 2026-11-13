@@ -1,5 +1,5 @@
 import {jwtDecode} from 'jwt-decode';
-import type {AppTokenClaims} from '@plan-for-myself/shared';
+import type {AppTokenClaims} from '@plan-for-myself/shared/auth';
 
 export function readIsGuest(token: string | null): boolean {
   return decodeToken(token)?.isGuest === true;

@@ -1,5 +1,5 @@
-import type {CalendarMonth, StudyRecordOverview} from '@plan-for-myself/shared';
-import {toMonthParam} from '@plan-for-myself/shared';
+import {type CalendarMonth, toMonthParam} from '@plan-for-myself/shared/date';
+import type {StudyRecordOverview} from '@plan-for-myself/shared/study-record';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {render} from '@testing-library/react';
 import {describe, expect, it} from 'vitest';

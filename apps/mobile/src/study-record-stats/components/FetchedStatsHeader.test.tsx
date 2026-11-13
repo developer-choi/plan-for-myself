@@ -1,5 +1,6 @@
 import {useState} from 'react';
-import {type CalendarMonth, type StudyRecordOverview} from '@plan-for-myself/shared';
+import type {CalendarMonth} from '@plan-for-myself/shared/date';
+import type {StudyRecordOverview} from '@plan-for-myself/shared/study-record';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {describe, expect, it} from '@jest/globals';
 import {render, screen} from '@testing-library/react-native';

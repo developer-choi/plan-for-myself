@@ -1,7 +1,7 @@
 import {type PropsWithChildren, useEffect, useRef, useState} from 'react';
 import {AppState, type AppStateStatus, Platform} from 'react-native';
 import {captureException} from '@sentry/react-native';
-import {createQueryClient} from '@plan-for-myself/shared/react';
+import {createQueryClient} from '@plan-for-myself/shared/query';
 import {focusManager, QueryClientProvider} from '@tanstack/react-query';
 import {useSession} from '@/auth/session-context';
 import {isGuestToGoogleTransition} from '@/auth/session-transition';

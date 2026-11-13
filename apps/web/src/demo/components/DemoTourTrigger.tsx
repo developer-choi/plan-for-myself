@@ -1,6 +1,6 @@
 'use client';
 
-import type {DemoTourPart} from '@plan-for-myself/shared';
+import type {DemoTourPart} from '@plan-for-myself/shared/demo';
 import {useEffect, useState, useSyncExternalStore} from 'react';
 import dynamic from 'next/dynamic';
 import {captureException} from '@sentry/nextjs';

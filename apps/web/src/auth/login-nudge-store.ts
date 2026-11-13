@@ -1,5 +1,4 @@
-import {LOGIN_NUDGE_STORAGE_KEY} from '@plan-for-myself/shared';
-import type {LoginNudgeStore} from '@plan-for-myself/shared/react';
+import {LOGIN_NUDGE_STORAGE_KEY, type LoginNudgeStore} from '@plan-for-myself/shared/auth';
 
 export const webLoginNudgeStore: LoginNudgeStore = {
   subscribe,

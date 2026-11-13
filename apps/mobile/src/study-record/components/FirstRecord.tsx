@@ -1,6 +1,8 @@
 import {StyleSheet, View} from 'react-native';
-import {colors, FIRST_RECORD_TEXT, toDateMonthParam} from '@plan-for-myself/shared';
-import {openOnce} from '@plan-for-myself/shared/react';
+import {colors} from '@plan-for-myself/shared/color';
+import {FIRST_RECORD_TEXT} from '@plan-for-myself/shared/study-record';
+import {toDateMonthParam} from '@plan-for-myself/shared/date';
+import {openOnce} from '@plan-for-myself/shared/overlay';
 import {Lucide} from '@react-native-vector-icons/lucide';
 import Button from '@/shared/components/Button';
 import Logo from '@/shared/components/Logo';

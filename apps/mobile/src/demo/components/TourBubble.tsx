@@ -1,5 +1,6 @@
 import {StyleSheet, useWindowDimensions, View} from 'react-native';
-import {colors, DEMO_TOUR_STEP_COUNT} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
+import {DEMO_TOUR_STEP_COUNT} from '@plan-for-myself/shared/demo';
 import Button from '@/shared/components/Button';
 import CloseIconButton from '@/shared/components/CloseIconButton';
 import Text from '@/shared/components/Text';

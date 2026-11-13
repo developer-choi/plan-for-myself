@@ -1,4 +1,4 @@
-import {colors} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
 
 export const fontFamily = 'NotoSansKR';
 

@@ -1,6 +1,6 @@
 import {render, screen, within} from '@testing-library/react';
 import {describe, expect, it} from 'vitest';
-import {type TrendBar} from '@plan-for-myself/shared';
+import type {TrendBar} from '@plan-for-myself/shared/study-record-stats';
 import TrendBars from './TrendBars';
 
 describe('TrendBars', () => {

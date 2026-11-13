@@ -1,5 +1,6 @@
 import {openURL} from 'expo-linking';
-import {INTRO_MENU_LABEL, INTRO_URL, MY_CALENDAR_LABEL, PRIVACY_POLICY_LABEL} from '@plan-for-myself/shared';
+import {INTRO_MENU_LABEL, MY_CALENDAR_LABEL, PRIVACY_POLICY_LABEL} from '@plan-for-myself/shared/label';
+import {INTRO_URL} from '@plan-for-myself/shared/intro';
 import {useSession} from '@/auth/session-context';
 import HeaderMenu from '@/shared/components/HeaderMenu';
 import {PRIVACY_POLICY_URL} from '@/shared/external-link';

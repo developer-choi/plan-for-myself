@@ -1,5 +1,7 @@
 import {StyleSheet, View} from 'react-native';
-import {colors, DEMO_BANNER_MESSAGE, MY_CALENDAR_LABEL, START_RECORDING_LABEL} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
+import {DEMO_BANNER_MESSAGE} from '@plan-for-myself/shared/demo';
+import {MY_CALENDAR_LABEL, START_RECORDING_LABEL} from '@plan-for-myself/shared/label';
 import {useSession} from '@/auth/session-context';
 import Button from '@/shared/components/Button';
 import Text from '@/shared/components/Text';

@@ -1,6 +1,6 @@
 import {type ReactNode} from 'react';
+import type {FailureTag, StudyRecordMonthly} from '@plan-for-myself/shared/study-record';
 import {
-  type FailureTag,
   type FailureTagSelection,
   filterByStatus,
   formatAppearedNotePrefix,
@@ -11,8 +11,7 @@ import {
   formatRepeatedNotePrefix,
   getFirstFailureTagName,
   STATS_TEXT,
-  type StudyRecordMonthly,
-} from '@plan-for-myself/shared';
+} from '@plan-for-myself/shared/study-record-stats';
 import {CheckIcon, Cross2Icon} from '@radix-ui/react-icons';
 import typography from '@developer-choi/design-system/styles/typography';
 import classNames from 'classnames';

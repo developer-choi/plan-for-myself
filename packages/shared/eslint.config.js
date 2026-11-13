@@ -29,6 +29,22 @@ export default defineConfig([
     rules: {
       ...baseRules,
       'check-file/folder-naming-convention': ['error', {'src/**/*': 'KEBAB_CASE'}],
+      'no-restricted-syntax': [
+        ...baseRules['no-restricted-syntax'],
+        {
+          selector: 'Program > ExpressionStatement:not([directive])',
+          message: '모듈 최상위 실행문 금지. 함수 안으로 옮기세요(sideEffects: false).',
+        },
+        {
+          selector:
+            'Program > :matches(IfStatement, ForStatement, ForInStatement, ForOfStatement, WhileStatement, DoWhileStatement, TryStatement, SwitchStatement, BlockStatement)',
+          message: '모듈 최상위 제어문 금지. 함수 안으로 옮기세요(sideEffects: false).',
+        },
+        {
+          selector: 'ImportDeclaration[specifiers.length=0]',
+          message: '부수효과용 import 금지(sideEffects: false). 필요한 이름을 가져와 쓰세요.',
+        },
+      ],
     },
   },
   testFilesConfig,

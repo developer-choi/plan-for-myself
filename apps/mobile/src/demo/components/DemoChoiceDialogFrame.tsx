@@ -1,5 +1,6 @@
 import {Pressable, StyleSheet, View} from 'react-native';
-import {colors, DEMO_CONTINUE_LABEL} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
+import {DEMO_CONTINUE_LABEL} from '@plan-for-myself/shared/demo';
 import Button from '@/shared/components/Button';
 import CloseIconButton from '@/shared/components/CloseIconButton';
 import DialogFrame from '@/shared/components/DialogFrame';

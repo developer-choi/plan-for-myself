@@ -1,6 +1,6 @@
 import type {PropsWithChildren} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {colors} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
 import IntroFrame from '@/intro/components/IntroFrame';
 import IntroSection from '@/intro/components/IntroSection';
 import Text from '@/shared/components/Text';

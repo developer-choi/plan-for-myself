@@ -1,6 +1,6 @@
 import {View} from 'react-native';
 import Svg, {Path} from 'react-native-svg';
-import {colors} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
 
 interface LogoProps {
   size: keyof typeof LOGO_SIZE;

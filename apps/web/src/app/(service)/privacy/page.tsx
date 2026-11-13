@@ -2,7 +2,7 @@ import type {ReactNode} from 'react';
 import type {Metadata} from 'next';
 import classNames from 'classnames';
 import typography from '@developer-choi/design-system/styles/typography';
-import {PRIVACY_POLICY_LABEL} from '@plan-for-myself/shared';
+import {PRIVACY_POLICY_LABEL} from '@plan-for-myself/shared/label';
 import {HomeIcon} from '@radix-ui/react-icons';
 import {ENTRY_URL} from '@/auth/redirect';
 import Card from '@/shared/components/Card';

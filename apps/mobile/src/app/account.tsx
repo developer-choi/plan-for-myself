@@ -1,6 +1,7 @@
 import {ScrollView, StyleSheet} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {ACCOUNT_LABEL, colors} from '@plan-for-myself/shared';
+import {ACCOUNT_LABEL} from '@plan-for-myself/shared/label';
+import {colors} from '@plan-for-myself/shared/color';
 import {Lucide} from '@react-native-vector-icons/lucide';
 import AccountSection from '@/auth/components/AccountSection';
 import {ICON_COLOR} from '@/shared/components/IconButton';

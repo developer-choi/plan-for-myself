@@ -1,4 +1,4 @@
-import type {StudyRecord} from '@plan-for-myself/shared';
+import type {StudyRecord} from '@plan-for-myself/shared/study-record';
 import {toMonth} from './date';
 
 /* 달 → 태그 → 그 달 그 태그가 찍힌 날 수. 기록은 하루 한 줄이라 태그가 나온 기록 수가 곧 날 수다 */

@@ -1,10 +1,6 @@
-import {
-  type CalendarMonth,
-  formatStatsTitle,
-  getStatsMonthNavigation,
-  monthPath,
-  statsPath,
-} from '@plan-for-myself/shared';
+import type {CalendarMonth} from '@plan-for-myself/shared/date';
+import {formatStatsTitle, getStatsMonthNavigation} from '@plan-for-myself/shared/study-record-stats';
+import {monthPath, statsPath} from '@plan-for-myself/shared/study-record';
 import {CalendarIcon} from '@radix-ui/react-icons';
 import SubPageHeader from '@/shared/components/SubPageHeader';
 

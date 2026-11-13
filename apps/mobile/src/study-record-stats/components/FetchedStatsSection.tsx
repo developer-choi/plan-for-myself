@@ -1,5 +1,6 @@
 import {type ReactNode, type RefObject, Suspense} from 'react';
-import {type CalendarMonth, isSameMonth, type StudyRecordMonthly, toMonthParam} from '@plan-for-myself/shared';
+import {type CalendarMonth, toMonthParam} from '@plan-for-myself/shared/date';
+import {isSameMonth, type StudyRecordMonthly} from '@plan-for-myself/shared/study-record';
 import {useSuspenseQuery} from '@tanstack/react-query';
 import type {ScrollView} from 'react-native';
 import HandledErrorBoundary from '@/shared/components/HandledErrorBoundary';

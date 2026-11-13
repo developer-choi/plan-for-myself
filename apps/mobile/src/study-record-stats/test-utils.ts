@@ -1,4 +1,4 @@
-import type {FailureTag, StudyRecord, StudyRecordMonthly} from '@plan-for-myself/shared';
+import type {FailureTag, StudyRecord, StudyRecordMonthly} from '@plan-for-myself/shared/study-record';
 
 interface MonthlyOverrides extends Partial<Omit<StudyRecordMonthly, 'study'>> {
   study?: Partial<StudyRecordMonthly['study']>;

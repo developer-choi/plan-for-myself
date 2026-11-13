@@ -1,5 +1,7 @@
 import {StyleSheet, View} from 'react-native';
-import {colors, type TagCalendarData, WEEKDAY_LABELS} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
+import type {TagCalendarData} from '@plan-for-myself/shared/study-record-stats';
+import {WEEKDAY_LABELS} from '@plan-for-myself/shared/date';
 import Text from '@/shared/components/Text';
 import {radius, spacing, typography} from '@/shared/styles/design-tokens';
 

@@ -1,6 +1,10 @@
 'use client';
 
-import {DEMO_STATS_TOUR_FIRST_NUMBER, DEMO_STATS_TOUR_STEPS, type DemoStatsTourTarget} from '@plan-for-myself/shared';
+import {
+  DEMO_STATS_TOUR_FIRST_NUMBER,
+  DEMO_STATS_TOUR_STEPS,
+  type DemoStatsTourTarget,
+} from '@plan-for-myself/shared/demo';
 import {ACTIONS, type EventData, EVENTS, Joyride, type Step, type TooltipRenderProps} from 'react-joyride';
 import TourBubble from '@/demo/components/TourBubble';
 import {DEMO_TOUR_FLOATING_OPTIONS, DEMO_TOUR_LOCALE, DEMO_TOUR_OPTIONS, DEMO_TOUR_STYLES} from '@/demo/demo-tour';

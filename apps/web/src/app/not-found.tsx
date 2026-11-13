@@ -1,7 +1,7 @@
 'use client';
 
 import {useRouter} from 'next/navigation';
-import {ENTRY_LABEL} from '@plan-for-myself/shared';
+import {ENTRY_LABEL} from '@plan-for-myself/shared/label';
 import {ENTRY_URL} from '@/auth/redirect';
 import ErrorNotice from '@/shared/components/ErrorNotice';
 

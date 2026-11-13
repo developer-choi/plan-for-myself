@@ -1,5 +1,5 @@
 import {StyleSheet, View} from 'react-native';
-import {colors} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
 import Button from '@/shared/components/Button';
 import DialogFrame from '@/shared/components/DialogFrame';
 import Text from '@/shared/components/Text';

@@ -1,5 +1,4 @@
-import type {CalendarMonth} from '@plan-for-myself/shared';
-import {toMonthParam} from '@plan-for-myself/shared';
+import {type CalendarMonth, toMonthParam} from '@plan-for-myself/shared/date';
 import {dehydrate, HydrationBoundary, QueryClient} from '@tanstack/react-query';
 import FetchedCalendarSection from '@/study-record/components/FetchedCalendarSection';
 import {studyRecordQueries, studyRecordStatsQueries} from '@/study-record/queries';

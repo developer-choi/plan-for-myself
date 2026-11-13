@@ -1,4 +1,5 @@
-import {FAILURE_TAG_TREND_MONTH_LIMIT, STATS_TEXT, type TrendBar} from '@plan-for-myself/shared';
+import {FAILURE_TAG_TREND_MONTH_LIMIT} from '@plan-for-myself/shared/study-record';
+import {STATS_TEXT, type TrendBar} from '@plan-for-myself/shared/study-record-stats';
 import typography from '@developer-choi/design-system/styles/typography';
 import classNames from 'classnames';
 import styles from './TrendBars.module.scss';

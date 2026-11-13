@@ -1,11 +1,8 @@
 import {StyleSheet, View} from 'react-native';
-import {
-  colors,
-  formatDateTitle,
-  getRecordFormDefaultValues,
-  INTRO_FORM_RECORD,
-  type RecordFormValues,
-} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
+import {formatDateTitle} from '@plan-for-myself/shared/date';
+import {getRecordFormDefaultValues, type RecordFormValues} from '@plan-for-myself/shared/study-record';
+import {INTRO_FORM_RECORD} from '@plan-for-myself/shared/intro';
 import {FormProvider, useForm} from 'react-hook-form';
 import Text from '@/shared/components/Text';
 import {radius, spacing, typography} from '@/shared/styles/design-tokens';

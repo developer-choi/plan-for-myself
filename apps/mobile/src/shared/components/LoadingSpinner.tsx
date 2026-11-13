@@ -1,5 +1,5 @@
 import {ActivityIndicator, StyleSheet, View} from 'react-native';
-import {colors} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
 import {fallbackSlotSizes} from '@/shared/components/fallback-slot';
 import {type FallbackSize} from '@/shared/types/fallback';
 

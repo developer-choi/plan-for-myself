@@ -3,9 +3,8 @@ import {
   formatMonthRecordLabel,
   formatStreakNote,
   STATS_TEXT,
-  type StudyRecordMonthly,
-  type StudyRecordOverview,
-} from '@plan-for-myself/shared';
+} from '@plan-for-myself/shared/study-record-stats';
+import type {StudyRecordMonthly, StudyRecordOverview} from '@plan-for-myself/shared/study-record';
 import Card from '@/shared/components/Card';
 import StatList, {StatListItem, StatSentence, StatValue} from '@/study-record-stats/components/StatList';
 

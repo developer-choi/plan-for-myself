@@ -1,6 +1,6 @@
 import {useRef, useState} from 'react';
 import {Modal, Pressable, StyleSheet, View} from 'react-native';
-import {colors} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
 import {Lucide} from '@react-native-vector-icons/lucide';
 import IconButton, {ICON_COLOR} from '@/shared/components/IconButton';
 import Text from '@/shared/components/Text';

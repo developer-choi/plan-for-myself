@@ -1,4 +1,4 @@
-import type {StudyRecordMonthly} from '@plan-for-myself/shared';
+import type {StudyRecordMonthly} from '@plan-for-myself/shared/study-record';
 import {screen} from '@testing-library/react';
 
 interface MonthlyOverrides extends Partial<Omit<StudyRecordMonthly, 'study'>> {

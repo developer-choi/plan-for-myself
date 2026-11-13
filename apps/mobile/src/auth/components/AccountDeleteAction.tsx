@@ -1,7 +1,8 @@
 import {StyleSheet, View} from 'react-native';
 import {captureException} from '@sentry/react-native';
-import {type AccountDeleteText, colors} from '@plan-for-myself/shared';
-import {openOnce, useAccountDelete} from '@plan-for-myself/shared/react';
+import {type AccountDeleteText, useAccountDelete} from '@plan-for-myself/shared/auth';
+import {colors} from '@plan-for-myself/shared/color';
+import {openOnce} from '@plan-for-myself/shared/overlay';
 import {accountApi} from '@/auth/api';
 import {useSession} from '@/auth/session-context';
 import Button from '@/shared/components/Button';

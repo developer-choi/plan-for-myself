@@ -1,4 +1,4 @@
-import {getKoreanToday} from '@plan-for-myself/shared';
+import {getKoreanToday} from '@plan-for-myself/shared/date';
 import {NextRequest, NextResponse} from 'next/server';
 import {getRequestUserId} from '@/auth/request-user';
 import {createStudyRecord, listStudyRecords} from '@/server/study-record/repository';

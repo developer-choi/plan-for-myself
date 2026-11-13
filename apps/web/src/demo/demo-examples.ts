@@ -1,13 +1,7 @@
 /* eslint-disable no-magic-numbers -- 예시 달력·통계에만 쓰는 고정 예시 데이터라 숫자를 그대로 적는다 */
-import {
-  type CalendarMonth,
-  type DemoOverview,
-  isHolidayDate,
-  shiftMonth,
-  type StudyRecord,
-  type StudyRecordMonthly,
-  toMonthParam,
-} from '@plan-for-myself/shared';
+import {type CalendarMonth, isHolidayDate, shiftMonth, toMonthParam} from '@plan-for-myself/shared/date';
+import type {DemoOverview} from '@plan-for-myself/shared/demo';
+import type {StudyRecord, StudyRecordMonthly} from '@plan-for-myself/shared/study-record';
 import {calculateMonthly} from '@/server/study-record-stats/monthly';
 import {calculateOverview} from '@/server/study-record-stats/overview';
 import {getDemoMonth, getDemoToday, getLastDayOfMonth, toDateString} from '@/demo/demo-today';

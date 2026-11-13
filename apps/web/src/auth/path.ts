@@ -1,5 +1,5 @@
 import type {Session} from 'next-auth';
-import {INTRO_URL} from '@plan-for-myself/shared';
+import {INTRO_URL} from '@plan-for-myself/shared/intro';
 import {DEFAULT_HOME_URL, ENTRY_URL, type LoginUrl, toLoginUrl} from '@/auth/redirect';
 
 export type LoginState = 'logged-out' | 'guest' | 'google';

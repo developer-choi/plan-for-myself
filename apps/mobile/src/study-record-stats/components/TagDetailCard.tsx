@@ -1,5 +1,5 @@
 import type {ReactNode, Ref} from 'react';
-import type {TrendBar} from '@plan-for-myself/shared';
+import type {TrendBar} from '@plan-for-myself/shared/study-record-stats';
 import {StyleSheet, View} from 'react-native';
 import Card from '@/shared/components/Card';
 import {spacing} from '@/shared/styles/design-tokens';

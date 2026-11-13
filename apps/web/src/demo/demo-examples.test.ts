@@ -1,4 +1,5 @@
-import {type CalendarMonth, FAILURE_TAG_TREND_MONTH_LIMIT, isSameMonth, shiftMonth} from '@plan-for-myself/shared';
+import {type CalendarMonth, shiftMonth} from '@plan-for-myself/shared/date';
+import {FAILURE_TAG_TREND_MONTH_LIMIT, isSameMonth} from '@plan-for-myself/shared/study-record';
 import {describe, expect, it} from 'vitest';
 import {getDemoMonth, getDemoMonthly, getDemoOverview, getDemoRecords, getDemoToday} from './demo-examples';
 

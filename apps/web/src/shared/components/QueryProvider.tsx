@@ -2,7 +2,7 @@
 
 import {type PropsWithChildren, useState} from 'react';
 import {QueryClientProvider} from '@tanstack/react-query';
-import {createQueryClient} from '@plan-for-myself/shared/react';
+import {createQueryClient} from '@plan-for-myself/shared/query';
 import {toLoginUrl} from '@/auth/redirect';
 import {signOutAndReplace} from '@/auth/sign-out';
 

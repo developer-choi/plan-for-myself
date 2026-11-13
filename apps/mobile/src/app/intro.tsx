@@ -1,6 +1,7 @@
 import {ScrollView, StyleSheet} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {colors, INTRO_TEXT} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
+import {INTRO_TEXT} from '@plan-for-myself/shared/intro';
 import {useSession} from '@/auth/session-context';
 import FailurePreview from '@/intro/components/FailurePreview';
 import FeatureSection from '@/intro/components/FeatureSection';

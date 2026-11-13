@@ -1,4 +1,4 @@
-import {DEMO_TOUR_BUTTON_LABELS} from '@plan-for-myself/shared';
+import {DEMO_TOUR_BUTTON_LABELS} from '@plan-for-myself/shared/demo';
 
 interface TourBubbleDisplayParams {
   stepIndex: number;

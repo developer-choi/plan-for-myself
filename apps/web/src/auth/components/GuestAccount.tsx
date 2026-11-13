@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import typography from '@developer-choi/design-system/styles/typography';
-import {GUEST_ACCOUNT_TITLE, GUEST_DELETE_TEXT} from '@plan-for-myself/shared';
+import {GUEST_ACCOUNT_TITLE, GUEST_DELETE_TEXT} from '@plan-for-myself/shared/auth';
 import AccountDeleteAction from '@/auth/components/AccountDeleteAction';
 import GoogleConnectAction from '@/auth/components/GoogleConnectAction';
 import Card from '@/shared/components/Card';

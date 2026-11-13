@@ -1,5 +1,5 @@
-import type {CalendarMonth, StudyRecord} from '@plan-for-myself/shared';
-import {getCalendarDayCells, WEEKDAY_LABELS} from '@plan-for-myself/shared';
+import {type CalendarMonth, WEEKDAY_LABELS} from '@plan-for-myself/shared/date';
+import {type StudyRecord, getCalendarDayCells} from '@plan-for-myself/shared/study-record';
 import {Badge} from '@developer-choi/design-system';
 import typography from '@developer-choi/design-system/styles/typography';
 import classNames from 'classnames';

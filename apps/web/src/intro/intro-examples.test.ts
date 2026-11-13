@@ -1,4 +1,4 @@
-import {INTRO_MONTHLY, INTRO_TREND} from '@plan-for-myself/shared';
+import {INTRO_MONTHLY, INTRO_TREND} from '@plan-for-myself/shared/intro';
 import {describe, expect, it} from 'vitest';
 import {isReduced} from '@/server/study-record-stats/tag-count';
 

@@ -1,6 +1,6 @@
 import {createRef} from 'react';
 import {describe, expect, it} from '@jest/globals';
-import type {TrendBar} from '@plan-for-myself/shared';
+import type {TrendBar} from '@plan-for-myself/shared/study-record-stats';
 import {render, screen} from '@testing-library/react-native';
 import Text from '@/shared/components/Text';
 import TagDetailCard from './TagDetailCard';

@@ -1,4 +1,4 @@
-import {type CalendarMonth, getKoreanDate} from '@plan-for-myself/shared';
+import {type CalendarMonth, getKoreanDate} from '@plan-for-myself/shared/date';
 
 /*
  * 예시는 실제 이번 달을 그리고, 그 달 마지막 날을 「오늘」로 둔다 — 달력(오늘 뒤 칸의 기록도 그린다)과 통계(오늘까지만 센다)가 같은 한 달을 보게.

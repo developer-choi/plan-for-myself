@@ -1,7 +1,8 @@
 import type {Ref} from 'react';
 import {Pressable, ScrollView, StyleSheet, View} from 'react-native';
-import type {CalendarMonth, StudyRecord} from '@plan-for-myself/shared';
-import {colors, getCalendarDayCells, WEEKDAY_LABELS} from '@plan-for-myself/shared';
+import {type CalendarMonth, WEEKDAY_LABELS} from '@plan-for-myself/shared/date';
+import {type StudyRecord, getCalendarDayCells} from '@plan-for-myself/shared/study-record';
+import {colors} from '@plan-for-myself/shared/color';
 import Text from '@/shared/components/Text';
 import {controlHeight, fontSize, radius, spacing, typography} from '@/shared/styles/design-tokens';
 

@@ -1,4 +1,4 @@
-import {openOnce} from '@plan-for-myself/shared/react';
+import {openOnce} from '@plan-for-myself/shared/overlay';
 import {act, render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {overlay, type OverlayControllerComponent, OverlayProvider} from 'overlay-kit';

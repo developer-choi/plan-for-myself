@@ -1,4 +1,4 @@
-import type {PostAppTokenApiRequest, PostAppTokenApiResponse} from '@plan-for-myself/shared';
+import type {PostAppTokenApiRequest, PostAppTokenApiResponse} from '@plan-for-myself/shared/auth';
 import {issueAppToken, issueGuestAppToken, readAppTokenGuestUserId} from '@/auth/app-token';
 import {verifyGoogleIdToken} from '@/auth/google-id-token';
 import {

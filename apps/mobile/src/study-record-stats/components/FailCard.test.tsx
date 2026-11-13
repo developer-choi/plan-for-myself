@@ -1,6 +1,7 @@
 import {createRef} from 'react';
 import {describe, expect, it} from '@jest/globals';
-import {colors, type FailureTagStatus, type StudyRecordMonthly} from '@plan-for-myself/shared';
+import {colors} from '@plan-for-myself/shared/color';
+import type {FailureTagStatus, StudyRecordMonthly} from '@plan-for-myself/shared/study-record';
 import type {TextStyle, View} from 'react-native';
 import {render, screen} from '@testing-library/react-native';
 import {createFailureTag, createMonthly} from '@/study-record-stats/test-utils';

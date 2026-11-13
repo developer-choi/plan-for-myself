@@ -1,6 +1,7 @@
 'use client';
 
-import {type CalendarMonth, isSameMonth, type StudyRecordMonthly, toMonthParam} from '@plan-for-myself/shared';
+import {type CalendarMonth, toMonthParam} from '@plan-for-myself/shared/date';
+import {isSameMonth, type StudyRecordMonthly} from '@plan-for-myself/shared/study-record';
 import {Suspense} from 'react';
 import {useSuspenseQuery} from '@tanstack/react-query';
 import HandledErrorBoundary from '@/shared/components/HandledErrorBoundary';

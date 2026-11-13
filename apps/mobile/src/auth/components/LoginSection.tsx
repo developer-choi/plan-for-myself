@@ -1,14 +1,14 @@
 import {Pressable, StyleSheet, View} from 'react-native';
+import {colors} from '@plan-for-myself/shared/color';
 import {
-  colors,
   GOOGLE_LOGIN_LABEL,
   GUEST_CONNECT_NOTE,
   GUEST_START_LABEL,
   INTRO_EXIT_LABEL,
   LOGIN_DESCRIPTION,
   type LoginFailure,
-  START_RECORDING_LABEL,
-} from '@plan-for-myself/shared';
+} from '@plan-for-myself/shared/auth';
+import {START_RECORDING_LABEL} from '@plan-for-myself/shared/label';
 import AuthScreenFrame, {authScreenStyles} from '@/auth/components/AuthScreenFrame';
 import GoogleIcon from '@/auth/components/GoogleIcon';
 import GuestLimitNotice from '@/auth/components/GuestLimitNotice';
