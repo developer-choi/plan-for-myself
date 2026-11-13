@@ -4,13 +4,12 @@
 
 ## 배포 (Railway)
 
-Railway 프로젝트 하나에 `staging`·`production` 환경을 두고, 환경마다 같은 설정의 `api` 서비스를 둔다. 서비스 설정(헬스 체크·리전·변수)은 레포 루트의 `.railway/railway.ts`(Railway Infrastructure as Code)가 정한다.
+Railway 프로젝트 하나에 `staging`·`production` 환경을 두고, 환경마다 `api` 서비스를 둔다. 서비스 설정(production의 GitHub `master` 소스·헬스 체크·리전·변수)은 레포 루트의 `.railway/railway.ts`(Railway Infrastructure as Code)가 정한다.
 
 ### 설정 파일 밖에서 넣는 것
 
 | 항목           | staging                  | production               |
 | -------------- | ------------------------ | ------------------------ |
-| 소스           | `railway up` 업로드      | GitHub `master`          |
 | `POSTGRES_URL` | Neon `dev` 브랜치        | Neon `main` 브랜치       |
 | `SENTRY_DSN`   | 웹과 같은 프로젝트의 DSN | 웹과 같은 프로젝트의 DSN |
 
