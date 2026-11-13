@@ -11,7 +11,7 @@ export default function QueryProvider({children}: PropsWithChildren) {
     session: {token, isGuest},
     handlers: {signOutOnUnauthorized},
   } = useSession();
-  const [queryClient] = useState(() => createQueryClient(() => void signOutOnUnauthorized()));
+  const [queryClient] = useState(() => createQueryClient((error) => void signOutOnUnauthorized(error)));
   const previousSessionCache = useRef({token, isGuest});
 
   /* 로그아웃하면 이전 사용자의 데이터가 다음 로그인 화면 뒤에 남지 않게 지운다 */

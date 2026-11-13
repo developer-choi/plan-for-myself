@@ -12,15 +12,17 @@ import {
 import {postAppTokenApi, postAppTokenGuestApi, postAppTokenRefreshApi} from '@/auth/api';
 import {deleteAppToken, getAppToken, saveAppToken} from '@/auth/app-token-storage';
 import {readIsGuest} from '@/auth/read-app-token';
+import {shouldSignOutOnUnauthorized} from '@/auth/unauthorized-sign-out';
 import {clearRegisteredRejection, readRegisteredRejection, saveRegisteredRejection} from '@/auth/registered-rejection';
 import {type GoogleConnectResult, SessionContext} from '@/auth/session-context';
 import {ApiResponseError} from '@developer-choi/utils/api';
+import {readSentToken} from '@/shared/api/client';
 import {isTransientApiError} from '@/shared/api/transient';
 
 interface UseAppTokenRefreshParams {
   isLoading: boolean;
   updateToken: (token: string) => void;
-  signOutOnUnauthorized: () => Promise<void>;
+  signOutOnUnauthorized: (error: unknown) => Promise<void>;
 }
 
 export default function SessionProvider({children}: PropsWithChildren) {
@@ -105,13 +107,16 @@ export default function SessionProvider({children}: PropsWithChildren) {
 
   const signOut = useCallback(() => signOutAs({isByServer: false}), [signOutAs]);
 
-  const signOutOnUnauthorized = useCallback(async () => {
-    /* 직접 로그아웃 뒤 늦게 돌아온 401이 「로그인이 풀렸어요」를 띄우지 않게 한다 */
-    if ((await getAppToken()) === null) {
-      return;
-    }
-    await signOutAs({isByServer: true});
-  }, [signOutAs]);
+  const signOutOnUnauthorized = useCallback(
+    async (error: unknown) => {
+      /* 직접 로그아웃 뒤나 Google 연결로 토큰이 바뀐 뒤 늦게 돌아온 401이 지금 세션을 끝내지 않게 한다 */
+      if (!shouldSignOutOnUnauthorized({current: await getAppToken(), failed: readSentToken(error)})) {
+        return;
+      }
+      await signOutAs({isByServer: true});
+    },
+    [signOutAs],
+  );
 
   useAppTokenRefresh({isLoading, updateToken: setToken, signOutOnUnauthorized});
 
@@ -160,7 +165,7 @@ function useAppTokenRefresh({isLoading, updateToken, signOutOnUnauthorized}: Use
       updateToken(next);
     } catch (error) {
       if (isUnauthorizedError(error)) {
-        await signOutOnUnauthorized();
+        await signOutOnUnauthorized(error);
         return;
       }
       if (!isTransientApiError(error)) {

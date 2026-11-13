@@ -16,7 +16,7 @@ export interface SessionContextValue {
     connectGoogle: () => Promise<GoogleConnectResult>;
     discardGuestAndConnect: () => Promise<GoogleConnectResult>;
     signOut: () => Promise<void>;
-    signOutOnUnauthorized: () => Promise<void>;
+    signOutOnUnauthorized: (error: unknown) => Promise<void>;
   };
 }
 
