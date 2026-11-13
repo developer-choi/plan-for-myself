@@ -1,11 +1,13 @@
 import {type ArgumentsHost, Catch, type ExceptionFilter, HttpException, HttpStatus, Logger} from '@nestjs/common';
 import {HttpAdapterHost} from '@nestjs/core';
+import {SentryExceptionCaptured} from '@sentry/nestjs';
 import {API_ERROR_CODES, type ApiErrorBody, type ApiErrorCode} from '@plan-for-myself/shared/error';
 
 @Catch()
 export class ApiExceptionFilter implements ExceptionFilter {
   constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
 
+  @SentryExceptionCaptured()
   catch(exception: unknown, host: ArgumentsHost) {
     const {status, body} = toResponse(exception);
     this.httpAdapterHost.httpAdapter.reply(host.switchToHttp().getResponse(), body, status);
