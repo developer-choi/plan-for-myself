@@ -7,13 +7,6 @@ export interface ErrorInfo {
 
 export function getErrorInfo(error: unknown): ErrorInfo {
   if (error instanceof ApiResponseError) {
-    if (error.status === HTTP_STATUS.FORBIDDEN) {
-      return {
-        title: '접근할 수 없어요',
-        content: '권한이 필요해요. 관리자에게 권한을 요청해 주세요.',
-      };
-    }
-
     if (error.status === HTTP_STATUS.NOT_FOUND) {
       return {
         title: '정보를 찾을 수 없어요',
