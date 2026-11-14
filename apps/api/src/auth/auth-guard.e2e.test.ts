@@ -183,11 +183,12 @@ describe('앱 토큰 인증', () => {
   });
 });
 
-const PROBE_PATH = '/auth-probe';
+const PROBE_ROUTE = 'auth-probe';
+const PROBE_PATH = `/api/${PROBE_ROUTE}`;
 
 let connection: DatabaseConnection;
 
-@Controller(PROBE_PATH)
+@Controller(PROBE_ROUTE)
 class AuthProbeController {
   @Get()
   read(@CurrentUser() user: UserRow) {
