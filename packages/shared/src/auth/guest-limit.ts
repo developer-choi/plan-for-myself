@@ -1,6 +1,7 @@
+import {API_ERROR_CODES} from '@plan-for-myself/shared/error';
 import {z} from 'zod';
 
-export const GUEST_LIMIT_CODE = 'guest_limit';
+export const GUEST_LIMIT_CODE = API_ERROR_CODES.GUEST_LIMIT;
 
 export type LoginFailure = 'guest-limit' | 'failed';
 

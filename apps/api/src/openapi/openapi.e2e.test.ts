@@ -152,6 +152,76 @@ describe('OpenAPI 문서', () => {
       expect(response.body).toHaveProperty([...DEMO_OK_SCHEMA_PATH, 'properties', 'monthly', 'nullable'], true);
     });
 
+    it('/docs-json이면 Google idToken 교환의 200 응답에 토큰과 거절 두 모양을 실어야 한다', async () => {
+      const response = await request(app.getHttpServer()).get('/docs-json');
+
+      expect(response.body).toMatchObject({
+        paths: {
+          '/api/app-token': {
+            post: {
+              responses: {
+                [HttpStatus.OK]: {
+                  content: {
+                    'application/json': {
+                      schema: {
+                        oneOf: [
+                          {properties: {type: {enum: ['session']}}, required: ['type', 'token']},
+                          {properties: {type: {enum: ['registered-account']}}, required: ['type', 'rejection']},
+                        ],
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+    });
+
+    it('/docs-json이면 Google idToken 교환의 경합 응답에 LOGIN_CONFLICT code를 실어야 한다', async () => {
+      const response = await request(app.getHttpServer()).get('/docs-json');
+
+      expect(response.body).toMatchObject({
+        paths: {
+          '/api/app-token': {
+            post: {
+              responses: {
+                [HttpStatus.CONFLICT]: {
+                  content: {'application/json': {schema: {properties: {code: {enum: ['LOGIN_CONFLICT']}}}}},
+                },
+              },
+            },
+          },
+        },
+      });
+    });
+
+    it('/docs-json이면 게스트 발급의 한도 응답에 guest_limit code를 실어야 한다', async () => {
+      const response = await request(app.getHttpServer()).get('/docs-json');
+
+      expect(response.body).toMatchObject({
+        paths: {
+          '/api/app-token/guest': {
+            post: {
+              responses: {
+                [HttpStatus.TOO_MANY_REQUESTS]: {
+                  content: {'application/json': {schema: {properties: {code: {enum: ['guest_limit']}}}}},
+                },
+              },
+            },
+          },
+        },
+      });
+    });
+
+    it('/docs-json이면 게스트 발급에 인증을 싣지 않아야 한다', async () => {
+      const response = await request(app.getHttpServer()).get('/docs-json');
+
+      expect(response.body).toHaveProperty(GUEST_POST_PATH);
+      expect(response.body).not.toHaveProperty([...GUEST_POST_PATH, 'security']);
+    });
+
     it('/docs면 문서 화면을 반환해야 한다', async () => {
       await request(app.getHttpServer()).get('/docs').expect(HttpStatus.OK).expect('Content-Type', /html/);
     });
@@ -159,6 +229,7 @@ describe('OpenAPI 문서', () => {
 });
 
 const DEMO_GET_PATH = ['paths', '/api/demo', 'get'];
+const GUEST_POST_PATH = ['paths', '/api/app-token/guest', 'post'];
 const DEMO_OK_SCHEMA_PATH = [
   ...DEMO_GET_PATH,
   'responses',
