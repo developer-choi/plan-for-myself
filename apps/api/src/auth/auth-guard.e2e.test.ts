@@ -10,6 +10,7 @@ import type {DatabaseConnection} from '../db/database';
 import {users} from '../db/schema';
 import {bearer, signTestToken} from '../testing/app-token';
 import {createInMemoryConnection, startApp} from '../testing/start-app';
+import {insertGuest as insertGuestRow} from '../testing/users';
 import {UserRepository, type UserRow} from '../user/user.repository';
 import {AppTokenProvider} from './app-token.provider';
 
@@ -209,10 +210,6 @@ function createProvider(secret: string) {
   );
 }
 
-async function insertGuest() {
-  const [row] = await connection.db.insert(users).values({isGuest: true}).returning({id: users.id});
-  if (!row) {
-    throw new Error('게스트 행을 만들지 못했다');
-  }
-  return row.id;
+function insertGuest() {
+  return insertGuestRow(connection.db);
 }

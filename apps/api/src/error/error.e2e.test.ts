@@ -1,4 +1,5 @@
-import {HttpStatus, type INestApplication} from '@nestjs/common';
+import {Public} from '@nestjs/authentication';
+import {BadRequestException, Controller, Get, HttpStatus, type INestApplication} from '@nestjs/common';
 import request from 'supertest';
 import type {App} from 'supertest/types';
 import {afterAll, beforeAll, describe, expect, it} from 'vitest';
@@ -8,7 +9,7 @@ describe('에러 응답', () => {
   let app: INestApplication<App>;
 
   beforeAll(async () => {
-    app = await startApp();
+    app = await startApp(undefined, {controllers: [UnknownCodeProbeController]});
   });
 
   afterAll(async () => {
@@ -53,7 +54,23 @@ describe('에러 응답', () => {
         expect(response.body).toEqual({code: 'INVALID_BODY', message: '요청 형식이 올바르지 않아요'});
       });
     });
+
+    it('BadRequestException에 등록되지 않은 code를 실으면 INVALID_BODY 응답으로 바꿔 반환해야 한다', async () => {
+      const response = await request(app.getHttpServer()).get(`/api/${UNKNOWN_CODE_ROUTE}`);
+
+      expect(response.body).toEqual({code: 'INVALID_BODY', message: '요청 형식이 올바르지 않아요'});
+    });
   });
 });
 
 const BODY_PARSER_DEFAULT_LIMIT_BYTES = 102_400;
+const UNKNOWN_CODE_ROUTE = 'unknown-code-probe';
+
+@Public()
+@Controller(UNKNOWN_CODE_ROUTE)
+class UnknownCodeProbeController {
+  @Get()
+  read() {
+    throw new BadRequestException({code: 'NOT_A_REGISTERED_CODE', message: '등록되지 않은 code'});
+  }
+}

@@ -1,1 +1,1 @@
-export type {DateType} from './type';
+export {DATE_TYPES, type DateType} from './type';

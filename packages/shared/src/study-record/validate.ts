@@ -1,3 +1,5 @@
+import {DATE_TYPES} from '@plan-for-myself/shared/date-type';
+import {API_ERROR_CODES, type ApiErrorBody} from '@plan-for-myself/shared/error';
 import {z} from 'zod';
 import {isEmptyStudyRecord} from './empty';
 import {STUDY_RECORD_FIELD_LIMITS, STUDY_RECORD_FIELD_MESSAGES} from './limits';
@@ -5,17 +7,7 @@ import {STUDY_RECORD_FIELD_LIMITS, STUDY_RECORD_FIELD_MESSAGES} from './limits';
 export type NewStudyRecord = z.infer<typeof newStudyRecordSchema>;
 export type StudyRecordFields = z.infer<typeof studyRecordFieldsSchema>;
 
-export interface Rejection {
-  code:
-    | 'INVALID_BODY'
-    | 'INVALID_DATE'
-    | 'INVALID_MONTH'
-    | 'INVALID_DATE_TYPE'
-    | 'INVALID_STUDIED_MINUTES'
-    | 'INVALID_FAIL_TAGS'
-    | 'EMPTY_RECORD';
-  message: string;
-}
+export type Rejection = ApiErrorBody;
 
 export type Validation<T> = {ok: true; value: T} | {ok: false; rejection: Rejection};
 
@@ -24,16 +16,49 @@ export interface MonthRange {
   until: string;
 }
 
+interface SchemaIssue {
+  message: string;
+  path?: readonly (PropertyKey | {key: PropertyKey})[];
+}
+
 export function validateNewStudyRecord(body: unknown, today: string): Validation<NewStudyRecord> {
-  const result = rejectEmptyRecord(validate(newStudyRecordSchema, body));
-  if (result.ok && result.value.date > today) {
-    return {ok: false, rejection: {code: 'INVALID_DATE', message: STUDY_RECORD_FIELD_MESSAGES.futureDate}};
-  }
-  return result;
+  const result = validate(newStudyRecordSchema, body);
+  return result.ok ? toValidation(result.value, checkNewStudyRecord(result.value, today)) : result;
 }
 
 export function validateStudyRecordUpdate(body: unknown): Validation<StudyRecordFields> {
-  return rejectEmptyRecord(validate(studyRecordUpdateSchema, body));
+  const result = validate(studyRecordUpdateSchema, body);
+  return result.ok ? toValidation(result.value, checkStudyRecordUpdate(result.value)) : result;
+}
+
+/**
+ * null: 빈 기록도 미래 날짜도 아니다
+ */
+export function checkNewStudyRecord(record: NewStudyRecord, today: string): Rejection | null {
+  if (isEmptyStudyRecord(record)) {
+    return EMPTY_RECORD_REJECTION;
+  }
+  if (record.date > today) {
+    return {code: API_ERROR_CODES.INVALID_DATE, message: STUDY_RECORD_FIELD_MESSAGES.futureDate};
+  }
+  return null;
+}
+
+/**
+ * null: 빈 기록이 아니다
+ */
+export function checkStudyRecordUpdate(fields: StudyRecordFields): Rejection | null {
+  return isEmptyStudyRecord(fields) ? EMPTY_RECORD_REJECTION : null;
+}
+
+export function toRejection(issues: readonly SchemaIssue[]): Rejection {
+  const [issue] = issues;
+  const segment = issue?.path?.[0];
+  const field = typeof segment === 'object' ? segment.key : segment;
+  if (issue && isRejectableField(field)) {
+    return {code: REJECTION_CODES[field], message: issue.message};
+  }
+  return {code: API_ERROR_CODES.INVALID_BODY, message: '요청 형식이 올바르지 않아요'};
 }
 
 export function validateDate(date: string | null, today: string): Validation<string> {
@@ -100,24 +125,24 @@ const dateSchema = z.iso
 
 const studyRecordOriginalSchema = z.object({
   date: dateSchema,
-  dateType: z.enum(['weekday', 'holiday'], {error: '평일·휴일 중 하나를 골라 주세요'}),
+  dateType: z.enum(DATE_TYPES, {error: '평일·휴일 중 하나를 골라 주세요'}),
   studiedMinutes: z.tuple([minutesSchema, minutesSchema, minutesSchema], {error: STUDIED_MINUTES_MESSAGE}),
   failTags: z
     .array(failTagSchema, {error: '실패 태그 목록이 올바르지 않아요'})
     .max(STUDY_RECORD_LIMITS.failTags.maxCount, {error: STUDY_RECORD_FIELD_MESSAGES.failTagCount}),
 });
 
-const newStudyRecordSchema = studyRecordOriginalSchema;
+export const newStudyRecordSchema = studyRecordOriginalSchema;
 const studyRecordFieldsSchema = studyRecordOriginalSchema.pick({
   dateType: true,
   studiedMinutes: true,
   failTags: true,
 });
-const studyRecordUpdateSchema = studyRecordFieldsSchema.extend({
+export const studyRecordUpdateSchema = studyRecordFieldsSchema.extend({
   date: z.never({error: '날짜는 바꿀 수 없어요. 삭제하고 그 날짜에 새로 기록해 주세요'}).optional(),
 });
 
-const monthSchema = z
+export const monthSchema = z
   .string({error: MONTH_MESSAGE})
   .regex(/^\d{4}-(0[1-9]|1[0-2])$/, {error: MONTH_MESSAGE})
   .refine(
@@ -140,34 +165,35 @@ const pkSchema = z
 const DATE_LENGTH = 'YYYY-MM-DD'.length;
 const MONTH_LENGTH = 'YYYY-MM'.length;
 
-const REJECTION_CODES: Record<keyof z.infer<typeof studyRecordOriginalSchema>, Rejection['code']> = {
-  date: 'INVALID_DATE',
-  dateType: 'INVALID_DATE_TYPE',
-  studiedMinutes: 'INVALID_STUDIED_MINUTES',
-  failTags: 'INVALID_FAIL_TAGS',
+const RECORD_FIELD_CODES: Record<keyof z.infer<typeof studyRecordOriginalSchema>, Rejection['code']> = {
+  date: API_ERROR_CODES.INVALID_DATE,
+  dateType: API_ERROR_CODES.INVALID_DATE_TYPE,
+  studiedMinutes: API_ERROR_CODES.INVALID_STUDIED_MINUTES,
+  failTags: API_ERROR_CODES.INVALID_FAIL_TAGS,
+};
+
+const REJECTION_CODES = {...RECORD_FIELD_CODES, month: API_ERROR_CODES.INVALID_MONTH};
+
+export const RECORD_REJECTION_CODES: [Rejection['code'], ...Rejection['code'][]] = [
+  API_ERROR_CODES.INVALID_BODY,
+  ...Object.values(RECORD_FIELD_CODES),
+  API_ERROR_CODES.EMPTY_RECORD,
+];
+
+const EMPTY_RECORD_REJECTION: Rejection = {
+  code: API_ERROR_CODES.EMPTY_RECORD,
+  message: STUDY_RECORD_FIELD_MESSAGES.emptyRecord,
 };
 
 function validate<T>(schema: z.ZodType<T>, body: unknown): Validation<T> {
   const result = schema.safeParse(body);
-  if (result.success) {
-    return {ok: true, value: result.data};
-  }
-
-  const [issue] = result.error.issues;
-  const field = issue?.path[0];
-  if (issue && isRecordField(field)) {
-    return {ok: false, rejection: {code: REJECTION_CODES[field], message: issue.message}};
-  }
-  return {ok: false, rejection: {code: 'INVALID_BODY', message: '요청 형식이 올바르지 않아요'}};
+  return result.success ? {ok: true, value: result.data} : {ok: false, rejection: toRejection(result.error.issues)};
 }
 
-function rejectEmptyRecord<T extends StudyRecordFields>(result: Validation<T>): Validation<T> {
-  if (result.ok && isEmptyStudyRecord(result.value)) {
-    return {ok: false, rejection: {code: 'EMPTY_RECORD', message: STUDY_RECORD_FIELD_MESSAGES.emptyRecord}};
-  }
-  return result;
+function toValidation<T>(value: T, rejection: Rejection | null): Validation<T> {
+  return rejection ? {ok: false, rejection} : {ok: true, value};
 }
 
-function isRecordField(field: PropertyKey | undefined): field is keyof typeof REJECTION_CODES {
+function isRejectableField(field: PropertyKey | undefined): field is keyof typeof REJECTION_CODES {
   return typeof field === 'string' && Object.hasOwn(REJECTION_CODES, field);
 }

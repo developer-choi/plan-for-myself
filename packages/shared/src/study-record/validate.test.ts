@@ -1,6 +1,10 @@
 import {describe, expect, it} from 'vitest';
-import {STUDY_RECORD_FIELD_MESSAGES} from './limits';
+import {STUDY_RECORD_FIELD_LIMITS, STUDY_RECORD_FIELD_MESSAGES} from './limits';
 import {
+  checkNewStudyRecord,
+  type NewStudyRecord,
+  RECORD_REJECTION_CODES,
+  toRejection,
   validateDate,
   validateMonth,
   validateNewStudyRecord,
@@ -156,6 +160,83 @@ describe('validateNotFutureMonth()', () => {
   });
 });
 
+describe('checkNewStudyRecord()', () => {
+  describe('General cases', () => {
+    it('공부시간이 있는 오늘 기록이면 null을 반환해야 한다', () => {
+      expect(checkNewStudyRecord(createRecord(TODAY, [MORNING_MINUTES, 0, 0]), TODAY)).toBeNull();
+    });
+  });
+
+  describe('Edge cases', () => {
+    describe('내일 날짜면', () => {
+      it('빈 기록일 때 빈 기록으로 거절해야 한다', () => {
+        expect(checkNewStudyRecord(createRecord('2026-09-25', [0, 0, 0]), TODAY)).toEqual(
+          EMPTY_RECORD_REJECTION.rejection,
+        );
+      });
+    });
+  });
+});
+
+describe('RECORD_REJECTION_CODES', () => {
+  describe('General cases', () => {
+    it('새 기록 검증이 거절하며 낼 수 있는 code와 같아야 한다', () => {
+      const body = createBody(TODAY);
+      const tooLongFailTag = '가'.repeat(STUDY_RECORD_FIELD_LIMITS.failTags.maxLength + 1);
+      const rejectedBodies = [
+        null,
+        {...body, date: '2026-13-01'},
+        {...body, dateType: 'workday'},
+        {...body, studiedMinutes: [-1, 0, 0]},
+        {...body, failTags: [tooLongFailTag]},
+        {...body, studiedMinutes: [0, 0, 0]},
+      ];
+
+      const codes = rejectedBodies.map((rejectedBody) => {
+        const result = validateNewStudyRecord(rejectedBody, TODAY);
+        return result.ok ? null : result.rejection.code;
+      });
+
+      expect(new Set(codes)).toEqual(new Set(RECORD_REJECTION_CODES));
+    });
+  });
+});
+
+describe('toRejection()', () => {
+  describe('General cases', () => {
+    [
+      {field: 'date', code: 'INVALID_DATE'},
+      {field: 'dateType', code: 'INVALID_DATE_TYPE'},
+      {field: 'studiedMinutes', code: 'INVALID_STUDIED_MINUTES'},
+      {field: 'failTags', code: 'INVALID_FAIL_TAGS'},
+      {field: 'month', code: 'INVALID_MONTH'},
+    ].forEach(({field, code}) => {
+      it(`첫 문제가 ${field} 칸이면 ${code}와 그 문제의 문구를 반환해야 한다`, () => {
+        expect(toRejection([{message: '문구', path: [field, 0]}])).toEqual({code, message: '문구'});
+      });
+    });
+
+    it('경로가 key를 가진 객체로 와도 그 칸의 code를 반환해야 한다', () => {
+      expect(toRejection([{message: '문구', path: [{key: 'month'}]}])).toEqual({
+        code: 'INVALID_MONTH',
+        message: '문구',
+      });
+    });
+  });
+
+  describe('Edge cases', () => {
+    [
+      {issues: [], reason: '빈 문제 목록'},
+      {issues: [{message: '문구'}], reason: '경로가 없는 문제'},
+      {issues: [{message: '문구', path: ['extra']}], reason: '기록에 없는 칸의 문제'},
+    ].forEach(({issues, reason}) => {
+      it(`${reason}이면 요청 형식 문구로 INVALID_BODY를 반환해야 한다`, () => {
+        expect(toRejection(issues)).toEqual({code: 'INVALID_BODY', message: '요청 형식이 올바르지 않아요'});
+      });
+    });
+  });
+});
+
 const TODAY = '2026-09-24';
 
 const EMPTY_RECORD_REJECTION = {
@@ -167,4 +248,8 @@ const MORNING_MINUTES = 30;
 
 function createBody(date: string) {
   return {date, dateType: 'weekday', studiedMinutes: [MORNING_MINUTES, 0, 0], failTags: []};
+}
+
+function createRecord(date: string, studiedMinutes: NewStudyRecord['studiedMinutes']): NewStudyRecord {
+  return {date, dateType: 'weekday', studiedMinutes, failTags: []};
 }

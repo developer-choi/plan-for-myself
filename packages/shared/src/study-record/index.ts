@@ -23,10 +23,18 @@ export type {
   StudyRecordOverview,
 } from './type';
 export {
+  checkNewStudyRecord,
+  checkStudyRecordUpdate,
+  type MonthRange,
+  monthSchema,
   type NewStudyRecord,
+  newStudyRecordSchema,
   parsePk,
+  RECORD_REJECTION_CODES,
   type Rejection,
   type StudyRecordFields,
+  studyRecordUpdateSchema,
+  toRejection,
   validateDate,
   validateMonth,
   validateNewStudyRecord,
