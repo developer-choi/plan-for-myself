@@ -6,6 +6,7 @@ import {
   GUEST_START_LABEL,
   INTRO_EXIT_LABEL,
   LOGIN_DESCRIPTION,
+  LOGIN_FAILED_NOTICE,
   type LoginFailure,
 } from '@plan-for-myself/shared/auth';
 import {START_RECORDING_LABEL} from '@plan-for-myself/shared/label';
@@ -44,7 +45,7 @@ export default function LoginSection({failure, isSignedOutByServer, pendingActio
       </View>
       <View style={authScreenStyles.actions}>
         {failure === 'guest-limit' && <GuestLimitNotice />}
-        {failure === 'failed' && <LoginFailedNotice />}
+        {failure === 'failed' && <LoginFailedNotice notice={LOGIN_FAILED_NOTICE} />}
         {failure === null && isSignedOutByServer && <SignedOutNotice />}
         <Button
           color="secondary"

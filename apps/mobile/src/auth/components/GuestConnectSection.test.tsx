@@ -69,10 +69,16 @@ describe('GuestConnectSection', () => {
   describe('Edge cases', () => {
     describe('거절됐을 때', () => {
       describe('삭제에 실패했으면', () => {
-        it('실패 안내가 보여야 한다', async () => {
+        it('로그인 실패 안내가 보여야 한다', async () => {
           await renderSection({isRejected: true, failure: 'failed'});
 
-          expect(screen.getByText(FAILED_TITLE)).toBeOnTheScreen();
+          expect(screen.getByText(LOGIN_FAILED_TITLE)).toBeOnTheScreen();
+        });
+
+        it('연결 실패 안내가 없어야 한다', async () => {
+          await renderSection({isRejected: true, failure: 'failed'});
+
+          expect(screen.queryByText(CONNECT_FAILED_TITLE)).not.toBeOnTheScreen();
         });
 
         it('거절 안내가 없어야 한다', async () => {
@@ -85,10 +91,16 @@ describe('GuestConnectSection', () => {
 
     describe('거절되지 않았을 때', () => {
       describe('실패했으면', () => {
-        it('실패 안내가 보여야 한다', async () => {
+        it('연결 실패 안내가 보여야 한다', async () => {
           await renderSection({isRejected: false, failure: 'failed'});
 
-          expect(screen.getByText(FAILED_TITLE)).toBeOnTheScreen();
+          expect(screen.getByText(CONNECT_FAILED_TITLE)).toBeOnTheScreen();
+        });
+
+        it('로그인 실패 안내가 없어야 한다', async () => {
+          await renderSection({isRejected: false, failure: 'failed'});
+
+          expect(screen.queryByText(LOGIN_FAILED_TITLE)).not.toBeOnTheScreen();
         });
 
         it('연결 버튼이 보여야 한다', async () => {
@@ -105,7 +117,8 @@ const CONNECT_LABEL = 'Google 계정 연결하기';
 const CALENDAR_LINK_LABEL = '내 달력으로 이동';
 const REJECTED_TITLE = '이 Google 계정은 연결할 수 없어요';
 const DISCARD_LABEL = '게스트 계정 삭제 후 로그인';
-const FAILED_TITLE = '로그인하지 못했어요';
+const LOGIN_FAILED_TITLE = '로그인하지 못했어요';
+const CONNECT_FAILED_TITLE = 'Google 계정을 연결하지 못했어요';
 const NO_OPERATION_HANDLERS = {onConnect: () => {}, onDiscard: () => Promise.resolve(), onLeave: () => {}};
 
 function renderSection({isRejected, failure}: {isRejected: boolean; failure: LoginFailure | null}) {

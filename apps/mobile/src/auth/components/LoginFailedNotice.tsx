@@ -1,6 +1,9 @@
-import {LOGIN_FAILED_NOTICE} from '@plan-for-myself/shared/auth';
 import LoginNotice from '@/auth/components/LoginNotice';
 
-export default function LoginFailedNotice() {
-  return <LoginNotice title={LOGIN_FAILED_NOTICE.title}>{LOGIN_FAILED_NOTICE.content}</LoginNotice>;
+interface LoginFailedNoticeProps {
+  notice: {title: string; content: string};
+}
+
+export default function LoginFailedNotice({notice}: LoginFailedNoticeProps) {
+  return <LoginNotice title={notice.title}>{notice.content}</LoginNotice>;
 }

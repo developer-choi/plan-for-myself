@@ -19,6 +19,11 @@ export const LOGIN_FAILED_NOTICE = {
   content: '잠시 후 다시 시도해 주세요',
 };
 
+export const GUEST_CONNECT_FAILED_NOTICE = {
+  title: 'Google 계정을 연결하지 못했어요',
+  content: LOGIN_FAILED_NOTICE.content,
+};
+
 export const REGISTERED_ACCOUNT_NOTICE = {
   title: '이 Google 계정은 연결할 수 없어요',
   reason: '이미 가입된 Google 계정이에요',

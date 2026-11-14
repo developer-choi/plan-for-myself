@@ -1,6 +1,11 @@
 import {Pressable, View} from 'react-native';
 import {GOOGLE_CONNECT_LABEL, GOOGLE_CONNECT_PAGE_LABEL, MY_CALENDAR_LABEL} from '@plan-for-myself/shared/label';
-import {KEEP_GUEST_LABEL, type LoginFailure} from '@plan-for-myself/shared/auth';
+import {
+  GUEST_CONNECT_FAILED_NOTICE,
+  KEEP_GUEST_LABEL,
+  LOGIN_FAILED_NOTICE,
+  type LoginFailure,
+} from '@plan-for-myself/shared/auth';
 import AuthScreenFrame, {authScreenStyles} from '@/auth/components/AuthScreenFrame';
 import DiscardGuestButton from '@/auth/components/DiscardGuestButton';
 import GoogleIcon from '@/auth/components/GoogleIcon';
@@ -30,7 +35,9 @@ export default function GuestConnectSection({isRejected, isPending, failure, han
       <Text style={authScreenStyles.title}>{GOOGLE_CONNECT_PAGE_LABEL}</Text>
       <View style={authScreenStyles.actions}>
         {isRejected && failure === null && <RegisteredAccountNotice />}
-        {failure === 'failed' && <LoginFailedNotice />}
+        {failure === 'failed' && (
+          <LoginFailedNotice notice={isRejected ? LOGIN_FAILED_NOTICE : GUEST_CONNECT_FAILED_NOTICE} />
+        )}
         {isRejected ? (
           <>
             <DiscardGuestButton onConfirm={handlers.onDiscard} />
