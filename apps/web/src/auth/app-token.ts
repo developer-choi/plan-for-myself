@@ -1,8 +1,6 @@
 import {errors, type JWTPayload, jwtVerify, SignJWT} from 'jose';
-import type {AppTokenClaims} from '@plan-for-myself/shared/auth';
+import {APP_TOKEN_AUDIENCE, type AppTokenClaims} from '@plan-for-myself/shared/auth';
 import {SESSION_MAX_AGE_SECONDS} from '@/auth/session-max-age';
-
-export const APP_TOKEN_AUDIENCE = 'plan-for-myself:app';
 
 export async function issueAppToken(userId: string): Promise<string> {
   return signAppToken({sub: userId});

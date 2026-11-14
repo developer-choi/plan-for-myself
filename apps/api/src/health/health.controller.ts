@@ -1,9 +1,11 @@
+import {Public} from '@nestjs/authentication';
 import {Controller, Get, Inject} from '@nestjs/common';
 import {ApiOkResponse, ApiOperation, ApiTags} from '@nestjs/swagger';
 import {sql} from 'drizzle-orm';
 import type {Database} from '../db/database';
 import {DATABASE} from '../db/database.module';
 
+@Public()
 @ApiTags('health')
 @Controller('health')
 export class HealthController {

@@ -38,16 +38,18 @@ describe('resolveDatabaseOptions()', () => {
     });
 
     describe('운영일 때', () => {
-      it.for([
+      [
         {name: '없으면', postgresUrl: undefined},
         {name: '빈 문자열이면', postgresUrl: ''},
-      ])('postgresUrl이 $name InvalidEnvError를 던져야 한다', ({postgresUrl}) => {
-        expect(() => resolveDatabaseOptions({postgresUrl, nodeEnv: 'production'})).toThrow(
-          expect.objectContaining({
-            name: 'InvalidEnvError',
-            message: '운영(NODE_ENV=production)에서는 POSTGRES_URL이 있어야 한다',
-          }),
-        );
+      ].forEach(({name, postgresUrl}) => {
+        it(`postgresUrl이 ${name} InvalidEnvError를 던져야 한다`, () => {
+          expect(() => resolveDatabaseOptions({postgresUrl, nodeEnv: 'production'})).toThrow(
+            expect.objectContaining({
+              name: 'InvalidEnvError',
+              message: '운영(NODE_ENV=production)에서는 POSTGRES_URL이 있어야 한다',
+            }),
+          );
+        });
       });
     });
   });

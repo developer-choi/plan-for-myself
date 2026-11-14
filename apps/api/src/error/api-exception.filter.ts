@@ -1,7 +1,15 @@
 import {type ArgumentsHost, Catch, type ExceptionFilter, HttpException, HttpStatus, Logger} from '@nestjs/common';
 import {HttpAdapterHost} from '@nestjs/core';
 import {SentryExceptionCaptured} from '@sentry/nestjs';
+import {DrizzleQueryError} from 'drizzle-orm';
 import {API_ERROR_CODES, type ApiErrorBody, type ApiErrorCode} from '@plan-for-myself/shared/error';
+
+interface PostgresErrorFields {
+  code?: string;
+  constraint?: string;
+  table?: string;
+  column?: string;
+}
 
 @Catch()
 export class ApiExceptionFilter implements ExceptionFilter {
@@ -20,12 +28,14 @@ const ERROR_CODE_BY_STATUS: Partial<Record<number, ApiErrorCode>> = {
   [HttpStatus.BAD_REQUEST]: API_ERROR_CODES.INVALID_BODY,
   [HttpStatus.PAYLOAD_TOO_LARGE]: API_ERROR_CODES.INVALID_BODY,
   [HttpStatus.UNSUPPORTED_MEDIA_TYPE]: API_ERROR_CODES.INVALID_BODY,
+  [HttpStatus.UNAUTHORIZED]: API_ERROR_CODES.UNAUTHORIZED,
   [HttpStatus.NOT_FOUND]: API_ERROR_CODES.NOT_FOUND,
 };
 
 const FIXED_MESSAGE_BY_CODE: Partial<Record<ApiErrorCode, string>> = {
   [API_ERROR_CODES.INVALID_BODY]: '요청 형식이 올바르지 않아요',
   [API_ERROR_CODES.NOT_FOUND]: '요청한 주소를 찾을 수 없어요',
+  [API_ERROR_CODES.UNAUTHORIZED]: '로그인이 필요해요',
 };
 
 const logger = new Logger('ApiExceptionFilter');
@@ -38,9 +48,29 @@ function toResponse(exception: unknown): {status: number; body: ApiErrorBody} {
     return {status, body: {code, message}};
   }
 
-  logger.error('처리하지 못한 예외', exception instanceof Error ? exception.stack : String(exception));
+  logger.error('처리하지 못한 예외', describeException(exception));
   return {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     body: {code: API_ERROR_CODES.INTERNAL_ERROR, message: INTERNAL_ERROR_MESSAGE},
   };
+}
+
+/* DrizzleQueryError의 message와 Postgres 에러 message(형 변환 실패 등)에는 쿼리 값(사용자 정보)이 들어 있어 SQL 문장과 값 없는 원인 필드만 남긴다 */
+function describeException(exception: unknown): string {
+  if (exception instanceof DrizzleQueryError) {
+    const stack = (exception.stack ?? exception.message).replace(
+      exception.message,
+      () => `Failed query: ${exception.query}`,
+    );
+    return [stack, `Caused by: ${describeQueryCause(exception.cause)}`].join('\n');
+  }
+  return exception instanceof Error ? (exception.stack ?? exception.message) : String(exception);
+}
+
+function describeQueryCause(cause: Error | undefined): string {
+  if (cause === undefined) {
+    return '알 수 없음';
+  }
+  const {code, constraint, table, column} = cause as PostgresErrorFields;
+  return code === undefined ? `${cause.name}: ${cause.message}` : JSON.stringify({code, constraint, table, column});
 }

@@ -1,4 +1,4 @@
-import type {INestApplication} from '@nestjs/common';
+import type {INestApplication, Type} from '@nestjs/common';
 import {Test} from '@nestjs/testing';
 import type {App} from 'supertest/types';
 import {AppModule} from '../app.module';
@@ -6,12 +6,16 @@ import {createDatabaseConnection, type DatabaseConnection} from '../db/database'
 import {DATABASE_CONNECTION} from '../db/database.module';
 import {setupOpenApi} from '../openapi/setup';
 
+interface StartAppOptions {
+  controllers?: Type[];
+}
+
 export function createInMemoryConnection() {
   return createDatabaseConnection({});
 }
 
-export async function startApp(connection?: DatabaseConnection) {
-  const moduleRef = await Test.createTestingModule({imports: [AppModule]})
+export async function startApp(connection?: DatabaseConnection, {controllers = []}: StartAppOptions = {}) {
+  const moduleRef = await Test.createTestingModule({imports: [AppModule], controllers})
     .overrideProvider(DATABASE_CONNECTION)
     .useValue(connection ?? (await createInMemoryConnection()))
     .compile();

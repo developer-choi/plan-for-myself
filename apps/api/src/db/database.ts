@@ -1,8 +1,11 @@
+import {fileURLToPath} from 'node:url';
 import {PGlite} from '@electric-sql/pglite';
 import {Logger} from '@nestjs/common';
+import type {Logger as DrizzleLogger} from 'drizzle-orm';
 import {drizzle as drizzlePg} from 'drizzle-orm/node-postgres';
 import type {PgDatabase, PgQueryResultHKT} from 'drizzle-orm/pg-core';
 import {drizzle as drizzlePglite} from 'drizzle-orm/pglite';
+import {migrate} from 'drizzle-orm/pglite/migrator';
 import {Pool} from 'pg';
 import {InvalidEnvError} from '../error/invalid-env.error';
 
@@ -45,15 +48,32 @@ export async function createDatabaseConnection({
   logQueries,
 }: DatabaseOptions): Promise<DatabaseConnection> {
   if (connectionString) {
-    const pool = new Pool({connectionString, connectionTimeoutMillis: CONNECTION_TIMEOUT_MS});
+    const pool = new Pool({
+      connectionString,
+      connectionTimeoutMillis: CONNECTION_TIMEOUT_MS,
+      // eslint-disable-next-line @typescript-eslint/naming-convention -- pg가 정한 옵션 이름이다
+      query_timeout: QUERY_TIMEOUT_MS,
+    });
     pool.on('error', (error) => logger.error('DB 연결 풀 에러', error));
-    return {db: drizzlePg({client: pool, logger: logQueries}), close: () => pool.end()};
+    return {db: drizzlePg({client: pool, logger: toQueryLogger(logQueries)}), close: () => pool.end()};
   }
 
+  /* 운영 Postgres의 테이블은 아직 웹 마이그레이션이 만들어서 PGlite에만 적용한다 */
   const client = await PGlite.create(dataDir);
-  return {db: drizzlePglite({client, logger: logQueries}), close: () => client.close()};
+  const db = drizzlePglite({client, logger: toQueryLogger(logQueries)});
+  await migrate(db, {migrationsFolder: MIGRATIONS_DIR});
+  return {db, close: () => client.close()};
 }
 
 const LOCAL_DATA_DIR = '.local-db';
+/* 번들에서는 이 파일이 dist 바로 아래라 tsdown.config.ts의 copy가 dist/migrations에 둔다 */
+const MIGRATIONS_DIR = fileURLToPath(new URL('./migrations', import.meta.url));
 const CONNECTION_TIMEOUT_MS = 5000;
+const QUERY_TIMEOUT_MS = 10_000;
 const logger = new Logger('Database');
+const queryLogger = new Logger('Query');
+
+/* 쿼리 값에는 사용자 정보가 들어가서 SQL 문장만 남긴다 */
+function toQueryLogger(logQueries: boolean | undefined): DrizzleLogger | false {
+  return logQueries ? {logQuery: (query) => queryLogger.log(query)} : false;
+}
