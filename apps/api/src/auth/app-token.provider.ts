@@ -2,13 +2,13 @@ import {AuthenticationRegistry, JwtBearerProvider, type JwtClaims} from '@nestjs
 import {Injectable} from '@nestjs/common';
 import {ConfigService} from '@nestjs/config';
 import {APP_TOKEN_AUDIENCE} from '@plan-for-myself/shared/auth';
-import {InvalidEnvError} from '../error/invalid-env.error';
+import {ImpossibleStateError} from '@plan-for-myself/shared/error';
 import {UserRepository, type UserRow} from '../user/user.repository';
 
 @Injectable()
 export class AppTokenProvider extends JwtBearerProvider<UserRow> {
   /**
-   * @throws InvalidEnvError AUTH_SECRET이 없거나 32바이트보다 짧을 때
+   * @throws ImpossibleStateError AUTH_SECRET이 없거나 32바이트보다 짧을 때
    */
   constructor(
     config: ConfigService,
@@ -31,7 +31,7 @@ const HS256_MIN_KEY_BYTES = 32;
 function readAuthSecret(config: ConfigService): string {
   const secret = config.get<string>('AUTH_SECRET') ?? '';
   if (new TextEncoder().encode(secret).byteLength < HS256_MIN_KEY_BYTES) {
-    throw new InvalidEnvError('AUTH_SECRET은 32바이트 이상이어야 한다');
+    throw new ImpossibleStateError('AUTH_SECRET은 32바이트 이상이어야 한다');
   }
   return secret;
 }

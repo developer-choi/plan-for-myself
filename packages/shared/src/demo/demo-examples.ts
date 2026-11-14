@@ -1,5 +1,6 @@
 /* eslint-disable no-magic-numbers -- 예시 달력·통계에만 쓰는 고정 예시 데이터라 숫자를 그대로 적는다 */
 import {type CalendarMonth, isHolidayDate, shiftMonth, toMonthParam} from '@plan-for-myself/shared/date';
+import {ImpossibleStateError} from '@plan-for-myself/shared/error';
 import type {StudyRecord, StudyRecordMonthly} from '@plan-for-myself/shared/study-record';
 import {calculateMonthly, calculateOverview} from '@plan-for-myself/shared/study-record-stats';
 import {getDemoMonth, getDemoToday, getLastDayOfMonth, toDateString} from './demo-today';
@@ -89,7 +90,7 @@ export function getDemoOverview(now = new Date()): DemoOverview {
   const overview = calculateOverview(getDemoRecords(now), getDemoToday(now));
 
   if (overview.firstRecordDate === null) {
-    throw new Error('예시 기록이 비어 있다');
+    throw new ImpossibleStateError('예시 기록이 비어 있다');
   }
 
   return {...overview, firstRecordDate: overview.firstRecordDate};

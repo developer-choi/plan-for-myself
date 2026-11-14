@@ -13,6 +13,7 @@
     "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
+    "@developer-choi/utils": "^0.1.0",
     "@electric-sql/pglite": "^0.5.8",
     "@nestjs/authentication": "^0.1.5",
     "@nestjs/common": "^12.3.3",

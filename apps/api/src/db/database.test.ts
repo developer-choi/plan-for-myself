@@ -1,3 +1,4 @@
+import {ImpossibleStateError} from '@plan-for-myself/shared/error';
 import {describe, expect, it} from 'vitest';
 import {resolveDatabaseOptions} from './database';
 
@@ -42,13 +43,16 @@ describe('resolveDatabaseOptions()', () => {
         {name: '없으면', postgresUrl: undefined},
         {name: '빈 문자열이면', postgresUrl: ''},
       ].forEach(({name, postgresUrl}) => {
-        it(`postgresUrl이 ${name} InvalidEnvError를 던져야 한다`, () => {
-          expect(() => resolveDatabaseOptions({postgresUrl, nodeEnv: 'production'})).toThrow(
-            expect.objectContaining({
-              name: 'InvalidEnvError',
-              message: '운영(NODE_ENV=production)에서는 POSTGRES_URL이 있어야 한다',
-            }),
-          );
+        describe(`postgresUrl이 ${name}`, () => {
+          it('ImpossibleStateError를 던져야 한다', () => {
+            expect(() => resolveDatabaseOptions({postgresUrl, nodeEnv: 'production'})).toThrow(ImpossibleStateError);
+          });
+
+          it('POSTGRES_URL이 있어야 한다는 문구로 멈춰야 한다', () => {
+            expect(() => resolveDatabaseOptions({postgresUrl, nodeEnv: 'production'})).toThrow(
+              expect.objectContaining({message: '운영(NODE_ENV=production)에서는 POSTGRES_URL이 있어야 한다'}),
+            );
+          });
         });
       });
     });

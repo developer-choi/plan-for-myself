@@ -1,6 +1,7 @@
 import {AuthenticationRegistry, CurrentUser} from '@nestjs/authentication';
 import {Controller, Get, HttpStatus, type INestApplication} from '@nestjs/common';
 import {ConfigService} from '@nestjs/config';
+import {ImpossibleStateError} from '@plan-for-myself/shared/error';
 import {eq, sql} from 'drizzle-orm';
 import request from 'supertest';
 import type {App} from 'supertest/types';
@@ -73,10 +74,8 @@ describe('앱 토큰 인증', () => {
       expect(response.body).toMatchObject({code: 'UNAUTHORIZED'});
     });
 
-    it('AUTH_SECRET이 31바이트면 토큰 검증기를 만들 때 InvalidEnvError를 던져야 한다', () => {
-      expect(() => createProvider('thirty-one-bytes-test-secret-x!')).toThrow(
-        expect.objectContaining({name: 'InvalidEnvError'}),
-      );
+    it('AUTH_SECRET이 31바이트면 토큰 검증기를 만들 때 ImpossibleStateError를 던져야 한다', () => {
+      expect(() => createProvider('thirty-one-bytes-test-secret-x!')).toThrow(ImpossibleStateError);
     });
 
     it('AUTH_SECRET이 한글로 채운 32바이트면 토큰 검증기를 만들어야 한다', () => {
@@ -177,8 +176,8 @@ describe('앱 토큰 인증', () => {
       }
     });
 
-    it('AUTH_SECRET이 비어 있으면 토큰 검증기를 만들 때 InvalidEnvError를 던져야 한다', () => {
-      expect(() => createProvider('')).toThrow(expect.objectContaining({name: 'InvalidEnvError'}));
+    it('AUTH_SECRET이 비어 있으면 토큰 검증기를 만들 때 ImpossibleStateError를 던져야 한다', () => {
+      expect(() => createProvider('')).toThrow(ImpossibleStateError);
     });
   });
 });
