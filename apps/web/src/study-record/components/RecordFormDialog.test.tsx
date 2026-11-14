@@ -24,6 +24,35 @@ describe('RecordFormDialog', () => {
       });
     });
 
+    describe('공부시간 아침 칸에만 소수를 넣고 [저장]을 누르면', () => {
+      it('아침 칸이 틀린 칸으로 표시되어야 한다', async () => {
+        renderDialog();
+
+        await typeMinutes([DECIMAL_MINUTES, '', '']);
+        await userEvent.click(getSaveButton());
+
+        expect(getMinuteField('아침')).toBeInvalid();
+      });
+
+      it('아침 칸의 설명으로 공부시간 안내가 읽혀야 한다', async () => {
+        renderDialog();
+
+        await typeMinutes([DECIMAL_MINUTES, '', '']);
+        await userEvent.click(getSaveButton());
+
+        expect(getMinuteField('아침')).toHaveAccessibleDescription(STUDY_RECORD_FIELD_MESSAGES.studiedMinutes);
+      });
+
+      it('점심 칸은 틀린 칸으로 표시되지 않아야 한다', async () => {
+        renderDialog();
+
+        await typeMinutes([DECIMAL_MINUTES, '', '']);
+        await userEvent.click(getSaveButton());
+
+        expect(getMinuteField('점심')).toBeValid();
+      });
+    });
+
     describe('빈 기록 문구가 뜬 뒤', () => {
       it('실패 태그를 입력하고 Enter를 누르면 문구가 사라진다', async () => {
         renderDialog();
@@ -47,6 +76,7 @@ describe('RecordFormDialog', () => {
 });
 
 const FAIL_TAG = '늦잠';
+const DECIMAL_MINUTES = '1.5';
 const MINUTE_LABELS = ['아침', '점심', '저녁'];
 
 /* 화면에서는 두 문장을 줄바꿈으로 나눠 보인다 */

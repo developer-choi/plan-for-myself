@@ -20,6 +20,7 @@ import styles from './RecordForm.module.scss';
 interface MinuteFieldProps {
   slot: MinuteSlot;
   label: string;
+  errorId: string;
 }
 
 export default function RecordFormFields() {
@@ -28,6 +29,7 @@ export default function RecordFormFields() {
     formState: {errors},
   } = useFormContext<RecordFormValues>();
   const minutesError = getMinutesError(errors);
+  const minutesErrorId = useId();
 
   return (
     <div className={styles.fields}>
@@ -56,11 +58,11 @@ export default function RecordFormFields() {
         <legend className={classNames(typography.body2, styles.sectionLabel)}>{RECORD_FORM_LABELS.minutes}</legend>
         <div className={styles.minutes}>
           {MINUTE_SLOTS.map(({slot, label}) => (
-            <MinuteField key={slot} label={label} slot={slot} />
+            <MinuteField key={slot} errorId={minutesErrorId} label={label} slot={slot} />
           ))}
         </div>
         {minutesError && (
-          <Caption isInvalid className={styles.minutesError}>
+          <Caption isInvalid className={styles.minutesError} id={minutesErrorId}>
             {minutesError}
           </Caption>
         )}
@@ -125,17 +127,21 @@ function FailTagInput() {
   );
 }
 
-function MinuteField({slot, label}: MinuteFieldProps) {
+function MinuteField({slot, label, errorId}: MinuteFieldProps) {
   const id = useId();
-  const {register} = useFormContext<RecordFormValues>();
+  const {register, getFieldState, formState} = useFormContext<RecordFormValues>();
+  const {invalid, error} = getFieldState(`minutes.${slot}`, formState);
 
   return (
-    <div>
+    <div className={styles.minuteField}>
       <label className={classNames(typography.body3, styles.fieldLabel)} htmlFor={id}>
         {label}
       </label>
       <TextField
         {...register(`minutes.${slot}`, {validate: validateMinuteInput})}
+        aria-describedby={invalid ? errorId : undefined}
+        aria-invalid={invalid}
+        error={error?.message}
         id={id}
         inputMode="numeric"
         placeholder={RECORD_FORM_LABELS.minutePlaceholder}
