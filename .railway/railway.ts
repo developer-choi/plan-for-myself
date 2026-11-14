@@ -8,6 +8,7 @@ export default defineRailway((context) => {
     ...(isProduction && {source: github('developer-choi/plan-for-myself', {branch: 'master'})}),
     build: {builder: 'DOCKERFILE', dockerfilePath: '/apps/api/Dockerfile'},
     deploy: {drainingSeconds: 10},
+    preDeploy: 'node --enable-source-maps apps/api/dist/migrate.mjs',
     healthcheck: '/health',
     replicas: {'asia-southeast1-eqsg3a': 1},
     env: {
