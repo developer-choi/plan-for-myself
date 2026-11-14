@@ -10,7 +10,7 @@ export {
   type PostAppTokenRefreshApiResponse,
   postAppTokenRefreshApiResponseSchema,
 } from './app-token-exchange';
-export {type AccountDeleteText, GOOGLE_DELETE_TEXT, GUEST_DELETE_TEXT} from './delete-text';
+export {type AccountDeleteText, DELETION_GRACE_DAYS, GOOGLE_DELETE_TEXT, GUEST_DELETE_TEXT} from './delete-text';
 export {GUEST_LIMIT_CODE, hasGuestLimitCode, type LoginFailure} from './guest-limit';
 export {
   CONNECT_KEEPS_RECORDS_HINT,

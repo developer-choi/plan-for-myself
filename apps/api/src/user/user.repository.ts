@@ -1,6 +1,6 @@
 import {Inject, Injectable} from '@nestjs/common';
 import {ImpossibleStateError} from '@plan-for-myself/shared/error';
-import {and, eq, exists, inArray, notExists, sql} from 'drizzle-orm';
+import {and, eq, exists, inArray, isNull, lt, notExists, sql} from 'drizzle-orm';
 import {alias} from 'drizzle-orm/pg-core';
 import type {Database} from '../db/database';
 import {DATABASE} from '../db/database.module';
@@ -25,10 +25,13 @@ export class UserRepository {
   constructor(@Inject(DATABASE) private readonly db: Database) {}
 
   /**
-   * null: 그 번호의 사용자 행이 없다
+   * null: 그 번호의 사용자 행이 없거나 탈퇴 표시가 됐다
    */
   async findById(id: number): Promise<UserRow | null> {
-    const [row] = await this.db.select({id: users.id, isGuest: users.isGuest}).from(users).where(eq(users.id, id));
+    const [row] = await this.db
+      .select({id: users.id, isGuest: users.isGuest})
+      .from(users)
+      .where(and(eq(users.id, id), isNull(users.deletedAt)));
     return row ?? null;
   }
 
@@ -60,12 +63,21 @@ export class UserRepository {
     const [row] = await this.db
       .insert(users)
       .values({googleSub})
-      .onConflictDoUpdate({target: users.googleSub, set: {googleSub: sql`excluded.google_sub`}})
+      .onConflictDoUpdate({target: users.googleSub, set: {deletedAt: null}})
       .returning({id: users.id});
     if (!row) {
       throw new ImpossibleStateError('ON CONFLICT DO UPDATE ... RETURNING이 행을 돌려주지 않았다');
     }
     return row.id;
+  }
+
+  async restore(id: number): Promise<boolean> {
+    const restored = await this.db
+      .update(users)
+      .set({deletedAt: null})
+      .where(eq(users.id, id))
+      .returning({id: users.id});
+    return restored.length > 0;
   }
 
   linkGuestToGoogle(guestUserId: number, googleSub: string): Promise<boolean> {
@@ -100,12 +112,29 @@ export class UserRepository {
     );
   }
 
-  async delete(id: number): Promise<void> {
+  async markDeleted(id: number): Promise<void> {
+    await this.db
+      .update(users)
+      .set({deletedAt: new Date()})
+      .where(and(eq(users.id, id), isNull(users.deletedAt)));
+  }
+
+  async purgeDeletedUsers(before: Date): Promise<number> {
+    /* 잠그지 않으면 같은 순간 Google 재로그인이 탈퇴 표시를 지운 사용자 행과 기록을 지운다 */
+    const target = this.db
+      .$with('target')
+      .as(this.db.select({id: users.id}).from(users).where(lt(users.deletedAt, before)).for('update'));
+    const targetIds = this.db.select({id: target.id}).from(target);
     /* study_records.user_id FK에 ON DELETE CASCADE가 없어 기록을 함께 지워야 사용자 행을 지울 수 있다 */
     const deletedRecords = this.db
       .$with('deleted_records')
-      .as(this.db.delete(studyRecords).where(eq(studyRecords.userId, id)));
-    await this.db.with(deletedRecords).delete(users).where(eq(users.id, id));
+      .as(this.db.delete(studyRecords).where(inArray(studyRecords.userId, targetIds)));
+    const deleted = await this.db
+      .with(target, deletedRecords)
+      .delete(users)
+      .where(inArray(users.id, targetIds))
+      .returning({id: users.id});
+    return deleted.length;
   }
 
   private async writeUnlessRaced(write: Promise<unknown[]>): Promise<boolean> {

@@ -60,7 +60,8 @@ export class AppTokenController {
     schema: apiErrorSchema([API_ERROR_CODES.UNAUTHORIZED]),
   })
   @ApiConflictResponse({
-    description: '판정 뒤 다른 요청이 그 게스트나 그 Google 계정을 바꿨다. 다시 보내면 바뀐 상태로 다시 판정한다',
+    description:
+      '판정 뒤 다른 요청이 그 게스트나 그 Google 계정을 바꿨다. 다시 보내면 바뀐 상태로 다시 판정한다. 게스트를 지운 뒤 가입 계정이 파기돼 실패했으면 그 게스트 토큰은 401이 되므로 다시 로그인해야 한다',
     schema: apiErrorSchema([API_ERROR_CODES.LOGIN_CONFLICT]),
   })
   async exchange(
