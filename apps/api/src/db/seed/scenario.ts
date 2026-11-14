@@ -1,7 +1,8 @@
 import {isHolidayDate, type SimpleDate} from '@plan-for-myself/shared/date';
 import type {DateType} from '@plan-for-myself/shared/date-type';
+import {ImpossibleStateError} from '@plan-for-myself/shared/error';
 import type {StudyRecord} from '@plan-for-myself/shared/study-record';
-import {addDays, getMonthDay, listDays} from './date.mjs';
+import {addDays, getMonthDay, listDays} from './date';
 
 export type SeedRecord = Omit<StudyRecord, 'pk' | 'date'> & {day: SimpleDate};
 
@@ -104,7 +105,11 @@ const TAG_DETAIL_THIS_MONTH = [
 ];
 
 function createRecord(day: SimpleDate, failTags: string[] = [], dateType?: DateType): SeedRecord {
-  const {morning, afternoon, evening} = STUDIED_MINUTES[day.date % STUDIED_MINUTES.length];
+  const minutes = STUDIED_MINUTES[day.date % STUDIED_MINUTES.length];
+  if (!minutes) {
+    throw new ImpossibleStateError('배열 길이로 나눈 나머지는 항상 배열 안의 위치다');
+  }
+  const {morning, afternoon, evening} = minutes;
   return {
     day,
     dateType: dateType ?? (isHolidayDate(day) ? 'holiday' : 'weekday'),

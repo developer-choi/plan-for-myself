@@ -66,3 +66,14 @@ INSERT INTO drizzle.__drizzle_migrations (hash, created_at) VALUES
   ('d2659302ffaec1353d94cc2a3d34039b31a5183d3f39dcb89a608fe9a6e8130f', 1794198826102),
   ('6dd3cf1e5ec1a1b804851e715ddc92fa962504156e649f923471ce5d1fdddeac', 1794287306566);
 ```
+
+## dev 시드
+
+Neon `dev` branch에 화면 확인용 공부 기록을 넣는다. 한 사용자(google_sub)의 기록을 전부 지우고 시나리오 기록으로 바꾼다. 사용자가 없으면 만든다.
+
+```bash
+yarn workspace api db:seed <시나리오> <google_sub>
+```
+
+- `POSTGRES_URL_NON_POOLING`(`.env.local`)에 연결하고, 접속한 DB가 Neon `dev` branch가 아니면 쓰기 전에 멈춘다. 로컬 PGlite에는 넣지 못한다
+- 시나리오(`streak`·`large`·`fail-compare` 등)는 `src/db/seed/scenario.ts`에 있다. 인자 없이 돌리면 사용법 오류에 시나리오 목록이 나온다

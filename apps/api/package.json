@@ -11,7 +11,8 @@
     "check-types": "tsc --noEmit",
     "test": "vitest run",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate --config drizzle.migrate.config.ts"
+    "db:migrate": "drizzle-kit migrate --config drizzle.migrate.config.ts",
+    "db:seed": "tsx --env-file-if-exists=.env.local src/db/seed/index.ts"
   },
   "dependencies": {
     "@developer-choi/utils": "^0.1.0",
@@ -47,6 +48,7 @@
     "jose": "^6.2.13",
     "supertest": "^7.3.1",
     "tsdown": "^0.23.7",
+    "tsx": "^4.23.15",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.57.2",
     "vitest": "^4.0.17"
