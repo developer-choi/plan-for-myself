@@ -47,9 +47,11 @@ export class GoogleLoginService {
         return this.session(decision.guestUserId);
       case 'switch-delete-empty-guest':
         throwIfRaced(await this.userRepository.deleteGuestWithoutRecords(decision.guestUserId));
+        throwIfRaced(await this.userRepository.restore(decision.registeredUserId));
         return this.session(decision.registeredUserId);
       case 'switch-discard-guest':
         throwIfRaced(await this.userRepository.deleteGuestWithRecords(decision.guestUserId));
+        throwIfRaced(await this.userRepository.restore(decision.registeredUserId));
         return this.session(decision.registeredUserId);
     }
   }

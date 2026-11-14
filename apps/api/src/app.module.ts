@@ -2,6 +2,7 @@ import {AuthenticationModule} from '@nestjs/authentication';
 import {BadRequestException, Module, StandardSchemaValidationPipe} from '@nestjs/common';
 import {ConfigModule, ConfigService} from '@nestjs/config';
 import {APP_FILTER, APP_PIPE} from '@nestjs/core';
+import {ScheduleModule} from '@nestjs/schedule';
 import {APP_TOKEN_AUDIENCE} from '@plan-for-myself/shared/auth';
 import {toRejection} from '@plan-for-myself/shared/study-record';
 import {AccountModule} from './account/account.module';
@@ -19,6 +20,7 @@ import {StudyRecordStatsModule} from './study-record-stats/study-record-stats.mo
 @Module({
   imports: [
     ConfigModule.forRoot({isGlobal: true, envFilePath: '.env.local', validationSchema: envSchema}),
+    ScheduleModule.forRoot(),
     DatabaseModule,
     SentryShutdownModule,
     AuthenticationModule.forRootAsync({

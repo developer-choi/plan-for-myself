@@ -1,4 +1,4 @@
-import {eq} from 'drizzle-orm';
+import {eq, sql} from 'drizzle-orm';
 import {assert} from 'vitest';
 import type {Database} from '../db/database';
 import {studyRecords, users} from '../db/schema';
@@ -35,6 +35,30 @@ export async function findUser(db: Database, id: number) {
     .from(users)
     .where(eq(users.id, id));
   return row ?? null;
+}
+
+/**
+ * null: 탈퇴 표시가 없다
+ * undefined: 그 번호의 사용자 행이 없다
+ */
+export async function findDeletedAt(db: Database, id: number) {
+  const [row] = await db.select({deletedAt: users.deletedAt}).from(users).where(eq(users.id, id));
+  return row?.deletedAt;
+}
+
+export async function insertRecordOnUserDelete(db: Database) {
+  await db.execute(sql`
+    CREATE FUNCTION insert_record_before_user_delete() RETURNS trigger AS $$
+    BEGIN
+      INSERT INTO study_records (user_id, record_date, timestamp, date_type, studied_minutes, fail_tags)
+      VALUES (OLD.id, '2026-09-02', 0, 'weekday', '{1,0,0}', '{}');
+      RETURN OLD;
+    END $$ LANGUAGE plpgsql
+  `);
+  await db.execute(sql`
+    CREATE TRIGGER insert_record_before_user_delete BEFORE DELETE ON users
+    FOR EACH ROW EXECUTE FUNCTION insert_record_before_user_delete()
+  `);
 }
 
 export function findRecordOwners(db: Database, userId: number) {

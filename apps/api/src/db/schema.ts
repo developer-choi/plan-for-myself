@@ -11,6 +11,7 @@ import {
   pgTable,
   serial,
   text,
+  timestamp,
   unique,
   varchar,
 } from 'drizzle-orm/pg-core';
@@ -22,6 +23,8 @@ export const users = pgTable(
     /* 게스트면 null */
     googleSub: varchar('google_sub').unique('users_google_sub_key'),
     isGuest: boolean('is_guest').notNull().default(false),
+    /* 탈퇴 표시. null이면 살아 있는 계정 */
+    deletedAt: timestamp('deleted_at', {withTimezone: true, mode: 'date'}),
   },
   (table) => [check('users_is_guest_matches_google_sub', sql`${table.isGuest} = (${table.googleSub} IS NULL)`)],
 );

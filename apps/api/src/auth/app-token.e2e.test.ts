@@ -205,6 +205,90 @@ describe('Google idToken 교환 API', () => {
       });
     });
 
+    describe('탈퇴한 Google 계정으로 다시 오면', () => {
+      it('그 사용자 번호의 토큰을 반환해야 한다', async () => {
+        const googleSub = 'withdrawn-sub';
+        const userId = await insertWithdrawnGoogleUser(googleSub);
+
+        const response = await exchange(app, {googleSub});
+
+        expect(await readSessionClaims(response.body)).toMatchObject({sub: String(userId)});
+      });
+
+      it('받은 토큰으로 탈퇴 전 기록을 조회할 수 있어야 한다', async () => {
+        const googleSub = 'withdrawn-records-sub';
+        const userId = await insertGoogleUser(connection.db, googleSub);
+        await insertRecord(connection.db, userId);
+        await withdraw(userId);
+
+        const response = await exchange(app, {googleSub});
+
+        const records = await request(app.getHttpServer())
+          .get('/api/study-records?month=2026-09')
+          .set('Authorization', bearer(readSessionToken(response.body)));
+        expect(records.body).toMatchObject([{date: '2026-09-01', studiedMinutes: [1, 0, 0]}]);
+      });
+    });
+
+    describe('게스트가 탈퇴한 가입 계정으로 넘어가면', () => {
+      it('기록이 없을 때 받은 토큰으로 인증이 필요한 API를 부를 수 있어야 한다', async () => {
+        const googleSub = 'withdrawn-switch-sub';
+        await insertWithdrawnGoogleUser(googleSub);
+        const guestId = await insertGuest(connection.db);
+
+        const response = await exchange(app, {googleSub, authorization: await guestAuth(guestId)});
+
+        await expectUsableToken(response.body);
+      });
+
+      it('기록을 버리고 넘어갈 때 받은 토큰으로 인증이 필요한 API를 부를 수 있어야 한다', async () => {
+        const googleSub = 'withdrawn-discard-sub';
+        await insertWithdrawnGoogleUser(googleSub);
+        const guestId = await insertGuestWithRecord();
+
+        const response = await discardAndConnect(googleSub, guestId);
+
+        await expectUsableToken(response.body);
+      });
+
+      [
+        {name: '기록이 없을 때', hasRecord: false},
+        {name: '기록을 버리고 넘어갈 때', hasRecord: true},
+      ].forEach(({name, hasRecord}) => {
+        describe(name, () => {
+          it('판정 뒤 다른 요청이 그 가입 계정을 지우면 409 LOGIN_CONFLICT를 반환해야 한다', async () => {
+            const raceConnection = await createInMemoryConnection();
+            const raceApp = await startExchangeApp(raceConnection);
+            try {
+              const googleSub = 'withdrawn-purged-sub';
+              const registeredId = await insertGoogleUser(raceConnection.db, googleSub);
+              await raceConnection.db.execute(sql`UPDATE users SET deleted_at = now() WHERE id = ${registeredId}`);
+              const guestId = await insertGuest(raceConnection.db);
+              if (hasRecord) {
+                await insertRecord(raceConnection.db, guestId);
+              }
+              const authorization = await guestAuth(guestId);
+              const rejected = hasRecord ? await exchange(raceApp, {googleSub, authorization}) : null;
+              await purgeRegisteredUserOnGuestDelete(raceConnection, registeredId);
+
+              const response = await exchange(raceApp, {
+                googleSub,
+                authorization,
+                discardIntent: rejected ? readRejection(rejected.body) : null,
+              });
+
+              expect({status: response.status, code: (response.body as {code: string}).code}).toEqual({
+                status: HttpStatus.CONFLICT,
+                code: 'LOGIN_CONFLICT',
+              });
+            } finally {
+              await raceApp.close();
+            }
+          });
+        });
+      });
+    });
+
     it('Google 사용자의 토큰과 함께 다른 Google 계정으로 오면 그 토큰의 사용자 행을 바꾸지 않아야 한다', async () => {
       const holderSub = 'holder-sub';
       const holderId = await insertGoogleUser(connection.db, holderSub);
@@ -306,6 +390,26 @@ async function discardAndConnect(googleSub: string, guestId: number) {
   return exchange(app, {googleSub, authorization, discardIntent: readRejection(rejected.body)});
 }
 
+async function withdraw(userId: number) {
+  await request(app.getHttpServer())
+    .delete('/api/account')
+    .set('Authorization', bearer(await signTestToken(String(userId))))
+    .expect(HttpStatus.NO_CONTENT);
+}
+
+async function insertWithdrawnGoogleUser(googleSub: string) {
+  const userId = await insertGoogleUser(connection.db, googleSub);
+  await withdraw(userId);
+  return userId;
+}
+
+async function expectUsableToken(body: unknown) {
+  await request(app.getHttpServer())
+    .get('/api/study-records?month=2026-10')
+    .set('Authorization', bearer(readSessionToken(body)))
+    .expect(HttpStatus.OK);
+}
+
 async function guestAuth(guestId: number) {
   return bearer(await signTestToken(String(guestId)));
 }
@@ -330,6 +434,20 @@ async function insertGuestWithRecord() {
   const guestId = await insertGuest(connection.db);
   await insertRecord(connection.db, guestId);
   return guestId;
+}
+
+async function purgeRegisteredUserOnGuestDelete(target: DatabaseConnection, registeredId: number) {
+  await target.db.execute(sql`
+    CREATE FUNCTION purge_registered_on_guest_delete() RETURNS trigger AS $$
+    BEGIN
+      DELETE FROM users WHERE id = ${sql.raw(String(registeredId))};
+      RETURN OLD;
+    END $$ LANGUAGE plpgsql
+  `);
+  await target.db.execute(sql`
+    CREATE TRIGGER purge_registered_on_guest_delete BEFORE DELETE ON users
+    FOR EACH ROW WHEN (OLD.is_guest) EXECUTE FUNCTION purge_registered_on_guest_delete()
+  `);
 }
 
 async function registerSameGoogleAccountBeforeLink(target: DatabaseConnection) {

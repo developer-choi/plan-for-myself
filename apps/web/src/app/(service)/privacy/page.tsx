@@ -2,6 +2,7 @@ import type {ReactNode} from 'react';
 import type {Metadata} from 'next';
 import classNames from 'classnames';
 import typography from '@developer-choi/design-system/styles/typography';
+import {DELETION_GRACE_DAYS} from '@plan-for-myself/shared/auth';
 import {PRIVACY_POLICY_LABEL} from '@plan-for-myself/shared/label';
 import {HomeIcon} from '@radix-ui/react-icons';
 import {ENTRY_URL} from '@/auth/redirect';
@@ -78,13 +79,11 @@ const POLICY_ITEMS: PolicyItem[] = [
   },
   {
     title: '보관 기간',
-    content:
-      '회원 탈퇴나 게스트 계정 삭제를 할 때까지 보관해요. 접속 IP는 우리 DB에는 남기지 않아요. 웹 서버(Vercel)와 API 서버(Railway)의 접속 기록에 남는 IP는 각 회사 개인정보 처리방침의 보관 기준을 따라요. 오류 정보는 Sentry 요금제의 보관 기간(현재 30일)이 지나면 자동으로 지워져요',
+    content: `회원 탈퇴한 뒤 ${DELETION_GRACE_DAYS}일이 지나고 그다음 파기 작업(매일 새벽 4시)이 돌 때까지, 게스트 계정은 삭제할 때까지 보관해요(아래 「삭제하는 방법」). 접속 IP는 우리 DB에는 남기지 않아요. 웹 서버(Vercel)와 API 서버(Railway)의 접속 기록에 남는 IP는 각 회사 개인정보 처리방침의 보관 기준을 따라요. 오류 정보는 Sentry 요금제의 보관 기간(현재 30일)이 지나면 자동으로 지워져요`,
   },
   {
     title: '삭제하는 방법',
-    content:
-      '회원 탈퇴나 게스트 계정 삭제를 누르면 계정과 기록을 DB에서 바로 모두 삭제해요. 오류 정보는 계정과 이어 두지 않아 탈퇴할 때 함께 삭제하지 못하고, 보관 기간이 지나면 지워져요. 법령에 따라 따로 보존하는 정보는 없어요',
+    content: `게스트 계정 삭제를 누르면 계정과 기록을 DB에서 바로 모두 삭제해요. 회원 탈퇴를 누르면 그 즉시 모든 기기에서 로그인이 풀려요. 실수로 누른 경우를 되돌릴 수 있게 계정과 기록을 탈퇴 표시 상태로 두고, ${DELETION_GRACE_DAYS}일이 지난 뒤 매일 새벽 4시에 도는 파기 작업에서 DB에서 모두 삭제해요. 그 ${DELETION_GRACE_DAYS}일 안에 같은 Google 계정으로 다시 로그인하면 계정과 기록이 되돌아와요. 오류 정보는 계정과 이어 두지 않아 탈퇴할 때 함께 삭제하지 못하고, 보관 기간이 지나면 지워져요. 법령에 따라 따로 보존하는 정보는 없어요`,
   },
   {title: '남에게 주는 정보', content: '없어요'},
   {
