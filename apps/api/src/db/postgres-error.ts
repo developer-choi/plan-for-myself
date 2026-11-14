@@ -18,3 +18,11 @@ export const POSTGRES_ERROR_CODES = {
 export function readPostgresError(error: unknown): PostgresErrorFields | null {
   return error instanceof DrizzleQueryError && error.cause ? (error.cause as PostgresErrorFields) : null;
 }
+
+export function describeQueryCause(cause: unknown): string {
+  const {code, constraint, table, column} = (cause ?? {}) as PostgresErrorFields;
+  if (code !== undefined) {
+    return JSON.stringify({code, constraint, table, column});
+  }
+  return cause instanceof Error ? `${cause.name}: ${cause.message}` : '알 수 없음';
+}
