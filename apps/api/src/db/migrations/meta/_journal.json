@@ -15,6 +15,13 @@
       "when": 1794287306566,
       "tag": "0001_create-study-records",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794435936569,
+      "tag": "0002_set-study-records-arrays-not-null",
+      "breakpoints": true
     }
   ]
 }

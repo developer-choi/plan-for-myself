@@ -45,3 +45,21 @@ railway up --environment staging --service api
 yarn workspace api build
 SENTRY_ENABLED=true SENTRY_DSN=<DSN> SENTRY_ENVIRONMENT=api-local yarn workspace api start
 ```
+
+## DB 마이그레이션
+
+테이블 구조는 `src/db/schema.ts`가 원본이고, `yarn workspace api db:generate`가 `src/db/migrations/`에 SQL을 만든다. 테스트·로컬 PGlite에는 서버가 뜰 때 적용되고, Neon(dev·운영)에는 서버 배포가 적용하지 않아 손으로 적용한다.
+
+- 적용 명령은 `yarn workspace api db:migrate`이고, `POSTGRES_URL_NON_POOLING`(pooled 아닌 직접 연결 주소)에 적용한다
+- 운영에는 운영 주소를 그 명령에만 셸 변수로 넘긴다. 셸 값이 `.env.local`보다 앞선다: `POSTGRES_URL_NON_POOLING=<운영 직접 연결 주소> yarn workspace api db:migrate`
+- 새 칸·제약을 쓰는 서버 코드는 staging에 올리기 전에 dev에, 머지하기 전에 운영에 먼저 적용한다
+- 이미 테이블이 있던 Neon DB는 처음 한 번, 그 테이블을 만든 `0000`·`0001`을 적용된 것으로 기록(베이스라인)한 뒤 돌린다. 기록 없이 돌리면 에러 문구 없이 exit 1로 멈춘다
+- 베이스라인은 아래 SQL로 넣는다. drizzle은 가장 늦은 `created_at` 하나로 적용 여부를 정하므로(hash는 보지 않는다) `0001`의 값은 `meta/_journal.json`의 `when`과 같아야 한다. `0002`부터는 기록하지 않는다. hash는 drizzle이 직접 적용할 때 남기는 값과 같은 SQL 파일의 sha256이다
+
+```sql
+CREATE SCHEMA IF NOT EXISTS drizzle;
+CREATE TABLE IF NOT EXISTS drizzle.__drizzle_migrations (id SERIAL PRIMARY KEY, hash text NOT NULL, created_at bigint);
+INSERT INTO drizzle.__drizzle_migrations (hash, created_at) VALUES
+  ('d2659302ffaec1353d94cc2a3d34039b31a5183d3f39dcb89a608fe9a6e8130f', 1794198826102),
+  ('6dd3cf1e5ec1a1b804851e715ddc92fa962504156e649f923471ce5d1fdddeac', 1794287306566);
+```
