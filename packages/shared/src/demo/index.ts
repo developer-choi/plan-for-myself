@@ -5,7 +5,10 @@ export {
   LOGGED_IN_DEMO_CHOICE_TITLES,
   LOGGED_OUT_DEMO_CHOICE_MESSAGES,
 } from './demo-choice';
+export {getDemoMonthly, getDemoOverview, getDemoRecords} from './demo-examples';
 export {DEMO_HOME_URL, demoCalendarPath, demoStatsPath} from './demo-path';
+export {getDemoResponse, isDemoStatsMonth} from './demo-response';
+export {getDemoMonth, getDemoToday} from './demo-today';
 export {
   DEMO_CALENDAR_TOUR_STEPS,
   DEMO_STATS_TOUR_FIRST_NUMBER,

@@ -17,14 +17,13 @@ describe('isUnauthorizedError()', () => {
   });
 
   describe('Boundary cases', () => {
-    it.for([HTTP_STATUS.FORBIDDEN, HTTP_STATUS.SERVER_ERROR])(
-      'API가 401이 아닌 오류 상태 %d를 주면 false를 반환해야 한다',
-      (status) => {
+    [HTTP_STATUS.FORBIDDEN, HTTP_STATUS.SERVER_ERROR].forEach((status) => {
+      it(`API가 401이 아닌 오류 상태(${status})를 주면 false를 반환해야 한다`, () => {
         const error = new ApiResponseError({method: 'GET', status, url: STUDY_RECORDS_URL, errorData: null});
 
         expect(isUnauthorizedError(error)).toBe(false);
-      },
-    );
+      });
+    });
   });
 
   describe('Edge cases', () => {

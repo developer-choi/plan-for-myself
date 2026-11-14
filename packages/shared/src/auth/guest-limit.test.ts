@@ -9,8 +9,16 @@ describe('hasGuestLimitCode()', () => {
   });
 
   describe('Boundary cases', () => {
-    it.for([{code: 'other'}, {}, null, undefined, 'guest_limit'])('%j이면 false를 반환해야 한다', (errorData) => {
-      expect(hasGuestLimitCode(errorData)).toBe(false);
+    [
+      {errorData: {code: 'other'}, reason: 'code가 다른 값'},
+      {errorData: {}, reason: 'code가 없는 객체'},
+      {errorData: null, reason: 'null'},
+      {errorData: undefined, reason: 'undefined'},
+      {errorData: 'guest_limit', reason: '객체가 아닌 문자열'},
+    ].forEach(({errorData, reason}) => {
+      it(`${reason}이면 false를 반환해야 한다`, () => {
+        expect(hasGuestLimitCode(errorData)).toBe(false);
+      });
     });
   });
 });

@@ -1,6 +1,7 @@
 import {ApiResponseError} from '@developer-choi/utils/api';
 import type {FieldErrors} from 'react-hook-form';
 import {z} from 'zod';
+import {API_ERROR_CODES} from '@plan-for-myself/shared/error';
 import {isHolidayDate} from '../date/holiday';
 import {parseDateParam} from '../date/month-param';
 import {STUDY_RECORD_FIELD_LIMITS, STUDY_RECORD_FIELD_MESSAGES} from './limits';
@@ -107,7 +108,7 @@ export function parseRecordRejection(error: unknown): RecordRejection | null {
     return null;
   }
 
-  return {message: body.data.message, isStale: STALE_REJECTION_STATUSES.includes(error.status)};
+  return {message: body.data.message, isStale: STALE_REJECTION_CODES.includes(body.data.code)};
 }
 
 export const UNEXPECTED_FAILURE_MESSAGE = '저장하지 못했어요. 잠시 후 다시 시도해 주세요';
@@ -127,6 +128,4 @@ const rejectionBodySchema = z.object({
   message: z.string({error: '거절 문구가 없어요'}),
 });
 
-const DUPLICATE_DATE_STATUS = 409;
-const NOT_FOUND_STATUS = 404;
-const STALE_REJECTION_STATUSES = [DUPLICATE_DATE_STATUS, NOT_FOUND_STATUS];
+const STALE_REJECTION_CODES: readonly string[] = [API_ERROR_CODES.DUPLICATE_DATE, API_ERROR_CODES.NOT_FOUND];

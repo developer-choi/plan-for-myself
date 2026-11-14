@@ -1,8 +1,9 @@
 import type {CalendarMonth} from '@plan-for-myself/shared/date';
-import type {GetDemoApiResponse} from '@plan-for-myself/shared/demo';
-import {isBeforeFirstRecord} from '@plan-for-myself/shared/study-record-stats';
 import {isFutureMonth} from '@plan-for-myself/shared/study-record';
-import {getDemoMonth, getDemoMonthly, getDemoOverview, getDemoRecords, getDemoToday} from '@/demo/demo-examples';
+import {isBeforeFirstRecord} from '@plan-for-myself/shared/study-record-stats';
+import {getDemoMonthly, getDemoOverview, getDemoRecords} from './demo-examples';
+import {getDemoMonth, getDemoToday} from './demo-today';
+import type {GetDemoApiResponse} from './type';
 
 export function isDemoStatsMonth(month: CalendarMonth, today: string, firstRecordDate: string | null): boolean {
   return !isFutureMonth(today, month) && !isBeforeFirstRecord(month, firstRecordDate);

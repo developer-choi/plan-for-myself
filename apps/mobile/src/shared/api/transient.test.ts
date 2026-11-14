@@ -16,23 +16,21 @@ describe('isTransientApiError()', () => {
   });
 
   describe('Boundary cases', () => {
-    it.each([HTTP_STATUS.SERVER_ERROR, BAD_GATEWAY_STATUS])(
-      'API가 서버 오류 상태 %d를 주면 true를 반환해야 한다',
-      (status) => {
+    [HTTP_STATUS.SERVER_ERROR, BAD_GATEWAY_STATUS].forEach((status) => {
+      it(`API가 서버 오류 상태(${status})를 주면 true를 반환해야 한다`, () => {
         const error = new ApiResponseError({method: 'POST', status, url: APP_TOKEN_REFRESH_URL, errorData: null});
 
         expect(isTransientApiError(error)).toBe(true);
-      },
-    );
+      });
+    });
 
-    it.each([UNAUTHORIZED_STATUS, HTTP_STATUS.UNPROCESSABLE, JUST_BELOW_SERVER_ERROR_STATUS])(
-      'API가 서버 오류가 아닌 상태 %d를 주면 false를 반환해야 한다',
-      (status) => {
+    [UNAUTHORIZED_STATUS, HTTP_STATUS.UNPROCESSABLE, JUST_BELOW_SERVER_ERROR_STATUS].forEach((status) => {
+      it(`API가 서버 오류가 아닌 상태(${status})를 주면 false를 반환해야 한다`, () => {
         const error = new ApiResponseError({method: 'POST', status, url: APP_TOKEN_REFRESH_URL, errorData: null});
 
         expect(isTransientApiError(error)).toBe(false);
-      },
-    );
+      });
+    });
   });
 
   describe('Edge cases', () => {
@@ -46,8 +44,14 @@ describe('isTransientApiError()', () => {
       });
     });
 
-    it.each([null, undefined, '요청 실패'])('에러가 아닌 값 %p이면 false를 반환해야 한다', (value) => {
-      expect(isTransientApiError(value)).toBe(false);
+    [
+      {value: null, reason: 'null'},
+      {value: undefined, reason: 'undefined'},
+      {value: '요청 실패', reason: '문자열'},
+    ].forEach(({value, reason}) => {
+      it(`에러가 아닌 값(${reason})이면 false를 반환해야 한다`, () => {
+        expect(isTransientApiError(value)).toBe(false);
+      });
     });
   });
 });

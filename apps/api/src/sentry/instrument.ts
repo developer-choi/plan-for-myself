@@ -1,6 +1,6 @@
+import {ImpossibleStateError} from '@plan-for-myself/shared/error';
 import * as Sentry from '@sentry/nestjs';
 import {DrizzleQueryError} from 'drizzle-orm';
-import {InvalidEnvError} from '../error/invalid-env.error';
 
 interface PostgresErrorFields {
   code?: string;
@@ -12,7 +12,7 @@ interface PostgresErrorFields {
 const enabled = process.env.SENTRY_ENABLED === 'true';
 
 if (enabled && (!process.env.SENTRY_DSN || !process.env.SENTRY_ENVIRONMENT)) {
-  throw new InvalidEnvError('SENTRY_ENABLED=true면 SENTRY_DSN과 SENTRY_ENVIRONMENT가 있어야 한다');
+  throw new ImpossibleStateError('SENTRY_ENABLED=true면 SENTRY_DSN과 SENTRY_ENVIRONMENT가 있어야 한다');
 }
 
 Sentry.init({

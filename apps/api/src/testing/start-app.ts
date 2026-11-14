@@ -4,7 +4,7 @@ import type {App} from 'supertest/types';
 import {AppModule} from '../app.module';
 import {createDatabaseConnection, type DatabaseConnection} from '../db/database';
 import {DATABASE_CONNECTION} from '../db/database.module';
-import {setupOpenApi} from '../openapi/setup';
+import {setupApp} from '../app.setup';
 
 interface StartAppOptions {
   controllers?: Type[];
@@ -20,7 +20,7 @@ export async function startApp(connection?: DatabaseConnection, {controllers = [
     .useValue(connection ?? (await createInMemoryConnection()))
     .compile();
   const app = moduleRef.createNestApplication<INestApplication<App>>({logger: false});
-  setupOpenApi(app);
+  setupApp(app);
   await app.init();
   return app;
 }

@@ -244,7 +244,7 @@ describe('parseRecordRejection()', () => {
       {status: 409, errorData: {code: 'DUPLICATE_DATE', message: '이 날짜엔 이미 기록이 있어요'}},
       {status: 404, errorData: {code: 'NOT_FOUND', message: '기록을 찾을 수 없어요'}},
     ].forEach(({status, errorData}) => {
-      describe(`${status} 거절이면`, () => {
+      describe(`${errorData.code} 거절이면`, () => {
         it('서버가 보낸 거절 문구를 반환해야 한다', () => {
           expect(parseRecordRejection(createResponseError(status, errorData))?.message).toBe(errorData.message);
         });
@@ -273,6 +273,24 @@ describe('parseRecordRejection()', () => {
   describe('Edge cases', () => {
     it('서버 응답이 아닌 오류면 null을 반환해야 한다', () => {
       expect(parseRecordRejection(new Error('network'))).toBeNull();
+    });
+
+    describe('상태 코드가 409여도', () => {
+      it('code가 DUPLICATE_DATE가 아니면 그 달 기록 목록을 다시 받지 않아도 된다고 반환해야 한다', () => {
+        const conflictStatus = 409;
+        const error = createResponseError(conflictStatus, {code: 'EMPTY_RECORD', message: '빈 기록'});
+
+        expect(parseRecordRejection(error)?.isStale).toBe(false);
+      });
+    });
+
+    describe('상태 코드가 409·404가 아니어도', () => {
+      it('code가 NOT_FOUND면 그 달 기록 목록을 다시 받아야 한다고 반환해야 한다', () => {
+        const badRequestStatus = 400;
+        const error = createResponseError(badRequestStatus, {code: 'NOT_FOUND', message: '기록을 찾을 수 없어요'});
+
+        expect(parseRecordRejection(error)?.isStale).toBe(true);
+      });
     });
 
     it('JSON이 아닌 응답이면 null을 반환해야 한다', () => {

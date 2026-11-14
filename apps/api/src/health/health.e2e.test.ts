@@ -14,6 +14,15 @@ describe('GET /health', () => {
         await app.close();
       }
     });
+
+    it('헬스 체크는 /api 접두사 밖에 있어야 한다', async () => {
+      const app = await startApp();
+      try {
+        await request(app.getHttpServer()).get('/api/health').expect(HttpStatus.NOT_FOUND);
+      } finally {
+        await app.close();
+      }
+    });
   });
 
   describe('Edge cases', () => {

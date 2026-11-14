@@ -1,8 +1,8 @@
 import {parseDateParam} from '@plan-for-myself/shared/date';
+import {getDemoResponse} from '@plan-for-myself/shared/demo';
+import {validateMonth} from '@plan-for-myself/shared/study-record';
 import {NextRequest, NextResponse} from 'next/server';
-import {getDemoResponse} from '@/demo/demo-response';
 import {badRequestResponse} from '@/server/study-record/response';
-import {validateMonth} from '@/server/study-record/validate';
 
 export function GET(request: NextRequest) {
   const monthParam = request.nextUrl.searchParams.get('month');

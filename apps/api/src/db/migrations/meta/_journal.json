@@ -8,6 +8,13 @@
       "when": 1794198826102,
       "tag": "0000_create-users",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794287306566,
+      "tag": "0001_create-study-records",
+      "breakpoints": true
     }
   ]
 }

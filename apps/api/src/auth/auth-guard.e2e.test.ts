@@ -1,6 +1,7 @@
 import {AuthenticationRegistry, CurrentUser} from '@nestjs/authentication';
 import {Controller, Get, HttpStatus, type INestApplication} from '@nestjs/common';
 import {ConfigService} from '@nestjs/config';
+import {ImpossibleStateError} from '@plan-for-myself/shared/error';
 import {eq, sql} from 'drizzle-orm';
 import request from 'supertest';
 import type {App} from 'supertest/types';
@@ -9,6 +10,7 @@ import type {DatabaseConnection} from '../db/database';
 import {users} from '../db/schema';
 import {bearer, signTestToken} from '../testing/app-token';
 import {createInMemoryConnection, startApp} from '../testing/start-app';
+import {insertGuest as insertGuestRow} from '../testing/users';
 import {UserRepository, type UserRow} from '../user/user.repository';
 import {AppTokenProvider} from './app-token.provider';
 
@@ -73,10 +75,8 @@ describe('앱 토큰 인증', () => {
       expect(response.body).toMatchObject({code: 'UNAUTHORIZED'});
     });
 
-    it('AUTH_SECRET이 31바이트면 토큰 검증기를 만들 때 InvalidEnvError를 던져야 한다', () => {
-      expect(() => createProvider('thirty-one-bytes-test-secret-x!')).toThrow(
-        expect.objectContaining({name: 'InvalidEnvError'}),
-      );
+    it('AUTH_SECRET이 31바이트면 토큰 검증기를 만들 때 ImpossibleStateError를 던져야 한다', () => {
+      expect(() => createProvider('thirty-one-bytes-test-secret-x!')).toThrow(ImpossibleStateError);
     });
 
     it('AUTH_SECRET이 한글로 채운 32바이트면 토큰 검증기를 만들어야 한다', () => {
@@ -177,17 +177,18 @@ describe('앱 토큰 인증', () => {
       }
     });
 
-    it('AUTH_SECRET이 비어 있으면 토큰 검증기를 만들 때 InvalidEnvError를 던져야 한다', () => {
-      expect(() => createProvider('')).toThrow(expect.objectContaining({name: 'InvalidEnvError'}));
+    it('AUTH_SECRET이 비어 있으면 토큰 검증기를 만들 때 ImpossibleStateError를 던져야 한다', () => {
+      expect(() => createProvider('')).toThrow(ImpossibleStateError);
     });
   });
 });
 
-const PROBE_PATH = '/auth-probe';
+const PROBE_ROUTE = 'auth-probe';
+const PROBE_PATH = `/api/${PROBE_ROUTE}`;
 
 let connection: DatabaseConnection;
 
-@Controller(PROBE_PATH)
+@Controller(PROBE_ROUTE)
 class AuthProbeController {
   @Get()
   read(@CurrentUser() user: UserRow) {
@@ -209,10 +210,6 @@ function createProvider(secret: string) {
   );
 }
 
-async function insertGuest() {
-  const [row] = await connection.db.insert(users).values({isGuest: true}).returning({id: users.id});
-  if (!row) {
-    throw new Error('게스트 행을 만들지 못했다');
-  }
-  return row.id;
+function insertGuest() {
+  return insertGuestRow(connection.db);
 }

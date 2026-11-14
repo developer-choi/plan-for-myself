@@ -1,3 +1,7 @@
+export {toMonth} from './calculate/date';
+export {calculateMonthly} from './calculate/monthly';
+export {calculateOverview} from './calculate/overview';
+export {isReduced} from './calculate/tag-count';
 export {
   filterByStatus,
   formatAppearedNotePrefix,

@@ -34,7 +34,7 @@ export interface StudyRecordMonthly {
   failureTags: FailureTag[];
 }
 
-export type FailureTagStatus = 'repeated' | 'appeared' | 'reduced';
+export type FailureTagStatus = (typeof FAILURE_TAG_STATUSES)[number];
 
 export interface FailureTag {
   tag: string;
@@ -48,7 +48,7 @@ export interface FailureTagTrend {
   month: string;
   count: number;
   previousCount: number;
-  status: Extract<FailureTagStatus, 'repeated' | 'reduced'>;
+  status: (typeof FAILURE_TAG_TREND_STATUSES)[number];
 }
 
 export interface RecordedDays {
@@ -76,3 +76,7 @@ export type PostStudyRecordApiRequest = Omit<StudyRecord, 'pk'>;
 export type PatchStudyRecordApiRequest = Omit<StudyRecord, 'date'>;
 
 export type DeleteStudyRecordApiRequest = Pick<StudyRecord, 'pk'>;
+
+export const FAILURE_TAG_STATUSES = ['repeated', 'appeared', 'reduced'] as const;
+
+export const FAILURE_TAG_TREND_STATUSES = ['repeated', 'reduced'] as const satisfies readonly FailureTagStatus[];

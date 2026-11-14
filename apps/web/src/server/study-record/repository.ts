@@ -1,6 +1,5 @@
-import type {StudyRecord} from '@plan-for-myself/shared/study-record';
+import type {NewStudyRecord, StudyRecord, StudyRecordFields} from '@plan-for-myself/shared/study-record';
 import {pool} from '@/server/db/pool';
-import type {NewStudyRecord, StudyRecordFields} from './validate';
 
 interface Queryable {
   query(text: string, values: unknown[]): Promise<{rows: StudyRecord[]}>;

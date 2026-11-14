@@ -9519,6 +9519,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "api@workspace:apps/api"
   dependencies:
+    "@developer-choi/utils": "npm:^0.1.0"
     "@electric-sql/pglite": "npm:^0.5.8"
     "@nestjs/authentication": "npm:^0.1.5"
     "@nestjs/common": "npm:^12.3.3"
@@ -9547,6 +9548,7 @@ __metadata:
     typescript: "npm:~6.0.3"
     typescript-eslint: "npm:^8.57.2"
     vitest: "npm:^4.0.17"
+    zod: "npm:^4.3.5"
   languageName: unknown
   linkType: soft
 

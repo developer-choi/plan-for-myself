@@ -1,13 +1,13 @@
 import {fileURLToPath} from 'node:url';
 import {PGlite} from '@electric-sql/pglite';
 import {Logger} from '@nestjs/common';
+import {ImpossibleStateError} from '@plan-for-myself/shared/error';
 import type {Logger as DrizzleLogger} from 'drizzle-orm';
 import {drizzle as drizzlePg} from 'drizzle-orm/node-postgres';
 import type {PgDatabase, PgQueryResultHKT} from 'drizzle-orm/pg-core';
 import {drizzle as drizzlePglite} from 'drizzle-orm/pglite';
 import {migrate} from 'drizzle-orm/pglite/migrator';
 import {Pool} from 'pg';
-import {InvalidEnvError} from '../error/invalid-env.error';
 
 export type Database = PgDatabase<PgQueryResultHKT>;
 
@@ -37,7 +37,7 @@ export function resolveDatabaseOptions({postgresUrl, nodeEnv, queryLog}: Databas
     return {connectionString: postgresUrl, logQueries};
   }
   if (nodeEnv === 'production') {
-    throw new InvalidEnvError('운영(NODE_ENV=production)에서는 POSTGRES_URL이 있어야 한다');
+    throw new ImpossibleStateError('운영(NODE_ENV=production)에서는 POSTGRES_URL이 있어야 한다');
   }
   return {dataDir: LOCAL_DATA_DIR, logQueries};
 }

@@ -284,11 +284,12 @@ function MinuteField({slot, label}: MinuteFieldProps) {
     <Controller
       control={control}
       name={`minutes.${slot}`}
-      render={({field}) => (
+      render={({field, fieldState}) => (
         <View style={styles.minuteField}>
           <Text style={styles.fieldLabel}>{label}</Text>
           <FormTextInput
             ref={field.ref}
+            isInvalid={fieldState.invalid}
             keyboardType="number-pad"
             placeholder={RECORD_FORM_LABELS.minutePlaceholder}
             suffix={RECORD_FORM_LABELS.minuteSuffix}

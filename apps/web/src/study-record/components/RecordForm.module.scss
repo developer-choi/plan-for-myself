@@ -46,6 +46,10 @@
   color: var(--color-fg-secondary);
 }
 
+.minuteField p {
+  display: none;
+}
+
 .minutesError {
   margin-top: var(--spacing-xs);
 }

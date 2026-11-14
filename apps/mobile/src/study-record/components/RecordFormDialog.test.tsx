@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import {colors} from '@plan-for-myself/shared/color';
 import {STUDY_RECORD_FIELD_MESSAGES, type StudyRecord} from '@plan-for-myself/shared/study-record';
 import Text from '@/shared/components/Text';
 import {describe, expect, it} from '@jest/globals';
@@ -80,6 +81,26 @@ describe('RecordFormDialog', () => {
       expect(screen.getByText(STUDY_RECORD_FIELD_MESSAGES.studiedMinutes)).toBeOnTheScreen();
     });
 
+    it('공부시간에 숫자가 아닌 글자를 넣고 [저장]을 누르면 그 칸 테두리가 실패 색이어야 한다', async () => {
+      const user = userEvent.setup();
+      await render(<DialogWithResult />);
+
+      await user.type(screen.getByTestId(MORNING_TEST_ID), NOT_A_NUMBER);
+      await user.press(screen.getByText(SAVE_LABEL));
+
+      expect(screen.getByTestId(MORNING_TEST_ID).parent).toHaveStyle({borderColor: colors.fail});
+    });
+
+    it('공부시간 아침 칸에만 숫자가 아닌 글자를 넣고 [저장]을 누르면 점심 칸 테두리는 실패 색이 아니어야 한다', async () => {
+      const user = userEvent.setup();
+      await render(<DialogWithResult />);
+
+      await user.type(screen.getByTestId(MORNING_TEST_ID), NOT_A_NUMBER);
+      await user.press(screen.getByText(SAVE_LABEL));
+
+      expect(screen.getByTestId(AFTERNOON_TEST_ID).parent).not.toHaveStyle({borderColor: colors.fail});
+    });
+
     it('태그 칸에 공백이 든 글자를 남긴 채 [저장]을 누르면 공백 금지 안내가 보여야 한다', async () => {
       const user = userEvent.setup();
       await render(<DialogWithResult />);
@@ -108,6 +129,8 @@ const CLOSED_RESULT = '닫힘';
 const FAIL_TAG_PLACEHOLDER = '단어 하나 입력 후 Enter';
 
 const MORNING_TEST_ID = '아침 분';
+
+const AFTERNOON_TEST_ID = '점심 분';
 
 const MINUTES = '30';
 
