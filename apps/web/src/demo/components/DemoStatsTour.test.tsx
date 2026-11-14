@@ -1,12 +1,7 @@
-import {type CalendarMonth, shiftMonth} from '@plan-for-myself/shared/date';
-import {
-  type DemoOverview,
-  getDemoMonth,
-  getDemoMonthly,
-  getDemoOverview,
-  getDemoRecords,
-} from '@plan-for-myself/shared/demo';
+import {type CalendarMonth, shiftMonth, toMonthParam} from '@plan-for-myself/shared/date';
+import {type DemoOverview, getDemoMonth, getDemoResponse} from '@plan-for-myself/shared/demo';
 import {FAILURE_TAG_TREND_MONTH_LIMIT} from '@plan-for-myself/shared/study-record';
+import {calculateMonthly} from '@plan-for-myself/shared/study-record-stats';
 import {MY_CALENDAR_LABEL} from '@plan-for-myself/shared/label';
 import {act, render, screen, waitFor} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -218,7 +213,8 @@ interface StatsCase {
 }
 
 const NOW = new Date('2026-10-12T12:00:00+09:00');
-const THIS_MONTH: StatsCase = {month: getDemoMonth(NOW), overview: getDemoOverview(NOW)};
+const DEMO = getDemoResponse(null, NOW);
+const THIS_MONTH: StatsCase = {month: getDemoMonth(NOW), overview: DEMO.overview};
 const MONTH_WITHOUT_RECORDS: StatsCase = {
   month: shiftMonth(getDemoMonth(NOW), -FAILURE_TAG_TREND_MONTH_LIMIT),
   overview: null,
@@ -237,9 +233,9 @@ function renderStatsWithTour({month, overview}: StatsCase, session: Session | nu
       <OverlayProvider>
         <DemoStatsSection
           month={month}
-          monthly={getDemoMonthly(month, NOW)}
+          monthly={calculateMonthly(DEMO.records, toMonthParam(month), DEMO.today)}
           overview={overview}
-          records={getDemoRecords(NOW)}
+          records={DEMO.records}
         />
         <DemoStatsTour />
       </OverlayProvider>

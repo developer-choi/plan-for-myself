@@ -54,22 +54,16 @@ describe('앱 토큰 인증', () => {
 
     [
       {name: '토큰의 발급 시각이 서버 시계보다 5초 앞서면', options: {issuedAt: '5s from now'}},
-      {name: '토큰이 만료된 지 10초면', options: {expirationTime: '10s ago'}},
+      {name: '토큰이 만료된 지 1초면', options: {expirationTime: '1s ago'}},
     ].forEach(({name, options}) => {
-      it(`${name} 200을 반환해야 한다`, async () => {
+      it(`${name} 401 UNAUTHORIZED를 반환해야 한다`, async () => {
         const token = await signTestToken(String(await insertGuest()), options);
 
-        await request(app.getHttpServer()).get(PROBE_PATH).set('Authorization', bearer(token)).expect(HttpStatus.OK);
+        const response = await request(app.getHttpServer()).get(PROBE_PATH).set('Authorization', bearer(token));
+
+        expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
+        expect(response.body).toMatchObject({code: 'UNAUTHORIZED'});
       });
-    });
-
-    it('토큰이 만료된 지 31초면 401 UNAUTHORIZED를 반환해야 한다', async () => {
-      const token = await signTestToken(String(await insertGuest()), {expirationTime: '31s ago'});
-
-      const response = await request(app.getHttpServer()).get(PROBE_PATH).set('Authorization', bearer(token));
-
-      expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
-      expect(response.body).toMatchObject({code: 'UNAUTHORIZED'});
     });
   });
 

@@ -1,13 +1,8 @@
-import {createHmac} from 'node:crypto';
 import {type RegisteredAccountRejection, REGISTERED_REJECTION_TTL_SECONDS} from '@plan-for-myself/shared/auth';
 import {cookies} from 'next/headers';
 
-export function createRegisteredRejection(guestUserId: string, googleSub: string): RegisteredAccountRejection {
-  return {guestUserId, googleSubHash: hashGoogleSub(googleSub)};
-}
-
-export async function setRegisteredRejection(guestUserId: string, googleSub: string): Promise<void> {
-  (await cookies()).set(REJECTION_COOKIE, serialize(createRegisteredRejection(guestUserId, googleSub)), {
+export async function setRegisteredRejection(rejection: RegisteredAccountRejection): Promise<void> {
+  (await cookies()).set(REJECTION_COOKIE, serialize(rejection), {
     ...COOKIE_OPTIONS,
     maxAge: REGISTERED_REJECTION_TTL_SECONDS,
   });
@@ -38,21 +33,9 @@ export async function clearLoginCookies(): Promise<void> {
   cookieStore.delete({name: DISCARD_INTENT_COOKIE, ...COOKIE_OPTIONS});
 }
 
-export function isDiscardIntentValid(
-  intent: RegisteredAccountRejection | null,
-  current: {guestUserId: string; googleSub: string},
-): boolean {
-  if (!intent) {
-    return false;
-  }
-
-  return intent.guestUserId === current.guestUserId && intent.googleSubHash === hashGoogleSub(current.googleSub);
-}
-
 const REJECTION_COOKIE = 'registered-account-rejection';
 const DISCARD_INTENT_COOKIE = 'discard-guest-intent';
 const DISCARD_INTENT_MAX_AGE_SECONDS = 300;
-const GOOGLE_SUB_HASH_PREFIX = 'google-sub:';
 const COOKIE_VALUE_PATTERN = /^(\d+)\.([0-9a-f]{64})$/;
 const COOKIE_OPTIONS = {
   httpOnly: true,
@@ -60,12 +43,6 @@ const COOKIE_OPTIONS = {
   secure: process.env.NODE_ENV === 'production',
   path: '/',
 } as const;
-
-function hashGoogleSub(googleSub: string): string {
-  return createHmac('sha256', process.env.AUTH_SECRET ?? '')
-    .update(GOOGLE_SUB_HASH_PREFIX + googleSub)
-    .digest('hex');
-}
 
 function serialize({guestUserId, googleSubHash}: RegisteredAccountRejection): string {
   return `${guestUserId}.${googleSubHash}`;

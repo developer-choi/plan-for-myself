@@ -1,21 +1,25 @@
-import NextAuth from 'next-auth';
+import {ApiResponseError} from '@developer-choi/utils/api';
+import {GUEST_LIMIT_CODE, hasGuestLimitCode} from '@plan-for-myself/shared/auth';
+import {ImpossibleStateError, isUnauthorizedError} from '@plan-for-myself/shared/error';
+import {captureException} from '@sentry/nextjs';
+import NextAuth, {CredentialsSignin, type User} from 'next-auth';
 import {NextResponse} from 'next/server';
-import {decideGoogleLogin, findGoogleLoginFacts, type GoogleLoginParams, resolveGoogleLogin} from '@/auth/google-login';
-import {authorizeGuest} from '@/auth/guest-login';
+import {postAppTokenApi, postAppTokenGuestApi, postAppTokenRefreshApi} from '@/auth/app-token-api';
 import {
-  clearDiscardIntent,
-  clearLoginCookies,
-  isDiscardIntentValid,
-  readDiscardIntent,
-  setRegisteredRejection,
-} from '@/auth/login-cookies';
+  getRefreshRetryAt,
+  isRefreshRetryWaiting,
+  readAppTokenClaims,
+  shouldRefreshAppToken,
+} from '@/auth/app-token-session';
+import {clearDiscardIntent, clearLoginCookies, readDiscardIntent, setRegisteredRejection} from '@/auth/login-cookies';
 import {getLoginState, getNextNavigating} from '@/auth/path';
-import {SESSION_MAX_AGE_SECONDS} from '@/auth/session-max-age';
 import Credentials from 'next-auth/providers/credentials';
 import Google, {type GoogleProfile} from 'next-auth/providers/google';
-import {pool} from '@/server/db/pool';
 
 const GUEST_PROVIDER_ID = 'guest';
+const SECONDS_PER_DAY = 86_400;
+const SESSION_MAX_AGE_DAYS = 30;
+const SESSION_MAX_AGE_SECONDS = SESSION_MAX_AGE_DAYS * SECONDS_PER_DAY;
 
 export const {handlers, signIn, signOut, auth} = NextAuth({
   secret: process.env.AUTH_SECRET,
@@ -34,47 +38,78 @@ export const {handlers, signIn, signOut, auth} = NextAuth({
     Credentials({
       id: GUEST_PROVIDER_ID,
       credentials: {},
-      authorize: (_credentials, request) => authorizeGuest(request),
+      authorize: async () => {
+        try {
+          const {token: appToken} = await postAppTokenGuestApi();
+          return {id: readAppTokenClaims(appToken).userId, appToken};
+        } catch (error) {
+          if (error instanceof ApiResponseError && hasGuestLimitCode(error.errorData)) {
+            throw new GuestLimitSignin();
+          }
+          throw error;
+        }
+      },
     }),
   ],
   callbacks: {
-    signIn: async ({account}) => {
+    signIn: async ({user, account}) => {
       if (account?.provider === GUEST_PROVIDER_ID || !account) {
         return true;
       }
 
-      const params = await readGoogleLoginParams(account.providerAccountId);
-      const facts = await findGoogleLoginFacts(params, pool);
-
-      const isRejected = decideGoogleLogin(facts).type === 'reject';
-
-      if (!isRejected || params.guestUserId === null) {
-        return true;
+      if (typeof account.id_token !== 'string') {
+        throw new ImpossibleStateError('Google 로그인 응답에 id_token이 없다');
       }
 
-      await setRegisteredRejection(params.guestUserId, params.googleSub);
-      await clearDiscardIntent();
-      return '/login';
+      const session = await auth();
+      const guestAppToken = session?.isGuest && session.appToken ? session.appToken : null;
+      const discardIntent = guestAppToken === null ? null : await readDiscardIntent();
+
+      const exchange = await postAppTokenApi({idToken: account.id_token, discardIntent}, guestAppToken);
+
+      if (exchange.type === 'registered-account') {
+        await setRegisteredRejection(exchange.rejection);
+        await clearDiscardIntent();
+        return '/login';
+      }
+
+      user.appToken = exchange.token;
+      return true;
     },
-    jwt: async ({token, account}) => {
-      if (!account) {
+    jwt: async ({token, user, account}) => {
+      if (account) {
+        const appToken = readUserAppToken(user);
+        const claims = readAppTokenClaims(appToken);
+        token.appToken = appToken;
+        token.userId = claims.userId;
+        token.isGuest = claims.isGuest;
+        if (account.provider !== GUEST_PROVIDER_ID) {
+          await clearLoginCookies();
+        }
         return token;
       }
 
-      const isGuest = account.provider === GUEST_PROVIDER_ID;
-      token.isGuest = isGuest;
+      if (!token.appToken) {
+        return null;
+      }
 
-      if (isGuest) {
-        token.userId = account.providerAccountId;
+      if (isRefreshRetryWaiting(token.refreshRetryAt) || !shouldRefreshAppToken(token.appToken)) {
         return token;
       }
 
-      token.userId = await resolveGoogleLogin(await readGoogleLoginParams(account.providerAccountId));
-      await clearLoginCookies();
-      return token;
+      try {
+        const {token: next} = await postAppTokenRefreshApi(token.appToken);
+        return {...token, appToken: next, refreshRetryAt: undefined};
+      } catch (error) {
+        if (isUnauthorizedError(error)) {
+          return null;
+        }
+        captureException(error);
+        return {...token, refreshRetryAt: getRefreshRetryAt()};
+      }
     },
     session: ({session, token}) => {
-      return {...session, userId: token.userId, isGuest: token.isGuest};
+      return {...session, userId: token.userId, isGuest: token.isGuest, appToken: token.appToken};
     },
     authorized({auth, request: {nextUrl, url}}) {
       const nextNavigating = getNextNavigating({
@@ -94,14 +129,13 @@ export const {handlers, signIn, signOut, auth} = NextAuth({
   },
 });
 
-async function readGoogleLoginParams(googleSub: string): Promise<GoogleLoginParams> {
-  const session = await auth();
-  const guestUserId = session?.isGuest ? session.userId : null;
+class GuestLimitSignin extends CredentialsSignin {
+  code = GUEST_LIMIT_CODE;
+}
 
-  if (guestUserId === null) {
-    return {googleSub, guestUserId, discardIntentValid: false};
+function readUserAppToken(user: User | undefined): string {
+  if (!user?.appToken) {
+    throw new ImpossibleStateError('로그인 흐름에서 앱 토큰을 받지 못했다');
   }
-
-  const discardIntentValid = isDiscardIntentValid(await readDiscardIntent(), {guestUserId, googleSub});
-  return {googleSub, guestUserId, discardIntentValid};
+  return user.appToken;
 }

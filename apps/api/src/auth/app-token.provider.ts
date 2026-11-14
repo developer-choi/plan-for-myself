@@ -8,7 +8,7 @@ export class AppTokenProvider extends JwtBearerProvider<UserRow> {
     private readonly userRepository: UserRepository,
     registry: AuthenticationRegistry,
   ) {
-    super({clockTolerance: CLOCK_TOLERANCE});
+    super();
     registry.registerProvider(this);
   }
 
@@ -17,8 +17,6 @@ export class AppTokenProvider extends JwtBearerProvider<UserRow> {
     return userId === null ? null : this.userRepository.findById(userId);
   }
 }
-
-const CLOCK_TOLERANCE = '30s';
 
 /**
  * null: sub가 없거나, 이 서버가 발급하는 모양이 아니다

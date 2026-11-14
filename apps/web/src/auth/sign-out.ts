@@ -1,5 +1,6 @@
 import {signOut} from 'next-auth/react';
 
-export function signOutAndReplace(url: string) {
-  void signOut({redirect: false}).then(() => window.location.replace(url));
+export async function signOutAndReplace(url: string): Promise<void> {
+  await signOut({redirect: false});
+  window.location.replace(url);
 }

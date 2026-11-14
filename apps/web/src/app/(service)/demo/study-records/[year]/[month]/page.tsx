@@ -1,10 +1,4 @@
-import {
-  demoCalendarPath,
-  getDemoMonth,
-  getDemoOverview,
-  getDemoRecords,
-  getDemoToday,
-} from '@plan-for-myself/shared/demo';
+import {demoCalendarPath, getDemoMonth} from '@plan-for-myself/shared/demo';
 import {findFirstRecordDateOfMonth} from '@plan-for-myself/shared/study-record';
 import {formatMonthTitle, parseMonth, shiftMonth} from '@plan-for-myself/shared/date';
 import type {Metadata} from 'next';
@@ -15,6 +9,7 @@ import DemoBanner from '@/demo/components/DemoBanner';
 import DemoCalendarMenu from '@/demo/components/DemoCalendarMenu';
 import DemoCalendarSection from '@/demo/components/DemoCalendarSection';
 import DemoTourTrigger from '@/demo/components/DemoTourTrigger';
+import {serverDemoApi} from '@/demo/server-api';
 import layout from '@/shared/styles/layout.module.scss';
 import CalendarHeader from '@/study-record/components/CalendarHeader';
 import styles from './page.module.scss';
@@ -36,10 +31,9 @@ export default async function Page({params}: PageProps) {
     notFound();
   }
 
-  const isLoggedIn = getLoginState(await auth()) !== 'logged-out';
-  const now = new Date();
-  const demoMonth = getDemoMonth(now);
-  const records = getDemoRecords(now);
+  const [session, {today, records, overview}] = await Promise.all([auth(), serverDemoApi.getDemoApi({})]);
+  const isLoggedIn = getLoginState(session) !== 'logged-out';
+  const demoMonth = getDemoMonth();
   const firstRecordDateOfDemoMonth = findFirstRecordDateOfMonth(records, demoMonth);
 
   return (
@@ -52,12 +46,7 @@ export default async function Page({params}: PageProps) {
         title={formatMonthTitle(viewMonth)}
       />
       <main className={styles.body}>
-        <DemoCalendarSection
-          month={viewMonth}
-          overview={getDemoOverview(now)}
-          records={records}
-          today={getDemoToday(now)}
-        />
+        <DemoCalendarSection month={viewMonth} overview={overview} records={records} today={today} />
       </main>
       {firstRecordDateOfDemoMonth && (
         <DemoTourTrigger demoMonth={demoMonth} firstRecordDate={firstRecordDateOfDemoMonth} part="calendar" />

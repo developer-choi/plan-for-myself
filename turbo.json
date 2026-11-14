@@ -6,7 +6,7 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "env": ["AUTH_*", "POSTGRES_*"],
+      "env": ["AUTH_*"],
       "passThroughEnv": ["SENTRY_AUTH_TOKEN", "CI"],
       "outputs": [".next/**", "!.next/cache/**", "!.next/dev/**"]
     },

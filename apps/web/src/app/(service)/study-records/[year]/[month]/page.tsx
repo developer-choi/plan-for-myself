@@ -57,11 +57,12 @@ export default async function Page({params}: PageProps) {
       <main className={styles.body}>
         <HandledErrorBoundary>
           <Suspense fallback={<LoadingSpinner />}>
-            <PrefetchedCalendar month={viewMonth} today={today} />
+            <PrefetchedCalendar month={viewMonth} today={today}>
+              {isGuest && <FetchedLoginNudgeCard today={today} />}
+            </PrefetchedCalendar>
           </Suspense>
         </HandledErrorBoundary>
       </main>
-      {isGuest && <FetchedLoginNudgeCard today={today} />}
     </div>
   );
 }

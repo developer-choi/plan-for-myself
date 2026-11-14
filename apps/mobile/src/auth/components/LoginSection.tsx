@@ -13,6 +13,7 @@ import AuthScreenFrame, {authScreenStyles} from '@/auth/components/AuthScreenFra
 import GoogleIcon from '@/auth/components/GoogleIcon';
 import GuestLimitNotice from '@/auth/components/GuestLimitNotice';
 import LoginFailedNotice from '@/auth/components/LoginFailedNotice';
+import SignedOutNotice from '@/auth/components/SignedOutNotice';
 import Button from '@/shared/components/Button';
 import Logo from '@/shared/components/Logo';
 import Text from '@/shared/components/Text';
@@ -22,6 +23,7 @@ export type PendingAction = 'google' | 'guest';
 
 interface LoginSectionProps {
   failure: LoginFailure | null;
+  isSignedOutByServer: boolean;
   pendingAction: PendingAction | null;
   handlers: {
     onSignIn: () => Promise<void>;
@@ -30,7 +32,7 @@ interface LoginSectionProps {
   };
 }
 
-export default function LoginSection({failure, pendingAction, handlers}: LoginSectionProps) {
+export default function LoginSection({failure, isSignedOutByServer, pendingAction, handlers}: LoginSectionProps) {
   return (
     <AuthScreenFrame>
       <Pressable disabled={pendingAction !== null} onPress={handlers.onExit}>
@@ -43,6 +45,7 @@ export default function LoginSection({failure, pendingAction, handlers}: LoginSe
       <View style={authScreenStyles.actions}>
         {failure === 'guest-limit' && <GuestLimitNotice />}
         {failure === 'failed' && <LoginFailedNotice />}
+        {failure === null && isSignedOutByServer && <SignedOutNotice />}
         <Button
           color="secondary"
           disabled={pendingAction === 'guest'}

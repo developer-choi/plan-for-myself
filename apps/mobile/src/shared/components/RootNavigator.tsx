@@ -3,10 +3,11 @@ import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import {overlay} from 'overlay-kit';
 import {useSession} from '@/auth/session-context';
+import {resetStackTo} from '@/shared/reset-stack';
 
 export default function RootNavigator() {
   const {
-    session: {token, isLoading, isGuest},
+    session: {token, isLoading, isGuest, isSignedOutByServer},
   } = useSession();
 
   useEffect(() => {
@@ -20,6 +21,12 @@ export default function RootNavigator() {
       overlay.unmountAll();
     }
   }, [token]);
+
+  useEffect(() => {
+    if (token === null && isSignedOutByServer) {
+      resetStackTo('/sign-in');
+    }
+  }, [token, isSignedOutByServer]);
 
   if (isLoading) {
     return null;

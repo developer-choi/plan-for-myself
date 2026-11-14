@@ -9,9 +9,9 @@ import {isGuestToGoogleTransition} from '@/auth/session-transition';
 export default function QueryProvider({children}: PropsWithChildren) {
   const {
     session: {token, isGuest},
-    handlers: {signOut},
+    handlers: {signOutOnUnauthorized},
   } = useSession();
-  const [queryClient] = useState(() => createQueryClient(() => void signOut()));
+  const [queryClient] = useState(() => createQueryClient((error) => void signOutOnUnauthorized(error)));
   const previousSessionCache = useRef({token, isGuest});
 
   /* 로그아웃하면 이전 사용자의 데이터가 다음 로그인 화면 뒤에 남지 않게 지운다 */

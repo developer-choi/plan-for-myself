@@ -4,13 +4,17 @@ import {SessionContext} from '@/auth/session-context';
 
 interface TestSessionProviderProps {
   token: string | null;
+  isSignedOutByServer?: boolean;
   children: ReactNode;
 }
 
-export function TestSessionProvider({token, children}: TestSessionProviderProps) {
+export function TestSessionProvider({token, isSignedOutByServer = false, children}: TestSessionProviderProps) {
   return (
     <SessionContext.Provider
-      value={{session: {token, isLoading: false, isGuest: readIsGuest(token)}, handlers: UNUSED_HANDLERS}}
+      value={{
+        session: {token, isLoading: false, isGuest: readIsGuest(token), isSignedOutByServer},
+        handlers: UNUSED_HANDLERS,
+      }}
     >
       {children}
     </SessionContext.Provider>
@@ -27,4 +31,5 @@ const UNUSED_HANDLERS = {
   connectGoogle: failUnused,
   discardGuestAndConnect: failUnused,
   signOut: failUnused,
+  signOutOnUnauthorized: failUnused,
 };

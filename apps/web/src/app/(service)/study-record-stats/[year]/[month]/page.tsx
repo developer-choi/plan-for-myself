@@ -9,7 +9,7 @@ import {isFutureMonth} from '@plan-for-myself/shared/study-record';
 import HandledErrorBoundary from '@/shared/components/HandledErrorBoundary';
 import LoadingSpinner from '@/shared/components/LoadingSpinner';
 import layout from '@/shared/styles/layout.module.scss';
-import {studyRecordQueries, studyRecordStatsQueries} from '@/study-record/queries';
+import {serverStudyRecordQueries, serverStudyRecordStatsQueries} from '@/study-record/server-queries';
 import FetchedStatsSection from '@/study-record-stats/components/FetchedStatsSection';
 import StatsPageHeader from '@/study-record-stats/components/StatsPageHeader';
 import styles from './page.module.scss';
@@ -61,12 +61,12 @@ export default async function Page({params}: PageProps) {
 /* 머리가 첫 기록 날짜를 쓰므로 머리까지 HydrationBoundary 안에 둔다. 받기에 실패해도 던지지 않아야 오류가 나도 머리(나갈 길)가 남는다 */
 async function PrefetchedStats({month, today}: PrefetchedStatsProps) {
   const queryClient = new QueryClient();
-  const overviewOptions = studyRecordStatsQueries.overview.options(today);
+  const overviewOptions = serverStudyRecordStatsQueries.overview.options(today);
 
   await Promise.all([
-    queryClient.query(studyRecordStatsQueries.monthly.options(toMonthParam(month), today)).catch(noop),
+    queryClient.query(serverStudyRecordStatsQueries.monthly.options(toMonthParam(month), today)).catch(noop),
     queryClient.query(overviewOptions).catch(noop),
-    queryClient.query(studyRecordQueries.list.options(toMonthParam(month))).catch(noop),
+    queryClient.query(serverStudyRecordQueries.list.options(toMonthParam(month))).catch(noop),
   ]);
 
   const overview = queryClient.getQueryData(overviewOptions.queryKey);

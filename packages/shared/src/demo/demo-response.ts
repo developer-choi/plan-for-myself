@@ -5,7 +5,7 @@ import {getDemoMonthly, getDemoOverview, getDemoRecords} from './demo-examples';
 import {getDemoMonth, getDemoToday} from './demo-today';
 import type {GetDemoApiResponse} from './type';
 
-export function isDemoStatsMonth(month: CalendarMonth, today: string, firstRecordDate: string | null): boolean {
+function isDemoStatsMonth(month: CalendarMonth, today: string, firstRecordDate: string | null): boolean {
   return !isFutureMonth(today, month) && !isBeforeFirstRecord(month, firstRecordDate);
 }
 

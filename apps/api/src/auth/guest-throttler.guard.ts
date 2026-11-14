@@ -22,7 +22,7 @@ export class GuestThrottlerGuard extends ThrottlerGuard {
   }
 
   /**
-   * @throws HttpException 웹과 같은 429 {code: guest_limit, message}
+   * @throws HttpException 429 {code: guest_limit, message}
    */
   protected override throwThrottlingException(): Promise<void> {
     return Promise.reject(new HttpException(GUEST_LIMIT_ERROR, HttpStatus.TOO_MANY_REQUESTS));

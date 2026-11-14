@@ -17,6 +17,7 @@ import {
   LOGIN_DESCRIPTION,
   LOGIN_FAILED_NOTICE,
   shouldShowRegisteredNotice,
+  SIGNED_OUT_NOTICE,
 } from '@plan-for-myself/shared/auth';
 import {INTRO_URL} from '@plan-for-myself/shared/intro';
 import DiscardGuestButton from '@/auth/components/DiscardGuestButton';
@@ -29,7 +30,7 @@ import {readRegisteredRejection} from '@/auth/login-cookies';
 import {getLoginErrorKind} from '@/auth/login-error';
 import {auth} from '@/auth/next-auth';
 import {getLoginState} from '@/auth/path';
-import {DEFAULT_HOME_URL, ENTRY_URL} from '@/auth/redirect';
+import {DEFAULT_HOME_URL, ENTRY_URL, LOGIN_REASON_PARAM, readLoginReason} from '@/auth/redirect';
 import Logo from '@/shared/components/Logo';
 import type {SearchParamsPageProps} from '@/shared/types/page';
 import styles from './page.module.scss';
@@ -41,6 +42,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Page({searchParams}: SearchParamsPageProps) {
   const [session, rejection, query] = await Promise.all([auth(), readRegisteredRejection(), searchParams]);
   const errorKind = getLoginErrorKind(query);
+  const reason = readLoginReason(query[LOGIN_REASON_PARAM]);
   const redirect = Array.isArray(query.redirect) ? query.redirect[0] : query.redirect;
   const isGuest = getLoginState(session) === 'guest';
   const copy = getLoginPageCopy(isGuest);
@@ -61,6 +63,9 @@ export default async function Page({searchParams}: SearchParamsPageProps) {
           {/* 삭제 후 로그인이 실패해 돌아오면 거절 안내 대신 실패 안내 하나만 둔다 */}
           {isRejected && errorKind === null && <RegisteredAccountNotice />}
           {errorKind === 'guest-limit' && <GuestLimitNotice />}
+          {reason === 'signed-out' && errorKind === null && !isRejected && !isGuest && (
+            <LoginNotice title={SIGNED_OUT_NOTICE.title}>{SIGNED_OUT_NOTICE.content}</LoginNotice>
+          )}
           {errorKind === 'failed' && (
             <LoginNotice title={LOGIN_FAILED_NOTICE.title}>{LOGIN_FAILED_NOTICE.content}</LoginNotice>
           )}
