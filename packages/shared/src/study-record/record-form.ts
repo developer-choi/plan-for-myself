@@ -6,6 +6,7 @@ import {isHolidayDate} from '../date/holiday';
 import {parseDateParam} from '../date/month-param';
 import {STUDY_RECORD_FIELD_LIMITS, STUDY_RECORD_FIELD_MESSAGES} from './limits';
 import type {StudyRecord, StudyRecordFieldsRequest} from './type';
+import {RECORD_REJECTION_CODES} from './validate';
 
 export type MinuteSlot = 'morning' | 'afternoon' | 'evening';
 
@@ -123,9 +124,16 @@ export const MINUTE_SLOTS: {slot: MinuteSlot; label: string}[] = [
   {slot: 'evening', label: '저녁'},
 ];
 
+const RECORD_FORM_REJECTION_CODES = [
+  ...RECORD_REJECTION_CODES,
+  API_ERROR_CODES.DUPLICATE_DATE,
+  API_ERROR_CODES.NOT_FOUND,
+  API_ERROR_CODES.UNAUTHORIZED,
+] as const;
+
 const rejectionBodySchema = z.object({
-  code: z.string({error: '거절 코드가 없어요'}),
-  message: z.string({error: '거절 문구가 없어요'}),
+  code: z.enum(RECORD_FORM_REJECTION_CODES),
+  message: z.string(),
 });
 
 const STALE_REJECTION_CODES: readonly string[] = [API_ERROR_CODES.DUPLICATE_DATE, API_ERROR_CODES.NOT_FOUND];

@@ -268,6 +268,16 @@ describe('parseRecordRejection()', () => {
         expect(parseRecordRejection(error)?.isStale).toBe(false);
       });
     });
+
+    describe('401 로그인 거절이면', () => {
+      const unauthorizedStatus = 401;
+      const message = '로그인이 필요해요';
+      const error = createResponseError(unauthorizedStatus, {code: 'UNAUTHORIZED', message});
+
+      it('서버가 보낸 거절 문구를 반환해야 한다', () => {
+        expect(parseRecordRejection(error)?.message).toBe(message);
+      });
+    });
   });
 
   describe('Edge cases', () => {
@@ -297,6 +307,16 @@ describe('parseRecordRejection()', () => {
       const serverErrorStatus = 500;
 
       expect(parseRecordRejection(createResponseError(serverErrorStatus, null))).toBeNull();
+    });
+
+    [
+      {status: 404, code: 'ROUTE_NOT_FOUND'},
+      {status: 500, code: 'INTERNAL_ERROR'},
+      {status: 400, code: 'INVALID_MONTH'},
+    ].forEach(({status, code}) => {
+      it(`기록 추가·수정·삭제가 내지 않는 ${code}면 null을 반환해야 한다`, () => {
+        expect(parseRecordRejection(createResponseError(status, {code, message: '서버 문구'}))).toBeNull();
+      });
     });
   });
 });
