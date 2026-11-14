@@ -17,9 +17,9 @@ describe('에러 응답', () => {
   });
 
   describe('General cases', () => {
-    it('/api 아래 없는 경로면 404 NOT_FOUND를 반환해야 한다', async () => {
+    it('/api 아래 없는 경로면 404 ROUTE_NOT_FOUND를 반환해야 한다', async () => {
       const response = await request(app.getHttpServer()).get('/api/nothing-here').expect(HttpStatus.NOT_FOUND);
-      expect(response.body).toEqual({code: 'NOT_FOUND', message: '요청한 주소를 찾을 수 없어요'});
+      expect(response.body).toEqual({code: 'ROUTE_NOT_FOUND', message: '요청한 주소를 찾을 수 없어요'});
     });
   });
 
