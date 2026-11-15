@@ -4,7 +4,7 @@
 
 ![웹 달력 화면](docs/assets/demo-calendar.png)
 
-**Android 앱**: [APK 다운로드](https://github.com/developer-choi/plan-for-myself/releases/latest/download/plan-for-myself.apk) (Play 스토어 출시 준비 중, 2026-12-01 배포 예정)
+**Android 앱**: [APK 다운로드](https://github.com/developer-choi/plan-for-myself/releases/latest/download/plan-for-myself.apk) (Play 스토어 출시 준비 중, 2026-12-13 배포 예정)
 
 ![앱 화면: 첫 화면·통계·실패 상세](docs/assets/app-screens.png)
 
