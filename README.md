@@ -17,6 +17,8 @@
 
 이를 통해, 같은 실패를 반복하지 않도록 유도하고자 합니다.
 
+웹과 Android 앱에서 같은 기능을 사용할 수 있습니다.
+
 일정·기획, 디자인, 개발, QA, 배포를 혼자 진행했습니다. 무엇을 어떻게 만들지는 제가 정하고, 구현은 AI에 맡기고, 마지막 리뷰는 제가 했습니다.
 
 ## 프로젝트 구조
@@ -30,7 +32,7 @@ packages/shared                 : 타입 · 입력 한도와 문구 · 날짜 �
 
 웹·앱·서버가 공통 패키지(packages/shared)를 가져다 사용합니다. 같은 코드를 한 번만 작성하므로 고칠 곳이 하나이고, 서버가 입력을 거절할 때도 웹·앱 폼과 **같은 입력 규칙과 같은 문구**로 거절합니다. ([모노레포로 옮기기](https://github.com/developer-choi/plan-for-myself/pull/35) · [공통 패키지 같이 쓰기](https://github.com/developer-choi/plan-for-myself/pull/36))
 
-## 프론트
+## 프론트 (웹 & 앱)
 
 - [웹과 앱이 로직을 함께 사용하기](docs/cases/development.md#웹과-앱이-로직을-한-벌로-쓰기): 기록 폼 로직을 공통 패키지의 훅 하나로 두고, 웹과 앱은 화면만 각자 그리게 했습니다
 - [정적 분석 도입](docs/cases/development.md#정적-분석-도입): AI가 자주 내는 실수를 커밋 시점에 막는 규칙을, 예외 주석이 늘어나는 노이즈와 리뷰에서 줄어드는 지적을 비교해 규칙마다 넣고 뺐습니다
@@ -53,9 +55,10 @@ packages/shared                 : 타입 · 입력 한도와 문구 · 날짜 �
 ## 기술 스택
 
 - **코어**: Next.js (App Router), React, TypeScript, TanStack Query
+- **앱**: React Native, Expo (expo-router)
 - **서버**: NestJS, Drizzle ORM, PostgreSQL (Neon), Auth.js (next-auth), OpenAPI
 - **폼**: react-hook-form, zod
 - **UI**: [`@developer-choi/design-system`(개인 디자인 시스템)](https://github.com/developer-choi/monorepo-playground/tree/master/packages/design-system), Sass
 - **테스트·품질**: Vitest, Testing Library, ESLint, Stylelint, Prettier, Commitlint
-- **빌드·배포**: Turborepo, Yarn workspaces, Vercel (웹), Railway (API 서버)
+- **빌드·배포**: Turborepo, Yarn workspaces, Vercel (웹), Railway (API 서버), EAS Build (Android 앱)
 - **모니터링**: Sentry
