@@ -19,6 +19,11 @@
       "android": {
         "buildType": "apk"
       }
+    },
+    "production": {
+      "corepack": true,
+      "environment": "production",
+      "autoIncrement": true
     }
   }
 }
