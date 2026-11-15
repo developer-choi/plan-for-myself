@@ -23,6 +23,7 @@
     "production": {
       "corepack": true,
       "environment": "production",
+      "channel": "production",
       "autoIncrement": true
     }
   }
