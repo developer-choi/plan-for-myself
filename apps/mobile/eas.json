@@ -19,6 +19,27 @@
       "android": {
         "buildType": "apk"
       }
+    },
+    "production": {
+      "corepack": true,
+      "environment": "production",
+      "channel": "production",
+      "autoIncrement": true
+    },
+    "production-apk": {
+      "extends": "production",
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "android": {
+        "track": "internal",
+        "releaseStatus": "draft"
+      }
     }
   }
 }
