@@ -1,13 +1,7 @@
 import {ImpossibleStateError} from '@plan-for-myself/shared/error';
 import * as Sentry from '@sentry/nestjs';
 import {DrizzleQueryError} from 'drizzle-orm';
-
-interface PostgresErrorFields {
-  code?: string;
-  constraint?: string;
-  table?: string;
-  column?: string;
-}
+import {describeQueryCause} from '../db/postgres-error';
 
 const enabled = process.env.SENTRY_ENABLED === 'true';
 
@@ -53,14 +47,6 @@ function removeQueryValues(event: Sentry.ErrorEvent, hint: Sentry.EventHint): Se
     }
   }
   return event;
-}
-
-function describeQueryCause(cause: unknown): string {
-  const {code, constraint, table, column} = (cause ?? {}) as PostgresErrorFields;
-  if (code === undefined && cause instanceof Error) {
-    return `${cause.name}: ${cause.message}`;
-  }
-  return JSON.stringify({code, constraint, table, column});
 }
 
 function childError(parent: unknown, source: string | undefined): unknown {

@@ -11,6 +11,7 @@ import {
 } from '@plan-for-myself/shared/label';
 import {
   GOOGLE_LOGIN_LABEL,
+  GUEST_CONNECT_FAILED_NOTICE,
   GUEST_CONNECT_NOTE,
   INTRO_EXIT_LABEL,
   KEEP_GUEST_LABEL,
@@ -48,6 +49,7 @@ export default async function Page({searchParams}: SearchParamsPageProps) {
   const copy = getLoginPageCopy(isGuest);
   /* 같은 Google 계정이 다시 넘어와 또 거절되므로 Google 버튼 대신 삭제하지 않고 돌아가는 길을 둔다 */
   const isRejected = shouldShowRegisteredNotice(rejection, session);
+  const failedNotice = isGuest && !isRejected ? GUEST_CONNECT_FAILED_NOTICE : LOGIN_FAILED_NOTICE;
 
   return (
     <div className={styles.page}>
@@ -66,9 +68,7 @@ export default async function Page({searchParams}: SearchParamsPageProps) {
           {reason === 'signed-out' && errorKind === null && !isRejected && !isGuest && (
             <LoginNotice title={SIGNED_OUT_NOTICE.title}>{SIGNED_OUT_NOTICE.content}</LoginNotice>
           )}
-          {errorKind === 'failed' && (
-            <LoginNotice title={LOGIN_FAILED_NOTICE.title}>{LOGIN_FAILED_NOTICE.content}</LoginNotice>
-          )}
+          {errorKind === 'failed' && <LoginNotice title={failedNotice.title}>{failedNotice.content}</LoginNotice>}
           {isRejected ? (
             <>
               <DiscardGuestButton />

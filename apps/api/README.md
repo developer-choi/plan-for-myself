@@ -51,12 +51,13 @@ SENTRY_ENABLED=true SENTRY_DSN=<DSN> SENTRY_ENVIRONMENT=api-local yarn workspace
 
 ## DB 마이그레이션
 
-테이블 구조는 `src/db/schema.ts`가 원본이고, `yarn workspace api db:generate`가 `src/db/migrations/`에 SQL을 만든다. 테스트·로컬 PGlite에는 서버가 뜰 때 적용되고, Neon(dev·운영)에는 서버 배포가 적용하지 않아 손으로 적용한다.
+테이블 구조는 `src/db/schema.ts`가 원본이고, `yarn workspace api db:generate`가 `src/db/migrations/`에 SQL을 만든다. 테스트·로컬 PGlite에는 서버가 뜰 때 적용된다. Neon(dev·운영)에는 Railway 배포의 pre-deploy 단계가 새 서버를 띄우기 전에 `dist/migrate.mjs`로 적용한다(`.railway/railway.ts`의 `preDeploy`). staging에 올리면 dev에, master에 머지하면 운영에 적용되므로 손으로 돌리지 않는다.
 
-- 적용 명령은 `yarn workspace api db:migrate`이고, `POSTGRES_URL_NON_POOLING`(pooled 아닌 직접 연결 주소)에 적용한다
-- 운영에는 운영 주소를 그 명령에만 셸 변수로 넘긴다. 셸 값이 `.env.local`보다 앞선다: `POSTGRES_URL_NON_POOLING=<운영 직접 연결 주소> yarn workspace api db:migrate`
-- 새 칸·제약을 쓰는 서버 코드는 staging에 올리기 전에 dev에, 머지하기 전에 운영에 먼저 적용한다
-- 이미 테이블이 있던 Neon DB는 처음 한 번, 그 테이블을 만든 `0000`·`0001`을 적용된 것으로 기록(베이스라인)한 뒤 돌린다. 기록 없이 돌리면 에러 문구 없이 exit 1로 멈춘다
+- 마이그레이션이 실패하면 새 배포가 진행되지 않고 이전 배포가 계속 돈다. 실패한 마이그레이션은 트랜잭션째 되돌려져 기록도 남지 않으므로, 고친 커밋을 다시 배포하면 된다
+- pre-deploy는 `POSTGRES_URL`로 접속하므로 문장 하나가 그 주소의 `statement_timeout`(5초)을 넘으면 실패한다
+- pre-deploy는 이전 배포가 아직 요청을 받는 동안 돈다. 그래서 칸·테이블을 지우거나 이름을 바꾸는 변경은 PR 두 개로 나눈다. 먼저 코드가 그 칸을 쓰지 않게 하는 PR을 머지하고, 그 배포가 끝난 뒤 지우는 마이그레이션 PR을 머지한다. 한 번에 넣으면 이전 배포의 쿼리가 `column does not exist`로 실패한다
+- 배포 없이 손으로 적용할 때(로컬 서버를 dev DB에 붙여 확인할 때 등)는 `yarn workspace api db:migrate`를 쓴다. `POSTGRES_URL_NON_POOLING`(pooled 아닌 직접 연결 주소)에 적용한다
+- 이미 테이블이 있던 Neon DB는 처음 한 번, 그 테이블을 만든 `0000`·`0001`을 적용된 것으로 기록(베이스라인)한 뒤 돌린다. 기록 없이 돌리면 `0000`부터 다시 적용하려다 이미 있는 테이블에 막혀 실패한다(`db:migrate`는 에러 문구 없이 exit 1로 멈춘다)
 - 베이스라인은 아래 SQL로 넣는다. drizzle은 가장 늦은 `created_at` 하나로 적용 여부를 정하므로(hash는 보지 않는다) `0001`의 값은 `meta/_journal.json`의 `when`과 같아야 한다. `0002`부터는 기록하지 않는다. hash는 drizzle이 직접 적용할 때 남기는 값과 같은 SQL 파일의 sha256이다
 
 ```sql
@@ -66,3 +67,14 @@ INSERT INTO drizzle.__drizzle_migrations (hash, created_at) VALUES
   ('d2659302ffaec1353d94cc2a3d34039b31a5183d3f39dcb89a608fe9a6e8130f', 1794198826102),
   ('6dd3cf1e5ec1a1b804851e715ddc92fa962504156e649f923471ce5d1fdddeac', 1794287306566);
 ```
+
+## dev 시드
+
+Neon `dev` branch에 화면 확인용 공부 기록을 넣는다. 한 사용자(google_sub)의 기록을 전부 지우고 시나리오 기록으로 바꾼다. 사용자가 없으면 만든다.
+
+```bash
+yarn workspace api db:seed <시나리오> <google_sub>
+```
+
+- `POSTGRES_URL_NON_POOLING`(`.env.local`)에 연결하고, 접속한 DB가 Neon `dev` branch가 아니면 쓰기 전에 멈춘다. 로컬 PGlite에는 넣지 못한다
+- 시나리오(`streak`·`large`·`fail-compare` 등)는 `src/db/seed/scenario.ts`에 있다. 인자 없이 돌리면 사용법 오류에 시나리오 목록이 나온다

@@ -1,4 +1,5 @@
 import {createContext, useContext} from 'react';
+import {ImpossibleStateError} from '@plan-for-myself/shared/error';
 
 export type GoogleConnectResult = 'connected' | 'cancelled' | 'rejected' | 'rejection-expired';
 
@@ -25,7 +26,7 @@ export const SessionContext = createContext<SessionContextValue | null>(null);
 export function useSession(): SessionContextValue {
   const value = useContext(SessionContext);
   if (value === null) {
-    throw new Error('useSession은 SessionProvider 안에서만 쓸 수 있다');
+    throw new ImpossibleStateError('useSession은 SessionProvider 안에서만 쓸 수 있다');
   }
   return value;
 }

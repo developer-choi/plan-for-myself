@@ -58,7 +58,6 @@ export async function createDatabaseConnection({
     return {db: drizzlePg({client: pool, logger: toQueryLogger(logQueries)}), close: () => pool.end()};
   }
 
-  /* 여기서 Postgres에도 적용하면 배포가 운영 DB를 바꾼다 */
   const client = await PGlite.create(dataDir);
   const db = drizzlePglite({client, logger: toQueryLogger(logQueries)});
   await migrate(db, {migrationsFolder: MIGRATIONS_DIR});
@@ -67,7 +66,7 @@ export async function createDatabaseConnection({
 
 const LOCAL_DATA_DIR = '.local-db';
 /* 번들에서는 이 파일이 dist 바로 아래라 tsdown.config.ts의 copy가 dist/migrations에 둔다 */
-const MIGRATIONS_DIR = fileURLToPath(new URL('./migrations', import.meta.url));
+export const MIGRATIONS_DIR = fileURLToPath(new URL('./migrations', import.meta.url));
 const CONNECTION_TIMEOUT_MS = 5000;
 const QUERY_TIMEOUT_MS = 10_000;
 const logger = new Logger('Database');

@@ -1,3 +1,5 @@
+import {ImpossibleStateError} from '../error/impossible-state-error';
+
 export interface SimpleDate {
   year: number;
   month: number;
@@ -120,7 +122,7 @@ export function convertLunarDateToSolar(year: number, month: number, date: numbe
     m1 = m1 + 1;
     const monthDays = md[m1 - 1];
     if (monthDays === undefined) {
-      throw new Error('알 수 없는 에러입니다. (양력 월 계산하다 에러남)');
+      throw new ImpossibleStateError('알 수 없는 에러입니다. (양력 월 계산하다 에러남)');
     }
     if (td <= monthDays) {
       break;
@@ -173,14 +175,14 @@ function getLday(date: number, y1: number, m1: number) {
       case 6:
         return 30;
       default:
-        throw new Error('알 수 없는 에러입니다. (mm 계산하다 에러남)');
+        throw new ImpossibleStateError('알 수 없는 에러입니다. (mm 계산하다 에러남)');
     }
   })();
 
   if (mm === undefined || (date >= 1 && date <= mm)) {
     return date;
   } else {
-    throw new Error('일 범위가 틀립니다.');
+    throw new ImpossibleStateError('일 범위가 틀립니다.');
   }
 }
 

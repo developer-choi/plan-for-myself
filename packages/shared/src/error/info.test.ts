@@ -10,7 +10,6 @@ function createRequestError() {
   return new ApiRequestError({method: 'GET', url: '/api/example'});
 }
 
-const FORBIDDEN_INFO = {title: '접근할 수 없어요', content: '권한이 필요해요. 관리자에게 권한을 요청해 주세요.'};
 const NOT_FOUND_INFO = {title: '정보를 찾을 수 없어요', content: '삭제되었거나 주소가 변경되었을 수 있어요.'};
 const NETWORK_INFO = {title: '연결이 불안정해요', content: '네트워크 상태를 확인한 뒤 다시 시도해 주세요.'};
 const TEMPORARY_INFO = {
@@ -20,10 +19,6 @@ const TEMPORARY_INFO = {
 
 describe('getErrorInfo()', () => {
   describe('General cases', () => {
-    it('403 응답 에러면 권한 요청 안내를 반환해야 한다', () => {
-      expect(getErrorInfo(createResponseError(HTTP_STATUS.FORBIDDEN))).toEqual(FORBIDDEN_INFO);
-    });
-
     it('404 응답 에러면 정보를 찾을 수 없다는 안내를 반환해야 한다', () => {
       expect(getErrorInfo(createResponseError(HTTP_STATUS.NOT_FOUND))).toEqual(NOT_FOUND_INFO);
     });

@@ -1,7 +1,7 @@
 import {type PropsWithChildren, useCallback, useEffect, useRef, useState} from 'react';
 import {AppState} from 'react-native';
 import {captureException} from '@sentry/react-native';
-import {isUnauthorizedError} from '@plan-for-myself/shared/error';
+import {ImpossibleStateError, isUnauthorizedError} from '@plan-for-myself/shared/error';
 import type {RegisteredAccountRejection} from '@plan-for-myself/shared/auth';
 import {
   GoogleOneTapSignIn,
@@ -53,7 +53,7 @@ export default function SessionProvider({children}: PropsWithChildren) {
     }
     const exchange = await postAppTokenApi({idToken, discardIntent: null});
     if (exchange.type === 'registered-account') {
-      throw new Error('게스트 토큰 없이 보낸 교환이 이미 가입됨으로 거절됐다');
+      throw new ImpossibleStateError('게스트 토큰 없이 보낸 교환이 이미 가입됨으로 거절됐다');
     }
     await commitToken(exchange.token);
   }, [commitToken]);

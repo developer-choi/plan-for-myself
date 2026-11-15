@@ -3,7 +3,7 @@ import {HttpAdapterHost} from '@nestjs/core';
 import {SentryExceptionCaptured} from '@sentry/nestjs';
 import {DrizzleQueryError} from 'drizzle-orm';
 import {API_ERROR_CODES, type ApiErrorBody, type ApiErrorCode} from '@plan-for-myself/shared/error';
-import {readPostgresError} from '../db/postgres-error';
+import {describeQueryCause} from '../db/postgres-error';
 
 @Catch()
 export class ApiExceptionFilter implements ExceptionFilter {
@@ -74,16 +74,7 @@ function describeException(exception: unknown): string {
       exception.message,
       () => `Failed query: ${exception.query}`,
     );
-    return [stack, `Caused by: ${describeQueryCause(exception)}`].join('\n');
+    return [stack, `Caused by: ${describeQueryCause(exception.cause)}`].join('\n');
   }
   return exception instanceof Error ? (exception.stack ?? exception.message) : String(exception);
-}
-
-function describeQueryCause(exception: DrizzleQueryError): string {
-  const fields = readPostgresError(exception);
-  if (fields?.code !== undefined) {
-    const {code, constraint, table, column} = fields;
-    return JSON.stringify({code, constraint, table, column});
-  }
-  return exception.cause ? `${exception.cause.name}: ${exception.cause.message}` : '알 수 없음';
 }
