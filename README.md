@@ -1,8 +1,14 @@
 # Plan for myself
 
-- 웹: https://plan-for-myself.vercel.app
+**Next.js 웹**: https://plan-for-myself.vercel.app
 
-![예시 달력 화면](docs/assets/demo-calendar.png)
+![웹 달력 화면](docs/assets/demo-calendar.png)
+
+**Android 앱**: [APK 다운로드](https://github.com/developer-choi/plan-for-myself/releases/latest/download/plan-for-myself.apk) (Play 스토어 출시 준비 중, 2026-12-01 배포 예정)
+
+![앱 화면: 첫 화면·통계·실패 상세](docs/assets/app-screens.png)
+
+<!-- 앱 시연 GIF(docs/assets/app-demo.gif)가 생기면 이 자리에 넣는다 -->
 
 ## 제공되는 기능
 
